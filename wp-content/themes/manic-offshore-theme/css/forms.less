@@ -1,0 +1,261 @@
+//     ____ ___  __  __ __  __  ___  _   _ 
+//    / ___/ _ \|  \/  |  \/  |/ _ \| \ | |
+//   | |  | | | | |\/| | |\/| | | | |  \| |
+//   | |__| |_| | |  | | |  | | |_| | |\  |
+//    \____\___/|_|  |_|_|  |_|\___/|_| \_|
+//                                         
+
+.custom-form-message{
+      width: 100%;
+    margin-bottom: 30px;
+    padding: 15px;
+    outline: 0;
+    font-family: "Open Sans",serif;
+    font-size: 12px;
+    color: #767676;
+    border: 1px solid transparent;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-transition: border-color .2s ease-out;
+    transition: border-color .2s ease-out;
+    resize: none;
+
+}
+
+.custom-submit-class{
+
+  //color: #0088cc !important;
+  //background-color: rgba(255, 255, 255, 1) !important;
+  color: #ffffff;
+  //background-color: rgba(0, 136, 204, 1);
+  background-color: @dark-blue;
+  
+
+  font-size: 14px;
+  line-height: 1.7em;
+
+  height: 42px;
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: 0px;
+  border-width: 2px;
+  border-radius: 30px;
+  //padding-left: 30px;
+  //padding-right: 30px;
+
+  cursor: pointer;
+  // /padding: 6px 25px;
+  padding: 6px 30px;
+  border: 2px solid #08c;
+  //border-color: rgba(0, 136, 204, 1);
+  border-color: @dark-blue;
+  //border-color: rgba(0, 136, 204, 1) !important;
+  display: inline-block;
+  position: relative;
+  outline: 0;
+  transition: color .2s ease-in-out,background-color .2s ease-in-out,border-color .2s ease-in-out;
+  -webkit-appearance: none;
+
+  margin-top: 7px;
+
+  &:hover{
+
+    // color: #0088cc !important;
+    // background-color: rgba(255, 255, 255, 1) !important;
+    // border-color: rgba(0, 136, 204, 1) !important;
+    color: @dark-blue;
+    background-color: @white;
+    border-color: @white;
+  }
+}
+
+
+
+
+
+//    ____ ___ ____ _   _ _   _ ____    _____ ___  ____  __  __ 
+//   / ___|_ _/ ___| \ | | | | |  _ \  |  ___/ _ \|  _ \|  \/  |
+//   \___ \| | |  _|  \| | | | | |_) | | |_ | | | | |_) | |\/| |
+//    ___) | | |_| | |\  | |_| |  __/  |  _|| |_| |  _ <| |  | |
+//   |____/___\____|_| \_|\___/|_|     |_|   \___/|_| \_\_|  |_|
+//                                                              
+
+.error-container {
+  margin-bottom: 20px;
+  color: red;
+}
+
+
+
+#signuppage-signup-form-row{
+  .mkdf-two-columns-50-50>.mkdf-two-columns-50-50-inner{
+    margin: 0 -6px;
+  }
+  .mkdf-two-columns-50-50 .mkdf-column .mkdf-column-inner{
+    padding: 0 6px;
+  }
+}
+
+
+/*
+#respond input[type=text], 
+#respond textarea, 
+.mkdf-content .searchform input[type=search], .mkdf-content .searchform input[type=text], .post-password-form input[type=password], .widget_product_search .searchform input[type=search], .widget_product_search .searchform input[type=text], .widget_search .searchform input[type=search], .widget_search .searchform input[type=text], .wpcf7-form-control.wpcf7-date, .wpcf7-form-control.wpcf7-number, .wpcf7-form-control.wpcf7-quiz, .wpcf7-form-control.wpcf7-select, .wpcf7-form-control.wpcf7-text, .wpcf7-form-control.wpcf7-textarea
+*/
+
+.field-container {
+  margin-bottom: 18px;
+  position: relative;
+  label.error {
+    display: block;
+    color: red;
+  }
+  #mobile-telephone {
+    visibility: hidden;
+    position: absolute;
+  }
+}
+
+.reg_complete {
+  color: red;
+  margin-bottom: 20px;
+  a {
+    color: @dark-blue;
+  }
+}
+#signup-page-form {
+  // ie dropdown fix
+  select::-ms-expand {
+      display: none;
+  }  
+}
+
+
+.custom-input-class{
+
+  width: 100%;
+    // margin-bottom: 30px;
+    padding: 15px;
+    outline: 0;
+    font-family: "Open Sans",serif;
+    font-size: 12px;
+    color: #767676;
+    border: 1px solid transparent;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-transition: border-color .2s ease-out;
+    transition: border-color .2s ease-out;
+    resize: none;
+
+  color: #767676;
+  font-size: 12px;
+  line-height: 22px;
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0px;
+  background-color: rgba(255, 255, 255, 1);
+  border-color: rgba(255, 255, 255, 1);
+  border-width: 1px;
+  border-radius: 6px;
+  padding-top: 12px;
+  padding-right: 24px;
+  padding-bottom: 12px;
+  padding-left: 24px;
+  margin-top: 0px;
+  // margin-bottom: 12px;
+  // margin-bottom: 18px;
+
+  -webkit-appearance: none;
+  -moz-appearance:    none;
+  appearance:         none;
+
+  position: relative;
+
+  /*
+  width: 100%;
+  margin-bottom: 30px;
+  padding: 15px;
+  outline: 0;
+  font-family: "Open Sans",serif;
+  font-size: 12px;
+  color: #767676;
+  border: 1px solid transparent;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-transition: border-color .2s ease-out;
+  transition: border-color .2s ease-out;
+  resize: none;
+  margin-bottom: 12px;
+  */
+  &.not-visible{
+    .opacity(0);
+    .display-inline-block();
+  }
+
+  &.placeholder{
+    color: lighten(#767676, 20%);
+  }
+
+  option{
+    color: #767676;
+  }
+
+}
+
+.custom-input-class-select-container{
+  position: relative;
+  &:before{
+    content: "";
+    display: block;
+    pointer-events: none;
+
+    width: 0;
+    height: 0;
+    content: '';
+    border-bottom: 0;
+    border-right: 7px solid transparent;
+    //border-top: .5em solid #6d6e70;
+    border-top: .5em solid lighten(#767676, 20%);
+    border-left: 7px solid transparent;
+
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    z-index: 6;
+    // margin-top: -12px;
+  }
+}
+
+
+
+input.custom-input-class{
+  // placeholders
+  &::-webkit-input-placeholder{
+    color: lighten(#767676, 20%);
+  }
+  &:-moz-placeholder{
+    color: lighten(#767676, 20%);
+  }
+  &::-moz-placeholder{
+    color: lighten(#767676, 20%);
+  }
+  &:-ms-input-placeholder{
+    color: lighten(#767676, 20%);
+  }
+}

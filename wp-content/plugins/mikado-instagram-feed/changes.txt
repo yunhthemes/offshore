@@ -1,0 +1,2 @@
+1.1
+- Improved Instagram integration. Connecting with Instagram is now done inside Mikado Options page

@@ -1,0 +1,164 @@
+@import "lib/mixins.less";
+
+@dark-blue: #008b9b;
+@light-blue: #b1cfd4;
+@dark-brown: #8a6226;
+@light-brown: #ecc68c;
+@white: #ffffff;
+@grey: #646464;
+
+//     ____ _____ _   _ _____ ____      _    _     
+//    / ___| ____| \ | | ____|  _ \    / \  | |    
+//   | |  _|  _| |  \| |  _| | |_) |  / _ \ | |    
+//   | |_| | |___| |\  | |___|  _ <  / ___ \| |___ 
+//    \____|_____|_| \_|_____|_| \_\/_/   \_\_____|
+//                                                 
+
+body {
+  font-size: 15px;
+}
+
+.fit-text{
+  margin-right: -50px;
+}
+.custom-hidden{
+  .opacity(0);
+}
+
+// breadcrumb
+
+.mkdf-breadcrumbs-inner {
+  a {
+    color: @dark-blue;
+  }
+  .arrow_right {
+    &:before {
+      content: "\45"!important;
+    }
+  }
+}
+
+
+.Deploy-button, 
+.Deploy-button{
+  background: @dark-blue !important;
+  border: 2px solid @dark-blue !important;
+}
+.Deploy-button:hover, 
+.Deploy-button:hover{
+  /*
+  color: @dark-blue !important;
+  border: 2px solid @dark-blue !important;
+  background: transparent !important;
+  */
+
+  color: @dark-blue !important;
+  border: 2px solid @white !important;
+  background: @white !important;
+}
+
+
+
+.mkdf-btn.mkdf-btn-solid.custon-deploy-button{
+  background: @dark-blue !important;
+  border: 2px solid @dark-blue !important;
+
+  &:hover{
+    color: @dark-blue !important;
+    border: 2px solid @dark-blue !important;
+    background: @white !important;
+
+    // color: @white !important; 
+    // border: 2px solid @light-blue !important;
+    // background: @light-blue !important;
+  }
+
+  &.full-width{
+    width: 100%;
+    text-align: center;
+  }
+}
+
+
+
+
+/*
+.extra-cta-column{
+  text-align: right;
+}
+*/
+
+.core-services-first-copy-column{
+  padding-right: 20px;
+
+  
+}
+
+
+
+
+// LIVE CHAT
+// 
+.sticky-wrapper{
+  position: fixed;
+  z-index: 160000;
+}
+
+.zopim{
+  &:nth-of-type(1) {
+    right: auto!important;
+    left: -75px!important;
+    top: 45%!important;
+    .rotation(90deg)!important;
+  } 
+  &:nth-of-type(2) {
+    right: auto!important;
+    left: 0px!important;
+    top: 30%!important;
+    // .rotation(90deg)!important;
+  }
+}
+
+body.custom-zopim-visible{
+  .zopim{
+    .opacity(1);
+    &:nth-of-type(1) {
+      right: auto!important;
+      left: -75px!important;
+      top: 45%!important;
+      .rotation(90deg)!important;
+    } 
+    &:nth-of-type(2) {
+      right: auto!important;
+      left: 0px!important;
+      top: 30%!important;
+      // .rotation(90deg)!important;
+    }
+  }  
+}
+
+@media only screen and (max-width: 991px) {
+  .zopim{
+    display: none !important;
+  }
+}
+
+
+
+
+// BACK TO TOP BUTTON
+
+#mkdf-back-to-top{
+  display: none !important;
+}
+
+
+
+@import "header.less";
+@import "footer.less";
+@import "forms.less";
+@import "page_home.less";
+@import "page_offshore.less";
+
+
+

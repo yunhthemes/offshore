@@ -1,0 +1,11 @@
+1.1
+- Added WooCommerce 2.4.12 compatibility
+- Added option for smooth page transition between pages
+- Updated Visual Composer to 4.9.1
+- Updated Font Awesome to 4.5 version
+- Updated documentation
+- Fixed bug with sidebar on search page
+- Fixed bug with like icon on portfolio single
+- Fixed bug with image link on single audio post page
+- Fixed bug with post variable in comments editing page
+- Fixed Google Maps API warning for Sensor not longer being required
