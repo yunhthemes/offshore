@@ -43,6 +43,7 @@ function remove_admin_bar() {
   }
 }
      
+require 'signup.php';
 require 'registration.php';
 require 'custom-login-form.php';
 

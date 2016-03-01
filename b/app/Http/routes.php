@@ -30,4 +30,4 @@ Route::group(['middleware' => ['web']], function () {
     //
 });
 
-Route::get('api/company', ['uses' => 'CompanyController@index']);
+Route::get('api/companytype/{id}', ['uses' => 'CompanyTypeController@index']);

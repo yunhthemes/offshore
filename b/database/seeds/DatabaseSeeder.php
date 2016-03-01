@@ -17,11 +17,9 @@ class DatabaseSeeder extends Seeder
         $this->call(UserTableSeeder::class);                
         $this->call(CompanyTableSeeder::class);
         $this->call(CompanyTypeTableSeeder::class);
-        $this->call(SecretarySeeder::class);
-        $this->call(DirectorSeeder::class);
-        $this->call(ShareholderSeeder::class);
+        $this->call(KeypersonnelSeeder::class);
         $this->call(ServiceSeeder::class);
-        $this->call(CompanyDirectorSeeder::class);
+        $this->call(JurisdictionsSeeder::class);
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
@@ -124,7 +122,7 @@ class CompanyTableSeeder extends Seeder
     }
 }
 
-class SecretarySeeder extends Seeder
+class KeypersonnelSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -133,104 +131,37 @@ class SecretarySeeder extends Seeder
      */
     public function run()
     {
-        DB::table('secretaries')->delete();
+        DB::table('keypersonnel')->delete();
 
-        DB::table('secretaries')->insert([
+        DB::table('keypersonnel')->insert([
             [
-                'name' => 'secretary 1',                
+                'name' => 'key personnel 1',                
                 'price' => '2000',         
-                'offshore' => true                
+                'offshore' => true,                
+                'role' => 'director'                
             ],
             [
-                'name' => 'secretary 2',                
+                'name' => 'key personnel 2',                
                 'price' => '3000',         
-                'offshore' => true
+                'offshore' => true,                
+                'role' => 'shareholder'
             ],
             [
-                'name' => 'secretary 3',                
+                'name' => 'key personnel 3',                
                 'price' => '4000',         
-                'offshore' => true
+                'offshore' => true,                
+                'role' => 'secretary'
             ],
             [
-                'name' => 'secretary 4',                
+                'name' => 'key personnel 4',                
                 'price' => '5000',         
-                'offshore' => true
+                'offshore' => true,                
+                'role' => 'director'
             ]
         ]);        
     }
 }
 
-class DirectorSeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
-        DB::table('directors')->delete();
-
-        DB::table('directors')->insert([
-            [
-                'name' => 'director 1',                
-                'price' => '2000',         
-                'offshore' => true                
-            ],
-            [
-                'name' => 'director 2',                
-                'price' => '3000',         
-                'offshore' => true
-            ],
-            [
-                'name' => 'director 3',                
-                'price' => '4000',         
-                'offshore' => true
-            ],
-            [
-                'name' => 'director 4',                
-                'price' => '5000',         
-                'offshore' => true
-            ]
-        ]);        
-    }
-}
-
-class ShareholderSeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
-        DB::table('shareholders')->delete();
-
-        DB::table('shareholders')->insert([
-            [
-                'name' => 'shareholder 1',                
-                'price' => '2000',         
-                'offshore' => true                
-            ],
-            [
-                'name' => 'shareholder 2',                
-                'price' => '3000',         
-                'offshore' => true
-            ],
-            [
-                'name' => 'shareholder 3',                
-                'price' => '4000',         
-                'offshore' => true
-            ],
-            [
-                'name' => 'shareholder 4',                
-                'price' => '5000',         
-                'offshore' => true
-            ]
-        ]);        
-    }
-}
 
 class ServiceSeeder extends Seeder
 {
@@ -264,7 +195,7 @@ class ServiceSeeder extends Seeder
     }
 }
 
-class CompanyDirectorSeeder extends Seeder
+class JurisdictionsSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -273,32 +204,24 @@ class CompanyDirectorSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('company_director')->delete();
+        DB::table('jurisdictions')->delete();
 
-        DB::table('company_director')->insert([
+        DB::table('jurisdictions')->insert([
             [
-                'company_id' => '45',                
-                'director_id' => '29',
-                'passport' => '12345',
-                'utility_bill' => '54321'
+                'name' => 'service 1',                
+                'price' => '2000'                
             ],
             [
-                'company_id' => '45',                
-                'director_id' => '36',
-                'passport' => '12345',
-                'utility_bill' => '54321'
+                'name' => 'service 2',                
+                'price' => '3000'
             ],
             [
-                'company_id' => '46',                
-                'director_id' => '36',
-                'passport' => '12345',
-                'utility_bill' => '54321'      
+                'name' => 'service 3',                
+                'price' => '4000'
             ],
             [
-                'company_id' => '46',                
-                'director_id' => '31',
-                'passport' => '12345',
-                'utility_bill' => '54321'        
+                'name' => 'service 4',                
+                'price' => '5000'
             ]
         ]);        
     }
