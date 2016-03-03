@@ -16,7 +16,7 @@ class CreateCompaniesTable extends Migration
         Schema::create('companies', function (Blueprint $table) {
             $table->increments('id')->unique();
             $table->string('name');
-            $table->string('incoporation_date');
+            $table->date('incorporation_date');
             $table->decimal('price', 10, 2);
             $table->boolean('shelf');
             $table->integer('company_type_id')->unsigned();

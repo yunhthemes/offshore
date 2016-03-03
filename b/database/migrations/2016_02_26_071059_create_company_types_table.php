@@ -16,6 +16,7 @@ class CreateCompanyTypesTable extends Migration
         Schema::create('company_types', function (Blueprint $table) {
             $table->increments('id')->unique();
             $table->string('name');            
+            $table->decimal('price', 10, 2);            
             $table->timestamps();
         });
     }

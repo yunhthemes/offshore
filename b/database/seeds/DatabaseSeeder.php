@@ -19,7 +19,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CompanyTypeTableSeeder::class);
         $this->call(KeypersonnelSeeder::class);
         $this->call(ServiceSeeder::class);
-        $this->call(JurisdictionsSeeder::class);
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
@@ -175,38 +174,6 @@ class ServiceSeeder extends Seeder
         DB::table('services')->delete();
 
         DB::table('services')->insert([
-            [
-                'name' => 'service 1',                
-                'price' => '2000'                
-            ],
-            [
-                'name' => 'service 2',                
-                'price' => '3000'
-            ],
-            [
-                'name' => 'service 3',                
-                'price' => '4000'
-            ],
-            [
-                'name' => 'service 4',                
-                'price' => '5000'
-            ]
-        ]);        
-    }
-}
-
-class JurisdictionsSeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
-        DB::table('jurisdictions')->delete();
-
-        DB::table('jurisdictions')->insert([
             [
                 'name' => 'service 1',                
                 'price' => '2000'                

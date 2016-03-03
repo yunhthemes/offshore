@@ -18,7 +18,6 @@ class CreateCompanyServiceTable extends Migration
             $table->integer('service_id')->unsigned();        
             $table->foreign('company_id')->references('id')->on('companies');
             $table->foreign('service_id')->references('id')->on('services');
-            $table->string('country');
             $table->timestamps();
         });
     }

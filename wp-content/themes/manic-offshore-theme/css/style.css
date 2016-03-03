@@ -621,6 +621,9 @@ footer .widget .mkdf-icon-list-item:hover p {
   background-color: #ffffff;
   border-color: #ffffff;
 }
+.add-more {
+  display: block;
+}
 .error-container {
   margin-bottom: 20px;
   color: red;

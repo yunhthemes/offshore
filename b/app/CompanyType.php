@@ -13,4 +13,9 @@ class CompanyType extends Model
     {
         return $this->hasMany('App\Company');
     }
+
+    public function services()
+    {
+        return $this->belongsToMany('App\Service', 'companytype_service');
+    }
 }
