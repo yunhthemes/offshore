@@ -19,7 +19,7 @@
 			                    	<th scope="row">{{ $service->id }}</th>
 			                    	<td>{{ $service->name }}</td>			                    	
 			                    	<td>{{ $service->companytypes[0]->pivot->price }}</td>			                    	
-			                    	<td>{{ $service->companytypes[0]->name }}</td>
+									<td>{{ $service->companytypes[0]->name }}</td>
 			                    	<td>{{ $service->created_at }}</td>
 			                    </tr> 
 			              	@endforeach

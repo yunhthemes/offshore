@@ -8,10 +8,11 @@
 				<h1>Admin panel</h1>
 				
 				<div class="space50"></div>
-				<ul>
-					<li><a href="{{ route('admin.jurisdiction.index') }}">Jurisdictions & Company Types</a></li>
-					<li><a href="{{ route('admin.company.index') }}">Self Companies</a></li>
-					<li><a href="{{ route('admin.service.index') }}">Company Services</a></li>
+				<ul class="admin-ctas">
+					<li><a href="{{ route('admin.jurisdiction.index') }}"><button class="custom-submit-class">Jurisdictions</button></a></li>
+					<li><a href="{{ route('admin.service.index') }}"><button class="custom-submit-class">Services</button></a></li>
+					<li><a href="{{ route('admin.keypersonnel.index') }}"><button class="custom-submit-class">Key Personnel</button></a></li>					
+					<li><a href="{{ route('admin.company.index') }}"><button class="custom-submit-class">Self Companies</button></a></li>					
 				</ul>
 			</div>
 		</div>

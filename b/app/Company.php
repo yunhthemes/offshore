@@ -13,4 +13,14 @@ class Company extends Model
     {
         return $this->belongsTo('App\CompanyType', 'company_type_id');
     }
+
+ 	public function services()
+    {
+        return $this->belongsToMany('App\Service', 'company_service');
+    }
+
+    public function keypersonnel()
+    {
+        return $this->belongsToMany('App\Keypersonnel', 'company_keypersonnel');
+    }
 }

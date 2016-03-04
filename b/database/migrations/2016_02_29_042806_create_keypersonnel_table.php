@@ -19,6 +19,8 @@ class CreateKeypersonnelTable extends Migration
             $table->decimal('price', 10, 2);
             $table->boolean('offshore');
             $table->string('role');            
+            $table->string('passport');
+            $table->string('utility_bill');
             $table->timestamps();
         });
     }

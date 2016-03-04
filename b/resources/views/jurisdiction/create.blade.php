@@ -13,7 +13,7 @@
 			<div class="form-container">
 				{!! Form::open(array('route' => 'admin.jurisdiction.store')) !!}
 					<div class="field-container">
-						{{ Form::text('company_type_name', null, ['class'=>'custom-input-class','placeholder'=>'Jurisdiction and company type']) }}
+						{{ Form::text('company_type_name', null, ['class'=>'custom-input-class','placeholder'=>'Jurisdiction']) }}
 					</div>
 					<div class="field-container">
 						{{ Form::text('company_type_price', null, ['class'=>'custom-input-class','placeholder'=>'Price']) }}					
@@ -31,12 +31,12 @@
 						{{ Form::checkbox('shelf_company', '1') }}
 						{{ Form::label('shelf_company', 'Shelf Company?') }}
 					</div> -->
-					<div class="field-container">
+					<!-- <div class="field-container">
 						{{ Form::text('service_name', null, ['class'=>'custom-input-class','placeholder'=>'Service name']) }}
 					</div>
 					<div class="field-container">
 						{{ Form::text('service_price', null, ['class'=>'custom-input-class','placeholder'=>'Service price']) }}
-					</div>
+					</div> -->
 					{{ Form::submit('Submit', ['class'=>'custom-submit-class']) }}
 			{!! Form::close() !!}
 			</div>

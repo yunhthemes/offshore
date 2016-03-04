@@ -13,4 +13,9 @@ class Service extends Model
     {
         return $this->belongsToMany('App\CompanyType', 'companytype_service')->withPivot('price');
     }
+
+    public function companies()
+    {
+        return $this->belongsToMany('App\Company', 'company_service');
+    }
 }

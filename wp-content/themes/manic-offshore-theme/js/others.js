@@ -35,13 +35,18 @@ jQuery(document).ready(function($) {
     return date.getMonth()+1 + "/" + date.getDate() + "/" + date.getFullYear() + "  " + strTime;
   }
 
-  function formatDate2(date){
+  function formatDate2(currentcountry, date){
     dateString=date;
-    dateString=dateString.toString().split(' ').slice(0, 5).join(' ')
+    // dateString=dateString.toString().split(' ').slice(0, 5).join(' ')
+    var dateArr = (dateString.toString().split(' ').slice(0, 5))    
+    var timeArr = dateArr[4].split(':');
+
+    dateString = "Present time in "+currentcountry+": "+dateArr[0]+", "+dateArr[2]+" "+dateArr[1]+" "+dateArr[3]+" "+timeArr[0]+":"+timeArr[1]+" hrs";
+
     return dateString;
   }
 
-  function getTime(offset)
+  function getTime(currentcountry, offset)
   {
       var d = new Date();
       localTime = d.getTime();
@@ -53,11 +58,13 @@ jQuery(document).ready(function($) {
       // using supplied offset
       var nd = new Date(utc + (3600000*offset));    
       console.log(nd);
-      return formatDate2(nd);
+      return formatDate2(currentcountry, nd);
       
   }
 
-  var utctime = $('#current_date_time').attr('date-utctime');
-  $('#current_date_time').html(getTime(utctime));
+  var utctime = $('#current_date_time').attr('data-utctime');
+  var currentcountry = $('#current_date_time').attr('data-country');
+
+  $('#current_date_time').html(getTime(currentcountry, utctime));
 
 });

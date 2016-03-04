@@ -4,12 +4,29 @@ function registration_form( $username, $password, $email, $title, $first_name, $
     <script>
     (function($) {
         $(document).ready(function(){
-            function changeStep(id){
-                if(id==3) {
+
+            function changeNextStep(id){
+
+                if(id==2) {
                     $(".step-"+(parseInt(id) - 1)).hide();
                 } 
                 else $("#step-"+(parseInt(id) - 1)).hide();
                 
+                $(".hide-step-indicators").css("display", "table");
+                $("#step-"+id).show();
+                $(".btn-primary").removeClass("btn-primary").addClass("btn-default").prop( "disabled", false );
+                $(".step-"+id+"-circle").removeClass("btn-default").addClass("btn-primary").prop( "disabled", true );
+            }
+
+            function changePrevStep(id) {
+                if((parseInt(id) + 1)==1) {
+                    $(".step-"+(parseInt(id) + 1)).hide();  
+                }
+                else $("#step-"+(parseInt(id) + 1)).hide();
+
+                if(id==0){
+                    $(".hide-step-indicators").css("display", "none");
+                }
                 $("#step-"+id).show();
                 $(".btn-primary").removeClass("btn-primary").addClass("btn-default").prop( "disabled", false );
                 $(".step-"+id+"-circle").removeClass("btn-default").addClass("btn-primary").prop( "disabled", true );
@@ -17,31 +34,51 @@ function registration_form( $username, $password, $email, $title, $first_name, $
 
             $(".next-btn").on("click", function(e){
                 e.preventDefault();                
-                changeStep($(this).data("id"));
+                changeNextStep($(this).data("id"));
             });
+
+            $(".back-btn").on("click", function(e){
+                e.preventDefault();                
+                changePrevStep($(this).data("id"));
+            });
+
+            function cloneForm($el) {
+                var html = $el.children(".field-container").clone();
+                $el.next(".pasteclone").append(html);
+            }
+            function updateClonedFields($pasteclone, id) {
+                var fieldID = $("."+id).find(".field-container").length;
+
+                var $fieldContainer = $pasteclone.find(".field-container").last();
+                $fieldContainer.find("label").html(id+" "+fieldID);
+            }
+
+            $(".add-more").on("click", function(e){
+                e.preventDefault();
+                console.log($(this).parent().find(".cloneable"))
+                cloneForm($(this).parent().find(".cloneable"))
+                updateClonedFields($(this).parent().find(".pasteclone"), $(this).data("id"));
+            })
 
         });
         
     }(jQuery));
     </script>
     
-    <div class="stepwizard">
+    <div class="stepwizard hide-step-indicators">
         <div class="stepwizard-row">
             <div class="stepwizard-step">
-                <button type="button" data-id="1" class="step-1-circle btn btn-primary btn-circle" disabled="disabled">1</button>                
+                <button type="button" data-id="1" class="step-1-1-circle step-1-2-circle btn btn-primary btn-circle" disabled="disabled">1</button>                
             </div>
             <div class="stepwizard-step">
-                <button type="button" data-id="2" class="step-2-1-circle step-2-2-circle btn btn-default btn-circle" disabled="disabled">2</button>                
+                <button type="button" data-id="2" class="step-2-circle btn btn-default btn-circle" disabled="disabled">2</button>                
             </div>
             <div class="stepwizard-step">
                 <button type="button" data-id="3" class="step-3-circle btn btn-default btn-circle" disabled="disabled">3</button>                
             </div> 
             <div class="stepwizard-step">
                 <button type="button" data-id="4" class="step-4-circle btn btn-default btn-circle" disabled="disabled">4</button>                
-            </div>
-            <div class="stepwizard-step">
-                <button type="button" data-id="5" class="step-5-circle btn btn-default btn-circle" disabled="disabled">5</button>                
-            </div>
+            </div>            
         </div>
     </div>
 
@@ -52,21 +89,21 @@ function registration_form( $username, $password, $email, $title, $first_name, $
 
     <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
 
-    <div id="step-1">
-        <form id="registration-page-form-step-1">
+    <div id="step-0">
+        <form id="registration-page-form-step">
           <div class="field-container">
             <h3>Please select:</h3>
             <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
-            <a href="#" id="incorporate_company"><button data-id="2-1" class="custom-submit-class next-btn">Incorporate a new company</button></a>
-            <a href="#" id="shelf_company"><button data-id="2-2" class="custom-submit-class next-btn">Purchase a shelf company</button></a>            
+            <a href="#" id="incorporate_company"><button data-id="1-1" class="custom-submit-class next-btn">Incorporate a new company</button></a>
+            <a href="#" id="shelf_company"><button data-id="1-2" class="custom-submit-class next-btn">Purchase a shelf company</button></a>            
           </div>             
         </form>
         <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
         <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
     </div>
 
-    <div id="step-2-1" class="step-2 reg-step">
-        <form id="registration-page-form-2">
+    <div id="step-1-1" class="step-1 reg-step">
+        <form id="registration-page-form-1">
           <div class="field-container">
             
             <h3>Offshore Company</h3>
@@ -83,6 +120,11 @@ function registration_form( $username, $password, $email, $title, $first_name, $
             <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
             
             <h3>Offshore name suggestions</h3>
+
+            <p>The name may be in any language, provided it is expressed in Roman characters. It must end in the word "Limited" or its abbreviation "Ltd" to denote its limited liability status.</p>
+            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+            <p>Please provide three suggestions for your company’s name in order of preference.  The company will be registered under the first name available.</p>
+
             <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
             
             <div class="field-container">
@@ -97,8 +139,8 @@ function registration_form( $username, $password, $email, $title, $first_name, $
                 <label for="name">3rd Choice</label>
                 <input type="text" name="company_name_3" class="custom-input-class" value="">
             </div>
-
-            <a href="#" id="next"><button data-id="3" class="custom-submit-class next-btn">Next</button></a>
+            <a href="#" id="next"><button data-id="0" class="custom-submit-class back-btn">Back</button></a>
+            <a href="#" id="next"><button data-id="2" class="custom-submit-class next-btn">Next</button></a>
             
           </div>             
         </form>
@@ -106,8 +148,8 @@ function registration_form( $username, $password, $email, $title, $first_name, $
         <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
     </div>
 
-    <div id="step-2-2" class="step-2 reg-step">
-        <form id="registration-page-form-2">
+    <div id="step-1-2" class="step-1 reg-step">
+        <form id="registration-page-form-1">
           <div class="field-container">
             
             <h3>Shelf Company</h3>
@@ -152,8 +194,9 @@ function registration_form( $username, $password, $email, $title, $first_name, $
                     <li><label for="price">Price: $3000</label></li>
                 </ul>                
             </div>
-
-            <a href="#" id="next"><button data-id="3" class="custom-submit-class next-btn">Next</button></a>
+    
+            <a href="#" id="next"><button data-id="0" class="custom-submit-class back-btn">Back</button></a>
+            <a href="#" id="next"><button data-id="2" class="custom-submit-class next-btn">Next</button></a>
            
             
           </div>             
@@ -162,8 +205,8 @@ function registration_form( $username, $password, $email, $title, $first_name, $
         <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
     </div>
 
-    <div id="step-3" class="reg-step">
-        <form id="registration-page-form-3">
+    <div id="step-2" class="reg-step">
+        <form id="registration-page-form-2">
             
             <div class="personnel">
                 <h3>Shareholders</h3>
@@ -172,23 +215,28 @@ function registration_form( $username, $password, $email, $title, $first_name, $
                 <p>At least one shareholder is required, to whom  a minimum of one share must be issued. Shareholders may be either natural persons or other corporate entities. Should confidentiality be required, the shares may be held via nominee shareholders. Please tick the box below if you would like Offshore Company Solutions to provide nominee shareholders. Bearer shares are not allowed.</p>
                 <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>            
                 
-                <div class="field-container">
-                    <label for="shareholder">Shareholder 1</label>
-                    <input type="text" name="shareholder_1" placeholder="Shareholder name" class="custom-input-class-2">                
-                    <input type="text" name="shareamount_1" placeholder="Share amount" class="custom-input-class-2">
-                </div>
+                <div class="Shareholder">
+                    <div class="field-container">
+                        <label for="shareholder">Shareholder 1</label>
+                        <input type="text" name="shareholder_1" placeholder="Shareholder name" class="custom-input-class-2">                
+                        <input type="text" name="shareamount_1" placeholder="Share amount" class="custom-input-class-2">
+                    </div>
 
-                <div class="field-container">
-                    <label for="shareholder">Shareholder 2</label>
-                    <input type="text" name="shareholder_2" placeholder="Shareholder name" class="custom-input-class-2">                
-                    <input type="text" name="shareamount_2" placeholder="Share amount" class="custom-input-class-2">
+                    <div class="field-container">
+                        <label for="shareholder">Shareholder 2</label>
+                        <input type="text" name="shareholder_2" placeholder="Shareholder name" class="custom-input-class-2">                
+                        <input type="text" name="shareamount_2" placeholder="Share amount" class="custom-input-class-2">
+                    </div>
+                    <div class="cloneable">
+                        <div class="field-container">
+                            <label for="shareholder">Shareholder 3</label>
+                            <input type="text" name="shareholder_3" placeholder="Shareholder name" class="custom-input-class-2">                
+                            <input type="text" name="shareamount_3" placeholder="Share amount" class="custom-input-class-2">
+                        </div>
+                    </div>            
+                    <div class="pasteclone"></div>
                 </div>
-
-                <div class="field-container">
-                    <label for="shareholder">Shareholder 3</label>
-                    <input type="text" name="shareholder_3" placeholder="Shareholder name" class="custom-input-class-2">                
-                    <input type="text" name="shareamount_3" placeholder="Share amount" class="custom-input-class-2">
-                </div>
+                <a href="#" data-id="Shareholder" class="add-more">Add More <i class="fa fa-plus"></i></a>
 
                 <div class="field-container">
                     <input type="checkbox" name="nominee_shareholders">
@@ -210,20 +258,26 @@ function registration_form( $username, $password, $email, $title, $first_name, $
                 <p>At least one director is required, who may be either a natural person or another company. The directors may be resident anywhere in the world. If the company will wish to qualify for benefits under the network of double tax treates which Cyprus has in place with other countries, then it will be necessary for the majority of directors to be resident in Cyprus. It is possible for a single person to be a sole director and shareholder.  Professional directors may be appointed if confidentiality is required.  Please tick the box below if you would like Offshore Company Solutions to provide professional directors.</p>
                 <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>            
                 
-                <div class="field-container">
-                    <label for="director">Director 1</label>
-                    <input type="text" name="director_1" placeholder="Director name" class="custom-input-class">                                    
-                </div>
+                <div class="Director">
+                    <div class="field-container">
+                        <label for="director">Director 1</label>
+                        <input type="text" name="director_1" placeholder="Director name" class="custom-input-class">                                    
+                    </div>
 
-                <div class="field-container">
-                    <label for="director">Director 2</label>
-                    <input type="text" name="director_2" placeholder="Director name" class="custom-input-class">                                    
+                    <div class="field-container">
+                        <label for="director">Director 2</label>
+                        <input type="text" name="director_2" placeholder="Director name" class="custom-input-class">                                    
+                    </div>
+                    
+                    <div class="cloneable">
+                        <div class="field-container">
+                            <label for="director">Director 3</label>
+                            <input type="text" name="director_3" placeholder="Director name" class="custom-input-class">                                    
+                        </div>
+                    </div>
+                    <div class="pasteclone"></div>
                 </div>
-
-                <div class="field-container">
-                    <label for="director">Director 3</label>
-                    <input type="text" name="director_3" placeholder="Director name" class="custom-input-class">                                    
-                </div>
+                <a href="#" data-id="Director" class="add-more">Add More <i class="fa fa-plus"></i></a>
 
                 <div class="field-container">
                     <input type="checkbox" name="nominee_directors">
@@ -242,7 +296,7 @@ function registration_form( $username, $password, $email, $title, $first_name, $
                 
                 <div class="field-container">
                     <label for="secretary">Secretary name</label>
-                    <input type="text" name="secretary_1" class="custom-input-class">                                    
+                    <input type="text" name="secretary_1" placeholder="Secretary name" class="custom-input-class">                                    
                 </div>                
 
                 <div class="field-container">
@@ -250,16 +304,17 @@ function registration_form( $username, $password, $email, $title, $first_name, $
                     <label for="nominee_directors" class="checkbox-label">Offshore Company Solutions to provide professional directors</label>
                 </div>                
             </div>
-
-            <a href="#" id="next"><button data-id="4" class="custom-submit-class next-btn">Next</button></a>
+                
+            <a href="#" id="next"><button data-id="1-1" class="custom-submit-class back-btn">Back</button></a>
+            <a href="#" id="next"><button data-id="3" class="custom-submit-class next-btn">Next</button></a>
              
         </form>
         <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
         <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
     </div>
 
-    <div id="step-4" class="reg-step">
-        <form id="registration-page-form-4">
+    <div id="step-3" class="reg-step">
+        <form id="registration-page-form-3">
             
             <div class="personnel">
                 <h3>Additional services</h3>
@@ -375,10 +430,189 @@ function registration_form( $username, $password, $email, $title, $first_name, $
                
                 <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
             </div>            
-
+            
+            <a href="#" id="next"><button data-id="2" class="custom-submit-class back-btn">Back</button></a>
             <a href="#" id="next"><button data-id="4" class="custom-submit-class next-btn">Next</button></a>
              
         </form>
+    </div>
+
+    <div id="step-4" class="reg-step">
+        <form id="registration-page-form-4">
+            <div class="field-container">
+                <h3 class="pull-left">Summary</h3>
+                <h4 class="pull-right">Price</h4>
+                <div class="clear"></div>
+                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+                
+                <div class="input-container pull-left">                
+                    <label for="jurisdiction">Jurisdiction</label>
+                    <input type="text" name="jurisdiction" class="custom-input-class">
+                </div>
+                <div class="price pull-right"><p>$1000</p></div>
+                <div class="clear"></div>
+            </div>
+
+            <div class="field-container">
+                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+                
+                <div class="input-container pull-left">                
+                    <label for="company_type">Company type</label>
+                    <input type="text" name="company_type" class="custom-input-class">
+                </div>
+                <div class="price pull-right"><p>$1000</p></div>
+                <div class="clear"></div>
+            </div>
+
+            <h4>Three proposed company names:</h4>
+            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+
+            <div class="field-container">
+                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+                
+                <div class="input-container pull-left">                
+                    <label for="company_type">One:</label>
+                    <input type="text" name="company_type" class="custom-input-class">
+                </div>                
+                <div class="clear"></div>
+            </div>            
+
+            <div class="field-container">
+                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+                
+                <div class="input-container pull-left">                
+                    <label for="company_type">Two:</label>
+                    <input type="text" name="company_type" class="custom-input-class">
+                </div>                
+                <div class="clear"></div>
+            </div>            
+
+            <div class="field-container">
+                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+                
+                <div class="input-container pull-left">                
+                    <label for="company_type">Three:</label>
+                    <input type="text" name="company_type" class="custom-input-class">
+                </div>                
+                <div class="clear"></div>
+            </div>
+
+            <h4>Key names:</h4>
+            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+
+            <div class="field-container">
+                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+                
+                <div class="input-container pull-left">                
+                    <label for="company_type">Directer 1:</label>
+                    <input type="text" name="company_type" class="custom-input-class">
+                </div>                
+                <div class="clear"></div>
+            </div>            
+
+            <div class="field-container">
+                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+                
+                <div class="input-container pull-left">                
+                    <label for="company_type">Directer 2:</label>
+                    <input type="text" name="company_type" class="custom-input-class">
+                </div>          
+                <div class="price pull-right"><p>$1000</p></div>      
+                <div class="clear"></div>
+            </div>            
+
+            <div class="field-container">
+                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+                
+                <div class="input-container pull-left">                
+                    <label for="company_type">Shareholder 1:</label>
+                    <input type="text" name="company_type" class="custom-input-class small-input">
+                    <input type="text" name="company_type" class="custom-input-class small-input-2">
+                </div>                
+                <div class="clear"></div>
+            </div>    
+
+            <div class="field-container">
+                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+                
+                <div class="input-container pull-left">                
+                    <label for="company_type">Shareholder 2:</label>
+                    <input type="text" name="company_type" class="custom-input-class small-input">
+                    <input type="text" name="company_type" class="custom-input-class small-input-2">
+                </div>                
+                <div class="clear"></div>
+            </div>    
+
+            <div class="field-container">
+                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+                
+                <div class="input-container pull-left">                
+                    <label for="company_type">Shareholder 3:</label>
+                    <input type="text" name="company_type" class="custom-input-class small-input">
+                    <input type="text" name="company_type" class="custom-input-class small-input-2">
+                </div>                
+                <div class="price pull-right"><p>$1000</p></div>      
+                <div class="clear"></div>
+            </div>                       
+
+            <div class="field-container">
+                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+                
+                <div class="input-container pull-left">                
+                    <label for="company_type">Total share allocation</label>
+                    <div class="small-input"></div>
+                    <input type="text" name="company_type" class="custom-input-class small-input-2">
+                </div>                
+                <div class="clear"></div>
+            </div>  
+
+            <div class="field-container">
+                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+                
+                <div class="input-container pull-left">                
+                    <label for="company_type">Secretary name</label>
+                    <input type="text" name="company_type" class="custom-input-class">
+                </div>                
+                <div class="price pull-right"><p>$1000</p></div>      
+                <div class="clear"></div>
+            </div>                       
+            
+            <h4>Additional services required:</h4>
+            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+            
+            <div class="field-container">
+                <div class="pull-left">                
+                    <p>Yes, I will need help setting up a merchant account</p>
+                </div>
+                <div class="price pull-right"><p>$1000</p></div>      
+                <div class="clear"></div>
+            </div>
+            <div class="field-container">
+                <div class="pull-left">                
+                    <p>Yes, I will need help setting up a bank account</p>
+                </div>
+                <div class="price pull-right"><p>$1000</p></div>      
+                <div class="clear"></div>
+            </div>
+            <div class="field-container">
+                <div class="pull-left">                
+                    <p>Yes, I will need help setting up mail services</p>
+                </div>
+                <div class="price pull-right"><p>$1000</p></div>     
+                <div class="clear"></div> 
+            </div>
+            <div class="field-container">
+                <div class="pull-left">                
+                    <p>Total Cost</p>
+                </div>
+                <div class="price pull-right"><p>$TBC</p></div>     
+                <div class="clear"></div> 
+            </div>
+            
+            <a href="#" id="next"><button data-id="3" class="custom-submit-class back-btn">Back</button></a>
+            <a href="#" id="next"><button class="custom-submit-class">Payment Gateway</button></a>
+            
+        </form>        
     </div>
     ';
 }

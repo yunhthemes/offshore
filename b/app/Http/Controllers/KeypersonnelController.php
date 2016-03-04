@@ -4,13 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\CompanyType;
-use App\Company;
-use App\Service;
+use App\Keypersonnel;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class JurisdictionController extends Controller
+class KeypersonnelController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,9 +18,9 @@ class JurisdictionController extends Controller
     public function index()
     {
         //
-        $company_types = CompanyType::all();     
-
-        return view('jurisdiction.index', ['company_types' => $company_types]);
+        $keypersonnel = Keypersonnel::all();
+        
+        return view('keypersonnel.index', ['keypersonnel' => $keypersonnel]);
     }
 
     /**
@@ -33,8 +31,7 @@ class JurisdictionController extends Controller
     public function create()
     {
         //
-        return view('jurisdiction.create');
-
+        return view('keypersonnel.create');
     }
 
     /**
@@ -46,31 +43,16 @@ class JurisdictionController extends Controller
     public function store(Request $request)
     {
         //
-        $company_type = new CompanyType;
-        $company_type->name = $request->company_type_name;
-        $company_type->price = $request->company_type_price;
-        $company_type->save();
+        $keypersonnel = new Keypersonnel();
+        $keypersonnel->name = $request->keypersonnel_name;
+        $keypersonnel->price = $request->keypersonnel_price;
+        $keypersonnel->offshore = 1;
+        $keypersonnel->role = $request->keypersonnel_role;
+        $keypersonnel->passport = $request->keypersonnel_passport;
+        $keypersonnel->utility_bill = $request->keypersonnel_utility_bill;
+        $keypersonnel->save();
 
-        // if($company_type->id) {
-
-            // $company = new Company;
-            // $company->name = $request->company_name;            
-            // $company->incorporation_date = $request->company_incorporation_date;
-            // $company->price = $request->company_price;
-            // $company->shelf = $request->shelf_company;
-            // $company->company_type_id = $company_type->id;
-            // $company->save();
-
-            // $service = new Service;
-            // $service->name = $request->service_name;
-            // $service->save();
-
-            // $company_type = CompanyType::find($company_type->id);
-            // $company_type->services()->attach($service->id, ['price' => $request->service_price]);
-
-        // }
-
-        return redirect('admin/jurisdiction');
+        return redirect('admin/keypersonnel');
     }
 
     /**

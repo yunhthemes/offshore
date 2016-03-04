@@ -39,3 +39,4 @@ CMS
 - switch on/off for adding company and service
 - js validation
 - edit/delete
+- validate for service!

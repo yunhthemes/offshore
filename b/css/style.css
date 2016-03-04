@@ -940,6 +940,9 @@ footer p {
   color: #ffffff;
   -webkit-font-smoothing: antialiased;
 }
+#main-content .admin-ctas li a button {
+  width: 300px;
+}
 .custom-form-message {
   width: 100%;
   margin-bottom: 30px;
@@ -1125,6 +1128,7 @@ label.country_options_label {
 }
 .form-container {
   width: 50%;
+  padding-bottom: 80px;
 }
 .custom-input-class,
 .custom-input-class-2 {

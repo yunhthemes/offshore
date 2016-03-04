@@ -18,9 +18,7 @@ class CreateCompanyKeypersonnelTable extends Migration
             $table->integer('keypersonnel_id')->unsigned();        
             $table->foreign('company_id')->references('id')->on('companies');
             $table->foreign('keypersonnel_id')->references('id')->on('keypersonnel');      
-            $table->decimal('share_amount', 10, 2);       
-            $table->string('passport');
-            $table->string('utility_bill');
+            $table->decimal('share_amount', 10, 2);                   
             $table->timestamps();
         });
     }

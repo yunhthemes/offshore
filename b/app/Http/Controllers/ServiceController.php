@@ -19,7 +19,9 @@ class ServiceController extends Controller
     public function index()
     {
         //
-        $services = Service::with('companytypes')->get();        
+        $services = Service::with('companytypes')->get();  
+
+        // return $services;      
 
         return view('service.index', ['services'=>$services]);
     }
@@ -45,16 +47,19 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $id = 1;
-        return $request->input('service_price_'.$id);
-
+        //        
         $service = new Service();
         $service->name = $request->service_name;
         $service->save();
 
-        $service->companytypes()->attach($request->company_type_id, ['price' => $request->service_price]);
+        $count = $request->company_type_count;
 
+        for($i=1;$i<=$count;$i++):
+            $company_type_id = $request->input('company_type_id_'.$i);
+            $service_price = $request->input('service_price_'.$i);
+            $service->companytypes()->attach($company_type_id, ['price' => $service_price]);
+        endfor;
+        
         return redirect('admin/service');
 
     }
