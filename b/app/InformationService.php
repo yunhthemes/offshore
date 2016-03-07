@@ -4,10 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Service extends Model
+class InformationService extends Model
 {
     //
-    protected $table = 'services';
+    protected $table = 'information_services';
 
     public function companytypes()
     {
@@ -15,8 +15,5 @@ class Service extends Model
         return $this->belongsTo('App\CompanyType');
     }
 
-    public function companies()
-    {
-        return $this->belongsToMany('App\Company', 'company_service');
-    }
+
 }

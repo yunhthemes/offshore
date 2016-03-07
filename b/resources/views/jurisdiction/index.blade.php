@@ -16,9 +16,9 @@
 						@if($company_types->count() > 0)
 			              	@foreach($company_types as $k => $company_type)
 			                    <tr>
-			                    	<th scope="row">{{ $company_type->id }}</th>
-			                    	<td>{{ $company_type->name }}</td>
-			                    	<td>{{ $company_type->created_at }}</td>
+			                    	<th scope="row"><a href="{{ route('admin.jurisdiction.show', $company_type->id) }}">{{ $company_type->id }}</a></th>
+			                    	<td><a href="{{ route('admin.jurisdiction.show', $company_type->id) }}">{{ $company_type->name }}</a></td>
+			                    	<td><a href="{{ route('admin.jurisdiction.show', $company_type->id) }}">{{ $company_type->created_at }}</a></td>
 			                    </tr> 
 			              	@endforeach
 			            @else					

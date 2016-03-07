@@ -17,6 +17,7 @@ class CreateCompanyTypesTable extends Migration
             $table->increments('id')->unique();
             $table->string('name');            
             $table->decimal('price', 10, 2);            
+            $table->string('rules');            
             $table->timestamps();
         });
     }

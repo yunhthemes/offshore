@@ -35,6 +35,4 @@ Route::get('admin', ['uses' => 'AdminController@index']);
 Route::group(['middleware' => 'web'], function() {
 	Route::resource('admin/jurisdiction', 'JurisdictionController');
 	Route::resource('admin/company', 'CompanyController');
-	Route::resource('admin/service', 'ServiceController');
-	Route::resource('admin/keypersonnel', 'KeypersonnelController');
 });

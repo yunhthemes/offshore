@@ -14,8 +14,31 @@ class CompanyType extends Model
         return $this->hasMany('App\Company');
     }
 
-    public function services()
+    public function directors()
     {
-        return $this->belongsToMany('App\Service', 'companytype_service');
+        return $this->hasMany('App\Director');
     }
+
+    public function shareholders()
+    {
+        return $this->hasMany('App\Shareholder');
+    }
+
+    public function secretaries()
+    {
+        return $this->hasMany('App\Secretary');
+    }
+
+    public function services()
+    {        
+        // return $this->belongsToMany('App\Service', 'companytype_service');
+        return $this->hasMany('App\Service');
+    }
+
+    public function informationservices()
+    {                
+        return $this->hasMany('App\InformationService');
+    }
+
+
 }

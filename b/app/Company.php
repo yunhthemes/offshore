@@ -18,9 +18,4 @@ class Company extends Model
     {
         return $this->belongsToMany('App\Service', 'company_service');
     }
-
-    public function keypersonnel()
-    {
-        return $this->belongsToMany('App\Keypersonnel', 'company_keypersonnel');
-    }
 }

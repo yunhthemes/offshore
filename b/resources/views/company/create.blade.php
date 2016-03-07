@@ -21,31 +21,11 @@
 						{{ Form::text('company_name', null, ['class'=>'custom-input-class','placeholder'=>'Company name']) }}
 					</div>
 					<div class="field-container">
-						{{ Form::text('company_incorporation_date', null, ['class'=>'custom-input-class','placeholder'=>'Company incorporation date']) }}
+						{{ Form::text('company_incorporation_date', null, ['class'=>'custom-input-class','placeholder'=>'Incorporation date']) }}
 					</div>
 					<div class="field-container">
-						{{ Form::label('services', 'Choose one or more services') }}
-						{{ Form::select('services', $services ,null , array('multiple'=>'multiple','name'=>'services[]', 'class'=>'custom-input-class')) }}
-					</div>
-
-					<div class="field-container">
-						{{ Form::label('shareholders', 'Choose one or more shareholders') }}
-						{{ Form::select('shareholders', $shareholders ,null , array('multiple'=>'multiple', 'id'=>'shareholder', 'name'=>'shareholders[]', 'class'=>'custom-input-class')) }}
-					</div>
-
-					<div class="populate-shareholder-fields">
-						
-					</div>
-
-					<div class="field-container">
-						{{ Form::label('directors', 'Choose one or more directors') }}
-						{{ Form::select('directors', $directors ,null , array('multiple'=>'multiple','name'=>'directors[]', 'class'=>'custom-input-class')) }}
+						{{ Form::text('company_price', null, ['class'=>'custom-input-class','placeholder'=>'Price']) }}
 					</div>					
-
-					<div class="field-container">
-						{{ Form::label('secretaries', 'Choose one or more secretaries') }}
-						{{ Form::select('secretaries', $secretaries ,null , array('multiple'=>'multiple','name'=>'secretaries[]', 'class'=>'custom-input-class')) }}
-					</div>
 
 					{{ Form::submit('Submit', ['class'=>'custom-submit-class']) }}
 			{!! Form::close() !!}
