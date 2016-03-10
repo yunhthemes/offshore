@@ -19,4 +19,9 @@ class Service extends Model
     {
         return $this->belongsToMany('App\Company', 'company_service');
     }
+
+    public function countries()
+    {
+        return $this->belongsToMany('App\Country', 'service_country')->withPivot('price');
+    }
 }

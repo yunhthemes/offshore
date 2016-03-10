@@ -19,16 +19,18 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
     	// DB::enableQueryLog();
+        // DB::getQueryLog();
 
-    	$companies = Company::with('companytypes')->get();
+        $companies = Company::with('companytypes')->get();
 
-        // return $companies;
-
-    	// DB::getQueryLog();
+        if($request->ajax())
+        {
+            return $companies;
+        }    	
 
         return view('company.index', ['companies'=>$companies]);
     }

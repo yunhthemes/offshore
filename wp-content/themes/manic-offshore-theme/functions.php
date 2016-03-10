@@ -1,4 +1,14 @@
 <?php
+/********************************************************************************************************/
+/* CONSTANTS */
+/********************************************************************************************************/
+
+define("THEMEROOT", get_stylesheet_directory_uri());
+define("IMAGES", THEMEROOT."/img");
+define("JS", THEMEROOT."/js");
+define("APP", THEMEROOT."/app");
+define("SITEURL", get_site_url());
+
 
 /*** Child Theme Function  ***/
 
@@ -23,6 +33,7 @@ if(!function_exists('deploy_mikado_scripts_customized')) {
 
     wp_enqueue_script('manic_others', get_stylesheet_directory_uri().'/js/others.js', array('jquery'), false, true);
     wp_enqueue_script('validation', get_stylesheet_directory_uri().'/js/plugins/jquery.validate.min.js', array('jquery'), false, true);
+    wp_enqueue_script('handlebars', get_stylesheet_directory_uri().'/js/plugins/handlebars-v4.0.5.js', array('jquery'), false, true);
   }
   add_action('wp_enqueue_scripts', 'deploy_mikado_scripts_customized');
 }
@@ -45,6 +56,7 @@ function remove_admin_bar() {
      
 require 'signup.php';
 require 'registration.php';
+require 'fourstep.php';
 require 'custom-login-form.php';
 
 // $api_url = 'https://api.instagram.com/v1/users/' . esc_html( $user_id ) . '/media/recent/';

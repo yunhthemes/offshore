@@ -24,18 +24,7 @@ jQuery(document).ready(function($) {
   $('#user_login').attr( 'placeholder', 'Username' );
   $('#user_pass').attr( 'placeholder', 'Password' );
 
-  function formatDate(date) {
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
-    var ampm = hours >= 12 ? 'pm' : 'am';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0'+minutes : minutes;
-    var strTime = hours + ':' + minutes + ' ' + ampm;
-    return date.getMonth()+1 + "/" + date.getDate() + "/" + date.getFullYear() + "  " + strTime;
-  }
-
-  function formatDate2(currentcountry, date){
+  function formatDate(currentcountry, date){
     dateString=date;
     // dateString=dateString.toString().split(' ').slice(0, 5).join(' ')
     var dateArr = (dateString.toString().split(' ').slice(0, 5))    
@@ -57,8 +46,10 @@ jQuery(document).ready(function($) {
       // create new Date object for different city
       // using supplied offset
       var nd = new Date(utc + (3600000*offset));    
-      console.log(nd);
-      return formatDate2(currentcountry, nd);
+      if(nd=="Invalid Date"){
+        return "";
+      }
+      return formatDate(currentcountry, nd);
       
   }
 

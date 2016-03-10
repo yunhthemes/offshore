@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Country;
 use App\CompanyType;
 use App\Company;
 use App\Director;
@@ -22,10 +23,16 @@ class JurisdictionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        $company_types = CompanyType::all();     
+        if($request->ajax())
+        {
+            $company_types = CompanyType::with('directors', 'shareholders', 'secretaries', 'services', 'informationservices')->get();    
+            return $company_types;
+        }
+
+        $company_types = CompanyType::all();    
 
         return view('jurisdiction.index', ['company_types' => $company_types]);
     }
@@ -38,7 +45,9 @@ class JurisdictionController extends Controller
     public function create()
     {
         //
-        return view('jurisdiction.create');
+        $countries = Country::lists('name', 'id');
+
+        return view('jurisdiction.create', ['countries' => $countries]);
 
     }
 
@@ -56,7 +65,7 @@ class JurisdictionController extends Controller
         $company_type = new CompanyType;
         $company_type->name = $request->company_type_name;
         $company_type->price = $request->company_type_price;
-        $company_type->rules = $request->company_type_rules;
+        $company_type->rules = 'company rules?';
         $company_type->save();
 
         if($company_type->id) {
@@ -87,55 +96,78 @@ class JurisdictionController extends Controller
 
             $count = $request->service_1_count;
 
-            for($i=1;$i<=$count;$i++):
-                if(!empty($request->input('service_1_name')) && !empty($request->input('service_1_country_'.$i)) && !empty($request->input('service_1_price_'.$i))):
-                     $service = new Service();
-                    $service->name = $request->service_1_name;
-                    $service->country = $request->input('service_1_country_'.$i);
-                    $service->price = $request->input('service_1_price_'.$i);
-                    $service->company_type_id = $company_type->id;    
-                    $service->save();                   
-                endif;                
-            endfor;
+            if(!empty($request->service_1_name) && !empty($request->input('service_1_price_1'))) {
+                $service = new Service();
+                $service->name = $request->service_1_name;
+                $service->company_type_id = $company_type->id;    
+                $service->save();
+
+                for($i=1;$i<=$count;$i++):
+                    if(!empty($request->input('service_1_name')) && !empty($request->input('service_1_country_'.$i)) && !empty($request->input('service_1_price_'.$i))):
+                        
+                        $country = Country::find($request->input('service_1_country_'.$i));
+                        $country->services()->attach($service->id, ['price' => $request->input('service_1_price_'.$i)]);
+                        
+                    endif;                
+                endfor;
+            }
 
             $count = $request->service_2_count;
 
-            for($i=1;$i<=$count;$i++):
-                if(!empty($request->input('service_2_name')) && !empty($request->input('service_2_country_'.$i)) && !empty($request->input('service_2_price_'.$i))):
-                    $service = new Service();
-                    $service->name = $request->service_2_name;
-                    $service->country = $request->input('service_2_country_'.$i);
-                    $service->price = $request->input('service_2_price_'.$i);
-                    $service->company_type_id = $company_type->id;    
-                    $service->save();                
-                endif;                
-            endfor;
+            if(!empty($request->service_2_name) && !empty($request->input('service_2_price_1'))) {
+
+                $service = new Service();
+                $service->name = $request->service_2_name;
+                $service->company_type_id = $company_type->id;    
+                $service->save();
+
+                for($i=1;$i<=$count;$i++):
+                    if(!empty($request->input('service_2_name')) && !empty($request->input('service_2_country_'.$i)) && !empty($request->input('service_2_price_'.$i))):
+                        
+                        $country = Country::find($request->input('service_2_country_'.$i));
+                        $country->services()->attach($service->id, ['price' => $request->input('service_2_price_'.$i)]);
+                                        
+                    endif;                
+                endfor;
+            }
 
             $count = $request->service_3_count;
 
-            for($i=1;$i<=$count;$i++):
-                if(!empty($request->input('service_3_name')) && !empty($request->input('service_3_country_'.$i)) && !empty($request->input('service_3_price_'.$i))):
-                    $service = new Service();
-                    $service->name = $request->service_3_name;
-                    $service->country = $request->input('service_3_country_'.$i);
-                    $service->price = $request->input('service_3_price_'.$i);
-                    $service->company_type_id = $company_type->id;    
-                    $service->save();                
-                endif;                
-            endfor;
+            if(!empty($request->service_3_name) && !empty($request->input('service_3_price_1'))) {
+
+                $service = new Service();
+                $service->name = $request->service_3_name;
+                $service->company_type_id = $company_type->id;    
+                $service->save();                
+
+                for($i=1;$i<=$count;$i++):
+                    if(!empty($request->input('service_3_name')) && !empty($request->input('service_3_country_'.$i)) && !empty($request->input('service_3_price_'.$i))):
+
+                        $country = Country::find($request->input('service_3_country_'.$i));
+                        $country->services()->attach($service->id, ['price' => $request->input('service_3_price_'.$i)]);                    
+                        
+                    endif;                
+                endfor;
+            }
 
             $count = $request->service_4_count;
 
-            for($i=1;$i<=$count;$i++):
-                if(!empty($request->input('service_4_name')) && !empty($request->input('service_4_country_'.$i)) && !empty($request->input('service_4_price_'.$i))):
-                    $service = new Service();
-                    $service->name = $request->service_4_name;
-                    $service->country = $request->input('service_4_country_'.$i);
-                    $service->price = $request->input('service_4_price_'.$i);
-                    $service->company_type_id = $company_type->id;    
-                    $service->save();                
-                endif;                
-            endfor;
+            if(!empty($request->service_4_name) && !empty($request->input('service_4_price_1'))) {
+
+                $service = new Service();
+                $service->name = $request->service_4_name;
+                $service->company_type_id = $company_type->id;    
+                $service->save();                
+
+                for($i=1;$i<=$count;$i++):
+                    if(!empty($request->input('service_4_name')) && !empty($request->input('service_4_country_'.$i)) && !empty($request->input('service_4_price_'.$i))):
+                        
+                        $country = Country::find($request->input('service_4_country_'.$i));
+                        $country->services()->attach($service->id, ['price' => $request->input('service_4_price_'.$i)]);                    
+                        
+                    endif;                
+                endfor;
+            }
 
             $count = $request->information_service_count;
 
@@ -178,12 +210,17 @@ class JurisdictionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         //
         // DB::enableQueryLog();
         $company_type = CompanyType::with('directors', 'shareholders', 'secretaries', 'services', 'informationservices')->find($id);
         // print_r(DB::getQueryLog());
+        if($request->ajax())
+        {
+            $companies = CompanyType::with('companies', 'shareholders', 'directors', 'secretaries', 'services.countries', 'informationservices')->find($id);    
+            return $companies;
+        }
 
         return view('jurisdiction.show', [ 'company_type' => $company_type ]);
     }

@@ -18,9 +18,9 @@
 					<div class="field-container">
 						{{ Form::text('company_type_price', null, ['class'=>'custom-input-class','placeholder'=>'Jurisdiction/Company Type Price']) }}			
 					</div>					
-					<div class="field-container">
+					<!-- <div class="field-container">
 						{{ Form::textarea('company_type_rules', null, ['class'=>'custom-input-class','placeholder'=>'Naming Rules']) }}					
-					</div>
+					</div> -->
 					
 					<div class="field-group">						
 						<div class="field-container">
@@ -56,8 +56,8 @@
 						<div id="cloneable">
 							<div class="field-group">												
 								<div class="field-container">
-									<div class="custom-input-class-select-container">
-										{{ Form::select('service_1_country_1', [''=>'Country of service' ,'Cyprus' => 'Cyprus', 'Switzerland' => 'Switzerland', 'Malta' => 'Malta'], null, ['class' => 'custom-input-class service_countries']) }}
+									<div class="custom-input-class-select-container">										
+										{{ Form::select('service_1_country_1', $countries, null, ['class' => 'custom-input-class service_countries']) }}
 									</div>
 								</div>							
 								<div class="field-container">
@@ -78,8 +78,8 @@
 						<div id="cloneable">
 							<div class="field-group">												
 								<div class="field-container">
-									<div class="custom-input-class-select-container">
-										{{ Form::select('service_2_country_1', [''=>'Country of service' ,'Cyprus' => 'Cyprus', 'Switzerland' => 'Switzerland', 'Malta' => 'Malta'], null, ['class' => 'custom-input-class service_countries']) }}
+									<div class="custom-input-class-select-container">										
+										{{ Form::select('service_2_country_1', $countries, null, ['class' => 'custom-input-class service_countries']) }}
 									</div>
 								</div>							
 								<div class="field-container">
@@ -95,13 +95,13 @@
 
 					<div class="each-service">
 						<h3>Mail forwarding</h3>
-						{{ Form::hidden('service_3_name', null, ['class'=>'custom-input-class','value'=>'Mail forwarding']) }}
+						{{ Form::hidden('service_3_name', 'Mail forwarding', ['class'=>'custom-input-class']) }}
 
 						<div id="cloneable">
 							<div class="field-group">												
 								<div class="field-container">
-									<div class="custom-input-class-select-container">
-										{{ Form::select('service_3_country_1', [''=>'Country of service' ,'Cyprus' => 'Cyprus', 'Switzerland' => 'Switzerland', 'Malta' => 'Malta'], null, ['class' => 'custom-input-class service_countries']) }}
+									<div class="custom-input-class-select-container">										
+										{{ Form::select('service_3_country_1', $countries, null, ['class' => 'custom-input-class service_countries']) }}
 									</div>
 								</div>							
 								<div class="field-container">
@@ -122,8 +122,8 @@
 						<div id="cloneable">
 							<div class="field-group">												
 								<div class="field-container">
-									<div class="custom-input-class-select-container">
-										{{ Form::select('service_4_country_1', [''=>'Country of service' ,'Cyprus' => 'Cyprus', 'Switzerland' => 'Switzerland', 'Malta' => 'Malta'], null, ['class' => 'custom-input-class service_countries']) }}
+									<div class="custom-input-class-select-container">										
+										{{ Form::select('service_4_country_1', $countries, null, ['class' => 'custom-input-class service_countries']) }}
 									</div>
 								</div>							
 								<div class="field-container">
@@ -168,23 +168,25 @@
 	}
 	function updateHiddenField(serviceName, $this) {	
 		if(serviceName=="information_service") {
-			console.log($this.parent().find('.information_services').length);
 
+			console.log($this.parent().find('.information_services').length);
 			console.log('#'+serviceName+'_count')
 
 			$('#'+serviceName+'_count').val($this.parent().find('.information_services').length);	
 		}else {
-			console.log($this.parent().find('.service_countries').length);
 
-			console.log('#'+serviceName+'_count')
+			// console.log($this.parent().find('.service_countries').length);
+			// console.log('#'+serviceName+'_count')
 
 			$('#'+serviceName+'_count').val($this.parent().find('.service_countries').length);	
 		}		
 	}
-	function updateClonedFields(serviceName) {
-		var id = parseInt($('.pasteclone').find('.field-group').length) + 1;
+	function updateClonedFields(serviceName, $this) {
+		var id = parseInt($this.parent().find('.field-group').length);
 
-		var $lastElAdded = $('.pasteclone').find('.field-group').last();
+		console.log(id);
+
+		var $lastElAdded = $this.parent().find('.field-group').last();
 
 		if(serviceName=="information_service") {
 			$lastElAdded.find('input').attr('name', serviceName+'_'+id).val('');			
@@ -201,7 +203,7 @@
 		var serviceName = $(this).data('service');
 
 		cloneForm($(this).parent('.each-service').children('#cloneable').find('.field-group'));
-		updateClonedFields(serviceName);
+		updateClonedFields(serviceName, $(this));
 		updateHiddenField(serviceName, $(this));
 
 	});

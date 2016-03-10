@@ -749,14 +749,17 @@ label.country_options_label {
   display: inline-block;
   margin-right: 10px;
 }
-#registration-page-form-1 ul {
+#registration-page-form-1-1 ul,
+#registration-page-form-1-2 ul {
   display: inline-block;
   vertical-align: top;
 }
-#registration-page-form-1 ul li {
+#registration-page-form-1-1 ul li,
+#registration-page-form-1-2 ul li {
   list-style: none;
 }
-#registration-page-form-1 input[type="radio"] {
+#registration-page-form-1-1 input[type="radio"],
+#registration-page-form-1-2 input[type="radio"] {
   display: inline-block;
 }
 #registration-page-form-3 input[type="checkbox"] {
@@ -1289,7 +1292,8 @@ body.home .rev_slider {
   padding-top: 30px!important;
 }
 .offshore #current_date_time {
-  text-align: right;
-  color: #646464;
-  font-size: 17px;
+  text-align: left;
+}
+.offshore h2 {
+  font-size: 24px;
 }
