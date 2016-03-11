@@ -26,10 +26,10 @@ class JurisdictionController extends Controller
     public function index(Request $request)
     {
         //
-        if($request->ajax())
+        if($request->ajax() || $request->callback)
         {
             $company_types = CompanyType::with('directors', 'shareholders', 'secretaries', 'services', 'informationservices')->get();    
-            return $company_types;
+            return response()->json($company_types)->setCallback($request->input('callback'));
         }
 
         $company_types = CompanyType::all();    
@@ -216,10 +216,10 @@ class JurisdictionController extends Controller
         // DB::enableQueryLog();
         $company_type = CompanyType::with('directors', 'shareholders', 'secretaries', 'services', 'informationservices')->find($id);
         // print_r(DB::getQueryLog());
-        if($request->ajax())
+        if($request->ajax() || $request->callback)
         {
             $companies = CompanyType::with('companies', 'shareholders', 'directors', 'secretaries', 'services.countries', 'informationservices')->find($id);    
-            return $companies;
+            return response()->json($companies)->setCallback($request->input('callback'));
         }
 
         return view('jurisdiction.show', [ 'company_type' => $company_type ]);

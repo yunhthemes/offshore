@@ -89,11 +89,11 @@ function registration_form() {
 
                     // add the chosen route to hidden field
                     if(id=="1-1") {
-                        sync_data_with_summary(1, "#chosen_route");
+                        update_input_val(1, "#chosen_route");
                         on_route_change(1);
                     }
                     else {
-                        sync_data_with_summary(2, "#chosen_route");
+                        update_input_val(2, "#chosen_route");
                         on_route_change(2); 
                     } 
 
@@ -154,6 +154,28 @@ function registration_form() {
                 return request;
             };
 
+            function makeJsonpRequest(Data, URL, Method) {
+                
+                var request = $.ajax({
+                    url: URL,
+                    crossDomain: true,
+                    type: Method,
+                    data: Data,
+                    dataType: "jsonp",
+                    jsonpCallback: "jsonpCallback",
+                    contentType: "application/json; charset=utf-8;",                    
+                    success: function (data) {
+                        // console.log(data);
+                    },
+                    error: function(xhr, status, error) {
+                        // console.log(status + "; " + error);
+                    }
+                });
+
+                return request;
+
+            }
+
             function failedRequest(response){
                 response.fail(function(jqXHR, textStatus, errorThrown){
                     console.log(errorThrown);
@@ -194,7 +216,7 @@ function registration_form() {
                 else $("#company-names-summary").hide();
             }
 
-            function sync_data_with_summary(data, selector) {                
+            function update_input_val(data, selector) {                
                 $(selector).val(data);
             }
 
@@ -202,21 +224,66 @@ function registration_form() {
                 if(add_amount=="") add_amount = 0;
                 amount += parseFloat(add_amount);
                 return amount;
-            }
-
-            function updateShareTotals(value) {
-                $("#total_share").val(value);
-                $("#summary_total_share").val(value);
-            }
+            }            
 
             function updateKeyPersonnelSummary() {
-                // count filled shareholder fields in step 2
-                // count filled director fields in step 2
-                // count filled secretary fields in step 2
-                // loop and populate input fields with data from step 2
-                $(".shareholder").find(".shareholder-name").each(function(index, obj){
-                    console.log($(obj).val());
+                
+                var directors = $("input.director-name").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
+                var secretaries = $("input.secretary-name").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
+                var shareholders = $("input.shareholder-name").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
+                var shareholder_amounts = $("input.shareholder-amount").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
+
+                var services = $("input.service-name").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });                
+                var services_ids = $("input.service-id").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });                
+                var services_countries = $("select.service-country").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
+                var services_prices = $("input.service-price").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
+
+                var newdata = [];
+
+                for(index = 0; index < shareholders.length; index++) {
+                    shareholders[index].amount_name = shareholder_amounts[index].name;
+                    shareholders[index].amount_value = shareholder_amounts[index].value;
+                }
+                
+                // need to find out about select dropdown key and value
+                console.log(services_countries);
+
+                for(index = 0; index < services.length; index++) {
+                    services[index].service_id_name = services_ids[index].name;
+                    services[index].service_id_value = services_ids[index].value;
+                    // services[index].service_country_name = services_countries[index].name;
+                    // services[index].service_country_value = services_countries[index].value;
+                    services[index].service_price_name = services_prices[index].name;
+                    services[index].service_price_value = services_prices[index].value;
+                }
+                
+                newdata["shareholders"] = shareholders;
+                newdata["directors"] = directors;  
+                newdata["secretaries"] = secretaries;
+                newdata["services"] = services;
+
+                createTemplateAndAppendHtml("#summaryshareholder-template", newdata, "#summaryshareholder");
+                createTemplateAndAppendHtml("#summarydirector-template", newdata, "#summarydirector");
+                createTemplateAndAppendHtml("#summarysecretary-template", newdata, "#summarysecretary");
+                createTemplateAndAppendHtml("#summaryservice-template", newdata, "#summaryservice");
+
+                $("#summary_total_share").val($("#total_share").val());
+
+                $("#summarydirector").find("#director-price p").text("$"+prices["directors"]);
+                $("#summarysecretary").find("#secretary-price p").text("$"+prices["secretaries"]);
+                $("#summaryshareholder").find("#shareholder-price p").text("$"+prices["secretaries"]);
+
+                $("#summaryjurisdiction-price").children("p").text("$"+prices["jurisdiction"]);
+
+                var summaryTotal = 0;
+                $(".summary-price").each(function(index, obj){
+                    var eachPrice = $(obj).children("p").text();
+                    var priceArr = eachPrice.split("$");
+                    summaryTotal += parseFloat(priceArr[1]);
                 });
+
+                $(".total-summary-price").html("<p>$"+summaryTotal.toFixed(2)+"</p>");
+
             }
 
             ////////////
@@ -226,7 +293,9 @@ function registration_form() {
             $(".next-btn").on("click", function(e){
                 e.preventDefault();                
                 changeNextStep($(this).data("id"));
-                updateKeyPersonnelSummary();
+                if($(this).data("id")==4) {
+                    updateKeyPersonnelSummary();
+                }
                 
             });
 
@@ -253,16 +322,23 @@ function registration_form() {
 
             /////
 
+            var prices = [];
             $(".step-1").on("change", "select.type_of_company", function(e){
                 
                 var selectedCompanyTypeId = $(this).val();
                 var selectedCompanyTypeName = $(this).find("option:selected").text();
                 var step_id = $(this).data("id");
 
-                sync_data_with_summary(selectedCompanyTypeName, "#jurisdiction");
+                update_input_val(selectedCompanyTypeName, "#jurisdiction");
 
-                var response = makeRequest("", "'.SITEURL.'/b/admin/jurisdiction/"+selectedCompanyTypeId, "GET");
+                // with cross domain
+                // var response = makeJsonpRequest("", "http://103.25.203.23/b/admin/jurisdiction/"+selectedCompanyTypeId, "GET");
+                var response = makeJsonpRequest("", "'.SITEURL.'/b/admin/jurisdiction/"+selectedCompanyTypeId, "GET");
+
+                // without cross domain
+                // var response = makeRequest("", "'.SITEURL.'/b/admin/jurisdiction/"+selectedCompanyTypeId, "GET");
                 var newdata = [];
+                
                 response.done(function(data, textStatus, jqXHR){                    
                     if(jqXHR.status==200) {
                         
@@ -270,18 +346,25 @@ function registration_form() {
                             newdata["companies"] = data.companies;                        
                             createTemplateAndAppendHtml("#shelf-companies-template", newdata, "#shelf-companies");    
                         }
+
+                        prices["jurisdiction"] = data.price;
                         
                         newdata["shareholders"] = data.shareholders;
                         createTemplateAndAppendHtml("#shareholder-template", newdata, "#shareholder");
+                        prices["shareholders"] = data.shareholders[0].price;                         
 
                         newdata["directors"] = data.directors;
                         createTemplateAndAppendHtml("#director-template", newdata, "#director");
+                        prices["directors"] = data.directors[0].price;                         
 
                         newdata["secretaries"] = data.secretaries;
                         createTemplateAndAppendHtml("#secretary-template", newdata, "#secretary");
+                        prices["secretaries"] = data.secretaries[0].price;                         
 
                         newdata["services"] = data.services;
-                        createTemplateAndAppendHtml("#service-template", newdata, "#service");                        
+                        createTemplateAndAppendHtml("#service-template", newdata, "#service");             
+
+                        // console.log(data.services);
 
                         newdata["informationservices"] = data.informationservices;
                         createTemplateAndAppendHtml("#informationservices-template", newdata, "#informationservices");
@@ -296,9 +379,9 @@ function registration_form() {
 
             $("#step-3").on("change", "#service_country", function(e){
                 e.preventDefault();
-                var price = $(this).find(":selected").data("price");
-                console.log(price);
-                $(this).parent().parent().next(".price").html("$"+price);
+                var servicePrice = $(this).find(":selected").data("price");
+                $(this).parent().parent().next("#service-price").html("$"+servicePrice);
+                $(this).parent().parent().parent().find("input.service-price").val(servicePrice);
             });
 
             //////
@@ -306,31 +389,27 @@ function registration_form() {
             $(".company-name-choice").on("change keyup", function(e){
                 var id = $(this).data("choice-id");
                 var data = $(this).val();
-                sync_data_with_summary(data, "#company_name_choice_"+id);
+                update_input_val(data, "#company_name_choice_"+id);
             });
 
             ///////
-
-            // doesn't work
 
             $("#step-2").on("change keyup", ".person-input", function(e){
                 var selector = $(this).data("selector");
                 var field = $(this).data(selector+"-field");
                 var id = $(this).data(selector+"-id");
                 var data = $(this).val();
+                var totalShareAmount = 0;
                 
-                if(selector=="shareholder" && field=="amount"){
-                    
-                    var totalShareAmount = 0;
-
-                    $(".shareholder-amount").each(function(i, obj){                        
+                if(selector=="shareholder" && field=="amount"){                                    
+                    $(".shareholder-amount").each(function(i, obj){
                         totalShareAmount = addAmount(totalShareAmount, $(obj).val());
-                    });                    
+                    });       
 
-                    updateShareTotals(totalShareAmount);
+                    update_input_val(totalShareAmount, "#total_share");
                 }
                 
-                sync_data_with_summary(data, "#summary_"+selector+"_"+id+"_"+field); 
+                // update_input_val(data, "#summary_"+selector+"_"+id+"_"+field); 
             });
 
             ///////////
@@ -338,7 +417,43 @@ function registration_form() {
             ///////////
 
             function init() {
-                var response = makeRequest("", "'.SITEURL.'/b/admin/jurisdiction", "GET");
+
+                // add operator support for handlebar
+                Handlebars.registerHelper("ifCond", function (v1, operator, v2, options) {
+
+                    switch (operator) {
+                        case "==":
+                            return (v1 == v2) ? options.fn(this) : options.inverse(this);
+                        case "===":
+                            return (v1 === v2) ? options.fn(this) : options.inverse(this);
+                        case "<":
+                            return (v1 < v2) ? options.fn(this) : options.inverse(this);
+                        case "<=":
+                            return (v1 <= v2) ? options.fn(this) : options.inverse(this);
+                        case ">":
+                            return (v1 > v2) ? options.fn(this) : options.inverse(this);
+                        case ">=":
+                            return (v1 >= v2) ? options.fn(this) : options.inverse(this);
+                        case "&&":
+                            return (v1 && v2) ? options.fn(this) : options.inverse(this);
+                        case "||":
+                            return (v1 || v2) ? options.fn(this) : options.inverse(this);
+                        default:
+                            return options.inverse(this);
+                    }
+                });
+
+                Handlebars.registerHelper("counter", function (index){
+                    return index + 1;
+                });
+
+                // with cross domain
+                // var response = makeJsonpRequest("", "http://103.25.203.23/b/admin/jurisdiction", "GET");
+                var response = makeJsonpRequest("", "'.SITEURL.'/b/admin/jurisdiction", "GET");
+
+                // without cross domain
+                // var response = makeRequest("", "'.SITEURL.'/b/admin/jurisdiction", "GET");
+
                 response.done(function(data, textStatus, jqXHR){                    
                     if(jqXHR.status==200) {
                         appendToSelect(data, "type_of_company");
@@ -498,16 +613,19 @@ function registration_form() {
                     
                     <div class="country-options-container pull-left">                
                         <label for="service_country" class="country_options_label">Country options</label>
-                        <div class="custom-input-class-select-container half">            
-                            <select id="service_country" class="custom-input-class">
+                        <div class="custom-input-class-select-container half">
+                            <input type="hidden" name="service_{{counter @index}}_id" class="service-id" value="{{id}}">
+                            <input type="hidden" name="service_{{counter @index}}_name" class="service-name" value="{{name}}">
+                            <select id="service_country" name="service_{{counter @index}}_country" class="service-country custom-input-class">
                                 <option value="" data-price="0.00" selected="selected">Please Select</option>
-                                {{#countries}}                                
+                                {{#countries}}
                                 <option value="{{id}}" data-price="{{pivot.price}}">{{name}}</option>
                                 {{/countries}}
                             </select>
                         </div>
                     </div>
-                    <div class="price pull-right"><p>$0.00</p></div>
+                    <div id="service-price" class="service-price price pull-right"><p>$0.00</p></div>
+                    <input type="hidden" name="service_{{counter @index}}_price" class="service-price" value="0.00">
                     <div class="clear"></div>
                 </div>    
             {{/services}}
@@ -530,6 +648,84 @@ function registration_form() {
             </div>            
         {{/if}}
     </script>     
+
+    <script id="summarydirector-template" type="text/x-handlebars-template">
+        {{#directors}}
+            {{#if value}}
+            <div class="field-container">
+                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+                <div class="input-container pull-left">                
+                    <label for="summary_{{name}}">Director {{counter @index}}:</label>
+                    <input type="text" id="summary_{{name}}" value="{{value}}" disabled="true" class="custom-input-class">
+                </div>                
+                {{#if @last}} <div id="director-price" class="price summary-price pull-right"><p>$0</p></div> {{/if}}
+                <div class="clear"></div>
+            </div>
+            {{/if}}
+        {{/directors}}
+    </script>    
+
+    <script id="summaryshareholder-template" type="text/x-handlebars-template">
+        {{#shareholders}}
+            {{#if value}}
+                <div class="field-container">
+                    <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+                    
+                    <div class="input-container pull-left">                
+                        <label for="summary_{{name}}">Shareholder {{counter @index}}:</label>
+                        <input type="text" id="summary_{{name}}" value="{{value}}" disabled="true" class="custom-input-class small-input">
+                        <input type="text" id="summary_{{amount_name}}" value="{{amount_value}}" disabled="true" class="custom-input-class small-input-2">
+                    </div>     
+                    {{#if @last}} <div id="shareholder-price" class="price summary-price pull-right"><p>$0</p></div> {{/if}}                          
+                    <div class="clear"></div>
+                </div>
+            {{/if}}
+        {{/shareholders}}
+        {{#if shareholders.count}}
+        <div class="field-container">
+            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+            
+            <div class="input-container pull-left">                
+                <label for="summary_total_share">Total share allocation</label>
+                <div class="small-input"></div>
+                <input type="text" id="summary_total_share" disabled="true" class="custom-input-class small-input-2">
+            </div>                
+            <div class="clear"></div>
+        </div>
+        {{/if}}
+    </script>
+
+    <script id="summarysecretary-template" type="text/x-handlebars-template">
+        {{#secretaries}}
+            {{#if value}}
+            <div class="field-container">
+                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+                <div class="input-container pull-left">                
+                    <label for="summary_{{name}}">Secretary {{counter @index}}:</label>
+                    <input type="text" id="summary_{{name}}" value="{{value}}" disabled="true" class="custom-input-class">
+                </div>                
+                {{#if @last}}<div id="secretary-price" class="price summary-price pull-right"><p>$0</p></div>{{/if}}
+                <div class="clear"></div>
+            </div>
+            {{/if}}
+        {{/secretaries}}
+    </script>
+
+    <script id="summaryservice-template" type="text/x-handlebars-template">
+        <h4>Additional services required:</h4>
+        <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>        
+        {{#services}}
+            {{#ifCond service_price_value ">" 0}}
+                <div class="field-container">
+                    <div class="pull-left">                
+                        <p>Yes, I will need help setting up a {{value}}</p>
+                    </div>
+                    <div class="price summary-price pull-right"><p>${{service_price_value}}</p></div>      
+                    <div class="clear"></div>
+                </div>
+            {{/ifCond}}
+        {{/services}}        
+    </script>
     
     <div class="stepwizard hide-step-indicators">
         <div class="stepwizard-row">
@@ -702,7 +898,7 @@ function registration_form() {
                     <label for="jurisdiction">Jurisdiction</label>
                     <input type="text" name="jurisdiction" id="jurisdiction" disabled="true" class="custom-input-class">
                 </div>
-                <div class="price pull-right"><p>$1000</p></div>
+                <div id="summaryjurisdiction-price" class="price summary-price pull-right"><p>$0</p></div>
                 <div class="clear"></div>
             </div>
 
@@ -753,124 +949,29 @@ function registration_form() {
             </div>
 
             <h4>Key names:</h4>
-            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
 
-            <div class="field-container">
-                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
-                
-                <div class="input-container pull-left">                
-                    <label for="summary_director_1_name">Directer 1:</label>
-                    <input type="text" id="summary_director_1_name" disabled="true" class="custom-input-class">
-                </div>                
-                <div class="clear"></div>
-            </div>            
-
-            <div class="field-container">
-                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
-                
-                <div class="input-container pull-left">                
-                    <label for="summary_director_2_name">Directer 2:</label>
-                    <input type="text" id="summary_director_2_name" disabled="true" class="custom-input-class">
-                </div>                
-                <div class="clear"></div>
-            </div>            
-
-            <div class="field-container">
-                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
-                
-                <div class="input-container pull-left">                
-                    <label for="summary_director_3_name">Directer 3:</label>
-                    <input type="text" id="summary_director_3_name" disabled="true" class="custom-input-class">
-                </div>          
-                <div id="director-price" class="price pull-right"><p>$1000</p></div>      
-                <div class="clear"></div>
-            </div>            
-            
-            <div class="field-container">
-                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
-                
-                <div class="input-container pull-left">                
-                    <label for="summary_shareholder_1_name">Shareholder 1:</label>
-                    <input type="text" id="summary_shareholder_1_name" disabled="true" class="custom-input-class small-input">
-                    <input type="text" id="summary_shareholder_1_amount" disabled="true" class="custom-input-class small-input-2">
-                </div>                
-                <div class="clear"></div>
-            </div>    
-
-            <div class="field-container">
-                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
-                
-                <div class="input-container pull-left">                
-                    <label for="summary_shareholder_2_name">Shareholder 2:</label>
-                    <input type="text" id="summary_shareholder_2_name" disabled="true" class="custom-input-class small-input">
-                    <input type="text" id="summary_shareholder_2_amount" disabled="true" class="custom-input-class small-input-2">
-                </div>                
-                <div class="clear"></div>
-            </div>    
-
-            <div class="field-container">
-                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
-                
-                <div class="input-container pull-left">                
-                    <label for="summary_shareholder_3_name">Shareholder 3:</label>
-                    <input type="text" id="summary_shareholder_3_name" disabled="true" class="custom-input-class small-input">
-                    <input type="text" id="summary_shareholder_3_amount" disabled="true" class="custom-input-class small-input-2">
-                </div>                
-                <div id="shareholder-price" class="price pull-right"><p>$1000</p></div>      
-                <div class="clear"></div>
-            </div>                       
-
-            <div class="field-container">
-                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
-                
-                <div class="input-container pull-left">                
-                    <label for="summary_total_share">Total share allocation</label>
-                    <div class="small-input"></div>
-                    <input type="text" id="summary_total_share" disabled="true" class="custom-input-class small-input-2">
-                </div>                
-                <div class="clear"></div>
-            </div>  
-
-            <div class="field-container">
-                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
-                
-                <div class="input-container pull-left">                
-                    <label for="summary_secretary_name">Secretary name</label>
-                    <input type="text" id="summary_secretary_1_name" disabled="true" class="custom-input-class">
-                </div>                
-                <div id="secretary-price" class="price pull-right"><p>$1000</p></div>      
-                <div class="clear"></div>
-            </div>                       
-            
-            <h4>Additional services required:</h4>
-            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
-            
-            <div class="field-container">
-                <div class="pull-left">                
-                    <p>Yes, I will need help setting up a merchant account</p>
-                </div>
-                <div class="price pull-right"><p>$1000</p></div>      
-                <div class="clear"></div>
+            <div id="summarydirector">
+                <!-- JS CONTENT GOES HERE -->
             </div>
-            <div class="field-container">
-                <div class="pull-left">                
-                    <p>Yes, I will need help setting up a bank account</p>
-                </div>
-                <div class="price pull-right"><p>$1000</p></div>      
-                <div class="clear"></div>
+
+            <div id="summaryshareholder">
+                <!-- JS CONTENT GOES HERE -->
             </div>
-            <div class="field-container">
-                <div class="pull-left">                
-                    <p>Yes, I will need help setting up mail services</p>
-                </div>
-                <div class="price pull-right"><p>$1000</p></div>     
-                <div class="clear"></div> 
+
+            <div id="summarysecretary">
+                <!-- JS CONTENT GOES HERE -->
             </div>
+
+            <div id="summaryservice">
+                <!-- JS CONTENT GOES HERE -->
+            </div>                          
+                        
             <div class="field-container">
                 <div class="pull-left">                
                     <p>Total Cost</p>
                 </div>
-                <div class="price pull-right"><p>$TBC</p></div>     
+                <div class="total-summary-price price pull-right"><p>$TBC</p></div>     
                 <div class="clear"></div> 
             </div>
             
