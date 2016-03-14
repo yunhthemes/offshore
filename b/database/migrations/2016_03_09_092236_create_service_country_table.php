@@ -13,13 +13,14 @@ class CreateServiceCountryTable extends Migration
     public function up()
     {
         //
-         Schema::create('service_country', function (Blueprint $table) {            
+         Schema::create('service_country', function (Blueprint $table) {       
+            $table->increments('id');     
             $table->integer('service_id')->unsigned();        
             $table->integer('country_id')->unsigned();
             $table->decimal('price', 10, 2);            
             $table->foreign('service_id')->references('id')->on('services');
             $table->foreign('country_id')->references('id')->on('countries');
-            $table->timestamps();
+            $table->timestamps('created_at');
         });
     }
 
