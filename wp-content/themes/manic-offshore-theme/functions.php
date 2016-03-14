@@ -9,7 +9,6 @@ define("JS", THEMEROOT."/js");
 define("APP", THEMEROOT."/app");
 define("SITEURL", get_site_url());
 
-
 /*** Child Theme Function  ***/
 
 function mkdf_child_theme_enqueue_scripts() {
@@ -56,7 +55,6 @@ function remove_admin_bar() {
      
 require 'signup.php';
 require 'registration.php';
-require 'fourstep.php';
 require 'custom-login-form.php';
 
 // $api_url = 'https://api.instagram.com/v1/users/' . esc_html( $user_id ) . '/media/recent/';

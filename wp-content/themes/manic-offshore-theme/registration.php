@@ -224,14 +224,19 @@ function registration_form() {
                 if(add_amount=="") add_amount = 0;
                 amount += parseFloat(add_amount);
                 return amount;
-            }            
+            }         
+
+            function updateHashInURL(hash) {
+                window.location.hash = hash;
+                return false;
+            }
 
             function updateKeyPersonnelSummary() {
                 
                 var directors = $("input.director-name").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
                 var secretaries = $("input.secretary-name").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
                 var shareholders = $("input.shareholder-name").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
-                var shareholder_amounts = $("input.shareholder-amount").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
+                var shareholder_amounts = $("input.shareholder-amount").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
 
                 var services = $("input.service-name").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });                
                 var services_ids = $("input.service-id").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });                
@@ -244,6 +249,8 @@ function registration_form() {
                     shareholders[index].amount_name = shareholder_amounts[index].name;
                     shareholders[index].amount_value = shareholder_amounts[index].value;
                 }
+
+                console.log(shareholders)
                 
                 // need to find out about select dropdown key and value
                 console.log(services_countries);
@@ -269,9 +276,14 @@ function registration_form() {
 
                 $("#summary_total_share").val($("#total_share").val());
 
-                $("#summarydirector").find("#director-price p").text("$"+prices["directors"]);
-                $("#summarysecretary").find("#secretary-price p").text("$"+prices["secretaries"]);
-                $("#summaryshareholder").find("#shareholder-price p").text("$"+prices["secretaries"]);
+                if ($("input#nominee_director").prop("checked")) $("#summarydirector").find("#director-price p").text("$"+prices["directors"]);
+                else $("#summarydirector").find("#director-price p").text("$0.00");
+
+                if ($("input#nominee_shareholder").prop("checked")) $("#summaryshareholder").find("#shareholder-price p").text("$"+prices["secretaries"]);
+                else $("#summaryshareholder").find("#shareholder-price p").text("$0.00");                
+
+                if ($("input#nominee_secretary").prop("checked")) $("#summarysecretary").find("#secretary-price p").text("$"+prices["secretaries"]);
+                else $("#summarysecretary").find("#secretary-price p").text("$0.00");                
 
                 $("#summaryjurisdiction-price").children("p").text("$"+prices["jurisdiction"]);
 
@@ -296,12 +308,14 @@ function registration_form() {
                 if($(this).data("id")==4) {
                     updateKeyPersonnelSummary();
                 }
+                updateHashInURL($(this).data("hash"));
                 
             });
 
             $(".back-btn").on("click", function(e){
                 e.preventDefault();                
                 changePrevStep($(this).data("id"));
+                updateHashInURL($(this).data("hash"));
             });
 
             /////
@@ -318,6 +332,8 @@ function registration_form() {
             $(".step-circle").on("click", function(e){
                 e.preventDefault();                
                 changePrevStep($(this).data("id"));
+
+                updateHashInURL($(this).data("hash"));
             });
 
             /////
@@ -332,8 +348,8 @@ function registration_form() {
                 update_input_val(selectedCompanyTypeName, "#jurisdiction");
 
                 // with cross domain
-                // var response = makeJsonpRequest("", "http://103.25.203.23/b/admin/jurisdiction/"+selectedCompanyTypeId, "GET");
-                var response = makeJsonpRequest("", "'.SITEURL.'/b/admin/jurisdiction/"+selectedCompanyTypeId, "GET");
+                var response = makeJsonpRequest("", "http://103.25.203.23/b/admin/jurisdiction/"+selectedCompanyTypeId, "GET");
+                // var response = makeJsonpRequest("", "'.SITEURL.'/b/admin/jurisdiction/"+selectedCompanyTypeId, "GET");
 
                 // without cross domain
                 // var response = makeRequest("", "'.SITEURL.'/b/admin/jurisdiction/"+selectedCompanyTypeId, "GET");
@@ -448,8 +464,8 @@ function registration_form() {
                 });
 
                 // with cross domain
-                // var response = makeJsonpRequest("", "http://103.25.203.23/b/admin/jurisdiction", "GET");
-                var response = makeJsonpRequest("", "'.SITEURL.'/b/admin/jurisdiction", "GET");
+                var response = makeJsonpRequest("", "http://103.25.203.23/b/admin/jurisdiction", "GET");
+                // var response = makeJsonpRequest("", "'.SITEURL.'/b/admin/jurisdiction", "GET");
 
                 // without cross domain
                 // var response = makeRequest("", "'.SITEURL.'/b/admin/jurisdiction", "GET");
@@ -523,8 +539,8 @@ function registration_form() {
             <a href="#" data-selector="shareholder" class="add-more">Add More <i class="fa fa-plus"></i></a>
 
             <div class="field-container">
-                <input type="checkbox" name="nominee_shareholders">
-                <label for="nominee_shareholders" class="checkbox-label">Offshore Company Solutions to provide nominee shareholders</label>
+                <input type="checkbox" name="nominee_shareholder" id="nominee_shareholder">
+                <label for="nominee_shareholder" class="checkbox-label">Offshore Company Solutions to provide nominee shareholders</label>
             </div>
 
             <div class="field-container">
@@ -568,8 +584,8 @@ function registration_form() {
             <a href="#" data-selector="director" class="add-more">Add More <i class="fa fa-plus"></i></a>
 
             <div class="field-container">
-                <input type="checkbox" name="nominee_directors">
-                <label for="nominee_directors" class="checkbox-label">Offshore Company Solutions to provide professional directors</label>
+                <input type="checkbox" name="nominee_director" id="nominee_director">
+                <label for="nominee_director" class="checkbox-label">Offshore Company Solutions to provide professional directors</label>
             </div>              
 
             <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>              
@@ -593,8 +609,8 @@ function registration_form() {
             </div>                
 
             <div class="field-container">
-                <input type="checkbox" name="nominee_directors">
-                <label for="nominee_directors" class="checkbox-label">Offshore Company Solutions to provide professional directors</label>
+                <input type="checkbox" name="nominee_secretary" id="nominee_secretary">
+                <label for="nominee_secretary" class="checkbox-label">Offshore Company Solutions to provide professional directors</label>
             </div>                   
         {{/if}}
     </script>
@@ -679,20 +695,20 @@ function registration_form() {
                     {{#if @last}} <div id="shareholder-price" class="price summary-price pull-right"><p>$0</p></div> {{/if}}                          
                     <div class="clear"></div>
                 </div>
+                {{#if @last}}
+                <div class="field-container">
+                    <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+                    
+                    <div class="input-container pull-left">                
+                        <label for="summary_total_share">Total share allocation</label>
+                        <div class="small-input"></div>
+                        <input type="text" id="summary_total_share" disabled="true" class="custom-input-class small-input-2">
+                    </div>                
+                    <div class="clear"></div>
+                </div>
+                {{/if}}
             {{/if}}
         {{/shareholders}}
-        {{#if shareholders.count}}
-        <div class="field-container">
-            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
-            
-            <div class="input-container pull-left">                
-                <label for="summary_total_share">Total share allocation</label>
-                <div class="small-input"></div>
-                <input type="text" id="summary_total_share" disabled="true" class="custom-input-class small-input-2">
-            </div>                
-            <div class="clear"></div>
-        </div>
-        {{/if}}
     </script>
 
     <script id="summarysecretary-template" type="text/x-handlebars-template">
@@ -730,16 +746,16 @@ function registration_form() {
     <div class="stepwizard hide-step-indicators">
         <div class="stepwizard-row">
             <div class="stepwizard-step">
-                <button type="button" data-id="1-1" class="step-1-circle step-1-1-circle step-1-2-circle step-circle btn btn-primary btn-circle" disabled="disabled">1</button>
+                <button type="button" data-id="1-1" data-hash="step-1" class="step-1-circle step-1-1-circle step-1-2-circle step-circle btn btn-primary btn-circle" disabled="disabled">1</button>
             </div>
             <div class="stepwizard-step">
-                <button type="button" data-id="2" class="step-2-circle step-circle btn btn-default btn-circle" disabled="disabled">2</button>                
+                <button type="button" data-id="2" data-hash="step-2" class="step-2-circle step-circle btn btn-default btn-circle" disabled="disabled">2</button>                
             </div>
             <div class="stepwizard-step">
-                <button type="button" data-id="3" class="step-3-circle step-circle btn btn-default btn-circle" disabled="disabled">3</button>                
+                <button type="button" data-id="3" data-hash="step-3" class="step-3-circle step-circle btn btn-default btn-circle" disabled="disabled">3</button>                
             </div> 
             <div class="stepwizard-step">
-                <button type="button" data-id="4" class="step-4-circle step-circle btn btn-default btn-circle" disabled="disabled">4</button>                
+                <button type="button" data-id="4" data-hash="step-4" class="step-4-circle step-circle btn btn-default btn-circle" disabled="disabled">4</button>                
             </div>            
         </div>
     </div>
@@ -757,8 +773,8 @@ function registration_form() {
             <h3>Please select:</h3>
             <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
             <input type="hidden" name="chosen_route" id="chosen_route" value="">
-            <a href="#" id="incorporate_company"><button data-id="1-1" class="custom-submit-class next-btn">Incorporate a new company</button></a>
-            <a href="#" id="shelf_company"><button data-id="1-2" class="custom-submit-class next-btn">Purchase a shelf company</button></a>            
+            <a href="#" id="incorporate_company"><button data-id="1-1" data-hash="step-1" class="custom-submit-class next-btn">Incorporate a new company</button></a>
+            <a href="#" id="shelf_company"><button data-id="1-2" data-hash="step-1" class="custom-submit-class next-btn">Purchase a shelf company</button></a>            
           </div>             
         </form>
         <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
@@ -801,8 +817,8 @@ function registration_form() {
                 <label for="name">3rd Choice</label>
                 <input type="text" name="company_name[]" data-choice-id="3" class="company-name-choice custom-input-class" value="">
             </div>
-            <a href="#" id="next"><button data-id="0" class="custom-submit-class back-btn">Back</button></a>
-            <a href="#" id="next"><button data-id="2" class="custom-submit-class next-btn">Next</button></a>
+            <a href="#" id="next"><button data-id="0" data-hash="#" class="custom-submit-class back-btn">Back</button></a>
+            <a href="#" id="next"><button data-id="2" data-hash="step-2" class="custom-submit-class next-btn">Next</button></a>
             
           </div>             
         </form>
@@ -830,8 +846,8 @@ function registration_form() {
             <!-- JS CONTENT GOES HERE -->
             </div>
     
-            <a href="#" id="next"><button data-id="0" class="custom-submit-class back-btn">Back</button></a>
-            <a href="#" id="next"><button data-id="2" class="custom-submit-class next-btn">Next</button></a>
+            <a href="#" id="next"><button data-id="0" data-hash="#" class="custom-submit-class back-btn">Back</button></a>
+            <a href="#" id="next"><button data-id="2" data-hash="step-2" class="custom-submit-class next-btn">Next</button></a>
            
             
           </div>             
@@ -855,8 +871,8 @@ function registration_form() {
                 <!-- JS CONTENT GOES HERE -->       
             </div>
                 
-            <a href="#" id="next"><button data-id="1-1" class="custom-submit-class back-btn">Back</button></a>
-            <a href="#" id="next"><button data-id="3" class="custom-submit-class next-btn">Next</button></a>
+            <a href="#" id="next"><button data-id="1-1" data-hash="step-1" class="custom-submit-class back-btn">Back</button></a>
+            <a href="#" id="next"><button data-id="3" data-hash="step-3" class="custom-submit-class next-btn">Next</button></a>
              
         </form>
         <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
@@ -880,8 +896,8 @@ function registration_form() {
                 <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
             </div>            
             
-            <a href="#" id="next"><button data-id="2" class="custom-submit-class back-btn">Back</button></a>
-            <a href="#" id="next"><button data-id="4" class="custom-submit-class next-btn">Next</button></a>
+            <a href="#" id="next"><button data-id="2" data-hash="step-2" class="custom-submit-class back-btn">Back</button></a>
+            <a href="#" id="next"><button data-id="4" data-hash="step-4" class="custom-submit-class next-btn">Next</button></a>
              
         </form>
     </div>
@@ -975,7 +991,7 @@ function registration_form() {
                 <div class="clear"></div> 
             </div>
             
-            <a href="#" id="next"><button data-id="3" class="custom-submit-class back-btn">Back</button></a>
+            <a href="#" id="next"><button data-id="3" data-hash="step-3" class="custom-submit-class back-btn">Back</button></a>
             <a href="#" id="next"><button class="custom-submit-class">Payment Gateway</button></a>
             
         </form>        
