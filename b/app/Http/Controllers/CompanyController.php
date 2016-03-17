@@ -64,7 +64,8 @@ class CompanyController extends Controller
         if(!empty($request->company_name) && !empty($request->company_incorporation_date) && !empty($request->company_type) && !empty($request->company_price)) {
             $company->name = $request->company_name;
             $company->incorporation_date = $request->company_incorporation_date;
-            $company->price = $request->company_price;
+            $company->price = (double) preg_replace("/[^0-9,.]/", "", $request->company_price);
+            $company->price_eu = (double) preg_replace("/[^0-9,.]/", "", $request->company_price_eu);
             $company->shelf = 1;
             $company->company_type_id = $request->company_type;
             $company->save();    

@@ -18,6 +18,7 @@ class CreateCompaniesTable extends Migration
             $table->string('name');
             $table->date('incorporation_date');
             $table->decimal('price', 10, 2);
+            $table->decimal('price_eu', 10, 2);
             $table->boolean('shelf');
             $table->integer('company_type_id')->unsigned();
             $table->foreign('company_type_id')->references('id')->on('company_types');

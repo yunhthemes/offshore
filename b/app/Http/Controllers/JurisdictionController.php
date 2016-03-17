@@ -64,32 +64,36 @@ class JurisdictionController extends Controller
 
         $company_type = new CompanyType;
         $company_type->name = $request->company_type_name;
-        $company_type->price = $request->company_type_price;
+        $company_type->price = (double) preg_replace("/[^0-9,.]/", "", $request->company_type_price);
+        $company_type->price_eu = (double) preg_replace("/[^0-9,.]/", "", $request->company_type_price_eu);
         $company_type->rules = 'company rules?';
         $company_type->save();
 
         if($company_type->id) {
 
-            if(!empty($request->director_name_rules) && !empty($request->director_price)) {
+            if(!empty($request->director_name_rules) && !empty($request->director_price) && !empty($request->director_price_eu)) {
                 $director = new Director;
                 $director->name_rules = $request->director_name_rules;
-                $director->price = $request->director_price;   
+                $director->price = (double) preg_replace("/[^0-9,.]/", "", $request->director_price);   
+                $director->price_eu = (double) preg_replace("/[^0-9,.]/", "", $request->director_price_eu);   
                 $director->company_type_id = $company_type->id;   
                 $director->save();
             }
 
-            if(!empty($request->shareholder_name_rules) && !empty($request->shareholder_price)) {
+            if(!empty($request->shareholder_name_rules) && !empty($request->shareholder_price) && !empty($request->shareholder_price_eu)) {
                 $shareholder = new Shareholder;
                 $shareholder->name_rules = $request->shareholder_name_rules;
-                $shareholder->price = $request->shareholder_price;
+                $shareholder->price = (double) preg_replace("/[^0-9,.]/", "", $request->shareholder_price);
+                $shareholder->price_eu= (double) preg_replace("/[^0-9,.]/", "", $request->shareholder_price_eu);
                 $shareholder->company_type_id = $company_type->id;       
                 $shareholder->save();
             }
 
-            if(!empty($request->secretary_name_rules) && !empty($request->secretary_price)) {
+            if(!empty($request->secretary_name_rules) && !empty($request->secretary_price) && !empty($request->secretary_price_eu)) {
                 $secretary = new Secretary;
                 $secretary->name_rules = $request->secretary_name_rules;
-                $secretary->price = $request->secretary_price;    
+                $secretary->price = (double) preg_replace("/[^0-9,.]/", "", $request->secretary_price);    
+                $secretary->price_eu = (double) preg_replace("/[^0-9,.]/", "", $request->secretary_price_eu);    
                 $secretary->company_type_id = $company_type->id;       
                 $secretary->save();
             }
@@ -103,10 +107,12 @@ class JurisdictionController extends Controller
                 $service->save();
 
                 for($i=1;$i<=$count;$i++):
-                    if(!empty($request->input('service_1_name')) && !empty($request->input('service_1_country_'.$i)) && !empty($request->input('service_1_price_'.$i))):
+                    if(!empty($request->input('service_1_name')) && !empty($request->input('service_1_country_'.$i)) && !empty($request->input('service_1_price_'.$i)) && !empty($request->input('service_1_price_eu_'.$i))):
                         
                         $country = Country::find($request->input('service_1_country_'.$i));
-                        $country->services()->attach($service->id, ['price' => $request->input('service_1_price_'.$i)]);
+                        $price = (double) preg_replace("/[^0-9,.]/", "", $request->input('service_1_price_'.$i));
+                        $price_eu = (double) preg_replace("/[^0-9,.]/", "", $request->input('service_1_price_eu_'.$i));
+                        $country->services()->attach($service->id, ['price' => $price, 'price_eu' => $price_eu]);
                         
                     endif;                
                 endfor;
@@ -122,10 +128,12 @@ class JurisdictionController extends Controller
                 $service->save();
 
                 for($i=1;$i<=$count;$i++):
-                    if(!empty($request->input('service_2_name')) && !empty($request->input('service_2_country_'.$i)) && !empty($request->input('service_2_price_'.$i))):
+                    if(!empty($request->input('service_2_name')) && !empty($request->input('service_2_country_'.$i)) && !empty($request->input('service_2_price_'.$i)) && !empty($request->input('service_2_price_eu_'.$i))):
                         
                         $country = Country::find($request->input('service_2_country_'.$i));
-                        $country->services()->attach($service->id, ['price' => $request->input('service_2_price_'.$i)]);
+                        $price = (double) preg_replace("/[^0-9,.]/", "", $request->input('service_2_price_'.$i));
+                        $price_eu = (double) preg_replace("/[^0-9,.]/", "", $request->input('service_2_price_eu_'.$i));
+                        $country->services()->attach($service->id, ['price' => $price, 'price_eu' => $price_eu]);                        
                                         
                     endif;                
                 endfor;
@@ -141,10 +149,12 @@ class JurisdictionController extends Controller
                 $service->save();                
 
                 for($i=1;$i<=$count;$i++):
-                    if(!empty($request->input('service_3_name')) && !empty($request->input('service_3_country_'.$i)) && !empty($request->input('service_3_price_'.$i))):
+                    if(!empty($request->input('service_3_name')) && !empty($request->input('service_3_country_'.$i)) && !empty($request->input('service_3_price_'.$i)) && !empty($request->input('service_3_price_eu_'.$i))):
 
                         $country = Country::find($request->input('service_3_country_'.$i));
-                        $country->services()->attach($service->id, ['price' => $request->input('service_3_price_'.$i)]);                    
+                        $price = (double) preg_replace("/[^0-9,.]/", "", $request->input('service_3_price_'.$i));
+                        $price_eu = (double) preg_replace("/[^0-9,.]/", "", $request->input('service_3_price_eu_'.$i));
+                        $country->services()->attach($service->id, ['price' => $price, 'price_eu' => $price_eu]);                                            
                         
                     endif;                
                 endfor;
@@ -160,10 +170,13 @@ class JurisdictionController extends Controller
                 $service->save();                
 
                 for($i=1;$i<=$count;$i++):
-                    if(!empty($request->input('service_4_name')) && !empty($request->input('service_4_country_'.$i)) && !empty($request->input('service_4_price_'.$i))):
+                    if(!empty($request->input('service_4_name')) && !empty($request->input('service_4_country_'.$i)) && !empty($request->input('service_4_price_'.$i)) && !empty($request->input('service_4_price_eu_'.$i))):
                         
                         $country = Country::find($request->input('service_4_country_'.$i));
-                        $country->services()->attach($service->id, ['price' => $request->input('service_4_price_'.$i)]);                    
+                        $price = (double) preg_replace("/[^0-9,.]/", "", $request->input('service_4_price_'.$i));
+                        $price_eu = (double) preg_replace("/[^0-9,.]/", "", $request->input('service_4_price_eu_'.$i));
+                        $country->services()->attach($service->id, ['price' => $price, 'price_eu' => $price_eu]);     
+                        // $country->services()->attach($service->id, ['price' => $request->input('service_4_price_'.$i), 'price_eu' => $request->input('service_4_price_eu_'.$i)]);                    
                         
                     endif;                
                 endfor;

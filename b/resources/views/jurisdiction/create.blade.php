@@ -13,55 +13,82 @@
 			<div class="form-container">
 				{!! Form::open(array('route' => 'admin.jurisdiction.store')) !!}
 					<div class="field-container">
-						{{ Form::text('company_type_name', null, ['class'=>'custom-input-class','placeholder'=>'Jurisdiction/Company Type']) }}
+						{{ Form::label('company_type_name', 'Jurisdiction/Company type')}}
+						{{ Form::text('company_type_name', null, ['class'=>'custom-input-class']) }}
 					</div>
 					<div class="field-container">
-						{{ Form::text('company_type_price', null, ['class'=>'custom-input-class','placeholder'=>'Jurisdiction/Company Type Price']) }}			
-					</div>					
-					<!-- <div class="field-container">
-						{{ Form::textarea('company_type_rules', null, ['class'=>'custom-input-class','placeholder'=>'Naming Rules']) }}					
-					</div> -->
+						{{ Form::label('company_type_price', 'Jurisdiction/Company type price (USD)')}}
+						{{ Form::text('company_type_price', null, ['class'=>'custom-input-class']) }}			
+					</div>										
+					<div class="field-container">
+						{{ Form::label('company_type_price_eu', 'Jurisdiction/Company type price (EUR)')}}
+						{{ Form::text('company_type_price_eu', null, ['class'=>'custom-input-class']) }}			
+					</div>										
 					
 					<div class="field-group">						
 						<div class="field-container">
-							{{ Form::textarea('director_name_rules', null, ['class'=>'custom-input-class','placeholder'=>'Director name rules']) }}
+							{{ Form::label('director_name_rules', 'Director name rules')}}
+							{{ Form::textarea('director_name_rules', null, ['class'=>'custom-input-class']) }}
 						</div>
 						<div class="field-container">
-							{{ Form::text('director_price', null, ['class'=>'custom-input-class','placeholder'=>'Nominee Director price']) }}
-						</div>
-					</div>
-
-					<div class="field-group">						
-						<div class="field-container">
-							{{ Form::textarea('shareholder_name_rules', null, ['class'=>'custom-input-class','placeholder'=>'Shareholder name rules']) }}
+							{{ Form::label('director_price', 'Nominee director price (USD)')}}
+							{{ Form::text('director_price', null, ['class'=>'custom-input-class']) }}
 						</div>
 						<div class="field-container">
-							{{ Form::text('shareholder_price', null, ['class'=>'custom-input-class','placeholder'=>'Nominee Shareholder price']) }}
+							{{ Form::label('director_price_eu', 'Nominee director price (EUR)')}}
+							{{ Form::text('director_price_eu', null, ['class'=>'custom-input-class']) }}
 						</div>
 					</div>
 
 					<div class="field-group">						
 						<div class="field-container">
-							{{ Form::textarea('secretary_name_rules', null, ['class'=>'custom-input-class','placeholder'=>'Secretary name rules']) }}
+							{{ Form::label('shareholder_name_rules', 'Shareholder name rules')}}
+							{{ Form::textarea('shareholder_name_rules', null, ['class'=>'custom-input-class']) }}
 						</div>
 						<div class="field-container">
-							{{ Form::text('secretary_price', null, ['class'=>'custom-input-class','placeholder'=>'Nominee Secretary price']) }}
+							{{ Form::label('shareholder_price', 'Nominee shareholder price (USD)')}}
+							{{ Form::text('shareholder_price', null, ['class'=>'custom-input-class']) }}
+						</div>
+						<div class="field-container">
+							{{ Form::label('shareholder_price_eu', 'Nominee shareholder price (EUR)')}}
+							{{ Form::text('shareholder_price_eu', null, ['class'=>'custom-input-class']) }}
+						</div>
+					</div>
+
+					<div class="field-group">						
+						<div class="field-container">
+							{{ Form::label('secretary_name_rules', 'Secretary name rules')}}
+							{{ Form::textarea('secretary_name_rules', null, ['class'=>'custom-input-class']) }}
+						</div>
+						<div class="field-container">
+							{{ Form::label('secretary_price', 'Nominee secretary price (USD)')}}
+							{{ Form::text('secretary_price', null, ['class'=>'custom-input-class']) }}
+						</div>
+						<div class="field-container">
+							{{ Form::label('secretary_price_eu', 'Nominee secretary price (EUR)')}}
+							{{ Form::text('secretary_price_eu', null, ['class'=>'custom-input-class']) }}
 						</div>
 					</div>
 					
 					<div class="each-service">
-						<h3>Bank account</h3>
+						<h3 class="form-header">Bank account</h3>
 						{{ Form::hidden('service_1_name', 'Bank account', ['class'=>'custom-input-class']) }}
 
 						<div id="cloneable">
 							<div class="field-group">												
 								<div class="field-container">
-									<div class="custom-input-class-select-container">										
+									{{ Form::label('service_1_country_1', 'Bank account country')}}
+									<div class="custom-input-class-select-container">																				
 										{{ Form::select('service_1_country_1', $countries, null, ['class' => 'custom-input-class service_countries']) }}
 									</div>
 								</div>							
 								<div class="field-container">
-									{{ Form::text('service_1_price_1', null, ['class'=>'custom-input-class service_prices','placeholder'=>'Service price']) }}
+									{{ Form::label('service_1_price_1', 'Bank account price (USD)')}}
+									{{ Form::text('service_1_price_1', null, ['class'=>'custom-input-class service_prices']) }}
+								</div>
+								<div class="field-container">
+									{{ Form::label('service_1_price_eu_1', 'Bank account price (EUR)')}}
+									{{ Form::text('service_1_price_eu_1', null, ['class'=>'custom-input-class service_prices']) }}
 								</div>
 							</div>
 						</div>
@@ -72,18 +99,24 @@
 					</div>
 					
 					<div class="each-service">
-						<h3>Credit/debit card</h3>
+						<h3 class="form-header">Credit/debit card</h3>
 						{{ Form::hidden('service_2_name', 'Credit card', ['class'=>'custom-input-class']) }}
 						
 						<div id="cloneable">
 							<div class="field-group">												
 								<div class="field-container">
+									{{ Form::label('service_2_country_1', 'Credit/debit card country')}}
 									<div class="custom-input-class-select-container">										
 										{{ Form::select('service_2_country_1', $countries, null, ['class' => 'custom-input-class service_countries']) }}
 									</div>
 								</div>							
 								<div class="field-container">
-									{{ Form::text('service_2_price_1', null, ['class'=>'custom-input-class service_prices','placeholder'=>'Service price']) }}
+									{{ Form::label('service_2_price_1', 'Credit/debit card price (USD)')}}
+									{{ Form::text('service_2_price_1', null, ['class'=>'custom-input-class service_prices']) }}
+								</div>
+								<div class="field-container">
+									{{ Form::label('service_2_price_eu_1', 'Credit/debit card price (EUR)')}}
+									{{ Form::text('service_2_price_eu_1', null, ['class'=>'custom-input-class service_prices']) }}
 								</div>
 							</div>
 						</div>
@@ -94,18 +127,24 @@
 					</div>
 
 					<div class="each-service">
-						<h3>Mail forwarding</h3>
+						<h3 class="form-header">Mail forwarding</h3>
 						{{ Form::hidden('service_3_name', 'Mail forwarding', ['class'=>'custom-input-class']) }}
 
 						<div id="cloneable">
 							<div class="field-group">												
 								<div class="field-container">
+									{{ Form::label('service_3_country_1', 'Mail forwarding country')}}
 									<div class="custom-input-class-select-container">										
 										{{ Form::select('service_3_country_1', $countries, null, ['class' => 'custom-input-class service_countries']) }}
 									</div>
 								</div>							
 								<div class="field-container">
-									{{ Form::text('service_3_price_1', null, ['class'=>'custom-input-class service_prices','placeholder'=>'Service price']) }}
+									{{ Form::label('service_3_price_1', 'Mail forwarding price (USD)')}}
+									{{ Form::text('service_3_price_1', null, ['class'=>'custom-input-class service_prices']) }}
+								</div>
+								<div class="field-container">
+									{{ Form::label('service_3_price_eu_1', 'Mail forwarding price (EUR)')}}
+									{{ Form::text('service_3_price_eu_1', null, ['class'=>'custom-input-class service_prices']) }}
 								</div>
 							</div>
 						</div>
@@ -116,18 +155,24 @@
 					</div>
 
 					<div class="each-service">
-						<h3>Local Telephone</h3>
+						<h3 class="form-header">Local telephone</h3>
 						{{ Form::hidden('service_4_name', 'Local Telephone', ['class'=>'custom-input-class']) }}
 
 						<div id="cloneable">
 							<div class="field-group">												
 								<div class="field-container">
+									{{ Form::label('service_4_country_1', 'Local telephone country')}}
 									<div class="custom-input-class-select-container">										
 										{{ Form::select('service_4_country_1', $countries, null, ['class' => 'custom-input-class service_countries']) }}
 									</div>
 								</div>							
 								<div class="field-container">
-									{{ Form::text('service_4_price_1', null, ['class'=>'custom-input-class service_prices','placeholder'=>'Service price']) }}
+									{{ Form::label('service_4_price_1', 'Local telephone price (USD)')}}
+									{{ Form::text('service_4_price_1', null, ['class'=>'custom-input-class service_prices']) }}
+								</div>
+								<div class="field-container">
+									{{ Form::label('service_4_price_eu_1', 'Local telephone price (EUR)')}}
+									{{ Form::text('service_4_price_eu_1', null, ['class'=>'custom-input-class service_prices']) }}
 								</div>
 							</div>
 						</div>
@@ -138,12 +183,13 @@
 					</div>
 
 					<div class="each-service">
-						<h3>Information Services</h3>
+						<h3 class="form-header">Information services</h3>
 
 						<div id="cloneable">
 							<div class="field-group">
 								<div class="field-container">
-									{{ Form::text('information_service_1', null, ['class'=>'custom-input-class information_services','placeholder'=>'Information Service Name']) }}
+									{{ Form::label('information_service_1', 'Information services name')}}
+									{{ Form::text('information_service_1', null, ['class'=>'custom-input-class information_services']) }}
 								</div>
 							</div>
 						</div>

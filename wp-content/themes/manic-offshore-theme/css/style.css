@@ -652,7 +652,25 @@ footer .widget .mkdf-icon-list-item:hover p {
   position: absolute;
 }
 .field-container .country-options-container {
-  width: 75%;
+  width: 100%;
+}
+.field-container .country-options-container .col-1-header,
+.field-container .country-options-container .col-2-header,
+.field-container .country-options-container .col-3-header,
+.field-container .country-options-container .col-1,
+.field-container .country-options-container .col-2,
+.field-container .country-options-container .col-3 {
+  display: inline-block;
+  width: 32%;
+  vertical-align: top;
+}
+.field-container .country-options-container .col-1-header .price,
+.field-container .country-options-container .col-2-header .price,
+.field-container .country-options-container .col-3-header .price,
+.field-container .country-options-container .col-1 .price,
+.field-container .country-options-container .col-2 .price,
+.field-container .country-options-container .col-3 .price {
+  padding-top: 0px;
 }
 .field-container .price {
   padding-top: 11px;
@@ -666,6 +684,10 @@ footer .widget .mkdf-icon-list-item:hover p {
 }
 .stepwizard-step p {
   margin-top: 10px;
+  position: absolute;
+  top: 80px;
+  width: 210px;
+  left: 5px;
 }
 .stepwizard-row {
   display: table-row;
@@ -686,35 +708,73 @@ footer .widget .mkdf-icon-list-item:hover p {
   content: " ";
   width: 100%;
   height: 1px;
-  background-color: #A2A0A0;
   z-order: 0;
 }
 .stepwizard .stepwizard-step {
-  display: table-cell;
+  width: 80px;
+  margin-right: 100px;
+  display: inline-block;
   text-align: left;
   position: relative;
+  color: grey;
+}
+.stepwizard .stepwizard-step:nth-of-type(1) p,
+.stepwizard .stepwizard-step:nth-of-type(3) p {
+  left: 0px;
+}
+.stepwizard .stepwizard-step:nth-of-type(2) p {
+  left: -40px;
 }
 .stepwizard .stepwizard-step:last-child {
-  width: 40px;
+  margin-right: 0px;
 }
-.stepwizard .btn-circle {
+.stepwizard .stepwizard-step:last-child:before {
+  display: none;
+}
+.stepwizard .stepwizard-step:before {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  content: "\f105";
+  display: block;
+  font-size: 30px;
+  line-height: 40px;
+  color: #3576ba;
+  text-align: center;
+  position: absolute;
+  margin-left: -10px;
+  margin-top: -20px;
+  right: -60px;
+  top: 50%;
   width: 40px;
   height: 40px;
-  text-align: center;
-  padding: 6px 0;
-  font-size: 12px;
-  line-height: 1.428571429;
-  border-radius: 25px;
-  border: 1px solid #646464 !important;
 }
-.stepwizard .btn-default {
-  background-color: #ffffff;
-  border-color: #646464;
+.stepwizard .stepwizard-step.active-step {
+  color: #008b9b;
 }
-.stepwizard .btn-primary {
-  color: #ffffff;
-  background-color: #008b9b;
-  border-color: #646464;
+.stepwizard .stepwizard-step button {
+  border: none;
+  width: 80px;
+  height: 90px;
+}
+.stepwizard .stepwizard-step:nth-of-type(1) button {
+  background: url("http://clients.manic.com.sg/offshore/wp-content/uploads/2016/01/Offshore_Icon-01.png") no-repeat;
+  background-size: contain;
+}
+.stepwizard .stepwizard-step:nth-of-type(2) button {
+  background: url("http://clients.manic.com.sg/offshore/wp-content/uploads/2016/01/Offshore_Icon-02.png") no-repeat;
+  background-size: contain;
+}
+.stepwizard .stepwizard-step:nth-of-type(3) button {
+  background: url("http://clients.manic.com.sg/offshore/wp-content/uploads/2016/01/Offshore_Icon-03.png") no-repeat;
+  background-size: contain;
+}
+.stepwizard .stepwizard-step:nth-of-type(4) button {
+  background: url("http://clients.manic.com.sg/offshore/wp-content/uploads/2016/01/Offshore_Icon-04.png") no-repeat;
+  background-size: contain;
 }
 #signup-page-form select::-ms-expand {
   display: none;
@@ -742,12 +802,21 @@ label.country_options_label {
   color: #767676;
   text-align: right;
 }
+.active {
+  display: block!important;
+}
 .hide-step-indicators {
   display: none;
 }
 #registration-page-form .field-container a {
   display: inline-block;
   margin-right: 10px;
+}
+label.align-label {
+  padding-top: 7px;
+}
+.nominee-container.hidden {
+  display: none;
 }
 #registration-page-form-1-1 ul,
 #registration-page-form-1-2 ul {
@@ -764,6 +833,10 @@ label.country_options_label {
 }
 #registration-page-form-3 input[type="checkbox"] {
   display: inline-block;
+}
+#registration-page-form-3 input:disabled {
+  background-color: #dddddd;
+  border-color: #bfbfbf;
 }
 #registration-page-form-4 label {
   display: inline-block;
@@ -782,6 +855,16 @@ label.country_options_label {
   padding-left: 0px;
   padding-right: 0px;
   text-align: center;
+}
+#registration-page-form-4 .route-specific-summary {
+  display: none;
+}
+.custom-input-container-left {
+  width: 70%;
+  margin-right: 20px;
+}
+.custom-input-container-right {
+  width: 25%;
 }
 .custom-input-class,
 .custom-input-class-2 {
