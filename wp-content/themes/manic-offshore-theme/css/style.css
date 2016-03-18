@@ -621,6 +621,13 @@ footer .widget .mkdf-icon-list-item:hover p {
   background-color: #ffffff;
   border-color: #ffffff;
 }
+.custom-submit-class.custom-submit-class-2 {
+  width: 200px;
+  height: 30px;
+  margin-top: 15px;
+  padding: 0px 20px;
+  display: block;
+}
 .add-more {
   display: block;
 }
@@ -711,7 +718,7 @@ footer .widget .mkdf-icon-list-item:hover p {
   z-order: 0;
 }
 .stepwizard .stepwizard-step {
-  width: 80px;
+  width: 130px;
   margin-right: 100px;
   display: inline-block;
   text-align: left;
@@ -838,6 +845,9 @@ label.align-label {
   background-color: #dddddd;
   border-color: #bfbfbf;
 }
+#registration-page-form-4 .half-field-container {
+  width: 70%;
+}
 #registration-page-form-4 label {
   display: inline-block;
   width: 165px;
@@ -855,6 +865,9 @@ label.align-label {
   padding-left: 0px;
   padding-right: 0px;
   text-align: center;
+}
+#registration-page-form-4 .one-row {
+  display: block;
 }
 #registration-page-form-4 .route-specific-summary {
   display: none;

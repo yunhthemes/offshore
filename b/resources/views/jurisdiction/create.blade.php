@@ -88,7 +88,7 @@
 								</div>
 								<div class="field-container">
 									{{ Form::label('service_1_price_eu_1', 'Bank account price (EUR)')}}
-									{{ Form::text('service_1_price_eu_1', null, ['class'=>'custom-input-class service_prices']) }}
+									{{ Form::text('service_1_price_eu_1', null, ['class'=>'custom-input-class service_prices_eu']) }}
 								</div>
 							</div>
 						</div>
@@ -116,7 +116,7 @@
 								</div>
 								<div class="field-container">
 									{{ Form::label('service_2_price_eu_1', 'Credit/debit card price (EUR)')}}
-									{{ Form::text('service_2_price_eu_1', null, ['class'=>'custom-input-class service_prices']) }}
+									{{ Form::text('service_2_price_eu_1', null, ['class'=>'custom-input-class service_prices_eu']) }}
 								</div>
 							</div>
 						</div>
@@ -144,7 +144,7 @@
 								</div>
 								<div class="field-container">
 									{{ Form::label('service_3_price_eu_1', 'Mail forwarding price (EUR)')}}
-									{{ Form::text('service_3_price_eu_1', null, ['class'=>'custom-input-class service_prices']) }}
+									{{ Form::text('service_3_price_eu_1', null, ['class'=>'custom-input-class service_prices_eu']) }}
 								</div>
 							</div>
 						</div>
@@ -172,7 +172,7 @@
 								</div>
 								<div class="field-container">
 									{{ Form::label('service_4_price_eu_1', 'Local telephone price (EUR)')}}
-									{{ Form::text('service_4_price_eu_1', null, ['class'=>'custom-input-class service_prices']) }}
+									{{ Form::text('service_4_price_eu_1', null, ['class'=>'custom-input-class service_prices_eu']) }}
 								</div>
 							</div>
 						</div>
@@ -238,7 +238,8 @@
 			$lastElAdded.find('input').attr('name', serviceName+'_'+id).val('');			
 		}else {
 			$lastElAdded.find('select').attr('name', serviceName+'_country_'+id).val('');
-			$lastElAdded.find('input').attr('name', serviceName+'_price_'+id).val('');			
+			$lastElAdded.find('input.service_prices').attr('name', serviceName+'_price_'+id).val('');			
+			$lastElAdded.find('input.service_prices_eu').attr('name', serviceName+'_price_eu_'+id).val('');			
 		}		
 	}
 

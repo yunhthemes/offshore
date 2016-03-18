@@ -226,8 +226,12 @@ function registration_form() {
             function on_route_change(route) {
                 if(route==1) {
                     $("#route-1-summary").show();                       
+                    $("#route-2-summary").hide(); 
+                    appendToHtml("$"+prices["jurisdiction"], "#summaryjurisdiction-price");                   
                 }else {
-                    $("#route-1-summary").hide();
+                    $("#route-2-summary").show();                    
+                    $("#route-1-summary").hide();                    
+                    appendToHtml("$0.00", "#summaryjurisdiction-price");
                 }
             }
 
@@ -267,36 +271,105 @@ function registration_form() {
                     }else if(selector==".service-js-switch") {
                         html.onchange = function() {
                             var countryId = $(html).data("country-id");
+                            var serviceId = $(html).data("service-id");
+                            var serviceName = $(html).data("service-name");
+
                             if(html.checked) {                                
-                                $(".credit_card_country_"+countryId).prop("disabled", false);
+                                $(".service-"+serviceId+"-country-"+countryId).prop("disabled", false);                                
+                                if(serviceName=="Bank account") {
+                                    $(".credit_card_in_country_"+countryId).prop("disabled", false);    
+                                }                                
                             }else {
-                                $(".credit_card_country_"+countryId).prop("disabled", true);
+                                $(".service-"+serviceId+"-country-"+countryId).prop("disabled", true);
+                                if(serviceName=="Bank account") {
+                                    $(".credit_card_in_country_"+countryId).prop("disabled", true);    
+                                }                                                                
                             }
                         }
                     }
-                });
-                
-                
+                });                            
+            }
+
+            function on_nominee_switch_change(selector, switch_input, price) {
+                if ($(switch_input).prop("checked")) {
+                    $("."+selector+"-container").show();
+                    $("#"+selector).html("<p>$"+price+"</p>");  
+                } 
+                else {
+                    $("."+selector+"-container").hide();
+                    $("#"+selector).hide().html("<p>$0.00</p>");
+                } 
             }
 
             function updateKeyPersonnelSummary() {
                 
+                var chosen_route = $("#chosen_route").val();
+
                 var directors = $("input.director-name").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
+                var director_address = $("input.director-address").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
+                var director_address_2 = $("input.director-address-2").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
+                var director_address_3 = $("input.director-address-3").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
+
                 var secretaries = $("input.secretary-name").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
+                var secretary_address = $("input.secretary-address").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
+                var secretary_address_2 = $("input.secretary-address-2").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
+                var secretary_address_3 = $("input.secretary-address-3").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
+
                 var shareholders = $("input.shareholder-name").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
                 var shareholder_amounts = $("input.shareholder-amount").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
+                var shareholder_address = $("input.shareholder-address").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
+                var shareholder_address_2 = $("input.shareholder-address-2").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
+                var shareholder_address_3 = $("input.shareholder-address-3").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
 
                 var services = $("input.service-name").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });                
-                var services_ids = $("input.service-id").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });                
-                var services_countries = $("select.service-country").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
-                var services_prices = $("input.service-price").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
+                var services_ids = $("input.service-id").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });     
+                var services_countries = [];
+                var services_prices = [];
+                var services_credit_card_counts = [];
 
-                var newdata = [];
+                for(index = 0; index < services_ids.length; index++) {
+                    services_countries[index] = $("input.service-"+services_ids[index].value+"-country").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
+                    services_prices[index] = $("input.service-"+services_ids[index].value+"-price").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
+                    services_credit_card_counts[index] = $("input.service-"+services_ids[index].value+"-credit-card-count").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
+                }
 
+                var selectedData = [];
+
+                // amend shareholders
                 for(index = 0; index < shareholders.length; index++) {
                     if(shareholder_amounts[index] && shareholder_amounts[index].name) shareholders[index].amount_name = shareholder_amounts[index].name;
                     if(shareholder_amounts[index] && shareholder_amounts[index].value) shareholders[index].amount_value = shareholder_amounts[index].value;
+
+                    if(shareholder_address[index] && shareholder_address[index].name) shareholders[index].address_name = shareholder_address[index].name;
+                    if(shareholder_address[index] && shareholder_address[index].value) shareholders[index].address_value = shareholder_address[index].value;
+
+                    if(shareholder_address_2[index] && shareholder_address_2[index].name) shareholders[index].address_2_name = shareholder_address_2[index].name;
+                    if(shareholder_address_2[index] && shareholder_address_2[index].value) shareholders[index].address_2_value = shareholder_address_2[index].value;
+
+                    if(shareholder_address_3[index] && shareholder_address_3[index].name) shareholders[index].address_3_name = shareholder_address_3[index].name;
+                    if(shareholder_address_3[index] && shareholder_address_3[index].value) shareholders[index].address_3_value = shareholder_address_3[index].value;
                 }
+
+                // amend directors
+                for(index = 0; index < directors.length; index++) {                    
+                    if(director_address[index] && director_address[index].name) directors[index].address_name = director_address[index].name;
+                    if(director_address[index] && director_address[index].value) directors[index].address_value = director_address[index].value;
+
+                    if(director_address_2[index] && director_address_2[index].name) directors[index].address_2_name = director_address_2[index].name;
+                    if(director_address_2[index] && director_address_2[index].value) directors[index].address_2_value = director_address_2[index].value;
+
+                    if(director_address_3[index] && director_address_3[index].name) directors[index].address_3_name = director_address_3[index].name;
+                    if(director_address_3[index] && director_address_3[index].value) directors[index].address_3_value = director_address_3[index].value;
+                }
+
+                if(secretary_address[index] && secretary_address[index].name) secretaries[index].address_name = secretary_address[index].name;
+                if(secretary_address[index] && secretary_address[index].value) secretaries[index].address_value = secretary_address[index].value;
+
+                if(secretary_address_2[index] && secretary_address_2[index].name) secretaries[index].address_2_name = secretary_address_2[index].name;
+                if(secretary_address_2[index] && secretary_address_2[index].value) secretaries[index].address_2_value = secretary_address_2[index].value;
+
+                if(secretary_address_3[index] && secretary_address_3[index].name) secretaries[index].address_3_name = secretary_address_3[index].name;
+                if(secretary_address_3[index] && secretary_address_3[index].value) secretaries[index].address_3_value = secretary_address_3[index].value;
 
                 // console.log(shareholders)
                 
@@ -306,40 +379,49 @@ function registration_form() {
                 for(index = 0; index < services.length; index++) {
                     if(services_ids[index] && services_ids[index].name) services[index].service_id_name = services_ids[index].name;
                     if(services_ids[index] && services_ids[index].value) services[index].service_id_value = services_ids[index].value;
-                    if(services_countries[index] && services_countries[index].name) services[index].service_country_name = 1;
-                    if(services_countries[index] && services_countries[index].value) services[index].service_country_value = 1;
-                    if(services_prices[index] && services_prices[index].name) services[index].service_price_name = services_prices[index].name;
-                    if(services_prices[index] && services_prices[index].value) services[index].service_price_value = services_prices[index].value;
+                    // if(services_countries[index] && services_countries[index].name) services[index].service_country_name = 1;
+                    // if(services_countries[index] && services_countries[index].value) services[index].service_country_value = 1;
+                    // if(services_prices[index] && services_prices[index].name) services[index].service_price_name = services_prices[index].name;
+                    // if(services_prices[index] && services_prices[index].value) services[index].service_price_value = services_prices[index].value;
+                    services[index].countires = services_countries[index];
+                    services[index].prices = services_prices[index];
+                    services[index].credit_card_counts = services_credit_card_counts[index];
                 }
 
-                // console.log(services);
-                
-                newdata["shareholders"] = shareholders;
-                newdata["directors"] = directors;
-                newdata["secretaries"] = secretaries;
-                newdata["services"] = services;
+                var chosenService = [];
+                chosenService = newdata["services"];
 
-                createTemplateAndAppendHtml("#summaryshareholder-template", newdata, "#summaryshareholder");
-                createTemplateAndAppendHtml("#summarydirector-template", newdata, "#summarydirector");
-                createTemplateAndAppendHtml("#summarysecretary-template", newdata, "#summarysecretary");
-                createTemplateAndAppendHtml("#summaryservice-template", newdata, "#summaryservice");
+                for(index = 0; index < chosenService.length; index++) {                
+
+                    if(services[index].countires.length <= 0) {
+
+                        chosenService[index] = "";                        
+                        
+                    }
+                }
+
+                console.log(newdata["services"])
+                console.log(chosenService)
+                
+                selectedData["shareholders"] = shareholders;
+                selectedData["directors"] = directors;
+                selectedData["secretaries"] = secretaries;
+                selectedData["services"] = chosenService;
+
+                createTemplateAndAppendHtml("#summaryshareholder-template", selectedData, "#summaryshareholder");
+                createTemplateAndAppendHtml("#summarydirector-template", selectedData, "#summarydirector");
+                createTemplateAndAppendHtml("#summarysecretary-template", selectedData, "#summarysecretary");
+                createTemplateAndAppendHtml("#summaryservice-template", selectedData, "#summaryservice");
 
                 $("#summary_total_share").val($("#total_share").val());
 
-                if ($("input#nominee_director").prop("checked")) $("#summarydirector").find("#director-price p").text("$"+prices["directors"]);
-                else $("#summarydirector").find("#director-price p").text("$0.00");
-
-                if ($("input#nominee_shareholder").prop("checked")) $("#summaryshareholder").find("#shareholder-price p").text("$"+prices["secretaries"]);
-                else $("#summaryshareholder").find("#shareholder-price p").text("$0.00");                
-
-                if ($("input#nominee_secretary").prop("checked")) $("#summarysecretary").find("#secretary-price p").text("$"+prices["secretaries"]);
-                else $("#summarysecretary").find("#secretary-price p").text("$0.00");                
-
-                $("#summaryjurisdiction-price").children("p").text("$"+prices["jurisdiction"]);
+                on_nominee_switch_change("summary-director-price", $("input#nominee_director"), prices["directors"]);
+                on_nominee_switch_change("summary-shareholder-price", $("input#nominee_shareholder"), prices["shareholders"]);
+                on_nominee_switch_change("summary-secretary-price", $("input#nominee_secretary"), prices["secretaries"]);                                     
 
                 var summaryTotal = 0;
                 $(".summary-price").each(function(index, obj){
-                    var eachPrice = $(obj).children("p").text();
+                    var eachPrice = $(obj).text();
                     var priceArr = eachPrice.split("$");
                     summaryTotal += parseFloat(priceArr[1]);
                 });
@@ -393,6 +475,7 @@ function registration_form() {
             /////
 
             var prices = [];
+            var newdata = [];
             $(".step-1").on("change", "select.type_of_company", function(e){
                 
                 var selectedCompanyTypeId = $(this).val();
@@ -400,18 +483,16 @@ function registration_form() {
                 var selectedCompanyTypePrice = $(this).find("option:selected").data("prices");
                 var step_id = $(this).data("id");
 
-                update_input_val(selectedCompanyTypeName, "#jurisdiction");
-
-                appendToHtml(selectedCompanyTypeName, "#selected-company-type-name");
-                appendToHtml(selectedCompanyTypePrice, "#selected-company-type-price");
+                appendToHtml(selectedCompanyTypeName, ".summaryjurisdiction-name");
+                appendToHtml(selectedCompanyTypeName, "#jurisdiction-name");
+                appendToHtml("$"+selectedCompanyTypePrice, "#jurisdiction-price");                
 
                 // with cross domain
-                // var response = makeJsonpRequest("", "http://103.25.203.23/b/admin/jurisdiction/"+selectedCompanyTypeId, "GET");
-                var response = makeJsonpRequest("", "'.SITEURL.'/b/admin/jurisdiction/"+selectedCompanyTypeId, "GET");
+                var response = makeJsonpRequest("", "http://103.25.203.23/b/admin/jurisdiction/"+selectedCompanyTypeId, "GET");
+                // var response = makeJsonpRequest("", "'.SITEURL.'/b/admin/jurisdiction/"+selectedCompanyTypeId, "GET");
 
                 // without cross domain
-                // var response = makeRequest("", "'.SITEURL.'/b/admin/jurisdiction/"+selectedCompanyTypeId, "GET");
-                var newdata = [];
+                // var response = makeRequest("", "'.SITEURL.'/b/admin/jurisdiction/"+selectedCompanyTypeId, "GET");                
                 
                 response.done(function(data, textStatus, jqXHR){                    
                     if(jqXHR.status==200) {
@@ -419,7 +500,7 @@ function registration_form() {
                         newdata["companies"] = data.companies;                        
                         createTemplateAndAppendHtml("#shelf-companies-template", newdata, "#shelf-companies");    
 
-                        prices["jurisdiction"] = data.price;
+                        prices["jurisdiction"] = data.price;                        
                         
                         newdata["shareholders"] = data.shareholders;
                         createTemplateAndAppendHtml("#shareholder-template", newdata, "#shareholder");
@@ -446,12 +527,18 @@ function registration_form() {
                         initPlugin(".info-service-js-switch");
                         initPlugin(".service-js-switch");
 
-                        
-
                     }
                 });
 
                 failedRequest(response);                
+            });
+
+            $("#step-3").on("change keyup", ".credit-card-count", function(e){
+                if($(this).val()!==""){
+                    $(this).parent().parent().find("input[type=hidden]").prop("disabled", false);
+                }else {
+                    $(this).parent().parent().find("input[type=hidden]").prop("disabled", true);
+                }                
             });
 
             $("#step-1").on("click", ".new-incorporation", function(e){
@@ -468,7 +555,11 @@ function registration_form() {
                 update_input_val(2, "#chosen_route");
                 on_route_change(2); 
 
-                changeNextStep(2, $(this).data("hash"));
+                changeNextStep(2, $(this).data("hash")); 
+
+                update_input_val($(this).data("company-id"), "#summary_company_id");
+                appendToHtml($(this).data("company-name"), "#summarycompany-name");               
+                appendToHtml("$"+$(this).data("company-price"), "#summarycompany-price");                               
             });
 
             /////
@@ -546,8 +637,8 @@ function registration_form() {
                 updateHashInURL("step-1");
 
                 // with cross domain
-                // var response = makeJsonpRequest("", "http://103.25.203.23/b/admin/jurisdiction", "GET");
-                var response = makeJsonpRequest("", "'.SITEURL.'/b/admin/jurisdiction", "GET");
+                var response = makeJsonpRequest("", "http://103.25.203.23/b/admin/jurisdiction", "GET");
+                // var response = makeJsonpRequest("", "'.SITEURL.'/b/admin/jurisdiction", "GET");
 
                 // without cross domain
                 // var response = makeRequest("", "'.SITEURL.'/b/admin/jurisdiction", "GET");
@@ -578,8 +669,8 @@ function registration_form() {
                     <li><label for="incorporation_date">Date of incorporation: {{incorporation_date}}</label></li>
                     <li><label for="price">Price: ${{price}}</label></li>
                 </ul>
-                <button data-company-id="{{id}}" class="pull-right custom-submit-class buy-now" data-hash="step-2">Buy now</button>
-                <div class="clear"></div>
+                <button data-company-name="{{name}}" data-company-id="{{id}}" data-company-price="{{price}}" class="pull-right custom-submit-class buy-now" data-hash="step-2">Buy now</button>
+                <div class="clear"></div>                
             </div>        
             {{/companies}}
         {{else}}   
@@ -875,18 +966,19 @@ function registration_form() {
                             <div class="each-country">
                                 <div class="col-1">
                                     <div id="service-country" class="service-country"><p>{{name}}</p></div>
+                                    <input type="hidden" name="service_{{counter @../index}}_country_{{id}}" class="service-{{../id}}-country-{{id}} service-{{../id}}-country" value="{{name}}" disabled="disabled">
                                 </div>
                                 <div class="col-2">
                                     <div id="service-price" class="service-price price"><p>{{pivot.price}}</p></div>
-                                    <input type="hidden" name="service_{{counter @../index}}_price" class="service-price" value="{{pivot.price}}">
+                                    <input type="hidden" name="service_{{counter @../index}}_price_{{id}}" class="service-{{../id}}-country-{{id}} service-{{../id}}-price" value="{{pivot.price}}" disabled="disabled">
                                 </div>               
                                 {{#ifCond ../name "==" "Credit card"}}           
                                 <div class="col-3">
-                                    <input type="text" name="service_{{counter @../index}}_no_of_card" class="credit_card_country_{{id}} custom-input-class-2" disabled="disabled">                
+                                    <input type="text" name="service_{{counter @../index}}_no_of_card_{{id}}" class="credit_card_in_country_{{id}} service-{{../id}}-credit-card-count credit-card-count custom-input-class-2" disabled="disabled">                
                                 </div>        
                                 {{else}}
                                 <div class="col-3">
-                                    <input type="checkbox" name="service_{{counter @../index}}_id" data-country-id="{{id}}" value="{{pivot.id}}" class="service-js-switch">
+                                    <input type="checkbox" name="service_{{counter @../index}}_id_{{id}}" data-service-name="{{../name}}" data-service-id="{{../id}}" data-country-id="{{id}}" value="{{pivot.id}}" class="service-js-switch">
                                 </div>
                                 {{/ifCond}}
                                 
@@ -924,38 +1016,71 @@ function registration_form() {
         {{/if}}
     </script>     
 
-    <script id="summarydirector-template" type="text/x-handlebars-template">
-        {{#directors}}
-            {{#if value}}
-            <div class="field-container">
-                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                <div class="input-container pull-left">                
-                    <label for="summary_{{name}}">Director {{counter @index}}:</label>
-                    <input type="text" id="summary_{{name}}" value="{{value}}" disabled="true" class="custom-input-class">
-                </div>                
-                {{#if @last}} <div id="director-price" class="price summary-price pull-right"><p>$0</p></div> {{/if}}
-                <div class="clear"></div>
-            </div>
-            {{/if}}
-        {{/directors}}
+    <script id="summarydirector-template" type="text/x-handlebars-template">        
+        <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>            
+        <h4>Directors:</h4>
+        <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+        {{#if directors.length}}            
+            {{#directors}}
+                {{#if value}}     
+                    {{#if @first}}{{/if}}
+                    <div class="field-container half-field-container">
+                        <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>   
+
+                        <div class="input-container pull-left">                
+                            <label class="pull-left" for="summary_{{counter @index}}_{{name}}">{{value}}:</label>
+                        </div>     
+                        <div class="pull-right">
+                            <input type="hidden" id="summary_{{name}}" value="{{value}}" class="custom-input-class small-input">
+                            <input type="text" id="summary_{{address_name}}" value="{{address_value}}" class="custom-input-class small-input one-row">
+                            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+                            <input type="text" id="summary_{{address_2_name}}" value="{{address_2_value}}" class="custom-input-class small-input one-row">
+                            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+                            <input type="text" id="summary_{{address_3_name}}" value="{{address_3_value}}" class="custom-input-class small-input one-row">
+                            <button class="custom-submit-class custom-submit-class-2">Upload Passport</button>
+                            <button class="custom-submit-class custom-submit-class-2">Upload Utility Bill</button>
+                        </div>      
+                        <div class="clear"></div>                    
+                    </div>
+                {{/if}}            
+            {{/directors}}
+        {{else}}
+            <div class="summary-director-price-container"><p class="pull-left">Nominee directors annual fee</p><div id="summary-director-price" class="price summary-price pull-right"><p>$0</p></div></div>
+            <div class="clear"></div>
+        {{/if}}            
     </script>    
 
     <script id="summaryshareholder-template" type="text/x-handlebars-template">
         {{#shareholders}}
             {{#if value}}
-                <div class="field-container">
+                {{#if @first}}
+                <h4>Shareholders:</h4>
+                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+                {{/if}}
+                <div class="field-container half-field-container">
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
                     
                     <div class="input-container pull-left">                
-                        <label for="summary_{{name}}">Shareholder {{counter @index}}:</label>
-                        <input type="text" id="summary_{{name}}" value="{{value}}" disabled="true" class="custom-input-class small-input">
-                        <input type="text" id="summary_{{amount_name}}" value="{{amount_value}}" disabled="true" class="custom-input-class small-input-2">
-                    </div>     
-                    {{#if @last}} <div id="shareholder-price" class="price summary-price pull-right"><p>$0</p></div> {{/if}}                          
+                        <label class="pull-left" for="summary_{{counter @index}}_{{name}}">{{value}}:</label>
+                    </div>
+                    <div class="pull-right">
+                        <input type="hidden" id="summary_{{name}}" value="{{value}}" class="custom-input-class small-input">
+                        <input type="text" id="summary_{{address_name}}" value="{{address_value}}" class="custom-input-class small-input one-row">
+                        <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+                        <input type="text" id="summary_{{address_2_name}}" value="{{address_2_value}}" class="custom-input-class small-input one-row">
+                        <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+                        <input type="text" id="summary_{{address_3_name}}" value="{{address_3_value}}" class="custom-input-class small-input one-row">
+                        <input type="hidden" id="summary_{{amount_name}}" value="{{amount_value}}" class="custom-input-class small-input-2 one-row">
+                        <button class="custom-submit-class custom-submit-class-2">Upload Passport</button>
+                        <button class="custom-submit-class custom-submit-class-2">Upload Utility Bill</button>
+                    </div>
                     <div class="clear"></div>
                 </div>
+  
+                {{#if @last}} <div class="summary-shareholder-price-container"><p class="pull-left">Nominee shareholders annual fee</p><div id="summary-shareholder-price" class="price summary-price pull-right"><p>$0</p></div><div class="clear"></div></div> {{/if}}                                              
+                
                 {{#if @last}}
-                <div class="field-container">
+                <!-- <div class="field-container">
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
                     
                     <div class="input-container pull-left">                
@@ -964,41 +1089,61 @@ function registration_form() {
                         <input type="text" id="summary_total_share" disabled="true" class="custom-input-class small-input-2">
                     </div>                
                     <div class="clear"></div>
-                </div>
+                </div> -->
+                <input type="hidden" id="summary_total_share" disabled="true" class="custom-input-class small-input-2">
                 {{/if}}
             {{/if}}
         {{/shareholders}}
     </script>
 
-    <script id="summarysecretary-template" type="text/x-handlebars-template">
-        {{#secretaries}}
-            {{#if value}}
-            <div class="field-container">
-                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                <div class="input-container pull-left">                
-                    <label for="summary_{{name}}">Secretary {{counter @index}}:</label>
-                    <input type="text" id="summary_{{name}}" value="{{value}}" disabled="true" class="custom-input-class">
-                </div>                
-                {{#if @last}}<div id="secretary-price" class="price summary-price pull-right"><p>$0</p></div>{{/if}}
-                <div class="clear"></div>
-            </div>
-            {{/if}}
-        {{/secretaries}}
+    <script id="summarysecretary-template" type="text/x-handlebars-template">        
+        <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>            
+        <h4>Secretaries:</h4>
+        <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+        {{#if secretaries.length}}            
+            {{#secretaries}}
+                {{#if value}}
+                    {{#if @first}}{{/if}}
+                    <div class="field-container half-field-container">
+                        <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+
+                        <div class="input-container pull-left">                
+                            <label class="pull-left" for="summary_{{counter @index}}_{{name}}">{{value}}:</label>
+                        </div>      
+                        <div class="pull-right">
+                            <input type="hidden" id="summary_{{name}}" value="{{value}}" class="custom-input-class small-input">
+                            <input type="text" id="summary_{{address_name}}" value="{{address_value}}" class="custom-input-class small-input one-row">
+                            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+                            <input type="text" id="summary_{{address_2_name}}" value="{{address_2_value}}" class="custom-input-class small-input one-row">
+                            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+                            <input type="text" id="summary_{{address_3_name}}" value="{{address_3_value}}" class="custom-input-class small-input one-row">
+                            <button class="custom-submit-class custom-submit-class-2">Upload Passport</button>
+                            <button class="custom-submit-class custom-submit-class-2">Upload Utility Bill</button>
+                        </div>   
+                        <div class="clear"></div>                           
+                    </div>
+                {{/if}}
+            {{/secretaries}}
+        {{else}}            
+            <div class="summary-secretary-price-container"><p class="pull-left">Nominee secretaries annual fee</p><div id="summary-secretary-price" class="price summary-price pull-right"><p>$0</p></div></div>
+            <div class="clear"></div>   
+        {{/if}}     
     </script>
 
     <script id="summaryservice-template" type="text/x-handlebars-template">
-        <h4>Additional services required:</h4>
+        <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>            
+        <h4>Other fees</h4>
         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>        
-        {{#services}}
-            {{#ifCond service_price_value ">" 0}}
+        {{#services}}                        
+            {{#countries}}
                 <div class="field-container">
                     <div class="pull-left">                
-                        <p>Yes, I will need help setting up a {{value}}</p>
+                        <p>{{../name}} in {{name}}</p>
                     </div>
-                    <div class="price summary-price pull-right"><p>${{service_price_value}}</p></div>      
+                    <div class="price summary-price pull-right">${{pivot.price}}</div>      
                     <div class="clear"></div>
                 </div>
-            {{/ifCond}}
+            {{/countries}}            
         {{/services}}        
     </script>
 
@@ -1055,7 +1200,7 @@ function registration_form() {
 
             <input type="hidden" name="chosen_route" id="chosen_route" value="">
             
-            <h3>Offshore Company</h3>
+            <h3>Please select the type of company you would like to purchase:</h3>
             <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
             
             <label for="type_of_company">Type of company:</label>
@@ -1075,8 +1220,8 @@ function registration_form() {
 
             <div id="new-incorporation-container" style="display: none;">
 
-                <h3 id="selected-company-type-name" class="pull-left"></h3>
-                <p id="selected-company-type-price" class="pull-right"></p>
+                <h3 id="jurisdiction-name" class="pull-left"></h3>
+                <p id="jurisdiction-price" class="pull-right"></p>
                 <div class="clear"></div>
 
                 <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
@@ -1199,11 +1344,12 @@ function registration_form() {
 
             <div id="route-1-summary" class="route-specific-summary">
                 <div class="input-container pull-left">                
-                    <label for="jurisdiction">New company formation - :</label>
+                    <p>New company formation - <span class="summaryjurisdiction-name"></span>:</p>
                 </div>
                 <div id="summaryjurisdiction-price" class="price summary-price pull-right"><p>$0</p></div>
                 <div class="clear"></div>
-            
+
+                <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>            
             
                 <div id="company-names-summary">
                     <h4>Three proposed company names:</h4>
@@ -1214,7 +1360,7 @@ function registration_form() {
                         
                         <div class="input-container pull-left">                
                             <label for="company_type">One:</label>
-                            <input type="text" id="company_name_choice_1" disabled="true" class="custom-input-class">
+                            <input type="text" name="summary_company_name[]" id="company_name_choice_1" class="custom-input-class">
                         </div>                
                         <div class="clear"></div>
                     </div>            
@@ -1224,7 +1370,7 @@ function registration_form() {
                         
                         <div class="input-container pull-left">                
                             <label for="company_type">Two:</label>
-                            <input type="text" id="company_name_choice_2" disabled="true" class="custom-input-class">
+                            <input type="text" name="summary_company_name[]" id="company_name_choice_2" class="custom-input-class">
                         </div>                
                         <div class="clear"></div>
                     </div>            
@@ -1234,31 +1380,30 @@ function registration_form() {
                         
                         <div class="input-container pull-left">                
                             <label for="company_type">Three:</label>
-                            <input type="text" id="company_name_choice_3" disabled="true" class="custom-input-class">
+                            <input type="text" name="summary_company_name[]" id="company_name_choice_3" class="custom-input-class">
                         </div>                
                         <div class="clear"></div>
                     </div>
                 </div>
             </div>
-
             <div id="route-2-summary" class="route-specific-summary">
                 <div class="input-container pull-left">                
-                    <label for="shelf_company">Purchase of shelf company - :</label>                    
+                    <p>Purchase of shelf company - <span class="summaryjurisdiction-name"></span>: <span id="summarycompany-name"></span></p>                    
+                    <input type="hidden" name="summary_company_id" id="summary_company_id" value="">
                 </div>
-                <div id="summaryselfcompany-price" class="price summary-price pull-right"><p>$0</p></div>
+                <div id="summarycompany-price" class="price summary-price pull-right"><p>$0</p></div>
                 <div class="clear"></div>
-            </div>
 
-            <h4>Key names:</h4>
-            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-
-            <div id="summarydirector">
-                <!-- JS CONTENT GOES HERE -->
-            </div>
+                <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
+            </div>            
 
             <div id="summaryshareholder">
                 <!-- JS CONTENT GOES HERE -->
             </div>
+
+            <div id="summarydirector">
+                <!-- JS CONTENT GOES HERE -->
+            </div>            
 
             <div id="summarysecretary">
                 <!-- JS CONTENT GOES HERE -->
