@@ -631,6 +631,101 @@ footer .widget .mkdf-icon-list-item:hover p {
 .add-more {
   display: block;
 }
+#signuppage-signup-form-row {
+  padding-bottom: 70px;
+}
+#signup_form .intl-tel-input {
+  width: 100%;
+}
+#signup_form .intl-tel-input .selected-flag {
+  width: 55px;
+  height: 48px;
+}
+#signup_form .intl-tel-input input {
+  padding-left: 80px!important;
+}
+#signup_form select,
+#signup_form input[type=text] {
+  width: 100%;
+  padding: 15px;
+  outline: 0;
+  font-family: "Open Sans", serif;
+  border: 1px solid transparent;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-transition: border-color 0.2s ease-out;
+  transition: border-color 0.2s ease-out;
+  resize: none;
+  color: #767676;
+  font-size: 12px;
+  line-height: 22px;
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0px;
+  background-color: #ffffff;
+  border-color: #ffffff;
+  border-width: 1px;
+  border-radius: 6px;
+  padding-top: 12px;
+  padding-right: 24px;
+  padding-bottom: 12px;
+  padding-left: 24px;
+  margin-top: 0px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: relative;
+  /*
+    width: 100%;
+    margin-bottom: 30px;
+    padding: 15px;
+    outline: 0;
+    font-family: "Open Sans",serif;
+    font-size: 12px;
+    color: #767676;
+    border: 1px solid transparent;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-transition: border-color .2s ease-out;
+    transition: border-color .2s ease-out;
+    resize: none;
+    margin-bottom: 12px;
+    */
+}
+#signup_form select.not-visible,
+#signup_form input[type=text].not-visible {
+  -moz-opacity: 0;
+  -khtml-opacity: 0;
+  -webkit-opacity: 0;
+  opacity: 0;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+  filter: alpha(opacity=0);
+  display: inline-block;
+  vertical-align: top;
+  *display: inline;
+  zoom: 1;
+}
+#signup_form select.placeholder,
+#signup_form input[type=text].placeholder {
+  color: #a9a9a9;
+}
+#signup_form select option,
+#signup_form input[type=text] option {
+  color: #767676;
+}
+#signup_form .bp-required-field-label {
+  display: none;
+}
 .error-container {
   margin-bottom: 20px;
   color: red;
@@ -650,7 +745,7 @@ footer .widget .mkdf-icon-list-item:hover p {
   margin-bottom: 18px;
   position: relative;
 }
-.field-container label.error {
+.field-container .error {
   display: block;
   color: red;
 }
@@ -855,6 +950,12 @@ label.align-label {
 #registration-page-form-4 input {
   display: inline-block;
   width: 300px;
+}
+#registration-page-form-4 input[type=checkbox] {
+  width: auto;
+}
+#registration-page-form-4 label[for=tnc] {
+  width: auto;
 }
 #registration-page-form-4 .small-input {
   width: 250px;

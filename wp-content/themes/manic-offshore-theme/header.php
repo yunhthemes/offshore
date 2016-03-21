@@ -21,9 +21,6 @@
   type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
   </script>
   <!--End of Zopim Live Chat Script-->
-
-  
-
 </head>
 
 <body <?php body_class(); ?>>

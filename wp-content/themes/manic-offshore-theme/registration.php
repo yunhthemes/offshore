@@ -327,6 +327,8 @@ function registration_form() {
                 var services_prices = [];
                 var services_credit_card_counts = [];
 
+                var info_services = $("input.info-service-name").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
+
                 for(index = 0; index < services_ids.length; index++) {
                     services_countries[index] = $("input.service-"+services_ids[index].value+"-country").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
                     services_prices[index] = $("input.service-"+services_ids[index].value+"-price").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
@@ -371,42 +373,35 @@ function registration_form() {
                 if(secretary_address_3[index] && secretary_address_3[index].name) secretaries[index].address_3_name = secretary_address_3[index].name;
                 if(secretary_address_3[index] && secretary_address_3[index].value) secretaries[index].address_3_value = secretary_address_3[index].value;
 
-                // console.log(shareholders)
-                
-                // need to find out about select dropdown key and value
-                // console.log(services_countries);
+                // console.log(shareholders)            
+                // console.log(services_prices);
+                // console.log(services_credit_card_counts);
 
                 for(index = 0; index < services.length; index++) {
                     if(services_ids[index] && services_ids[index].name) services[index].service_id_name = services_ids[index].name;
                     if(services_ids[index] && services_ids[index].value) services[index].service_id_value = services_ids[index].value;
-                    // if(services_countries[index] && services_countries[index].name) services[index].service_country_name = 1;
-                    // if(services_countries[index] && services_countries[index].value) services[index].service_country_value = 1;
-                    // if(services_prices[index] && services_prices[index].name) services[index].service_price_name = services_prices[index].name;
-                    // if(services_prices[index] && services_prices[index].value) services[index].service_price_value = services_prices[index].value;
-                    services[index].countires = services_countries[index];
-                    services[index].prices = services_prices[index];
-                    services[index].credit_card_counts = services_credit_card_counts[index];
-                }
 
-                var chosenService = [];
-                chosenService = newdata["services"];
+                    services[index].countries = services_countries[index];
 
-                for(index = 0; index < chosenService.length; index++) {                
+                    $.each(services[index].countries, function(i, v){
+                        if(services_prices[index].length > 0) {
+                            v.service_price_name = services_prices[index][i].name;
+                            v.service_price_value = services_prices[index][i].value;
+                        }
+                        if(services_credit_card_counts[index].length > 0) {
+                            v.services_credit_card_counts_name = services_credit_card_counts[index][i].name;
+                            v.services_credit_card_counts_value = services_credit_card_counts[index][i].value;    
+                        }                        
+                    });                    
+                }                
 
-                    if(services[index].countires.length <= 0) {
-
-                        chosenService[index] = "";                        
-                        
-                    }
-                }
-
-                console.log(newdata["services"])
-                console.log(chosenService)
+                // console.log(services);
+                console.log(info_services);
                 
                 selectedData["shareholders"] = shareholders;
                 selectedData["directors"] = directors;
                 selectedData["secretaries"] = secretaries;
-                selectedData["services"] = chosenService;
+                selectedData["services"] = services;
 
                 createTemplateAndAppendHtml("#summaryshareholder-template", selectedData, "#summaryshareholder");
                 createTemplateAndAppendHtml("#summarydirector-template", selectedData, "#summarydirector");
@@ -1004,9 +999,10 @@ function registration_form() {
                     <div class="field-container">
                         <div class="pull-left">
                             <label for="info_services[]" class="checkbox-label">{{name}}</label>
+                            <input type="hidden" name="info_services_name[]" class="info-service-name" value="{{name}}">
                         </div>
                         <div class="pull-right">
-                            <input type="checkbox" name="info_services[]" value="{{id}}" class="info-service-js-switch">
+                            <input type="checkbox" name="info_services_id[]" value="{{id}}" class="info-service-id info-service-js-switch">
                         </div>
                         <div class="clear"></div>
                     </div>
@@ -1138,9 +1134,9 @@ function registration_form() {
             {{#countries}}
                 <div class="field-container">
                     <div class="pull-left">                
-                        <p>{{../name}} in {{name}}</p>
+                        <p>{{../value}} in {{value}} {{#if services_credit_card_counts_value}} - {{services_credit_card_counts_value}} cards {{/if}}</p>
                     </div>
-                    <div class="price summary-price pull-right">${{pivot.price}}</div>      
+                    <div class="price summary-price pull-right">${{service_price_value}}</div>      
                     <div class="clear"></div>
                 </div>
             {{/countries}}            
@@ -1419,6 +1415,10 @@ function registration_form() {
                 </div>
                 <div class="total-summary-price price pull-right"><p>$TBC</p></div>     
                 <div class="clear"></div> 
+            </div>
+            
+            <div class="field-container">
+                <input type="checkbox" name="tnc" value="yes"> <label for="tnc">I have read and agree with the Terms and conditions</label>
             </div>
             
             <a href="#" id="next"><button data-id="3" data-hash="step-3" class="custom-submit-class back-btn">Back</button></a>
