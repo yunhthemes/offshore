@@ -64,10 +64,11 @@ function get_ip_address() {
 
 function registration_form() {
     $ip = get_ip_address();
+    $user_id = get_current_user_id();
     echo '
     <script>
     (function($) {
-        $(document).ready(function(){
+        $(document).ready(function(){            
 
             ////////////
             //// CHANGE STEPS
@@ -154,11 +155,11 @@ function registration_form() {
                     data: Data,
                     success: function(response) {
                         // if success remove current item
-                        // console.log(response);
+                        console.log(response);
                     },
                     error: function( error ){
                         // Log any error.
-                        // console.log( "ERROR:", error );
+                        console.log("ERROR:", error);
                     }
                 });
 
@@ -324,16 +325,26 @@ function registration_form() {
                 var services = $("input.service-name").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });                
                 var services_ids = $("input.service-id").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });     
                 var services_countries = [];
+                var services_countries_ids = [];
                 var services_prices = [];
-                var services_credit_card_counts = [];
-
-                var info_services = $("input.info-service-name").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
+                var services_credit_card_counts = [];                
 
                 for(index = 0; index < services_ids.length; index++) {
+                    services_countries_ids[index] = $("input.service-"+services_ids[index].value+"-country-id").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
                     services_countries[index] = $("input.service-"+services_ids[index].value+"-country").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
                     services_prices[index] = $("input.service-"+services_ids[index].value+"-price").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
                     services_credit_card_counts[index] = $("input.service-"+services_ids[index].value+"-credit-card-count").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
                 }
+
+                var info_services = $("input.info-service-id").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
+                var info_services_names = $("input.info-service-name").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
+
+                for(index =0; index < info_services.length; index++) {
+                    if(info_services_names[index] && info_services_names[index].name) info_services[index].service_name = info_services_names[index].name;
+                    if(info_services_names[index] && info_services_names[index].value) info_services[index].service_value = info_services_names[index].value;
+                }
+
+                // console.log(services_countries_ids)
 
                 var selectedData = [];
 
@@ -364,14 +375,14 @@ function registration_form() {
                     if(director_address_3[index] && director_address_3[index].value) directors[index].address_3_value = director_address_3[index].value;
                 }
 
-                if(secretary_address[index] && secretary_address[index].name) secretaries[index].address_name = secretary_address[index].name;
-                if(secretary_address[index] && secretary_address[index].value) secretaries[index].address_value = secretary_address[index].value;
+                if(secretary_address[0] && secretary_address[0].name) secretaries[0].address_name = secretary_address[0].name;
+                if(secretary_address[0] && secretary_address[0].value) secretaries[0].address_value = secretary_address[0].value;
 
-                if(secretary_address_2[index] && secretary_address_2[index].name) secretaries[index].address_2_name = secretary_address_2[index].name;
-                if(secretary_address_2[index] && secretary_address_2[index].value) secretaries[index].address_2_value = secretary_address_2[index].value;
+                if(secretary_address_2[0] && secretary_address_2[0].name) secretaries[0].address_2_name = secretary_address_2[0].name;
+                if(secretary_address_2[0] && secretary_address_2[0].value) secretaries[0].address_2_value = secretary_address_2[0].value;
 
-                if(secretary_address_3[index] && secretary_address_3[index].name) secretaries[index].address_3_name = secretary_address_3[index].name;
-                if(secretary_address_3[index] && secretary_address_3[index].value) secretaries[index].address_3_value = secretary_address_3[index].value;
+                if(secretary_address_3[0] && secretary_address_3[0].name) secretaries[0].address_3_name = secretary_address_3[0].name;
+                if(secretary_address_3[0] && secretary_address_3[0].value) secretaries[0].address_3_value = secretary_address_3[0].value;
 
                 // console.log(shareholders)            
                 // console.log(services_prices);
@@ -385,6 +396,8 @@ function registration_form() {
 
                     $.each(services[index].countries, function(i, v){
                         if(services_prices[index].length > 0) {
+                            v.service_country_id_name = services_countries_ids[index][i].name;
+                            v.service_country_id_value = services_countries_ids[index][i].value;
                             v.service_price_name = services_prices[index][i].name;
                             v.service_price_value = services_prices[index][i].value;
                         }
@@ -397,16 +410,19 @@ function registration_form() {
 
                 // console.log(services);
                 console.log(info_services);
+                console.log(secretaries);
                 
                 selectedData["shareholders"] = shareholders;
                 selectedData["directors"] = directors;
                 selectedData["secretaries"] = secretaries;
                 selectedData["services"] = services;
+                selectedData["infoservices"] = info_services;
 
                 createTemplateAndAppendHtml("#summaryshareholder-template", selectedData, "#summaryshareholder");
                 createTemplateAndAppendHtml("#summarydirector-template", selectedData, "#summarydirector");
                 createTemplateAndAppendHtml("#summarysecretary-template", selectedData, "#summarysecretary");
                 createTemplateAndAppendHtml("#summaryservice-template", selectedData, "#summaryservice");
+                createTemplateAndAppendHtml("#summaryinfoservice-template", selectedData, "#summaryinfoservice");
 
                 $("#summary_total_share").val($("#total_share").val());
 
@@ -423,6 +439,13 @@ function registration_form() {
 
                 $(".total-summary-price").html("<p>$"+summaryTotal.toFixed(2)+"</p>");
 
+            }
+
+            function updateOnJurisdictionChange(selectedCompanyTypeName, selectedCompanyTypePrice, selectedCompanyTypeId){
+                appendToHtml(selectedCompanyTypeName, ".summaryjurisdiction-name");
+                appendToHtml(selectedCompanyTypeName, "#jurisdiction-name");
+                appendToHtml("$"+selectedCompanyTypePrice, "#jurisdiction-price");   
+                update_input_val(selectedCompanyTypeId, "#jurisdiction_id"); // summary form
             }
 
             ////////////
@@ -478,13 +501,11 @@ function registration_form() {
                 var selectedCompanyTypePrice = $(this).find("option:selected").data("prices");
                 var step_id = $(this).data("id");
 
-                appendToHtml(selectedCompanyTypeName, ".summaryjurisdiction-name");
-                appendToHtml(selectedCompanyTypeName, "#jurisdiction-name");
-                appendToHtml("$"+selectedCompanyTypePrice, "#jurisdiction-price");                
+                updateOnJurisdictionChange(selectedCompanyTypeName, selectedCompanyTypePrice, selectedCompanyTypeId);
 
                 // with cross domain
-                var response = makeJsonpRequest("", "http://103.25.203.23/b/admin/jurisdiction/"+selectedCompanyTypeId, "GET");
-                // var response = makeJsonpRequest("", "'.SITEURL.'/b/admin/jurisdiction/"+selectedCompanyTypeId, "GET");
+                // var response = makeJsonpRequest("", "http://103.25.203.23/b/admin/jurisdiction/"+selectedCompanyTypeId, "GET");
+                var response = makeJsonpRequest("", "'.SITEURL.'/b/admin/jurisdiction/"+selectedCompanyTypeId, "GET");
 
                 // without cross domain
                 // var response = makeRequest("", "'.SITEURL.'/b/admin/jurisdiction/"+selectedCompanyTypeId, "GET");                
@@ -552,7 +573,7 @@ function registration_form() {
 
                 changeNextStep(2, $(this).data("hash")); 
 
-                update_input_val($(this).data("company-id"), "#summary_company_id");
+                update_input_val($(this).data("company-id"), "#shelf_company_id"); // summary forms
                 appendToHtml($(this).data("company-name"), "#summarycompany-name");               
                 appendToHtml("$"+$(this).data("company-price"), "#summarycompany-price");                               
             });
@@ -594,6 +615,20 @@ function registration_form() {
                 // update_input_val(data, "#summary_"+selector+"_"+id+"_"+field); 
             });
 
+            ///////
+
+            $(".payment-gateway-btn").on("click", function(e){
+
+                e.preventDefault();
+                console.log($("#registration-page-form-4").serializeArray().filter(function(k) { return $.trim(k.value) != ""; }));
+
+                var data = $("#registration-page-form-4").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
+                var response = makeRequest(data, "'.SITEURL.'/b/admin/company", "POST");
+
+                console.log(response);
+
+            });
+
             ///////////
             /// INIT
             ///////////
@@ -632,8 +667,8 @@ function registration_form() {
                 updateHashInURL("step-1");
 
                 // with cross domain
-                var response = makeJsonpRequest("", "http://103.25.203.23/b/admin/jurisdiction", "GET");
-                // var response = makeJsonpRequest("", "'.SITEURL.'/b/admin/jurisdiction", "GET");
+                // var response = makeJsonpRequest("", "http://103.25.203.23/b/admin/jurisdiction", "GET");
+                var response = makeJsonpRequest("", "'.SITEURL.'/b/admin/jurisdiction", "GET");
 
                 // without cross domain
                 // var response = makeRequest("", "'.SITEURL.'/b/admin/jurisdiction", "GET");
@@ -961,19 +996,20 @@ function registration_form() {
                             <div class="each-country">
                                 <div class="col-1">
                                     <div id="service-country" class="service-country"><p>{{name}}</p></div>
-                                    <input type="hidden" name="service_{{counter @../index}}_country_{{id}}" class="service-{{../id}}-country-{{id}} service-{{../id}}-country" value="{{name}}" disabled="disabled">
+                                    <input type="hidden" name="service_{{../id}}_country_{{counter @index}}" class="service-{{../id}}-country-{{id}} service-{{../id}}-country" value="{{name}}" disabled="disabled">
                                 </div>
                                 <div class="col-2">
                                     <div id="service-price" class="service-price price"><p>{{pivot.price}}</p></div>
-                                    <input type="hidden" name="service_{{counter @../index}}_price_{{id}}" class="service-{{../id}}-country-{{id}} service-{{../id}}-price" value="{{pivot.price}}" disabled="disabled">
+                                    <input type="hidden" name="service_{{../id}}_price_{{counter @index}}" class="service-{{../id}}-country-{{id}} service-{{../id}}-price" value="{{pivot.price}}" disabled="disabled">
                                 </div>               
                                 {{#ifCond ../name "==" "Credit card"}}           
                                 <div class="col-3">
-                                    <input type="text" name="service_{{counter @../index}}_no_of_card_{{id}}" class="credit_card_in_country_{{id}} service-{{../id}}-credit-card-count credit-card-count custom-input-class-2" disabled="disabled">                
+                                    <input type="text" name="service_{{../id}}_country_{{counter @index}}_no_of_card" class="credit_card_in_country_{{id}} service-{{../id}}-credit-card-count credit-card-count custom-input-class-2" disabled="disabled">
+                                    <input type="hidden" name="service_{{../id}}_country_{{counter @index}}_id" value="{{pivot.id}}" class="service-{{../id}}-country-id">                
                                 </div>        
                                 {{else}}
                                 <div class="col-3">
-                                    <input type="checkbox" name="service_{{counter @../index}}_id_{{id}}" data-service-name="{{../name}}" data-service-id="{{../id}}" data-country-id="{{id}}" value="{{pivot.id}}" class="service-js-switch">
+                                    <input type="checkbox" name="service_{{../id}}_country_{{counter @index}}_id" data-service-name="{{../name}}" data-service-id="{{../id}}" data-country-id="{{id}}" value="{{pivot.id}}" class="service-js-switch service-{{../id}}-country-id">
                                 </div>
                                 {{/ifCond}}
                                 
@@ -1012,14 +1048,14 @@ function registration_form() {
         {{/if}}
     </script>     
 
-    <script id="summarydirector-template" type="text/x-handlebars-template">        
-        <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>            
-        <h4>Directors:</h4>
-        <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+    <script id="summarydirector-template" type="text/x-handlebars-template">                
         {{#if directors.length}}            
+            <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>            
+            <h4>Directors:</h4>
+            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
             {{#directors}}
                 {{#if value}}     
-                    {{#if @first}}{{/if}}
+                    {{#if @first}}<input type="hidden" name="director_count" value="{{../directors.length}}">{{/if}}
                     <div class="field-container half-field-container">
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>   
 
@@ -1027,12 +1063,13 @@ function registration_form() {
                             <label class="pull-left" for="summary_{{counter @index}}_{{name}}">{{value}}:</label>
                         </div>     
                         <div class="pull-right">
-                            <input type="hidden" id="summary_{{name}}" value="{{value}}" class="custom-input-class small-input">
-                            <input type="text" id="summary_{{address_name}}" value="{{address_value}}" class="custom-input-class small-input one-row">
+                            <input type="hidden" name="director_{{counter @index}}_name" id="summary_{{name}}" value="{{value}}">                            
+
+                            <input type="text" name="director_{{counter @index}}_address" id="summary_{{address_name}}" value="{{address_value}}" class="custom-input-class small-input one-row">
                             <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                            <input type="text" id="summary_{{address_2_name}}" value="{{address_2_value}}" class="custom-input-class small-input one-row">
+                            <input type="text" name="director_{{counter @index}}_address_2" id="summary_{{address_2_name}}" value="{{address_2_value}}" class="custom-input-class small-input one-row">
                             <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                            <input type="text" id="summary_{{address_3_name}}" value="{{address_3_value}}" class="custom-input-class small-input one-row">
+                            <input type="text" name="director_{{counter @index}}_address_3" id="summary_{{address_3_name}}" value="{{address_3_value}}" class="custom-input-class small-input one-row">
                             <button class="custom-submit-class custom-submit-class-2">Upload Passport</button>
                             <button class="custom-submit-class custom-submit-class-2">Upload Utility Bill</button>
                         </div>      
@@ -1052,6 +1089,7 @@ function registration_form() {
                 {{#if @first}}
                 <h4>Shareholders:</h4>
                 <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+                <input type="hidden" name="shareholder_count" value="{{../shareholders.length}}">
                 {{/if}}
                 <div class="field-container half-field-container">
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
@@ -1060,13 +1098,14 @@ function registration_form() {
                         <label class="pull-left" for="summary_{{counter @index}}_{{name}}">{{value}}:</label>
                     </div>
                     <div class="pull-right">
-                        <input type="hidden" id="summary_{{name}}" value="{{value}}" class="custom-input-class small-input">
-                        <input type="text" id="summary_{{address_name}}" value="{{address_value}}" class="custom-input-class small-input one-row">
+                        <input type="hidden" name="shareholder_{{counter @index}}_name" id="summary_{{name}}" value="{{value}}">                       
+
+                        <input type="text" name="shareholder_{{counter @index}}_address" id="summary_{{address_name}}" value="{{address_value}}" class="custom-input-class small-input one-row">
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                        <input type="text" id="summary_{{address_2_name}}" value="{{address_2_value}}" class="custom-input-class small-input one-row">
+                        <input type="text" name="shareholder_{{counter @index}}_address_2" id="summary_{{address_2_name}}" value="{{address_2_value}}" class="custom-input-class small-input one-row">
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                        <input type="text" id="summary_{{address_3_name}}" value="{{address_3_value}}" class="custom-input-class small-input one-row">
-                        <input type="hidden" id="summary_{{amount_name}}" value="{{amount_value}}" class="custom-input-class small-input-2 one-row">
+                        <input type="text" name="shareholder_{{counter @index}}_address_3" id="summary_{{address_3_name}}" value="{{address_3_value}}" class="custom-input-class small-input one-row">
+                        <input type="hidden" name="shareholder_{{counter @index}}_amount" id="summary_{{amount_name}}" value="{{amount_value}}" class="custom-input-class small-input-2 one-row">
                         <button class="custom-submit-class custom-submit-class-2">Upload Passport</button>
                         <button class="custom-submit-class custom-submit-class-2">Upload Utility Bill</button>
                     </div>
@@ -1086,20 +1125,20 @@ function registration_form() {
                     </div>                
                     <div class="clear"></div>
                 </div> -->
-                <input type="hidden" id="summary_total_share" disabled="true" class="custom-input-class small-input-2">
+                <input type="hidden" name="total_share" id="summary_total_share" disabled="true" class="custom-input-class small-input-2">
                 {{/if}}
             {{/if}}
         {{/shareholders}}
     </script>
 
-    <script id="summarysecretary-template" type="text/x-handlebars-template">        
-        <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>            
-        <h4>Secretaries:</h4>
-        <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+    <script id="summarysecretary-template" type="text/x-handlebars-template">                
         {{#if secretaries.length}}            
+            <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>            
+            <h4>Secretaries:</h4>
+            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
             {{#secretaries}}
                 {{#if value}}
-                    {{#if @first}}{{/if}}
+                    {{#if @first}}<input type="hidden" name="secretary_count" value="{{../secretaries.length}}">{{/if}}
                     <div class="field-container half-field-container">
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
 
@@ -1107,12 +1146,13 @@ function registration_form() {
                             <label class="pull-left" for="summary_{{counter @index}}_{{name}}">{{value}}:</label>
                         </div>      
                         <div class="pull-right">
-                            <input type="hidden" id="summary_{{name}}" value="{{value}}" class="custom-input-class small-input">
-                            <input type="text" id="summary_{{address_name}}" value="{{address_value}}" class="custom-input-class small-input one-row">
+                            <input type="hidden" name="secretary_{{counter @index}}_name" id="summary_{{name}}" value="{{value}}">                            
+
+                            <input type="text" name="secretary_{{counter @index}}_address" id="summary_{{address_name}}" value="{{address_value}}" class="custom-input-class small-input one-row">
                             <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                            <input type="text" id="summary_{{address_2_name}}" value="{{address_2_value}}" class="custom-input-class small-input one-row">
+                            <input type="text" name="secretary_{{counter @index}}_address_2" id="summary_{{address_2_name}}" value="{{address_2_value}}" class="custom-input-class small-input one-row">
                             <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                            <input type="text" id="summary_{{address_3_name}}" value="{{address_3_value}}" class="custom-input-class small-input one-row">
+                            <input type="text" name="secretary_{{counter @index}}_address_3" id="summary_{{address_3_name}}" value="{{address_3_value}}" class="custom-input-class small-input one-row">
                             <button class="custom-submit-class custom-submit-class-2">Upload Passport</button>
                             <button class="custom-submit-class custom-submit-class-2">Upload Utility Bill</button>
                         </div>   
@@ -1130,8 +1170,13 @@ function registration_form() {
         <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>            
         <h4>Other fees</h4>
         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>        
-        {{#services}}                        
+        {{#services}}
+            {{#if @first}}<input type="hidden" name="service_count" value="{{../services.length}}">{{/if}}                   
             {{#countries}}
+                {{#if @first}}<input type="hidden" name="service_{{counter @../index}}_country_count" value="{{../countries.length}}">{{/if}}                   
+                <input type="hidden" name="service_{{counter @../index}}_country_{{counter @index}}_id" value="{{service_country_id_value}}">
+                <input type="hidden" name="service_{{counter @../index}}_country_{{counter @index}}_no_of_card" value="{{services_credit_card_counts_value}}">
+
                 <div class="field-container">
                     <div class="pull-left">                
                         <p>{{../value}} in {{value}} {{#if services_credit_card_counts_value}} - {{services_credit_card_counts_value}} cards {{/if}}</p>
@@ -1139,8 +1184,14 @@ function registration_form() {
                     <div class="price summary-price pull-right">${{service_price_value}}</div>      
                     <div class="clear"></div>
                 </div>
-            {{/countries}}            
+            {{/countries}}
         {{/services}}        
+    </script>
+
+    <script id="summaryinfoservice-template" type="text/x-handlebars-template">        
+        {{#infoservices}}                        
+            <input type="hidden" name="{{name}}" value="{{value}}">            
+        {{/infoservices}}        
     </script>
 
     <p class="ip_address">IP Address detected: <span class="user_ip">'.$ip.'</span></p>
@@ -1330,13 +1381,16 @@ function registration_form() {
     </div>
 
     <div id="step-4" class="reg-step">
-        <form id="registration-page-form-4">
+        <form name="registration-page-form-4" id="registration-page-form-4">
             <div class="field-container">
                 <h3 class="pull-left"></h3>
                 <h4 class="pull-right">Charge</h4>
                 <div class="clear"></div>
                 <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
-            </div>            
+            </div>
+
+            <input type="hidden" name="user_id" id="user_id" value="'.$user_id.'">
+            <input type="hidden" name="jurisdiction_id" id="jurisdiction_id">
 
             <div id="route-1-summary" class="route-specific-summary">
                 <div class="input-container pull-left">                
@@ -1356,7 +1410,7 @@ function registration_form() {
                         
                         <div class="input-container pull-left">                
                             <label for="company_type">One:</label>
-                            <input type="text" name="summary_company_name[]" id="company_name_choice_1" class="custom-input-class">
+                            <input type="text" name="company_name_choices[]" id="company_name_choice_1" class="custom-input-class">
                         </div>                
                         <div class="clear"></div>
                     </div>            
@@ -1366,7 +1420,7 @@ function registration_form() {
                         
                         <div class="input-container pull-left">                
                             <label for="company_type">Two:</label>
-                            <input type="text" name="summary_company_name[]" id="company_name_choice_2" class="custom-input-class">
+                            <input type="text" name="company_name_choices[]" id="company_name_choice_2" class="custom-input-class">
                         </div>                
                         <div class="clear"></div>
                     </div>            
@@ -1376,7 +1430,7 @@ function registration_form() {
                         
                         <div class="input-container pull-left">                
                             <label for="company_type">Three:</label>
-                            <input type="text" name="summary_company_name[]" id="company_name_choice_3" class="custom-input-class">
+                            <input type="text" name="company_name_choices[]" id="company_name_choice_3" class="custom-input-class">
                         </div>                
                         <div class="clear"></div>
                     </div>
@@ -1385,7 +1439,7 @@ function registration_form() {
             <div id="route-2-summary" class="route-specific-summary">
                 <div class="input-container pull-left">                
                     <p>Purchase of shelf company - <span class="summaryjurisdiction-name"></span>: <span id="summarycompany-name"></span></p>                    
-                    <input type="hidden" name="summary_company_id" id="summary_company_id" value="">
+                    <input type="hidden" name="shelf_company_id" id="shelf_company_id" value="">
                 </div>
                 <div id="summarycompany-price" class="price summary-price pull-right"><p>$0</p></div>
                 <div class="clear"></div>
@@ -1408,6 +1462,10 @@ function registration_form() {
             <div id="summaryservice">
                 <!-- JS CONTENT GOES HERE -->
             </div>                          
+
+            <div id="summaryinfoservice">
+                <!-- JS CONTENT GOES HERE -->
+            </div>                          
                         
             <div class="field-container">
                 <div class="pull-left">                
@@ -1422,7 +1480,7 @@ function registration_form() {
             </div>
             
             <a href="#" id="next"><button data-id="3" data-hash="step-3" class="custom-submit-class back-btn">Back</button></a>
-            <a href="#" id="next"><button class="custom-submit-class">Payment Gateway</button></a>
+            <a href="#"><button class="custom-submit-class payment-gateway-btn">Payment Gateway</button></a>
             
         </form>        
     </div>';

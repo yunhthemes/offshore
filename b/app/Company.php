@@ -18,4 +18,24 @@ class Company extends Model
     {
         return $this->belongsToMany('App\Service', 'company_service');
     }
+
+    public function companydirectors()
+    {
+    	return $this->hasMany('App\CompanyDirector');
+    }
+
+    public function companyshareholders()
+    {
+    	return $this->hasMany('App\CompanyShareholder');
+    }
+
+    public function companysecretaries()
+    {
+    	return $this->hasMany('App\CompanySecretary');
+    }
+
+    public function servicescountries()
+    {
+        return $this->belongsToMany('App\ServiceCountry', 'company_service_country');
+    }
 }

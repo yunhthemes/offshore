@@ -33,6 +33,6 @@ Route::group(['middleware' => ['web']], function () {
 Route::get('api/companytype/{id}', ['uses' => 'ApiController@companytype']);
 Route::get('admin', ['uses' => 'AdminController@index']);
 Route::group(['middleware' => 'web'], function() {
-	Route::resource('admin/jurisdiction', 'JurisdictionController');
-	Route::resource('admin/company', 'CompanyController');
+	Route::resource('admin/jurisdiction', 'JurisdictionController');	
 });
+Route::resource('admin/company', 'CompanyController');
