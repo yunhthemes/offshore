@@ -15,5 +15,10 @@ class InformationService extends Model
         return $this->belongsTo('App\CompanyType');
     }
 
+    public function companies()
+    {
+        return $this->belongsToMany('App\Company', 'company_information_service');
+    }
+
 
 }

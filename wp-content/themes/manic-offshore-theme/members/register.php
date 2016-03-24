@@ -46,10 +46,13 @@
 								do_action( 'bp_before_registration_confirmed' ); ?>
 
 								<?php if ( bp_registration_needs_activation() ) : ?>
-									<p><?php _e( 'You have successfully created your account! To begin using this site you will need to activate your account via the email we have just sent to your address.', 'buddypress' ); ?></p>
+									<p><?php _e( 'You have successfully created your account! To begin using this site you will need to activate your account via the email we have just sent to your address.', 'buddypress' ); ?></p>									
 								<?php else : ?>
 									<p><?php _e( 'You have successfully created your account! Please log in using the username and password you have just created.', 'buddypress' ); ?></p>
 								<?php endif; ?>
+								<div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
+								<div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
+								<div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
 
 								<?php
 
@@ -110,18 +113,18 @@
 
 	                                $form.validate({
 	                                    rules: {
-	                                        field_3: "required",
-	                                        field_1: "required",
 	                                        field_2: "required",
+	                                        field_1: "required",
+	                                        field_6: "required",
 	                                        signup_email: {
 	                                            required: true,
 	                                            email: true
 	                                        },
 	                                        field_10: "required",
 	                                        signup_username: "required",
-	                                        password: "required",
-	                                        retype_password: {
-	                                            equalTo: "#password"
+	                                        signup_password: "required",
+	                                        signup_password_confirm: {
+	                                            equalTo: "#signup_password"
 	                                        }
 	                                    }
 	                                });
@@ -150,7 +153,7 @@
 	                                //     }
 	                                // }
 
-	                                $("#field_10").intlTelInput({
+	                                $("#field_7").intlTelInput({
 	                                	utilsScript: "<?php echo JS; ?>/plugins/utils.js"
 	                                });
 

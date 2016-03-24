@@ -226,13 +226,18 @@ class JurisdictionController extends Controller
     public function show(Request $request, $id)
     {
         //
-        // DB::enableQueryLog();
-        $company_type = CompanyType::with('directors', 'shareholders', 'secretaries', 'services', 'informationservices')->find($id);
-        // print_r(DB::getQueryLog());
+        DB::enableQueryLog();
+        $company_type = CompanyType::with('directors', 'shareholders', 'secretaries', 'services.countries', 'informationservices')->find($id);        
+        
         if($request->ajax() || $request->callback)
         {
-            $companies = CompanyType::with('companies', 'shareholders', 'directors', 'secretaries', 'services.countries', 'informationservices')->find($id);    
+            $companies = CompanyType::with('companies','shareholders', 'directors', 'secretaries', 'services.countries', 'informationservices')->find($id);    
+
+            // return $companies->companies;
+            // print_r(DB::getQueryLog()); exit();
+
             return response()->json($companies)->setCallback($request->input('callback'));
+            
         }
 
         return view('jurisdiction.show', [ 'company_type' => $company_type ]);

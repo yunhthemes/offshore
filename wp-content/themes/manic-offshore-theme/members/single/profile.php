@@ -46,9 +46,9 @@ do_action( 'bp_before_profile_content' ); ?>
 	case 'public' :
 
 		// Display XProfile
-		if ( bp_is_active( 'xprofile' ) )
+		if ( bp_is_active( 'xprofile' ) ) {
 			bp_get_template_part( 'members/single/profile/profile-loop' );
-
+		}
 		// Display WordPress profile (fallback)
 		else
 			bp_get_template_part( 'members/single/profile/profile-wp' );

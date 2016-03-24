@@ -14,10 +14,10 @@ class Company extends Model
         return $this->belongsTo('App\CompanyType', 'company_type_id');
     }
 
- 	public function services()
-    {
-        return $this->belongsToMany('App\Service', 'company_service');
-    }
+ 	// public function services()
+  //   {
+  //       return $this->belongsToMany('App\Service', 'company_service');
+  //   }
 
     public function companydirectors()
     {
@@ -34,8 +34,18 @@ class Company extends Model
     	return $this->hasMany('App\CompanySecretary');
     }
 
+    public function informationservice()
+    {
+        return $this->belongsToMany('App\InformationService', 'company_information_service');
+    }
+
     public function servicescountries()
     {
         return $this->belongsToMany('App\ServiceCountry', 'company_service_country');
+    }
+
+    public function wpuser()
+    {
+        return $this->belongsTo('App\Wpuser', 'wpuser_id');
     }
 }

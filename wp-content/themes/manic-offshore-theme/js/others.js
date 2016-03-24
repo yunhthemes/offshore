@@ -18,8 +18,8 @@ jQuery(document).ready(function($) {
 
   $('.mkdf-breadcrumbs-inner > a').first().html('Home');
 
-  $('.mkdf-title-holder h1').clone().appendTo('#custom-page-title');
-  $('.mkdf-breadcrumbs-holder').clone().appendTo('#custom-breadcrumb');
+  $('.mkdf-title').find('.mkdf-title-holder h1').clone().appendTo('#custom-page-title');
+  $('.mkdf-title').find('.mkdf-breadcrumbs-holder').clone().appendTo('#custom-breadcrumb');
 
   $('#user_login').attr( 'placeholder', 'Username' );
   $('#user_pass').attr( 'placeholder', 'Password' );

@@ -11,7 +11,9 @@ use App\CompanyType;
 use App\CompanyDirector;
 use App\CompanySecretary;
 use App\CompanyShareholder;
-use App\WpuserCompany;
+use App\Country;
+use App\Wpuser;
+use App\InformationService;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 Use DB;
@@ -29,14 +31,8 @@ class CompanyController extends Controller
     	// DB::enableQueryLog();
         // DB::getQueryLog();
 
-        $companies = Company::with('companytypes')->get();
-
-        if($request->ajax())
-        {
-            return $companies;
-        }    	
-
-        return view('company.index', ['companies'=>$companies]);
+        $companies = Company::with('companytypes')->get();              
+        return view('company.index', ['companies'=>$companies]);            
     }
 
     /**
@@ -65,52 +61,94 @@ class CompanyController extends Controller
 
         if($request->ajax() || $request->callback) {
 
-            // if(empty($request->shelf_company_id)) {
-                
-            // }
-            $wpuser_company = new WpuserCompany();
-            $wpuser_company->wpuser_id = $request->user_id;
-            $wpuser_company->company_id = $request->shelf_company_id;
-            $wpuser_company->save();
+            $user_id = $request->user_id;
 
-            $company = Company::find($request->shelf_company_id);
-            $directors = array();
-            $secretaries = array();
-            $shareholders = array();
-
-            for($i=1;$i<=$request->director_count;$i++) {                
-                $name = $request->input('director_'.$i.'_name');
-                $address = $request->input('director_'.$i.'_address');
-                $address_2 = $request->input('director_'.$i.'_address_2');
-                $address_3 = $request->input('director_'.$i.'_address_3');
-                $directors[] = new CompanyDirector(['name'=>$name, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3]);
+            if(empty($user_id) || $user_id==0) { // for unregistered user testing
+                $user_id = 1;
             }
 
-            for($i=1;$i<=$request->secretary_count;$i++) {                
-                $name = $request->input('secretary_'.$i.'_name');
-                $address = $request->input('secretary_'.$i.'_address');
-                $address_2 = $request->input('secretary_'.$i.'_address_2');
-                $address_3 = $request->input('secretary_'.$i.'_address_3');
-                $secretaries[] = new CompanySecretary(['name'=>$name, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3]);
-            }
+            $company_id = $request->shelf_company_id;
 
-            for($i=1;$i<=$request->shareholder_count;$i++) {                
-                $name = $request->input('shareholder_'.$i.'_name');
-                $address = $request->input('shareholder_'.$i.'_address');
-                $address_2 = $request->input('shareholder_'.$i.'_address_2');
-                $address_3 = $request->input('shareholder_'.$i.'_address_3');
-                $amount = $request->input('shareholder_'.$i.'_amount');
-                $shareholders[] = new CompanyShareholder(['name'=>$name, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3, 'share_amount'=>$amount]);
-            }
+            if(empty($company_id)) { // if not shelf create new company
+                $company = new Company;
+                $company->name = implode(", ", $request->company_name_choices);
+                $company->incorporation_date = date('Y-m-d H:i:s');
+                $company->price = 0;
+                $company->price_eu = 0;
+                $company->company_type_id = $request->jurisdiction_id;
+                $company->save();
 
-            $company->companydirectors()->saveMany($directors);
-            $company->companysecretaries()->saveMany($secretaries);
-            $company->companyshareholders()->saveMany($shareholders);
+                $company_id = $company->id;
+            }            
 
-            // save service
-            // save info service
+            if(!empty($user_id) && !empty($company_id) && $user_id!==0):
 
-            return response()->json(['message' => 'Successfully added', 'response' => $request->all()], 200)->setCallback($request->input('callback'));
+                $company = Company::find($company_id);
+                $wpuser = Wpuser::find($user_id);
+
+                $company->wpuser()->associate($wpuser);
+                $company->save();
+
+                // $company->wpusers()->attach($wpuser->ID); // might change to one to many which is to add user_id in compaines table
+
+                $directors = array();
+                $secretaries = array();
+                $shareholders = array();
+
+                for($i=1;$i<=$request->director_count;$i++) {                
+                    $name = $request->input('director_'.$i.'_name');
+                    $address = $request->input('director_'.$i.'_address');
+                    $address_2 = $request->input('director_'.$i.'_address_2');
+                    $address_3 = $request->input('director_'.$i.'_address_3');
+                    $directors[] = new CompanyDirector(['name'=>$name, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3]);
+                }
+
+                for($i=1;$i<=$request->secretary_count;$i++) {                
+                    $name = $request->input('secretary_'.$i.'_name');
+                    $address = $request->input('secretary_'.$i.'_address');
+                    $address_2 = $request->input('secretary_'.$i.'_address_2');
+                    $address_3 = $request->input('secretary_'.$i.'_address_3');
+                    $secretaries[] = new CompanySecretary(['name'=>$name, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3]);
+                }
+
+                for($i=1;$i<=$request->shareholder_count;$i++) {                
+                    $name = $request->input('shareholder_'.$i.'_name');
+                    $address = $request->input('shareholder_'.$i.'_address');
+                    $address_2 = $request->input('shareholder_'.$i.'_address_2');
+                    $address_3 = $request->input('shareholder_'.$i.'_address_3');
+                    $amount = $request->input('shareholder_'.$i.'_amount');
+                    $shareholders[] = new CompanyShareholder(['name'=>$name, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3, 'share_amount'=>$amount]);
+                }
+
+                $company->companydirectors()->saveMany($directors);
+                $company->companysecretaries()->saveMany($secretaries);
+                $company->companyshareholders()->saveMany($shareholders);
+
+                for($i=1;$i<=$request->service_count;$i++) {
+                    $service_country_count = $request->input('service_'.$i.'_country_count');
+
+                    for($j=1;$j<=$service_country_count;$j++) {
+                        $service_country_id = $request->input('service_'.$i.'_country_'.$j.'_id'); 
+                        $credit_card_count = ($request->input('service_'.$i.'_country_'.$j.'_no_of_card')) ? $request->input('service_'.$i.'_country_'.$j.'_no_of_card') : "";
+
+                        $company->servicescountries()->attach($service_country_id, ['credit_card_count'=>$credit_card_count]);
+                    }
+                }
+
+                $info_services_ids = $request->info_services_id;
+                $company_info_services = array();
+
+                foreach ($info_services_ids as $key => $value) {
+                    $company->informationservice()->attach($value);
+                }                
+
+                return response()->json(['message' => 'Successfully added', 'response' => $request->all()], 200)->setCallback($request->input('callback'));
+
+            else:
+
+                return response()->json(['message' => 'missing required fields'], 412);
+
+            endif;
 
         }else {
 
@@ -122,7 +160,7 @@ class CompanyController extends Controller
                 $company->price_eu = (double) preg_replace("/[^0-9,.]/", "", $request->company_price_eu);
                 $company->shelf = 1;
                 $company->company_type_id = $request->company_type;
-                $company->save();    
+                $company->save();
             }
 
             return redirect('admin/company');
@@ -158,9 +196,9 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+        //              
         return $id;
     }
 

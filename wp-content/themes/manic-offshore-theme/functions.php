@@ -64,3 +64,13 @@ require 'custom-login-form.php';
 //     wp_redirect( get_option('siteurl') . '/sign-up' );
 //   }
 // }
+
+function nonreg_visitor_redirect() {
+  global $bp;
+  if ( bp_is_activity_component() || bp_is_groups_component() || bp_is_group_forum() || bp_is_page( BP_MEMBERS_SLUG ) ) {
+    if(!is_user_logged_in()) { //just a visitor and not logged in
+      wp_redirect( get_option('siteurl') );
+    }
+  }
+}
+add_filter('get_header','nonreg_visitor_redirect',1);

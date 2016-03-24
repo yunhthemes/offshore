@@ -21,6 +21,7 @@ class CreateCompanyShareholderTable extends Migration
             $table->string('address_2');
             $table->string('address_3');
             $table->string('share_amount');
+            $table->foreign('company_id')->references('id')->on('companies');
             $table->timestamps('created_at');
         });
     }

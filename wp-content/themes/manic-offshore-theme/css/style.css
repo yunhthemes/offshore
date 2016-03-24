@@ -1494,3 +1494,122 @@ body.home .rev_slider {
 .offshore h2 {
   font-size: 24px;
 }
+.dashboard {
+  padding-bottom: 80px !important;
+}
+.dashboard .profile table.profile-fields tr {
+  border: none;
+}
+.dashboard .profile table.profile-fields tr td.label {
+  text-align: left;
+}
+.dashboard #change-avatar-personal-li {
+  display: none;
+}
+.dashboard #profile-personal-li {
+  display: none;
+}
+.dashboard #notifications-personal-li {
+  display: none;
+}
+#buddypress div.item-list-tabs ul li.current a,
+#buddypress div.item-list-tabs ul li.selected a {
+  background-color: #008b9b;
+  color: #ffffff;
+}
+#buddypress table.forum tr.alt td,
+#buddypress table.messages-notices tr.alt td,
+#buddypress table.notifications tr.alt td,
+#buddypress table.notifications-settings tr.alt td,
+#buddypress table.profile-fields tr.alt td,
+#buddypress table.profile-settings tr.alt td,
+#buddypress table.wp-profile-fields tr.alt td {
+  background: #dddddd;
+}
+.circle-container {
+  text-align: center;
+  min-height: 400px;
+  position: relative;
+}
+.circle-container .circle {
+  background-color: #008b9b;
+  -webkit-border-radius: 100px;
+  border-radius: 100px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  width: 200px;
+  height: 200px;
+  display: inline-block;
+}
+.circle-container .circle h4 {
+  font-size: 17px;
+  color: #ffffff;
+  text-align: center;
+}
+.circle-container .circle.circle-2 {
+  position: relative;
+  top: 200px;
+}
+.circle-container .arrow {
+  display: inline-block;
+  -webkit-transform: rotate(-50deg);
+  -moz-transform: rotate(-50deg);
+  -o-transform: rotate(-50deg);
+  -ms-transform: rotate(-50deg);
+  transform: rotate(-50deg);
+}
+.circle-container .arrow:nth-of-type(2) {
+  -webkit-transform: rotate(50deg);
+  -moz-transform: rotate(50deg);
+  -o-transform: rotate(50deg);
+  -ms-transform: rotate(50deg);
+  transform: rotate(50deg);
+}
+.circle-container .arrow i {
+  font-size: 30px;
+}
+.circle-container .v-align-table {
+  display: table;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+.circle-container .v-align-table .v-align-table-cell {
+  display: table-cell;
+  vertical-align: middle;
+}
+#user-company-details .each-detail {
+  margin-bottom: 10px;
+  padding: 10px;
+}
+#user-company-details .each-detail:nth-of-type(2n) {
+  background-color: #dddddd;
+}
+#user-company-details .lbl-container {
+  display: inline-block;
+  width: 250px;
+  vertical-align: top;
+}
+#user-company-details .lbl-container h5 {
+  color: #363636;
+  font-weight: 700;
+  font-size: 14px;
+}
+#user-company-details .value-container {
+  display: inline-block;
+  vertical-align: top;
+  max-width: 350px;
+}
+#user-company-details .value-container .each-value .value,
+#user-company-details .value-container .each-value .amount {
+  display: inline-block;
+  margin-right: 30px;
+}
+#user-company-details-container {
+  display: none;
+}
+#user-company-details-container .back-to-dashboard {
+  text-align: right;
+  display: block;
+}

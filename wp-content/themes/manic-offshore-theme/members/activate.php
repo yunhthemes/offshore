@@ -42,7 +42,9 @@
 			<?php else : ?>
 				<p><?php printf( __( 'Your account was activated successfully! You can now <a href="%s">log in</a> with the username and password you provided when you signed up.', 'buddypress' ), wp_login_url( bp_get_root_domain() ) ); ?></p>
 			<?php endif; ?>
-
+			<div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
+			<div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
+			<div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
 		<?php else : ?>
 
 			<p><?php _e( 'Please provide a valid activation key.', 'buddypress' ); ?></p>
@@ -50,13 +52,17 @@
 			<form action="" method="get" class="standard-form" id="activation-form">
 
 				<label for="key"><?php _e( 'Activation Key:', 'buddypress' ); ?></label>
-				<input type="text" name="key" id="key" value="" />
+				<input type="text" name="key" id="key" value="" class="custom-input-class" />
 
 				<p class="submit">
 					<input type="submit" name="submit" value="<?php esc_attr_e( 'Activate', 'buddypress' ); ?>" />
 				</p>
 
 			</form>
+
+			<div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
+			<div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
+			<div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
 
 		<?php endif; ?>
 

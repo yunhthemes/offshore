@@ -15,3 +15,119 @@
 		font-size: 24px;
 	}
 }
+
+.dashboard {
+    padding-bottom: 80px !important;
+
+    .profile {
+    	table.profile-fields {
+			tr {
+				border: none;
+				td.label {
+					text-align: left;
+				}
+			}
+    	}
+    }
+
+    #change-avatar-personal-li {
+    	display: none;
+    }
+    #profile-personal-li {
+    	display: none;
+    }
+    #notifications-personal-li {
+    	display: none;
+    }
+
+} 
+
+#buddypress div.item-list-tabs ul li.current a, #buddypress div.item-list-tabs ul li.selected a {
+	background-color: @dark-blue;
+	color: @white;
+}
+
+#buddypress table.forum tr.alt td, #buddypress table.messages-notices tr.alt td, #buddypress table.notifications tr.alt td, #buddypress table.notifications-settings tr.alt td, #buddypress table.profile-fields tr.alt td, #buddypress table.profile-settings tr.alt td, #buddypress table.wp-profile-fields tr.alt td {
+	background: @grey-2;
+}
+
+.circle-container {
+	text-align: center;
+	min-height: 400px;
+	position: relative;
+	.circle {
+		background-color: @dark-blue;
+		.round(100px);
+		width: 200px;
+		height: 200px;
+		display: inline-block;
+		h4 {
+			font-size: 17px;
+			color: @white;
+			text-align: center;
+		}	
+		&.circle-2 {
+			position: relative;
+			top: 200px;
+		}
+	}
+	.arrow {
+		display: inline-block;
+		.rotation(-50deg);
+		&:nth-of-type(2){
+			.rotation(50deg);
+		}
+		i {
+			font-size: 30px;
+		}
+	}
+	.v-align-table {
+		display: table;
+		width: 100%;
+		height: 100%;
+		text-align: center;
+		.v-align-table-cell {
+			display: table-cell;
+			vertical-align: middle;
+		}
+	}
+}
+
+#user-company-details {
+	.each-detail {
+		margin-bottom: 10px;
+		padding: 10px;
+		&:nth-of-type(2n) {
+			background-color: #dddddd;						
+		}
+	}
+	.lbl-container {
+		display: inline-block; 
+		width: 250px;
+		vertical-align: top;		
+		h5 {
+			color: @dark-grey;
+			font-weight: 700;
+			font-size: 14px;
+		}
+	}
+	.value-container {
+		display: inline-block;
+		vertical-align: top;
+	    max-width: 350px;
+		.each-value {
+			.value, .amount {
+				display: inline-block;
+				margin-right: 30px;
+			}
+		}
+	}
+}
+
+#user-company-details-container {
+	display: none;
+	.back-to-dashboard {
+		text-align: right;
+		display: block;
+	}
+}
