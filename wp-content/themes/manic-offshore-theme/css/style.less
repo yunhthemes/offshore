@@ -155,7 +155,10 @@ body.custom-zopim-visible{
   display: none !important;
 }
 
-
+// ie dropdown fix
+select::-ms-expand {
+    display: none;
+}  
 
 @import "header.less";
 @import "footer.less";

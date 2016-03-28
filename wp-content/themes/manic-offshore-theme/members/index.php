@@ -12,10 +12,10 @@
 	                    <div class="wpb_wrapper">
 	                        <div class="wpb_raw_code wpb_content_element wpb_raw_html">
 	                            <div class="wpb_wrapper">
-	                                <div id="custom-breadcrumb">
+	                                <div id="">
 	                                    <div class="mkdf-breadcrumbs-holder">
 	                                        <div class="mkdf-breadcrumbs">
-	                                            <!-- <div class="mkdf-breadcrumbs-inner"><a href="http://localhost:8888/offshore/">Home</a><span class="mkdf-delimiter"><span class="mkdf-icon-font-elegant arrow_right mkdf-delimiter-icon"></span></span><span class="mkdf-current">Registration</span></div> -->
+	                                            <div class="mkdf-breadcrumbs-inner"><a href="<?php echo home_url( '/' ); ?>">Home</a><span class="mkdf-delimiter"><span class="mkdf-icon-font-elegant arrow_right mkdf-delimiter-icon"></span></span><span class="mkdf-current">Client dashboard</span></div>
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -62,7 +62,6 @@
 	                            		</ul>
 	                            	</div>
 	                            	<div class="wpb_column vc_column_container vc_col-sm-9">
-	                            		<p>List of company associated with this account.</p>
 	                            		<div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
 		                                <div id="user-companies-container">
 			                                <div id="user-companies">
@@ -91,18 +90,37 @@
 	</div>
 </div>
 <script id="user-companies-template" type="text/x-handlebars-template">
-    <div class="company-lists">
+    <div id="company-lists">
     {{#if companies}}
-    	{{#companies}}
-	    	{{#if name}}
-		    	<div class="each-company">
-		    		<h2>{{name}}</h2>			    		
-		    		<p>Service renewal date: N/A</p>
-		    		<a href="#" data-company-id="{{id}}" class="company-details"><button class="custom-submit-class">Company details</button></a>
-		    	</div>
-		    	<div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
-	    	{{/if}}
-    	{{/companies}}    	
+    	<div class="header">
+            <div class="each-header">
+                <h6>Company</h6>
+            </div>
+            <div class="each-header">
+                <h6>Renewal date</h6>
+            </div>
+            <div class="each-header">
+                <h6>Jurisdiction</h6>
+            </div>
+            <div class="each-header"></div>
+        </div>   
+
+        {{#companies}}                                       
+            <div class="content">
+                <div class="each-content">
+                    <p>{{ name }}</p>
+                </div>
+                <div class="each-content">
+                    <p>{{ incorporation_date }}</p>    
+                </div>
+                <div class="each-content">
+                    <p>{{ company_type_id }}</p>
+                </div>
+                <div class="each-content">
+                    <a href="#" data-company-id="{{id}}" class="company-details"><button class="custom-submit-class">Company details</button></a>
+                </div>                        
+            </div>                               
+        {{/companies}}    	
 	{{else}}
 		<p>There is no compaines under this account.</p>
 	{{/if}}

@@ -226,14 +226,21 @@ class JurisdictionController extends Controller
     public function show(Request $request, $id)
     {
         //
-        DB::enableQueryLog();
+        // DB::enableQueryLog();
         $company_type = CompanyType::with('directors', 'shareholders', 'secretaries', 'services.countries', 'informationservices')->find($id);        
         
         if($request->ajax() || $request->callback)
         {
             $companies = CompanyType::with('companies','shareholders', 'directors', 'secretaries', 'services.countries', 'informationservices')->find($id);    
 
-            // return $companies->companies;
+            $companies = CompanyType::with(['companies' => function($query){
+                $query->where('shelf', 1)->where('wpuser_id', NULL); // only shelf compaines without owner return
+            }, 'shareholders', 'directors', 'secretaries', 'services.countries', 'informationservices'])->find($id);
+
+            foreach ($companies->companies as $key => $company) {
+                $company->incorporation_date = date('d M Y', strtotime($company->incorporation_date));
+            }
+
             // print_r(DB::getQueryLog()); exit();
 
             return response()->json($companies)->setCallback($request->input('callback'));

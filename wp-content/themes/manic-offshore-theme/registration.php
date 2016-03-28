@@ -267,10 +267,10 @@ function registration_form() {
                         html.onchange = function() {
                             if(html.checked) {
                                 $(html).parent().parent().find(".key-person-info").hide();
-                                $(html).parent().find(".nominee-container").show();
+                                $(html).parent().parent().find(".nominee-container").show();
                             }else {
                                 $(html).parent().parent().find(".key-person-info").show();
-                                $(html).parent().find(".nominee-container").hide();
+                                $(html).parent().parent().find(".nominee-container").hide();
                             } 
                         };
                     }else if(selector==".service-js-switch") {
@@ -281,12 +281,12 @@ function registration_form() {
 
                             if(html.checked) {                                
                                 $(".service-"+serviceId+"-country-"+countryId).prop("disabled", false);                                
-                                if(serviceName=="Bank account") {
+                                if(serviceName=="Bank accounts") {
                                     $(".credit_card_in_country_"+countryId).prop("disabled", false);    
                                 }                                
                             }else {
                                 $(".service-"+serviceId+"-country-"+countryId).prop("disabled", true);
-                                if(serviceName=="Bank account") {
+                                if(serviceName=="Bank accounts") {
                                     $(".credit_card_in_country_"+countryId).prop("disabled", true);    
                                 }                                                                
                             }
@@ -507,9 +507,7 @@ function registration_form() {
                 var selectedCompanyTypeId = $(this).val();
                 var selectedCompanyTypeName = $(this).find("option:selected").text();
                 var selectedCompanyTypePrice = $(this).find("option:selected").data("prices");
-                var step_id = $(this).data("id");
-
-                updateOnJurisdictionChange(selectedCompanyTypeName, selectedCompanyTypePrice, selectedCompanyTypeId);
+                var step_id = $(this).data("id");                
 
                 // with cross domain
                 // var response = makeJsonpRequest("", "http://103.25.203.23/b/admin/jurisdiction/"+selectedCompanyTypeId, "GET");
@@ -550,6 +548,8 @@ function registration_form() {
                         initPlugin(".js-switch");
                         initPlugin(".info-service-js-switch");
                         initPlugin(".service-js-switch");
+
+                        updateOnJurisdictionChange(selectedCompanyTypeName, selectedCompanyTypePrice, selectedCompanyTypeId);
 
                     }
                 });
@@ -680,7 +680,7 @@ function registration_form() {
                     return index + 1;
                 });
 
-                updateHashInURL("step-1");
+                updateHashInURL("1");
 
                 // with cross domain
                 // var response = makeJsonpRequest("", "http://103.25.203.23/b/admin/jurisdiction", "GET");
@@ -708,24 +708,50 @@ function registration_form() {
         {{#if companies.length}}
             <p>The following shelf companies are immediately available.  You may purchase one of these or order a new incorporation below.</p>
             <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>        
-            {{#companies}}
-            <div class="field-container">                
-                <ul class="pull-left">
-                    <li><label for="company_name">Company name: {{name}}</label></li>
-                    <li><label for="incorporation_date">Date of incorporation: {{incorporation_date}}</label></li>
-                    <li><label for="price">Price: ${{price}}</label></li>
-                </ul>
-                <button data-company-name="{{name}}" data-company-id="{{id}}" data-company-price="{{price}}" class="pull-right custom-submit-class buy-now" data-hash="step-2">Buy now</button>
-                <div class="clear"></div>                
-            </div>        
-            {{/companies}}
+            <div class="field-container">  
+                <div class="header">
+                    <div class="each-header">
+                        <h6>Company name</h6>
+                    </div>
+                    <div class="each-header">
+                        <h6>Incorporated</h6>
+                    </div>
+                    <div class="each-header">
+                        <h6>Price</h6>
+                    </div>
+                    <div class="each-header"></div>
+                </div>   
+
+                {{#companies}}                                       
+                    <div class="content">
+                        <div class="each-content">
+                            <p>{{ name }}</p>
+                        </div>
+                        <div class="each-content">
+                            <p>{{ incorporation_date }}</p>    
+                        </div>
+                        <div class="each-content">
+                            <p>${{ price }}</p>
+                        </div>
+                        <div class="each-content">
+                            <button data-company-name="{{name}}" data-company-id="{{id}}" data-company-price="{{price}}" class="custom-submit-class buy-now" data-hash="2">Buy now</button>
+                        </div>                        
+                    </div>                               
+                {{/companies}}
+            </div>    
         {{else}}   
             <p>Unfortunately no shelf companies are presently available.  You may order a new incorporation below.</p>
             <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>            
         {{/if}}
 
-        <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>                    
-        <button data-id="0" data-hash="#" class="custom-submit-class new-incorporation">New incorporation</button>        
+        <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>                         
+
+        <p>I would like Offshore Company Solutions to arrange a new incorporation for me</p>
+        <p><span id="jurisdiction-name"></span> new incorporation charge: <span id="jurisdiction-price"></span></p>
+
+        <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>            
+
+        <button data-id="0" data-hash="#" class="custom-submit-class new-incorporation">New incorporation</button>                
     </script>
     <script id="shareholder-template" type="text/x-handlebars-template">
         {{#if shareholders.length}}
@@ -742,14 +768,14 @@ function registration_form() {
                 <div class="field-container">
                     <div class="custom-input-container-left pull-left">
                         <label for="shareholder" class="name">Shareholder 1</label>
-                        <input type="text" name="shareholder_1_name" placeholder="Shareholder name" data-selector="shareholder" data-shareholder-field="name" data-shareholder-id="1" class="shareholder-name person-input custom-input-class">                
+                        <input type="text" name="shareholder_1_name" placeholder="Name" data-selector="shareholder" data-shareholder-field="name" data-shareholder-id="1" class="shareholder-name person-input custom-input-class">                
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                         <label for="shareholder_1_address" class="address">Shareholder 1 address</label>
-                        <input type="text" name="shareholder_1_address" placeholder="Shareholder address" data-selector="shareholder" data-shareholder-field="address" data-shareholder-id="1" class="shareholder-address person-input custom-input-class">                
+                        <input type="text" name="shareholder_1_address" placeholder="Street" data-selector="shareholder" data-shareholder-field="address" data-shareholder-id="1" class="shareholder-address person-input custom-input-class">                
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                        <input type="text" name="shareholder_1_address_2" placeholder="Shareholder address 2" data-selector="shareholder" data-shareholder-field="address_2" data-shareholder-id="1" class="shareholder-address-2 person-input custom-input-class">                
+                        <input type="text" name="shareholder_1_address_2" placeholder="City, State" data-selector="shareholder" data-shareholder-field="address_2" data-shareholder-id="1" class="shareholder-address-2 person-input custom-input-class">                
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                        <input type="text" name="shareholder_1_address_3" placeholder="Shareholder address 3" data-selector="shareholder" data-shareholder-field="address_3" data-shareholder-id="1" class="shareholder-address-3 person-input custom-input-class">                
+                        <input type="text" name="shareholder_1_address_3" placeholder="Country" data-selector="shareholder" data-shareholder-field="address_3" data-shareholder-id="1" class="shareholder-address-3 person-input custom-input-class">                
                     </div>
                     <div class="custom-input-container-right pull-right">
                         <label for="shareamount_1_amount">Number of shares</label>
@@ -761,14 +787,14 @@ function registration_form() {
                 <div class="field-container">
                     <div class="custom-input-container-left pull-left">
                         <label for="shareholder" class="name">Shareholder 2</label>
-                        <input type="text" name="shareholder_2_name" placeholder="Shareholder name" data-selector="shareholder" data-shareholder-field="name" data-shareholder-id="2" class="shareholder-name person-input custom-input-class">
+                        <input type="text" name="shareholder_2_name" placeholder="Name" data-selector="shareholder" data-shareholder-field="name" data-shareholder-id="2" class="shareholder-name person-input custom-input-class">
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                         <label for="shareholder_2_address" class="address">Shareholder 2 address</label>
-                        <input type="text" name="shareholder_2_address" placeholder="Shareholder address" data-selector="shareholder" data-shareholder-field="address" data-shareholder-id="2" class="shareholder-address person-input custom-input-class">                
+                        <input type="text" name="shareholder_2_address" placeholder="Street" data-selector="shareholder" data-shareholder-field="address" data-shareholder-id="2" class="shareholder-address person-input custom-input-class">                
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                        <input type="text" name="shareholder_2_address_2" placeholder="Shareholder address 2" data-selector="shareholder" data-shareholder-field="address_2" data-shareholder-id="2" class="shareholder-address-2 person-input custom-input-class">                
+                        <input type="text" name="shareholder_2_address_2" placeholder="City, State" data-selector="shareholder" data-shareholder-field="address_2" data-shareholder-id="2" class="shareholder-address-2 person-input custom-input-class">                
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                        <input type="text" name="shareholder_2_address_3" placeholder="Shareholder address 3" data-selector="shareholder" data-shareholder-field="address_3" data-shareholder-id="2" class="shareholder-address-3 person-input custom-input-class">                
+                        <input type="text" name="shareholder_2_address_3" placeholder="Country" data-selector="shareholder" data-shareholder-field="address_3" data-shareholder-id="2" class="shareholder-address-3 person-input custom-input-class">                
                     </div>
                     <div class="custom-input-container-right pull-right">
                         <label for="shareamount_2_amount">Number of shares</label>
@@ -780,14 +806,14 @@ function registration_form() {
                     <div class="field-container">
                         <div class="custom-input-container-left pull-left">
                             <label for="shareholder" class="name">Shareholder 3</label>
-                            <input type="text" name="shareholder_3_name" placeholder="Shareholder name" data-selector="shareholder" data-shareholder-field="name" data-shareholder-id="3" class="shareholder-name person-input custom-input-class">                
+                            <input type="text" name="shareholder_3_name" placeholder="Name" data-selector="shareholder" data-shareholder-field="name" data-shareholder-id="3" class="shareholder-name person-input custom-input-class">                
                             <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                             <label for="shareholder_3_address" class="address">Shareholder 3 address</label>
-                            <input type="text" name="shareholder_3_address" placeholder="Shareholder address" data-selector="shareholder" data-shareholder-field="address" data-shareholder-id="3" class="shareholder-address person-input custom-input-class">                
+                            <input type="text" name="shareholder_3_address" placeholder="Street" data-selector="shareholder" data-shareholder-field="address" data-shareholder-id="3" class="shareholder-address person-input custom-input-class">                
                             <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                            <input type="text" name="shareholder_3_address_2" placeholder="Shareholder address 2" data-selector="shareholder" data-shareholder-field="address_2" data-shareholder-id="3" class="shareholder-address-2 person-input custom-input-class">                
+                            <input type="text" name="shareholder_3_address_2" placeholder="City, State" data-selector="shareholder" data-shareholder-field="address_2" data-shareholder-id="3" class="shareholder-address-2 person-input custom-input-class">                
                             <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                            <input type="text" name="shareholder_3_address_3" placeholder="Shareholder address 3" data-selector="shareholder" data-shareholder-field="address_3" data-shareholder-id="3" class="shareholder-address-3 person-input custom-input-class">                
+                            <input type="text" name="shareholder_3_address_3" placeholder="Country" data-selector="shareholder" data-shareholder-field="address_3" data-shareholder-id="3" class="shareholder-address-3 person-input custom-input-class">                
                         </div>
                         <div class="custom-input-container-right pull-right">
                             <label for="shareamount_3_amount">Number of shares</label>                            
@@ -815,16 +841,17 @@ function registration_form() {
 
             <p>Should confidentiality be required, Offshore Company Solutions can arrange for the shares to be held by nominees on behalf of the above shareholders instead of registering the shares directly in the names of the shareholders.  An annual nominee shareholder fee of will apply for this service.</p>  
             <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-            <p>Offshore Company Solutions to provide professional shareholders?</p>
+
+            <p class="pull-left">Offshore Company Solutions to provide nominee shareholders?</p>
+            <div class="pull-right yesno-btn"><input type="checkbox" name="nominee_shareholder" id="nominee_shareholder" class="js-switch"></div>
+            <div class="clear"></div>
 
             <div class="field-container">
-                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                <input type="checkbox" name="nominee_shareholder" id="nominee_shareholder" class="js-switch">
-                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+                <div class="vc_empty_space" style="height: 20px"><span class="vc_empty_space_inner"></span></div>
                 
                 <div class="nominee-container hidden">
                     <div class="pull-left">
-                        <label for="nominee_shareholder" class="checkbox-label align-label">Annual professional shareholder fee:</label>
+                        <label for="nominee_shareholder" class="checkbox-label align-label">Annual nominee shareholder fee:</label>
                     </div>
                     <div class="pull-right">
                         {{#shareholders}}
@@ -851,11 +878,13 @@ function registration_form() {
 
             <p>Professional directors may be provided by Offshore Company Solutions if confidentiality is required or if double tax treaty benefits will be claimed.  An annual professional director fee will be charged for this service.</p>
             <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-            <p>Offshore Company Solutions to provide professional directors?</p>
+            
+            <p class="pull-left">Offshore Company Solutions to provide professional directors?</p>
+            <div class="pull-right yesno-btn"><input type="checkbox" name="nominee_director" id="nominee_director" class="js-switch"></div>
+            <div class="clear"></div>
 
             <div class="field-container">
-                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                <input type="checkbox" name="nominee_director" id="nominee_director" class="js-switch">
+                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>                            
                 <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>                                        
 
                 <div class="nominee-container hidden">
@@ -876,39 +905,39 @@ function registration_form() {
             <div class="director key-person-info">
                 <div class="field-container">
                     <label for="director" class="name">Director 1</label>
-                    <input type="text" name="director_1_name" placeholder="Director name" data-selector="director" data-director-field="name" data-director-id="1" class="director-name person-input custom-input-class">   
+                    <input type="text" name="director_1_name" placeholder="Name" data-selector="director" data-director-field="name" data-director-id="1" class="director-name person-input custom-input-class">   
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                     <label for="director_1_address" class="address">Director 1 address</label>
-                    <input type="text" name="director_1_address" placeholder="Director address" data-selector="director" data-director-field="address" data-director-id="1" class="director-address person-input custom-input-class">                
+                    <input type="text" name="director_1_address" placeholder="Street" data-selector="director" data-director-field="address" data-director-id="1" class="director-address person-input custom-input-class">                
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                    <input type="text" name="director_1_address_2" placeholder="Director address 2" data-selector="director" data-director-field="address_2" data-director-id="1" class="director-address-2 person-input custom-input-class">                
+                    <input type="text" name="director_1_address_2" placeholder="City, State" data-selector="director" data-director-field="address_2" data-director-id="1" class="director-address-2 person-input custom-input-class">                
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                    <input type="text" name="director_1_address_3" placeholder="Director address 3" data-selector="director" data-director-field="address_3" data-director-id="1" class="director-address-3 person-input custom-input-class">                                                 
+                    <input type="text" name="director_1_address_3" placeholder="Country" data-selector="director" data-director-field="address_3" data-director-id="1" class="director-address-3 person-input custom-input-class">                                                 
                 </div>
 
                 <div class="field-container">
                     <label for="director" class="name">Director 2</label>
-                    <input type="text" name="director_2_name" placeholder="Director name" data-selector="director" data-director-field="name" data-director-id="2" class="director-name person-input custom-input-class">    
+                    <input type="text" name="director_2_name" placeholder="Name" data-selector="director" data-director-field="name" data-director-id="2" class="director-name person-input custom-input-class">    
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                     <label for="director_2_address" class="address">Director 2 address</label>
-                    <input type="text" name="director_2_address" placeholder="Director address" data-selector="director" data-director-field="address" data-director-id="2" class="director-address person-input custom-input-class">                
+                    <input type="text" name="director_2_address" placeholder="Street" data-selector="director" data-director-field="address" data-director-id="2" class="director-address person-input custom-input-class">                
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                    <input type="text" name="director_2_address_2" placeholder="Director address 2" data-selector="director" data-director-field="address_2" data-director-id="2" class="director-address-2 person-input custom-input-class">                
+                    <input type="text" name="director_2_address_2" placeholder="City, State" data-selector="director" data-director-field="address_2" data-director-id="2" class="director-address-2 person-input custom-input-class">                
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                    <input type="text" name="director_2_address_3" placeholder="Director address 3" data-selector="director" data-director-field="address_3" data-director-id="2" class="director-address-3 person-input custom-input-class">                                                                                 
+                    <input type="text" name="director_2_address_3" placeholder="Country" data-selector="director" data-director-field="address_3" data-director-id="2" class="director-address-3 person-input custom-input-class">                                                                                 
                 </div>
                 
                 <div class="cloneable">
                     <div class="field-container">
                         <label for="director" class="name">Director 3</label>
-                        <input type="text" name="director_3_name" placeholder="Director name" data-selector="director" data-director-field="name" data-director-id="3" class="director-name person-input custom-input-class">    
+                        <input type="text" name="director_3_name" placeholder="Name" data-selector="director" data-director-field="name" data-director-id="3" class="director-name person-input custom-input-class">    
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                         <label for="director_3_address" class="address">Director 3 address</label>
-                        <input type="text" name="director_3_address" placeholder="Director address" data-selector="director" data-director-field="address" data-director-id="3" class="director-address person-input custom-input-class">                
+                        <input type="text" name="director_3_address" placeholder="Street" data-selector="director" data-director-field="address" data-director-id="3" class="director-address person-input custom-input-class">                
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                        <input type="text" name="director_3_address_2" placeholder="Director address 2" data-selector="director" data-director-field="address_2" data-director-id="3" class="director-address-2 person-input custom-input-class">                
+                        <input type="text" name="director_3_address_2" placeholder="City, State" data-selector="director" data-director-field="address_2" data-director-id="3" class="director-address-2 person-input custom-input-class">                
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                        <input type="text" name="director_3_address_3" placeholder="Director address 3" data-selector="director" data-director-field="address_3" data-director-id="3" class="director-address-3 person-input custom-input-class">                                                                                 
+                        <input type="text" name="director_3_address_3" placeholder="Country" data-selector="director" data-director-field="address_3" data-director-id="3" class="director-address-3 person-input custom-input-class">                                                                                 
                     </div>
                 </div>
                 <div class="pasteclone"></div>
@@ -933,16 +962,17 @@ function registration_form() {
 
             <p>A professional secretary may be provided by Offshore Company Solutions, with the necessary experience to handle the responsibilities carried by this position.  An annual company secretary fee will apply for this service.</p>
             <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-            <p>Offshore Company Solutions to provide a professional company secretary?</p>
+            <p class="pull-left">Offshore Company Solutions to provide a company secretary?</p>
+            <div class="pull-right yesno-btn"><input type="checkbox" name="nominee_secretary" id="nominee_secretary" class="js-switch"></div>
+            <div class="clear"></div>
 
             <div class="field-container">
-                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                <input type="checkbox" name="nominee_secretary" id="nominee_secretary" class="js-switch">
+                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>                            
                 <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>  
 
                 <div class="nominee-container hidden">
                     <div class="pull-left">
-                        <label for="nominee_secretary" class="checkbox-label">Annual professional secretary fee:</label>
+                        <label for="nominee_secretary" class="checkbox-label">Annual company secretary fee:</label>
                     </div>
                     <div class="pull-right">
                         {{#secretaries}}
@@ -959,14 +989,14 @@ function registration_form() {
             <div class="secretary key-person-info">
                 <div class="field-container">
                     <label for="secretary" class="name">Secretary name</label>
-                    <input type="text" name="secretary_1_name" placeholder="Secretary name" data-selector="secretary" data-secretary-field="name" data-secretary-id="1" class="secretary-name person-input custom-input-class">     
+                    <input type="text" name="secretary_1_name" placeholder="Name" data-selector="secretary" data-secretary-field="name" data-secretary-id="1" class="secretary-name person-input custom-input-class">     
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                     <label for="secretary_1_address" class="address">Secretary address</label>
-                    <input type="text" name="secretary_1_address" placeholder="Secretary address" data-selector="secretary" data-secretary-field="address" data-secretary-id="1" class="secretary-address person-input custom-input-class">                
+                    <input type="text" name="secretary_1_address" placeholder="Street" data-selector="secretary" data-secretary-field="address" data-secretary-id="1" class="secretary-address person-input custom-input-class">                
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                    <input type="text" name="secretary_1_address_2" placeholder="Secretary address 2" data-selector="secretary" data-secretary-field="address_2" data-secretary-id="1" class="secretary-address-2 person-input custom-input-class">                
+                    <input type="text" name="secretary_1_address_2" placeholder="City, State" data-selector="secretary" data-secretary-field="address_2" data-secretary-id="1" class="secretary-address-2 person-input custom-input-class">                
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                    <input type="text" name="secretary_1_address_3" placeholder="Secretary address 3" data-selector="secretary" data-secretary-field="address_3" data-secretary-id="1" class="secretary-address-3 person-input custom-input-class">                               
+                    <input type="text" name="secretary_1_address_3" placeholder="Country" data-selector="secretary" data-secretary-field="address_3" data-secretary-id="1" class="secretary-address-3 person-input custom-input-class">                               
                 </div>
             </div>   
         {{/if}}
@@ -983,6 +1013,14 @@ function registration_form() {
                     <h4 class="pull-right"></h4>
                     <div class="clear"></div>
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+                    {{#ifCond name "==" "Bank accounts"}}
+                        <p>A bank account may be opened in the following jurisdictions for your company (multiple jurisdictions may be selected)</p>                    
+                    {{/ifCond}}
+                    {{#ifCond name "==" "Credit/debit cards"}}
+                        <p>Credit or debit cards are available in the following jurisdictions for your company.  Note that a bank account must be opened at the same bank before credit or debit cards may be issued:</p>                    
+                    {{/ifCond}}
+
+                    <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
                     
                     <div class="country-options-container pull-left">                                                                
                         <input type="hidden" name="service_{{counter @index}}_id" class="service-id" value="{{id}}">
@@ -995,19 +1033,28 @@ function registration_form() {
                         </select> -->
                         <div class="header">
                             <div class="col-1-header">
-                                <label for="service_country">Location</label>
+                                {{#ifCond name "==" "Credit/debit cards"}}
+                                <h6 for="service_country">Bank location</h6>
+                                {{else}}
+                                <h6 for="service_country">Location</h6>
+                                {{/ifCond}}
                             </div>
                             <div class="col-2-header">
-                                <label for="service_country">Price</label>
+                                {{#ifCond name "==" "Credit/debit cards"}}
+                                <h6 for="service_country">Charge per card</h6>
+                                {{else}}
+                                <h6 for="service_country">Price</h6>
+                                {{/ifCond}}
                             </div>
                             <div class="col-3-header">
-                                {{#ifCond name "==" "Credit card"}}
-                                <label for="service_country">No. of cards to issue</label>
+                                {{#ifCond name "==" "Credit/debit cards"}}
+                                <h6 for="service_country">No. of cards to issue</h6>
                                 {{else}}
-                                <label for="service_country">Select service</label>
+                                <h6 for="service_country">Open account</h6>
                                 {{/ifCond}}
                             </div>
                         </div>
+                        <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
                         {{#countries}}
                             <div class="each-country">
                                 <div class="col-1">
@@ -1018,7 +1065,7 @@ function registration_form() {
                                     <div id="service-price" class="service-price price"><p>{{pivot.price}}</p></div>
                                     <input type="hidden" name="service_{{../id}}_price_{{counter @index}}" class="service-{{../id}}-country-{{id}} service-{{../id}}-price" value="{{pivot.price}}" disabled="disabled">
                                 </div>               
-                                {{#ifCond ../name "==" "Credit card"}}           
+                                {{#ifCond ../name "==" "Credit/debit cards"}}           
                                 <div class="col-3">
                                     <input type="text" name="service_{{../id}}_country_{{counter @index}}_no_of_card" class="credit_card_in_country_{{id}} service-{{../id}}-credit-card-count credit-card-count custom-input-class-2" disabled="disabled">
                                     <input type="hidden" name="service_{{../id}}_country_{{counter @index}}_id" value="{{pivot.id}}" class="service-{{../id}}-country-id">                
@@ -1217,22 +1264,22 @@ function registration_form() {
     <div class="stepwizard">
         <div class="stepwizard-row">
             <div class="stepwizard-step">
-                <button type="button" data-id="1" data-hash="step-1" class="step-1-circle step-1-1-circle step-1-2-circle step-circle btn btn-circle btn-primary" disabled>
+                <button type="button" data-id="1" data-hash="1" class="step-1-circle step-1-1-circle step-1-2-circle step-circle btn btn-circle btn-primary" disabled>
                 </button>
                 <p>Choose your <br>jurisdiction</p>
             </div>
             <div class="stepwizard-step">
-                <button type="button" data-id="2" data-hash="step-2" class="step-2-circle step-circle btn btn-default btn-circle" disabled="disabled">                    
+                <button type="button" data-id="2" data-hash="2" class="step-2-circle step-circle btn btn-default btn-circle" disabled="disabled">                    
                 </button>
                 <p>Incorporate from scratch<br>or choose a shelf company</p>
             </div>
             <div class="stepwizard-step">
-                <button type="button" data-id="3" data-hash="step-3" class="step-3-circle step-circle btn btn-default btn-circle" disabled="disabled">                    
+                <button type="button" data-id="3" data-hash="3" class="step-3-circle step-circle btn btn-default btn-circle" disabled="disabled">                    
                 </button>
                 <p>Tell us how<br>to structure it</p>
             </div> 
             <div class="stepwizard-step">
-                <button type="button" data-id="4" data-hash="step-4" class="step-4-circle step-circle btn btn-default btn-circle" disabled="disabled">                    
+                <button type="button" data-id="4" data-hash="4" class="step-4-circle step-circle btn btn-default btn-circle" disabled="disabled">                    
                 </button>
                 <p>Pay and<br>you’re done!</p>
             </div>            
@@ -1267,13 +1314,7 @@ function registration_form() {
 
             <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>                                
 
-            <div id="new-incorporation-container" style="display: none;">
-
-                <h3 id="jurisdiction-name" class="pull-left"></h3>
-                <p id="jurisdiction-price" class="pull-right"></p>
-                <div class="clear"></div>
-
-                <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
+            <div id="new-incorporation-container" style="display: none;">                
 
                 <p>Please provide three suggestions for your company’s name in order of preference.  The company will be registered under the first name available.</p>
 
@@ -1281,22 +1322,22 @@ function registration_form() {
 
                 <p>The name may be in any language, provided it is expressed in Roman characters. It must end in the word "Limited" or its abbreviation "Ltd" to denote its limited liability status.</p>
 
-                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+                <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
             
                 <div class="field-container">
-                    <label for="name">1st Choice</label>
+                    <label for="name">1st choice</label>
                     <input type="text" name="company_name[]" data-choice-id="1" class="company-name-choice custom-input-class" value="">
                 </div>
                 <div class="field-container">
-                    <label for="name">2nd Choice</label>
+                    <label for="name">2nd choice</label>
                     <input type="text" name="company_name[]" data-choice-id="2" class="company-name-choice custom-input-class" value="">
                 </div>
                 <div class="field-container">
-                    <label for="name">3rd Choice</label>
+                    <label for="name">3rd choice</label>
                     <input type="text" name="company_name[]" data-choice-id="3" class="company-name-choice custom-input-class" value="">
                 </div>
                 <!-- <a href="#" id="next"><button data-id="0" data-hash="#" class="custom-submit-class back-btn">Back</button></a> -->
-                <a href="#" id="next"><button data-id="2" data-hash="step-2" class="custom-submit-class next-btn">Next</button></a>
+                <a href="#" id="next"><button data-id="2" data-hash="2" class="custom-submit-class next-btn">Next</button></a>
 
             </div>            
             
@@ -1321,8 +1362,8 @@ function registration_form() {
                 <!-- JS CONTENT GOES HERE -->       
             </div>
                 
-            <a href="#" id="next"><button data-id="1" data-hash="step-1" class="custom-submit-class back-btn">Back</button></a>
-            <a href="#" id="next"><button data-id="3" data-hash="step-3" class="custom-submit-class next-btn">Next</button></a>
+            <a href="#" id="next"><button data-id="1" data-hash="1" class="custom-submit-class back-btn">Back</button></a>
+            <a href="#" id="next"><button data-id="3" data-hash="3" class="custom-submit-class next-btn">Next</button></a>
              
         </form>
         <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
@@ -1346,8 +1387,8 @@ function registration_form() {
                 <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
             </div>            
             
-            <a href="#" id="next"><button data-id="2" data-hash="step-2" class="custom-submit-class back-btn">Back</button></a>
-            <a href="#" id="next"><button data-id="4" data-hash="step-4" class="custom-submit-class next-btn">Next</button></a>
+            <a href="#" id="next"><button data-id="2" data-hash="2" class="custom-submit-class back-btn">Back</button></a>
+            <a href="#" id="next"><button data-id="4" data-hash="4" class="custom-submit-class next-btn">Next</button></a>
              
         </form>
     </div>
@@ -1457,7 +1498,7 @@ function registration_form() {
                 <input type="checkbox" name="tnc" value="yes"> <label for="tnc">I have read and agree with the Terms and conditions</label>
             </div>
             
-            <a href="#" id="next"><button data-id="3" data-hash="step-3" class="custom-submit-class back-btn">Back</button></a>
+            <a href="#" id="next"><button data-id="3" data-hash="3" class="custom-submit-class back-btn">Back</button></a>
             <a href="#"><button class="custom-submit-class payment-gateway-btn">Payment Gateway</button></a>
             
         </form>        

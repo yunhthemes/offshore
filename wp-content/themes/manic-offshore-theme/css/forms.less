@@ -370,13 +370,6 @@
     }
 }
 
-#signup-page-form {
-  // ie dropdown fix
-  select::-ms-expand {
-      display: none;
-  }  
-}
-
 label {
   display: block;
   &.checkbox-label, &.country_options_label {
@@ -443,6 +436,23 @@ label.align-label {
   input[type="radio"] {
     display: inline-block;
   }  
+  .field-container {
+    margin-bottom: 0px;
+  }
+  .each-header, .each-content {
+    display: inline-block;
+    vertical-align: middle;
+    width: 24%;       
+  }
+  .each-header {
+    margin-bottom: 5px;
+  }
+  .each-content {
+    margin-bottom: 15px; 
+  }
+  .custom-submit-class {
+    margin-top: 0px;
+  }
 }
 
 #registration-page-form-3 {

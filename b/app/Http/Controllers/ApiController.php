@@ -27,7 +27,7 @@ class ApiController extends Controller
 
     public function usercompanies($id, Request $request) {
 
-    	$wpuser = Wpuser::find($id);
+    	$wpuser = Wpuser::with('companytypes')->find($id);
     	if($wpuser) {
     		$wpuser_compaines = $wpuser->companies;            	
     	}else {
