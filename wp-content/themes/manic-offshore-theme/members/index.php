@@ -7,7 +7,7 @@
 	                    <div class="wpb_wrapper"></div>
 	                </div>
 	            </div>
-	            <div class="wpb_column vc_column_container vc_col-sm-8">
+	            <div class="wpb_column vc_column_container vc_col-sm-10">
 	                <div class="vc_column-inner ">
 	                    <div class="wpb_wrapper">
 	                        <div class="wpb_raw_code wpb_content_element wpb_raw_html">
@@ -33,11 +33,6 @@
 	                    </div>
 	                </div>
 	            </div>
-	            <div class="wpb_column vc_column_container vc_col-sm-2">
-	                <div class="vc_column-inner ">
-	                    <div class="wpb_wrapper"></div>
-	                </div>
-	            </div>
 	        </div>
 	    </div>
 	</div>
@@ -49,20 +44,18 @@
 	                    <div class="wpb_wrapper"></div>
 	                </div>
 	            </div>
-	            <div class="wpb_column vc_column_container vc_col-sm-8">
+	            <div class="wpb_column vc_column_container vc_col-sm-10">
 	                <div class="vc_column-inner ">
 	                    <div class="wpb_wrapper">
 	                        <div class="wpb_text_column wpb_content_element ">
 	                            <div class="wpb_wrapper">
-	                            	<div class="wpb_column vc_column_container vc_col-sm-3">
-	                            		<ul class="vertical-links">
-	                            			<li><a href="<?php echo home_url( '/member-dashboard/' ); ?>" class="active">Dashboard</a></li>
-	                            			<li><a href="<?php echo home_url( '/member-dashboard/' . bp_core_get_username( get_current_user_id() ) ); ?>">Profile</a></li>
-	                            			<li><a href="<?php echo home_url( '/member-dashboard/' . bp_core_get_username( get_current_user_id() ) . '/messages/' ); ?>">Messages</a></li>
-	                            		</ul>
-	                            	</div>
 	                            	<div class="wpb_column vc_column_container vc_col-sm-9">
-	                            		<div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
+	                            		<ul class="tabs">
+	                            			<li><a class="active" href="<?php echo home_url( '/client-dashboard/' ); ?>" class="active">Dashboard</a></li>
+	                            			<li><a href="<?php echo home_url( '/client-dashboard/' . bp_core_get_username( get_current_user_id() ) ); ?>">Profile</a></li>
+	                            			<li><a href="<?php echo home_url( '/client-dashboard/' . bp_core_get_username( get_current_user_id() ) . '/messages/' ); ?>">Messages</a></li>
+	                            		</ul>
+	                            		<div id="tabs-content-seperator" class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
 		                                <div id="user-companies-container">
 			                                <div id="user-companies">
 			                                	<!-- JS CONTENT GOES HERE -->
@@ -78,11 +71,6 @@
 	                            </div>
 	                        </div>
 	                    </div>
-	                </div>
-	            </div>
-	            <div class="wpb_column vc_column_container vc_col-sm-2">
-	                <div class="vc_column-inner ">
-	                    <div class="wpb_wrapper"></div>
 	                </div>
 	            </div>
 	        </div>
@@ -111,10 +99,10 @@
                     <p>{{ name }}</p>
                 </div>
                 <div class="each-content">
-                    <p>{{ incorporation_date }}</p>    
+                    <p>{{ renewal_date }}</p>    
                 </div>
                 <div class="each-content">
-                    <p>{{ company_type_id }}</p>
+                    <p>{{ companytypes.name }}</p>
                 </div>
                 <div class="each-content">
                     <a href="#" data-company-id="{{id}}" class="company-details"><button class="custom-submit-class">Company details</button></a>

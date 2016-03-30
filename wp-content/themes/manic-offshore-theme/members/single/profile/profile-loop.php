@@ -32,7 +32,7 @@ do_action( 'bp_before_profile_loop_content' ); ?>
 
 							<tr<?php bp_field_css_class(); ?>>
 
-								<td class="label"><?php bp_the_profile_field_name(); ?></td>
+								<td class="label"><h6><?php bp_the_profile_field_name(); ?></h6></td>
 
 								<td class="data"><?php bp_the_profile_field_value(); ?></td>
 

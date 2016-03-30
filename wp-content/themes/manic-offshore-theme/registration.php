@@ -74,6 +74,10 @@ function registration_form() {
             //// CHANGE STEPS
             ////////////
 
+            function moveToTop() {
+                window.scrollTo(0, 420);
+            }
+
             function changeNextStep(id, hash){
 
                 $(".active").removeClass("active");
@@ -84,6 +88,8 @@ function registration_form() {
 
                 $(".active-step").removeClass("active-step");
                 $(".step-"+id+"-circle").parent().addClass("active-step");
+
+                moveToTop();
 
                 updateHashInURL(hash);
                 
@@ -114,6 +120,8 @@ function registration_form() {
 
                 $(".active-step").removeClass("active-step");
                 $(".step-"+id+"-circle").parent().addClass("active-step");
+
+                moveToTop();
 
                 updateHashInURL(hash);
             }
@@ -267,6 +275,7 @@ function registration_form() {
                         html.onchange = function() {
                             if(html.checked) {
                                 $(html).parent().parent().find(".key-person-info").hide();
+                                $(html).parent().parent().find(".key-person-info").children(".field-container").children(".person-input").val("");
                                 $(html).parent().parent().find(".nominee-container").show();
                             }else {
                                 $(html).parent().parent().find(".key-person-info").show();
@@ -282,11 +291,13 @@ function registration_form() {
                             if(html.checked) {                                
                                 $(".service-"+serviceId+"-country-"+countryId).prop("disabled", false);                                
                                 if(serviceName=="Bank accounts") {
-                                    $(".credit_card_in_country_"+countryId).prop("disabled", false);    
+                                    console.log("hi")
+                                    $(".credit_card_in_country_"+countryId).prop("disabled", false);
                                 }                                
                             }else {
                                 $(".service-"+serviceId+"-country-"+countryId).prop("disabled", true);
                                 if(serviceName=="Bank accounts") {
+                                    $(".credit_card_in_country_"+countryId).val("").trigger("change");    
                                     $(".credit_card_in_country_"+countryId).prop("disabled", true);    
                                 }                                                                
                             }
@@ -306,6 +317,17 @@ function registration_form() {
                 } 
             }
 
+            function updateSummaryTotal() {
+                var summaryTotal = 0;
+                $(".summary-price").each(function(index, obj){
+                    var eachPrice = $(obj).text();
+                    var priceArr = eachPrice.split("$");
+                    summaryTotal += parseFloat(priceArr[1]);
+                });
+
+                $(".total-summary-price").html("<p>$"+summaryTotal.toFixed(2)+"</p>");
+            }
+
             function updateKeyPersonnelSummary() {
                 
                 var chosen_route = $("#chosen_route").val();
@@ -313,18 +335,18 @@ function registration_form() {
                 var directors = $("input.director-name").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
                 var director_address = $("input.director-address").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
                 var director_address_2 = $("input.director-address-2").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
-                var director_address_3 = $("input.director-address-3").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
+                var director_address_3 = $("select.director-address-3").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
 
                 var secretaries = $("input.secretary-name").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
                 var secretary_address = $("input.secretary-address").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
                 var secretary_address_2 = $("input.secretary-address-2").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
-                var secretary_address_3 = $("input.secretary-address-3").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
+                var secretary_address_3 = $("select.secretary-address-3").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
 
                 var shareholders = $("input.shareholder-name").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
                 var shareholder_amounts = $("input.shareholder-amount").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
                 var shareholder_address = $("input.shareholder-address").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
                 var shareholder_address_2 = $("input.shareholder-address-2").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
-                var shareholder_address_3 = $("input.shareholder-address-3").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
+                var shareholder_address_3 = $("select.shareholder-address-3").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
 
                 var services = $("input.service-name").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });                
                 var services_ids = $("input.service-id").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });     
@@ -347,8 +369,6 @@ function registration_form() {
                     if(info_services_names[index] && info_services_names[index].name) info_services[index].service_name = info_services_names[index].name;
                     if(info_services_names[index] && info_services_names[index].value) info_services[index].service_value = info_services_names[index].value;
                 }
-
-                // console.log(services_countries_ids)
 
                 var selectedData = [];
 
@@ -379,18 +399,22 @@ function registration_form() {
                     if(director_address_3[index] && director_address_3[index].value) directors[index].address_3_value = director_address_3[index].value;
                 }
 
-                if(secretary_address[0] && secretary_address[0].name) secretaries[0].address_name = secretary_address[0].name;
-                if(secretary_address[0] && secretary_address[0].value) secretaries[0].address_value = secretary_address[0].value;
+                if(secretaries.length > 0) {
+                    if(secretary_address[0] && secretary_address[0].name) secretaries[0].address_name = secretary_address[0].name;
+                    if(secretary_address[0] && secretary_address[0].value) secretaries[0].address_value = secretary_address[0].value;
 
-                if(secretary_address_2[0] && secretary_address_2[0].name) secretaries[0].address_2_name = secretary_address_2[0].name;
-                if(secretary_address_2[0] && secretary_address_2[0].value) secretaries[0].address_2_value = secretary_address_2[0].value;
+                    if(secretary_address_2[0] && secretary_address_2[0].name) secretaries[0].address_2_name = secretary_address_2[0].name;
+                    if(secretary_address_2[0] && secretary_address_2[0].value) secretaries[0].address_2_value = secretary_address_2[0].value;
 
-                if(secretary_address_3[0] && secretary_address_3[0].name) secretaries[0].address_3_name = secretary_address_3[0].name;
-                if(secretary_address_3[0] && secretary_address_3[0].value) secretaries[0].address_3_value = secretary_address_3[0].value;
+                    if(secretary_address_3[0] && secretary_address_3[0].name) secretaries[0].address_3_name = secretary_address_3[0].name;
+                    if(secretary_address_3[0] && secretary_address_3[0].value) secretaries[0].address_3_value = secretary_address_3[0].value;    
+                }
+                
 
                 // console.log(shareholders)            
                 // console.log(services_prices);
                 // console.log(services_credit_card_counts);
+                // console.log(services);
 
                 for(index = 0; index < services.length; index++) {
                     if(services_ids[index] && services_ids[index].name) services[index].service_id_name = services_ids[index].name;
@@ -400,15 +424,19 @@ function registration_form() {
 
                     $.each(services[index].countries, function(i, v){
                         if(services_prices[index].length > 0) {
-                            v.service_country_id_name = services_countries_ids[index][i].name;
-                            v.service_country_id_value = services_countries_ids[index][i].value;
                             if(services_credit_card_counts[index].length > 0) {
-                                v.service_price_name = services_prices[index][i].name;
-                                var total_credit_card_price = parseFloat(services_prices[index][i].value) * parseFloat(services_credit_card_counts[index][i].value);
-                                v.service_price_value = total_credit_card_price.toFixed(2);
-                                v.services_credit_card_counts_name = services_credit_card_counts[index][i].name;
-                                v.services_credit_card_counts_value = services_credit_card_counts[index][i].value;    
+                                if(services_credit_card_counts[index][i]) {
+                                    v.service_country_id_name = services_countries_ids[index][i].name;
+                                    v.service_country_id_value = services_countries_ids[index][i].value;                            
+                                    v.service_price_name = services_prices[index][i].name;
+                                    var total_credit_card_price = parseFloat(services_prices[index][i].value) * parseFloat(services_credit_card_counts[index][i].value);
+                                    v.service_price_value = total_credit_card_price.toFixed(2);
+                                    v.services_credit_card_counts_name = services_credit_card_counts[index][i].name;
+                                    v.services_credit_card_counts_value = services_credit_card_counts[index][i].value;                                      
+                                }                                
                             }else {
+                                v.service_country_id_name = services_countries_ids[index][i].name;
+                                v.service_country_id_value = services_countries_ids[index][i].value;
                                 v.service_price_name = services_prices[index][i].name;
                                 v.service_price_value = services_prices[index][i].value;
                             }                                                    
@@ -416,9 +444,9 @@ function registration_form() {
                     });                    
                 }                
 
-                // console.log(services);
-                console.log(info_services);
-                console.log(secretaries);
+                console.log(services);
+                // console.log(info_services);
+                // console.log(secretaries);
                 
                 selectedData["shareholders"] = shareholders;
                 selectedData["directors"] = directors;
@@ -438,14 +466,7 @@ function registration_form() {
                 on_nominee_switch_change("summary-shareholder-price", $("input#nominee_shareholder"), prices["shareholders"]);
                 on_nominee_switch_change("summary-secretary-price", $("input#nominee_secretary"), prices["secretaries"]);                                     
 
-                var summaryTotal = 0;
-                $(".summary-price").each(function(index, obj){
-                    var eachPrice = $(obj).text();
-                    var priceArr = eachPrice.split("$");
-                    summaryTotal += parseFloat(priceArr[1]);
-                });
-
-                $(".total-summary-price").html("<p>$"+summaryTotal.toFixed(2)+"</p>");
+                updateSummaryTotal();
 
             }
 
@@ -489,6 +510,84 @@ function registration_form() {
                     alert("Can\'t add more than is 6 fields");
                 }
                 
+            });
+
+            $("#step-4").on("click", ".edit-summary-btn", function(e){
+                e.preventDefault();
+
+                $(this).parent().parent().find(".edit-form").show();
+                $(this).parent().parent().find(".person-info").hide();
+            });
+
+            $("#step-4").on("click", ".save-summary-btn", function(e){
+                e.preventDefault();
+
+                var editForm = $(this).parent().parent().find(".edit-form");
+                var personInfo = $(this).parent().parent().find(".person-info");
+
+                editForm.hide();
+                personInfo.show();
+
+                editFromValues = editForm.find(".custom-input-class").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
+
+                // console.log(editFromValues)
+
+                $.each(editFromValues, function(i, v){
+                    personInfo.find("."+v.name).text(v.value);
+                });
+
+
+            });
+
+            $("#step-4").on("change keyup", ".edit-no-of-card", function(e){
+                e.preventDefault();
+
+                var editedVal = $(this).val();
+                var editedInputName = $(this).attr("name");
+
+                var totalPrice = $(this).data("price");
+                var noOfCard = $(this).data("noofcard");
+
+                if(editedVal=="" && isNaN(editedVal)==true){
+                    editedVal = 0;
+                }
+
+                var pricePerCard = totalPrice / noOfCard;
+
+                var newtotalPrice = parseFloat(pricePerCard) * parseFloat(editedVal);                
+
+                $(this).parent().parent().parent().find(".summary-price").text("$"+newtotalPrice.toFixed(2));
+
+                $(this).parent().parent().parent().find("."+editedInputName).text(editedVal);
+
+                updateSummaryTotal();
+
+            });
+
+            $("#step-4").on("click", ".remove-btn", function(e){
+                e.preventDefault();
+                $(this).parent().parent().parent().remove();
+
+                var selector = $(this).data("selector");
+                
+                if($("#"+selector).attr("type")=="checkbox") {
+                    $("#"+selector).trigger("click");
+                }
+                else {
+                    console.log(selector)
+                    console.log($("#"+selector).val());
+                    $("#"+selector).val("").trigger("change");
+                }
+
+                updateSummaryTotal();
+            });
+
+            $("#step-4").on("click", ".upload-passport-btn", function(e){
+                e.preventDefault();
+            });
+
+            $("#step-4").on("click", ".upload-bill-btn", function(e){
+                e.preventDefault();
             });
 
             /////
@@ -775,11 +874,14 @@ function registration_form() {
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                         <input type="text" name="shareholder_1_address_2" placeholder="City, State" data-selector="shareholder" data-shareholder-field="address_2" data-shareholder-id="1" class="shareholder-address-2 person-input custom-input-class">                
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                        <input type="text" name="shareholder_1_address_3" placeholder="Country" data-selector="shareholder" data-shareholder-field="address_3" data-shareholder-id="1" class="shareholder-address-3 person-input custom-input-class">                
+                        <!-- <input type="text" name="shareholder_1_address_3" placeholder="Country" data-selector="shareholder" data-shareholder-field="address_3" data-shareholder-id="1" class="shareholder-address-3 person-input custom-input-class"> -->
+                        <div class="custom-input-class-select-container">            
+                            <select name="shareholder_1_address_3" data-selector="shareholder" data-shareholder-field="address_3" data-shareholder-id="1" class="shareholder-address-3 person-input custom-input-class"><option value="Afganistan">Afghanistan</option><option value="Albania">Albania</option><option value="Algeria">Algeria</option><option value="American Samoa">American Samoa</option><option value="Andorra">Andorra</option><option value="Angola">Angola</option><option value="Anguilla">Anguilla</option><option value="Antigua &amp; Barbuda">Antigua &amp; Barbuda</option><option value="Argentina">Argentina</option><option value="Armenia">Armenia</option><option value="Aruba">Aruba</option><option value="Australia">Australia</option><option value="Austria">Austria</option><option value="Azerbaijan">Azerbaijan</option><option value="Bahamas">Bahamas</option><option value="Bahrain">Bahrain</option><option value="Bangladesh">Bangladesh</option><option value="Barbados">Barbados</option><option value="Belarus">Belarus</option><option value="Belgium">Belgium</option><option value="Belize">Belize</option><option value="Benin">Benin</option><option value="Bermuda">Bermuda</option><option value="Bhutan">Bhutan</option><option value="Bolivia">Bolivia</option><option value="Bonaire">Bonaire</option><option value="Bosnia &amp; Herzegovina">Bosnia &amp; Herzegovina</option><option value="Botswana">Botswana</option><option value="Brazil">Brazil</option><option value="British Indian Ocean Ter">British Indian Ocean Ter</option><option value="Brunei">Brunei</option><option value="Bulgaria">Bulgaria</option><option value="Burkina Faso">Burkina Faso</option><option value="Burundi">Burundi</option><option value="Cambodia">Cambodia</option><option value="Cameroon">Cameroon</option><option value="Canada">Canada</option><option value="Canary Islands">Canary Islands</option><option value="Cape Verde">Cape Verde</option><option value="Cayman Islands">Cayman Islands</option><option value="Central African Republic">Central African Republic</option><option value="Chad">Chad</option><option value="Channel Islands">Channel Islands</option><option value="Chile">Chile</option><option value="China">China</option><option value="Christmas Island">Christmas Island</option><option value="Cocos Island">Cocos Island</option><option value="Colombia">Colombia</option><option value="Comoros">Comoros</option><option value="Congo">Congo</option><option value="Cook Islands">Cook Islands</option><option value="Costa Rica">Costa Rica</option><option value="Cote DIvoire">Cote D`Ivoire</option><option value="Croatia">Croatia</option><option value="Cuba">Cuba</option><option value="Curaco">Curacao</option><option value="Cyprus">Cyprus</option><option value="Czech Republic">Czech Republic</option><option value="Denmark">Denmark</option><option value="Djibouti">Djibouti</option><option value="Dominica">Dominica</option><option value="Dominican Republic">Dominican Republic</option><option value="East Timor">East Timor</option><option value="Ecuador">Ecuador</option><option value="Egypt">Egypt</option><option value="El Salvador">El Salvador</option><option value="Equatorial Guinea">Equatorial Guinea</option><option value="Eritrea">Eritrea</option><option value="Estonia">Estonia</option><option value="Ethiopia">Ethiopia</option><option value="Falkland Islands">Falkland Islands</option><option value="Faroe Islands">Faroe Islands</option><option value="Fiji">Fiji</option><option value="Finland">Finland</option><option value="France">France</option><option value="French Guiana">French Guiana</option><option value="French Polynesia">French Polynesia</option><option value="French Southern Ter">French Southern Ter</option><option value="Gabon">Gabon</option><option value="Gambia">Gambia</option><option value="Georgia">Georgia</option><option value="Germany">Germany</option><option value="Ghana">Ghana</option><option value="Gibraltar">Gibraltar</option><option value="Great Britain">Great Britain</option><option value="Greece">Greece</option><option value="Greenland">Greenland</option><option value="Grenada">Grenada</option><option value="Guadeloupe">Guadeloupe</option><option value="Guam">Guam</option><option value="Guatemala">Guatemala</option><option value="Guinea">Guinea</option><option value="Guyana">Guyana</option><option value="Haiti">Haiti</option><option value="Hawaii">Hawaii</option><option value="Honduras">Honduras</option><option value="Hong Kong">Hong Kong</option><option value="Hungary">Hungary</option><option value="Iceland">Iceland</option><option value="India">India</option><option value="Indonesia">Indonesia</option><option value="Iran">Iran</option><option value="Iraq">Iraq</option><option value="Ireland">Ireland</option><option value="Isle of Man">Isle of Man</option><option value="Israel">Israel</option><option value="Italy">Italy</option><option value="Jamaica">Jamaica</option><option value="Japan">Japan</option><option value="Jordan">Jordan</option><option value="Kazakhstan">Kazakhstan</option><option value="Kenya">Kenya</option><option value="Kiribati">Kiribati</option><option value="Korea North">Korea North</option><option value="Korea Sout">Korea South</option><option value="Kuwait">Kuwait</option><option value="Kyrgyzstan">Kyrgyzstan</option><option value="Laos">Laos</option><option value="Latvia">Latvia</option><option value="Lebanon">Lebanon</option><option value="Lesotho">Lesotho</option><option value="Liberia">Liberia</option><option value="Libya">Libya</option><option value="Liechtenstein">Liechtenstein</option><option value="Lithuania">Lithuania</option><option value="Luxembourg">Luxembourg</option><option value="Macau">Macau</option><option value="Macedonia">Macedonia</option><option value="Madagascar">Madagascar</option><option value="Malaysia">Malaysia</option><option value="Malawi">Malawi</option><option value="Maldives">Maldives</option><option value="Mali">Mali</option><option value="Malta">Malta</option><option value="Marshall Islands">Marshall Islands</option><option value="Martinique">Martinique</option><option value="Mauritania">Mauritania</option><option value="Mauritius">Mauritius</option><option value="Mayotte">Mayotte</option><option value="Mexico">Mexico</option><option value="Midway Islands">Midway Islands</option><option value="Moldova">Moldova</option><option value="Monaco">Monaco</option><option value="Mongolia">Mongolia</option><option value="Montserrat">Montserrat</option><option value="Morocco">Morocco</option><option value="Mozambique">Mozambique</option><option value="Myanmar">Myanmar</option><option value="Nambia">Nambia</option><option value="Nauru">Nauru</option><option value="Nepal">Nepal</option><option value="Netherland Antilles">Netherland Antilles</option><option value="Netherlands">Netherlands (Holland, Europe)</option><option value="Nevis">Nevis</option><option value="New Caledonia">New Caledonia</option><option value="New Zealand">New Zealand</option><option value="Nicaragua">Nicaragua</option><option value="Niger">Niger</option><option value="Nigeria">Nigeria</option><option value="Niue">Niue</option><option value="Norfolk Island">Norfolk Island</option><option value="Norway">Norway</option><option value="Oman">Oman</option><option value="Pakistan">Pakistan</option><option value="Palau Island">Palau Island</option><option value="Palestine">Palestine</option><option value="Panama">Panama</option><option value="Papua New Guinea">Papua New Guinea</option><option value="Paraguay">Paraguay</option><option value="Peru">Peru</option><option value="Phillipines">Philippines</option><option value="Pitcairn Island">Pitcairn Island</option><option value="Poland">Poland</option><option value="Portugal">Portugal</option><option value="Puerto Rico">Puerto Rico</option><option value="Qatar">Qatar</option><option value="Republic of Montenegro">Republic of Montenegro</option><option value="Republic of Serbia">Republic of Serbia</option><option value="Reunion">Reunion</option><option value="Romania">Romania</option><option value="Russia">Russia</option><option value="Rwanda">Rwanda</option><option value="St Barthelemy">St Barthelemy</option><option value="St Eustatius">St Eustatius</option><option value="St Helena">St Helena</option><option value="St Kitts-Nevis">St Kitts-Nevis</option><option value="St Lucia">St Lucia</option><option value="St Maarten">St Maarten</option><option value="St Pierre &amp; Miquelon">St Pierre &amp; Miquelon</option><option value="St Vincent &amp; Grenadines">St Vincent &amp; Grenadines</option><option value="Saipan">Saipan</option><option value="Samoa">Samoa</option><option value="Samoa American">Samoa American</option><option value="San Marino">San Marino</option><option value="Sao Tome &amp; Principe">Sao Tome &amp; Principe</option><option value="Saudi Arabia">Saudi Arabia</option><option value="Senegal">Senegal</option><option value="Serbia">Serbia</option><option value="Seychelles">Seychelles</option><option value="Sierra Leone">Sierra Leone</option><option value="Singapore">Singapore</option><option value="Slovakia">Slovakia</option><option value="Slovenia">Slovenia</option><option value="Solomon Islands">Solomon Islands</option><option value="Somalia">Somalia</option><option value="South Africa">South Africa</option><option value="Spain">Spain</option><option value="Sri Lanka">Sri Lanka</option><option value="Sudan">Sudan</option><option value="Suriname">Suriname</option><option value="Swaziland">Swaziland</option><option value="Sweden">Sweden</option><option value="Switzerland">Switzerland</option><option value="Syria">Syria</option><option value="Tahiti">Tahiti</option><option value="Taiwan">Taiwan</option><option value="Tajikistan">Tajikistan</option><option value="Tanzania">Tanzania</option><option value="Thailand">Thailand</option><option value="Togo">Togo</option><option value="Tokelau">Tokelau</option><option value="Tonga">Tonga</option><option value="Trinidad &amp; Tobago">Trinidad &amp; Tobago</option><option value="Tunisia">Tunisia</option><option value="Turkey">Turkey</option><option value="Turkmenistan">Turkmenistan</option><option value="Turks &amp; Caicos Is">Turks &amp; Caicos Is</option><option value="Tuvalu">Tuvalu</option><option value="Uganda">Uganda</option><option value="Ukraine">Ukraine</option><option value="United Arab Erimates">United Arab Emirates</option><option value="United Kingdom">United Kingdom</option><option value="United States of America">United States of America</option><option value="Uraguay">Uruguay</option><option value="Uzbekistan">Uzbekistan</option><option value="Vanuatu">Vanuatu</option><option value="Vatican City State">Vatican City State</option><option value="Venezuela">Venezuela</option><option value="Vietnam">Vietnam</option><option value="Virgin Islands (Brit)">Virgin Islands (Brit)</option><option value="Virgin Islands (USA)">Virgin Islands (USA)</option><option value="Wake Island">Wake Island</option><option value="Wallis &amp; Futana Is">Wallis &amp; Futana Is</option><option value="Yemen">Yemen</option><option value="Zaire">Zaire</option><option value="Zambia">Zambia</option><option value="Zimbabwe">Zimbabwe</option></select>     
+                        </div>           
                     </div>
                     <div class="custom-input-container-right pull-right">
                         <label for="shareamount_1_amount">Number of shares</label>
-                        <input type="text" name="shareamount_1_amount" placeholder="Share amount" data-selector="shareholder" data-shareholder-field="amount" data-shareholder-id="1" class="shareholder-amount person-input custom-input-class" value="0">
+                        <input type="text" name="shareamount_1_amount" placeholder="Share amount" data-selector="shareholder" data-shareholder-field="amount" data-shareholder-id="1" class="shareholder-amount person-input custom-input-class" value="">
                     </div>
                     <div class="clear"></div>
                 </div>
@@ -794,11 +896,14 @@ function registration_form() {
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                         <input type="text" name="shareholder_2_address_2" placeholder="City, State" data-selector="shareholder" data-shareholder-field="address_2" data-shareholder-id="2" class="shareholder-address-2 person-input custom-input-class">                
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                        <input type="text" name="shareholder_2_address_3" placeholder="Country" data-selector="shareholder" data-shareholder-field="address_3" data-shareholder-id="2" class="shareholder-address-3 person-input custom-input-class">                
+                        <!-- <input type="text" name="shareholder_2_address_3" placeholder="Country" data-selector="shareholder" data-shareholder-field="address_3" data-shareholder-id="2" class="shareholder-address-3 person-input custom-input-class">                 -->
+                        <div class="custom-input-class-select-container">            
+                            <select name="shareholder_2_address_3" placeholder="Country" data-selector="shareholder" data-shareholder-field="address_3" data-shareholder-id="2" class="shareholder-address-3 person-input custom-input-class"><option value="Afganistan">Afghanistan</option><option value="Albania">Albania</option><option value="Algeria">Algeria</option><option value="American Samoa">American Samoa</option><option value="Andorra">Andorra</option><option value="Angola">Angola</option><option value="Anguilla">Anguilla</option><option value="Antigua &amp; Barbuda">Antigua &amp; Barbuda</option><option value="Argentina">Argentina</option><option value="Armenia">Armenia</option><option value="Aruba">Aruba</option><option value="Australia">Australia</option><option value="Austria">Austria</option><option value="Azerbaijan">Azerbaijan</option><option value="Bahamas">Bahamas</option><option value="Bahrain">Bahrain</option><option value="Bangladesh">Bangladesh</option><option value="Barbados">Barbados</option><option value="Belarus">Belarus</option><option value="Belgium">Belgium</option><option value="Belize">Belize</option><option value="Benin">Benin</option><option value="Bermuda">Bermuda</option><option value="Bhutan">Bhutan</option><option value="Bolivia">Bolivia</option><option value="Bonaire">Bonaire</option><option value="Bosnia &amp; Herzegovina">Bosnia &amp; Herzegovina</option><option value="Botswana">Botswana</option><option value="Brazil">Brazil</option><option value="British Indian Ocean Ter">British Indian Ocean Ter</option><option value="Brunei">Brunei</option><option value="Bulgaria">Bulgaria</option><option value="Burkina Faso">Burkina Faso</option><option value="Burundi">Burundi</option><option value="Cambodia">Cambodia</option><option value="Cameroon">Cameroon</option><option value="Canada">Canada</option><option value="Canary Islands">Canary Islands</option><option value="Cape Verde">Cape Verde</option><option value="Cayman Islands">Cayman Islands</option><option value="Central African Republic">Central African Republic</option><option value="Chad">Chad</option><option value="Channel Islands">Channel Islands</option><option value="Chile">Chile</option><option value="China">China</option><option value="Christmas Island">Christmas Island</option><option value="Cocos Island">Cocos Island</option><option value="Colombia">Colombia</option><option value="Comoros">Comoros</option><option value="Congo">Congo</option><option value="Cook Islands">Cook Islands</option><option value="Costa Rica">Costa Rica</option><option value="Cote DIvoire">Cote D`Ivoire</option><option value="Croatia">Croatia</option><option value="Cuba">Cuba</option><option value="Curaco">Curacao</option><option value="Cyprus">Cyprus</option><option value="Czech Republic">Czech Republic</option><option value="Denmark">Denmark</option><option value="Djibouti">Djibouti</option><option value="Dominica">Dominica</option><option value="Dominican Republic">Dominican Republic</option><option value="East Timor">East Timor</option><option value="Ecuador">Ecuador</option><option value="Egypt">Egypt</option><option value="El Salvador">El Salvador</option><option value="Equatorial Guinea">Equatorial Guinea</option><option value="Eritrea">Eritrea</option><option value="Estonia">Estonia</option><option value="Ethiopia">Ethiopia</option><option value="Falkland Islands">Falkland Islands</option><option value="Faroe Islands">Faroe Islands</option><option value="Fiji">Fiji</option><option value="Finland">Finland</option><option value="France">France</option><option value="French Guiana">French Guiana</option><option value="French Polynesia">French Polynesia</option><option value="French Southern Ter">French Southern Ter</option><option value="Gabon">Gabon</option><option value="Gambia">Gambia</option><option value="Georgia">Georgia</option><option value="Germany">Germany</option><option value="Ghana">Ghana</option><option value="Gibraltar">Gibraltar</option><option value="Great Britain">Great Britain</option><option value="Greece">Greece</option><option value="Greenland">Greenland</option><option value="Grenada">Grenada</option><option value="Guadeloupe">Guadeloupe</option><option value="Guam">Guam</option><option value="Guatemala">Guatemala</option><option value="Guinea">Guinea</option><option value="Guyana">Guyana</option><option value="Haiti">Haiti</option><option value="Hawaii">Hawaii</option><option value="Honduras">Honduras</option><option value="Hong Kong">Hong Kong</option><option value="Hungary">Hungary</option><option value="Iceland">Iceland</option><option value="India">India</option><option value="Indonesia">Indonesia</option><option value="Iran">Iran</option><option value="Iraq">Iraq</option><option value="Ireland">Ireland</option><option value="Isle of Man">Isle of Man</option><option value="Israel">Israel</option><option value="Italy">Italy</option><option value="Jamaica">Jamaica</option><option value="Japan">Japan</option><option value="Jordan">Jordan</option><option value="Kazakhstan">Kazakhstan</option><option value="Kenya">Kenya</option><option value="Kiribati">Kiribati</option><option value="Korea North">Korea North</option><option value="Korea Sout">Korea South</option><option value="Kuwait">Kuwait</option><option value="Kyrgyzstan">Kyrgyzstan</option><option value="Laos">Laos</option><option value="Latvia">Latvia</option><option value="Lebanon">Lebanon</option><option value="Lesotho">Lesotho</option><option value="Liberia">Liberia</option><option value="Libya">Libya</option><option value="Liechtenstein">Liechtenstein</option><option value="Lithuania">Lithuania</option><option value="Luxembourg">Luxembourg</option><option value="Macau">Macau</option><option value="Macedonia">Macedonia</option><option value="Madagascar">Madagascar</option><option value="Malaysia">Malaysia</option><option value="Malawi">Malawi</option><option value="Maldives">Maldives</option><option value="Mali">Mali</option><option value="Malta">Malta</option><option value="Marshall Islands">Marshall Islands</option><option value="Martinique">Martinique</option><option value="Mauritania">Mauritania</option><option value="Mauritius">Mauritius</option><option value="Mayotte">Mayotte</option><option value="Mexico">Mexico</option><option value="Midway Islands">Midway Islands</option><option value="Moldova">Moldova</option><option value="Monaco">Monaco</option><option value="Mongolia">Mongolia</option><option value="Montserrat">Montserrat</option><option value="Morocco">Morocco</option><option value="Mozambique">Mozambique</option><option value="Myanmar">Myanmar</option><option value="Nambia">Nambia</option><option value="Nauru">Nauru</option><option value="Nepal">Nepal</option><option value="Netherland Antilles">Netherland Antilles</option><option value="Netherlands">Netherlands (Holland, Europe)</option><option value="Nevis">Nevis</option><option value="New Caledonia">New Caledonia</option><option value="New Zealand">New Zealand</option><option value="Nicaragua">Nicaragua</option><option value="Niger">Niger</option><option value="Nigeria">Nigeria</option><option value="Niue">Niue</option><option value="Norfolk Island">Norfolk Island</option><option value="Norway">Norway</option><option value="Oman">Oman</option><option value="Pakistan">Pakistan</option><option value="Palau Island">Palau Island</option><option value="Palestine">Palestine</option><option value="Panama">Panama</option><option value="Papua New Guinea">Papua New Guinea</option><option value="Paraguay">Paraguay</option><option value="Peru">Peru</option><option value="Phillipines">Philippines</option><option value="Pitcairn Island">Pitcairn Island</option><option value="Poland">Poland</option><option value="Portugal">Portugal</option><option value="Puerto Rico">Puerto Rico</option><option value="Qatar">Qatar</option><option value="Republic of Montenegro">Republic of Montenegro</option><option value="Republic of Serbia">Republic of Serbia</option><option value="Reunion">Reunion</option><option value="Romania">Romania</option><option value="Russia">Russia</option><option value="Rwanda">Rwanda</option><option value="St Barthelemy">St Barthelemy</option><option value="St Eustatius">St Eustatius</option><option value="St Helena">St Helena</option><option value="St Kitts-Nevis">St Kitts-Nevis</option><option value="St Lucia">St Lucia</option><option value="St Maarten">St Maarten</option><option value="St Pierre &amp; Miquelon">St Pierre &amp; Miquelon</option><option value="St Vincent &amp; Grenadines">St Vincent &amp; Grenadines</option><option value="Saipan">Saipan</option><option value="Samoa">Samoa</option><option value="Samoa American">Samoa American</option><option value="San Marino">San Marino</option><option value="Sao Tome &amp; Principe">Sao Tome &amp; Principe</option><option value="Saudi Arabia">Saudi Arabia</option><option value="Senegal">Senegal</option><option value="Serbia">Serbia</option><option value="Seychelles">Seychelles</option><option value="Sierra Leone">Sierra Leone</option><option value="Singapore">Singapore</option><option value="Slovakia">Slovakia</option><option value="Slovenia">Slovenia</option><option value="Solomon Islands">Solomon Islands</option><option value="Somalia">Somalia</option><option value="South Africa">South Africa</option><option value="Spain">Spain</option><option value="Sri Lanka">Sri Lanka</option><option value="Sudan">Sudan</option><option value="Suriname">Suriname</option><option value="Swaziland">Swaziland</option><option value="Sweden">Sweden</option><option value="Switzerland">Switzerland</option><option value="Syria">Syria</option><option value="Tahiti">Tahiti</option><option value="Taiwan">Taiwan</option><option value="Tajikistan">Tajikistan</option><option value="Tanzania">Tanzania</option><option value="Thailand">Thailand</option><option value="Togo">Togo</option><option value="Tokelau">Tokelau</option><option value="Tonga">Tonga</option><option value="Trinidad &amp; Tobago">Trinidad &amp; Tobago</option><option value="Tunisia">Tunisia</option><option value="Turkey">Turkey</option><option value="Turkmenistan">Turkmenistan</option><option value="Turks &amp; Caicos Is">Turks &amp; Caicos Is</option><option value="Tuvalu">Tuvalu</option><option value="Uganda">Uganda</option><option value="Ukraine">Ukraine</option><option value="United Arab Erimates">United Arab Emirates</option><option value="United Kingdom">United Kingdom</option><option value="United States of America">United States of America</option><option value="Uraguay">Uruguay</option><option value="Uzbekistan">Uzbekistan</option><option value="Vanuatu">Vanuatu</option><option value="Vatican City State">Vatican City State</option><option value="Venezuela">Venezuela</option><option value="Vietnam">Vietnam</option><option value="Virgin Islands (Brit)">Virgin Islands (Brit)</option><option value="Virgin Islands (USA)">Virgin Islands (USA)</option><option value="Wake Island">Wake Island</option><option value="Wallis &amp; Futana Is">Wallis &amp; Futana Is</option><option value="Yemen">Yemen</option><option value="Zaire">Zaire</option><option value="Zambia">Zambia</option><option value="Zimbabwe">Zimbabwe</option></select>     
+                        </div>
                     </div>
                     <div class="custom-input-container-right pull-right">
                         <label for="shareamount_2_amount">Number of shares</label>
-                        <input type="text" name="shareamount_2_amount" placeholder="Share amount" data-selector="shareholder" data-shareholder-field="amount" data-shareholder-id="2" class="shareholder-amount person-input custom-input-class" value="0">
+                        <input type="text" name="shareamount_2_amount" placeholder="Share amount" data-selector="shareholder" data-shareholder-field="amount" data-shareholder-id="2" class="shareholder-amount person-input custom-input-class" value="">
                     </div>
                     <div class="clear"></div>
                 </div>
@@ -813,11 +918,14 @@ function registration_form() {
                             <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                             <input type="text" name="shareholder_3_address_2" placeholder="City, State" data-selector="shareholder" data-shareholder-field="address_2" data-shareholder-id="3" class="shareholder-address-2 person-input custom-input-class">                
                             <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                            <input type="text" name="shareholder_3_address_3" placeholder="Country" data-selector="shareholder" data-shareholder-field="address_3" data-shareholder-id="3" class="shareholder-address-3 person-input custom-input-class">                
+                            <!-- <input type="text" name="shareholder_3_address_3" placeholder="Country" data-selector="shareholder" data-shareholder-field="address_3" data-shareholder-id="3" class="shareholder-address-3 person-input custom-input-class">                 -->
+                            <div class="custom-input-class-select-container">            
+                                <select name="shareholder_3_address_3" placeholder="Country" data-selector="shareholder" data-shareholder-field="address_3" data-shareholder-id="3" class="shareholder-address-3 person-input custom-input-class"><option value="Afganistan">Afghanistan</option><option value="Albania">Albania</option><option value="Algeria">Algeria</option><option value="American Samoa">American Samoa</option><option value="Andorra">Andorra</option><option value="Angola">Angola</option><option value="Anguilla">Anguilla</option><option value="Antigua &amp; Barbuda">Antigua &amp; Barbuda</option><option value="Argentina">Argentina</option><option value="Armenia">Armenia</option><option value="Aruba">Aruba</option><option value="Australia">Australia</option><option value="Austria">Austria</option><option value="Azerbaijan">Azerbaijan</option><option value="Bahamas">Bahamas</option><option value="Bahrain">Bahrain</option><option value="Bangladesh">Bangladesh</option><option value="Barbados">Barbados</option><option value="Belarus">Belarus</option><option value="Belgium">Belgium</option><option value="Belize">Belize</option><option value="Benin">Benin</option><option value="Bermuda">Bermuda</option><option value="Bhutan">Bhutan</option><option value="Bolivia">Bolivia</option><option value="Bonaire">Bonaire</option><option value="Bosnia &amp; Herzegovina">Bosnia &amp; Herzegovina</option><option value="Botswana">Botswana</option><option value="Brazil">Brazil</option><option value="British Indian Ocean Ter">British Indian Ocean Ter</option><option value="Brunei">Brunei</option><option value="Bulgaria">Bulgaria</option><option value="Burkina Faso">Burkina Faso</option><option value="Burundi">Burundi</option><option value="Cambodia">Cambodia</option><option value="Cameroon">Cameroon</option><option value="Canada">Canada</option><option value="Canary Islands">Canary Islands</option><option value="Cape Verde">Cape Verde</option><option value="Cayman Islands">Cayman Islands</option><option value="Central African Republic">Central African Republic</option><option value="Chad">Chad</option><option value="Channel Islands">Channel Islands</option><option value="Chile">Chile</option><option value="China">China</option><option value="Christmas Island">Christmas Island</option><option value="Cocos Island">Cocos Island</option><option value="Colombia">Colombia</option><option value="Comoros">Comoros</option><option value="Congo">Congo</option><option value="Cook Islands">Cook Islands</option><option value="Costa Rica">Costa Rica</option><option value="Cote DIvoire">Cote D`Ivoire</option><option value="Croatia">Croatia</option><option value="Cuba">Cuba</option><option value="Curaco">Curacao</option><option value="Cyprus">Cyprus</option><option value="Czech Republic">Czech Republic</option><option value="Denmark">Denmark</option><option value="Djibouti">Djibouti</option><option value="Dominica">Dominica</option><option value="Dominican Republic">Dominican Republic</option><option value="East Timor">East Timor</option><option value="Ecuador">Ecuador</option><option value="Egypt">Egypt</option><option value="El Salvador">El Salvador</option><option value="Equatorial Guinea">Equatorial Guinea</option><option value="Eritrea">Eritrea</option><option value="Estonia">Estonia</option><option value="Ethiopia">Ethiopia</option><option value="Falkland Islands">Falkland Islands</option><option value="Faroe Islands">Faroe Islands</option><option value="Fiji">Fiji</option><option value="Finland">Finland</option><option value="France">France</option><option value="French Guiana">French Guiana</option><option value="French Polynesia">French Polynesia</option><option value="French Southern Ter">French Southern Ter</option><option value="Gabon">Gabon</option><option value="Gambia">Gambia</option><option value="Georgia">Georgia</option><option value="Germany">Germany</option><option value="Ghana">Ghana</option><option value="Gibraltar">Gibraltar</option><option value="Great Britain">Great Britain</option><option value="Greece">Greece</option><option value="Greenland">Greenland</option><option value="Grenada">Grenada</option><option value="Guadeloupe">Guadeloupe</option><option value="Guam">Guam</option><option value="Guatemala">Guatemala</option><option value="Guinea">Guinea</option><option value="Guyana">Guyana</option><option value="Haiti">Haiti</option><option value="Hawaii">Hawaii</option><option value="Honduras">Honduras</option><option value="Hong Kong">Hong Kong</option><option value="Hungary">Hungary</option><option value="Iceland">Iceland</option><option value="India">India</option><option value="Indonesia">Indonesia</option><option value="Iran">Iran</option><option value="Iraq">Iraq</option><option value="Ireland">Ireland</option><option value="Isle of Man">Isle of Man</option><option value="Israel">Israel</option><option value="Italy">Italy</option><option value="Jamaica">Jamaica</option><option value="Japan">Japan</option><option value="Jordan">Jordan</option><option value="Kazakhstan">Kazakhstan</option><option value="Kenya">Kenya</option><option value="Kiribati">Kiribati</option><option value="Korea North">Korea North</option><option value="Korea Sout">Korea South</option><option value="Kuwait">Kuwait</option><option value="Kyrgyzstan">Kyrgyzstan</option><option value="Laos">Laos</option><option value="Latvia">Latvia</option><option value="Lebanon">Lebanon</option><option value="Lesotho">Lesotho</option><option value="Liberia">Liberia</option><option value="Libya">Libya</option><option value="Liechtenstein">Liechtenstein</option><option value="Lithuania">Lithuania</option><option value="Luxembourg">Luxembourg</option><option value="Macau">Macau</option><option value="Macedonia">Macedonia</option><option value="Madagascar">Madagascar</option><option value="Malaysia">Malaysia</option><option value="Malawi">Malawi</option><option value="Maldives">Maldives</option><option value="Mali">Mali</option><option value="Malta">Malta</option><option value="Marshall Islands">Marshall Islands</option><option value="Martinique">Martinique</option><option value="Mauritania">Mauritania</option><option value="Mauritius">Mauritius</option><option value="Mayotte">Mayotte</option><option value="Mexico">Mexico</option><option value="Midway Islands">Midway Islands</option><option value="Moldova">Moldova</option><option value="Monaco">Monaco</option><option value="Mongolia">Mongolia</option><option value="Montserrat">Montserrat</option><option value="Morocco">Morocco</option><option value="Mozambique">Mozambique</option><option value="Myanmar">Myanmar</option><option value="Nambia">Nambia</option><option value="Nauru">Nauru</option><option value="Nepal">Nepal</option><option value="Netherland Antilles">Netherland Antilles</option><option value="Netherlands">Netherlands (Holland, Europe)</option><option value="Nevis">Nevis</option><option value="New Caledonia">New Caledonia</option><option value="New Zealand">New Zealand</option><option value="Nicaragua">Nicaragua</option><option value="Niger">Niger</option><option value="Nigeria">Nigeria</option><option value="Niue">Niue</option><option value="Norfolk Island">Norfolk Island</option><option value="Norway">Norway</option><option value="Oman">Oman</option><option value="Pakistan">Pakistan</option><option value="Palau Island">Palau Island</option><option value="Palestine">Palestine</option><option value="Panama">Panama</option><option value="Papua New Guinea">Papua New Guinea</option><option value="Paraguay">Paraguay</option><option value="Peru">Peru</option><option value="Phillipines">Philippines</option><option value="Pitcairn Island">Pitcairn Island</option><option value="Poland">Poland</option><option value="Portugal">Portugal</option><option value="Puerto Rico">Puerto Rico</option><option value="Qatar">Qatar</option><option value="Republic of Montenegro">Republic of Montenegro</option><option value="Republic of Serbia">Republic of Serbia</option><option value="Reunion">Reunion</option><option value="Romania">Romania</option><option value="Russia">Russia</option><option value="Rwanda">Rwanda</option><option value="St Barthelemy">St Barthelemy</option><option value="St Eustatius">St Eustatius</option><option value="St Helena">St Helena</option><option value="St Kitts-Nevis">St Kitts-Nevis</option><option value="St Lucia">St Lucia</option><option value="St Maarten">St Maarten</option><option value="St Pierre &amp; Miquelon">St Pierre &amp; Miquelon</option><option value="St Vincent &amp; Grenadines">St Vincent &amp; Grenadines</option><option value="Saipan">Saipan</option><option value="Samoa">Samoa</option><option value="Samoa American">Samoa American</option><option value="San Marino">San Marino</option><option value="Sao Tome &amp; Principe">Sao Tome &amp; Principe</option><option value="Saudi Arabia">Saudi Arabia</option><option value="Senegal">Senegal</option><option value="Serbia">Serbia</option><option value="Seychelles">Seychelles</option><option value="Sierra Leone">Sierra Leone</option><option value="Singapore">Singapore</option><option value="Slovakia">Slovakia</option><option value="Slovenia">Slovenia</option><option value="Solomon Islands">Solomon Islands</option><option value="Somalia">Somalia</option><option value="South Africa">South Africa</option><option value="Spain">Spain</option><option value="Sri Lanka">Sri Lanka</option><option value="Sudan">Sudan</option><option value="Suriname">Suriname</option><option value="Swaziland">Swaziland</option><option value="Sweden">Sweden</option><option value="Switzerland">Switzerland</option><option value="Syria">Syria</option><option value="Tahiti">Tahiti</option><option value="Taiwan">Taiwan</option><option value="Tajikistan">Tajikistan</option><option value="Tanzania">Tanzania</option><option value="Thailand">Thailand</option><option value="Togo">Togo</option><option value="Tokelau">Tokelau</option><option value="Tonga">Tonga</option><option value="Trinidad &amp; Tobago">Trinidad &amp; Tobago</option><option value="Tunisia">Tunisia</option><option value="Turkey">Turkey</option><option value="Turkmenistan">Turkmenistan</option><option value="Turks &amp; Caicos Is">Turks &amp; Caicos Is</option><option value="Tuvalu">Tuvalu</option><option value="Uganda">Uganda</option><option value="Ukraine">Ukraine</option><option value="United Arab Erimates">United Arab Emirates</option><option value="United Kingdom">United Kingdom</option><option value="United States of America">United States of America</option><option value="Uraguay">Uruguay</option><option value="Uzbekistan">Uzbekistan</option><option value="Vanuatu">Vanuatu</option><option value="Vatican City State">Vatican City State</option><option value="Venezuela">Venezuela</option><option value="Vietnam">Vietnam</option><option value="Virgin Islands (Brit)">Virgin Islands (Brit)</option><option value="Virgin Islands (USA)">Virgin Islands (USA)</option><option value="Wake Island">Wake Island</option><option value="Wallis &amp; Futana Is">Wallis &amp; Futana Is</option><option value="Yemen">Yemen</option><option value="Zaire">Zaire</option><option value="Zambia">Zambia</option><option value="Zimbabwe">Zimbabwe</option></select>     
+                            </div>
                         </div>
                         <div class="custom-input-container-right pull-right">
                             <label for="shareamount_3_amount">Number of shares</label>                            
-                            <input type="text" name="shareamount_3_amount" placeholder="Share amount" data-selector="shareholder" data-shareholder-field="amount" data-shareholder-id="3" class="shareholder-amount person-input custom-input-class" value="0">
+                            <input type="text" name="shareamount_3_amount" placeholder="Share amount" data-selector="shareholder" data-shareholder-field="amount" data-shareholder-id="3" class="shareholder-amount person-input custom-input-class" value="">
                         </div>     
                         <div class="clear"></div>                   
                     </div>
@@ -912,7 +1020,10 @@ function registration_form() {
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                     <input type="text" name="director_1_address_2" placeholder="City, State" data-selector="director" data-director-field="address_2" data-director-id="1" class="director-address-2 person-input custom-input-class">                
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                    <input type="text" name="director_1_address_3" placeholder="Country" data-selector="director" data-director-field="address_3" data-director-id="1" class="director-address-3 person-input custom-input-class">                                                 
+                    <!-- <input type="text" name="director_1_address_3" placeholder="Country" data-selector="director" data-director-field="address_3" data-director-id="1" class="director-address-3 person-input custom-input-class"> -->
+                    <div class="custom-input-class-select-container">            
+                        <select name="director_1_address_3" placeholder="Country" data-selector="director" data-director-field="address_3" data-director-id="1" class="director-address-3 person-input custom-input-class"><option value="Afganistan">Afghanistan</option><option value="Albania">Albania</option><option value="Algeria">Algeria</option><option value="American Samoa">American Samoa</option><option value="Andorra">Andorra</option><option value="Angola">Angola</option><option value="Anguilla">Anguilla</option><option value="Antigua &amp; Barbuda">Antigua &amp; Barbuda</option><option value="Argentina">Argentina</option><option value="Armenia">Armenia</option><option value="Aruba">Aruba</option><option value="Australia">Australia</option><option value="Austria">Austria</option><option value="Azerbaijan">Azerbaijan</option><option value="Bahamas">Bahamas</option><option value="Bahrain">Bahrain</option><option value="Bangladesh">Bangladesh</option><option value="Barbados">Barbados</option><option value="Belarus">Belarus</option><option value="Belgium">Belgium</option><option value="Belize">Belize</option><option value="Benin">Benin</option><option value="Bermuda">Bermuda</option><option value="Bhutan">Bhutan</option><option value="Bolivia">Bolivia</option><option value="Bonaire">Bonaire</option><option value="Bosnia &amp; Herzegovina">Bosnia &amp; Herzegovina</option><option value="Botswana">Botswana</option><option value="Brazil">Brazil</option><option value="British Indian Ocean Ter">British Indian Ocean Ter</option><option value="Brunei">Brunei</option><option value="Bulgaria">Bulgaria</option><option value="Burkina Faso">Burkina Faso</option><option value="Burundi">Burundi</option><option value="Cambodia">Cambodia</option><option value="Cameroon">Cameroon</option><option value="Canada">Canada</option><option value="Canary Islands">Canary Islands</option><option value="Cape Verde">Cape Verde</option><option value="Cayman Islands">Cayman Islands</option><option value="Central African Republic">Central African Republic</option><option value="Chad">Chad</option><option value="Channel Islands">Channel Islands</option><option value="Chile">Chile</option><option value="China">China</option><option value="Christmas Island">Christmas Island</option><option value="Cocos Island">Cocos Island</option><option value="Colombia">Colombia</option><option value="Comoros">Comoros</option><option value="Congo">Congo</option><option value="Cook Islands">Cook Islands</option><option value="Costa Rica">Costa Rica</option><option value="Cote DIvoire">Cote D`Ivoire</option><option value="Croatia">Croatia</option><option value="Cuba">Cuba</option><option value="Curaco">Curacao</option><option value="Cyprus">Cyprus</option><option value="Czech Republic">Czech Republic</option><option value="Denmark">Denmark</option><option value="Djibouti">Djibouti</option><option value="Dominica">Dominica</option><option value="Dominican Republic">Dominican Republic</option><option value="East Timor">East Timor</option><option value="Ecuador">Ecuador</option><option value="Egypt">Egypt</option><option value="El Salvador">El Salvador</option><option value="Equatorial Guinea">Equatorial Guinea</option><option value="Eritrea">Eritrea</option><option value="Estonia">Estonia</option><option value="Ethiopia">Ethiopia</option><option value="Falkland Islands">Falkland Islands</option><option value="Faroe Islands">Faroe Islands</option><option value="Fiji">Fiji</option><option value="Finland">Finland</option><option value="France">France</option><option value="French Guiana">French Guiana</option><option value="French Polynesia">French Polynesia</option><option value="French Southern Ter">French Southern Ter</option><option value="Gabon">Gabon</option><option value="Gambia">Gambia</option><option value="Georgia">Georgia</option><option value="Germany">Germany</option><option value="Ghana">Ghana</option><option value="Gibraltar">Gibraltar</option><option value="Great Britain">Great Britain</option><option value="Greece">Greece</option><option value="Greenland">Greenland</option><option value="Grenada">Grenada</option><option value="Guadeloupe">Guadeloupe</option><option value="Guam">Guam</option><option value="Guatemala">Guatemala</option><option value="Guinea">Guinea</option><option value="Guyana">Guyana</option><option value="Haiti">Haiti</option><option value="Hawaii">Hawaii</option><option value="Honduras">Honduras</option><option value="Hong Kong">Hong Kong</option><option value="Hungary">Hungary</option><option value="Iceland">Iceland</option><option value="India">India</option><option value="Indonesia">Indonesia</option><option value="Iran">Iran</option><option value="Iraq">Iraq</option><option value="Ireland">Ireland</option><option value="Isle of Man">Isle of Man</option><option value="Israel">Israel</option><option value="Italy">Italy</option><option value="Jamaica">Jamaica</option><option value="Japan">Japan</option><option value="Jordan">Jordan</option><option value="Kazakhstan">Kazakhstan</option><option value="Kenya">Kenya</option><option value="Kiribati">Kiribati</option><option value="Korea North">Korea North</option><option value="Korea Sout">Korea South</option><option value="Kuwait">Kuwait</option><option value="Kyrgyzstan">Kyrgyzstan</option><option value="Laos">Laos</option><option value="Latvia">Latvia</option><option value="Lebanon">Lebanon</option><option value="Lesotho">Lesotho</option><option value="Liberia">Liberia</option><option value="Libya">Libya</option><option value="Liechtenstein">Liechtenstein</option><option value="Lithuania">Lithuania</option><option value="Luxembourg">Luxembourg</option><option value="Macau">Macau</option><option value="Macedonia">Macedonia</option><option value="Madagascar">Madagascar</option><option value="Malaysia">Malaysia</option><option value="Malawi">Malawi</option><option value="Maldives">Maldives</option><option value="Mali">Mali</option><option value="Malta">Malta</option><option value="Marshall Islands">Marshall Islands</option><option value="Martinique">Martinique</option><option value="Mauritania">Mauritania</option><option value="Mauritius">Mauritius</option><option value="Mayotte">Mayotte</option><option value="Mexico">Mexico</option><option value="Midway Islands">Midway Islands</option><option value="Moldova">Moldova</option><option value="Monaco">Monaco</option><option value="Mongolia">Mongolia</option><option value="Montserrat">Montserrat</option><option value="Morocco">Morocco</option><option value="Mozambique">Mozambique</option><option value="Myanmar">Myanmar</option><option value="Nambia">Nambia</option><option value="Nauru">Nauru</option><option value="Nepal">Nepal</option><option value="Netherland Antilles">Netherland Antilles</option><option value="Netherlands">Netherlands (Holland, Europe)</option><option value="Nevis">Nevis</option><option value="New Caledonia">New Caledonia</option><option value="New Zealand">New Zealand</option><option value="Nicaragua">Nicaragua</option><option value="Niger">Niger</option><option value="Nigeria">Nigeria</option><option value="Niue">Niue</option><option value="Norfolk Island">Norfolk Island</option><option value="Norway">Norway</option><option value="Oman">Oman</option><option value="Pakistan">Pakistan</option><option value="Palau Island">Palau Island</option><option value="Palestine">Palestine</option><option value="Panama">Panama</option><option value="Papua New Guinea">Papua New Guinea</option><option value="Paraguay">Paraguay</option><option value="Peru">Peru</option><option value="Phillipines">Philippines</option><option value="Pitcairn Island">Pitcairn Island</option><option value="Poland">Poland</option><option value="Portugal">Portugal</option><option value="Puerto Rico">Puerto Rico</option><option value="Qatar">Qatar</option><option value="Republic of Montenegro">Republic of Montenegro</option><option value="Republic of Serbia">Republic of Serbia</option><option value="Reunion">Reunion</option><option value="Romania">Romania</option><option value="Russia">Russia</option><option value="Rwanda">Rwanda</option><option value="St Barthelemy">St Barthelemy</option><option value="St Eustatius">St Eustatius</option><option value="St Helena">St Helena</option><option value="St Kitts-Nevis">St Kitts-Nevis</option><option value="St Lucia">St Lucia</option><option value="St Maarten">St Maarten</option><option value="St Pierre &amp; Miquelon">St Pierre &amp; Miquelon</option><option value="St Vincent &amp; Grenadines">St Vincent &amp; Grenadines</option><option value="Saipan">Saipan</option><option value="Samoa">Samoa</option><option value="Samoa American">Samoa American</option><option value="San Marino">San Marino</option><option value="Sao Tome &amp; Principe">Sao Tome &amp; Principe</option><option value="Saudi Arabia">Saudi Arabia</option><option value="Senegal">Senegal</option><option value="Serbia">Serbia</option><option value="Seychelles">Seychelles</option><option value="Sierra Leone">Sierra Leone</option><option value="Singapore">Singapore</option><option value="Slovakia">Slovakia</option><option value="Slovenia">Slovenia</option><option value="Solomon Islands">Solomon Islands</option><option value="Somalia">Somalia</option><option value="South Africa">South Africa</option><option value="Spain">Spain</option><option value="Sri Lanka">Sri Lanka</option><option value="Sudan">Sudan</option><option value="Suriname">Suriname</option><option value="Swaziland">Swaziland</option><option value="Sweden">Sweden</option><option value="Switzerland">Switzerland</option><option value="Syria">Syria</option><option value="Tahiti">Tahiti</option><option value="Taiwan">Taiwan</option><option value="Tajikistan">Tajikistan</option><option value="Tanzania">Tanzania</option><option value="Thailand">Thailand</option><option value="Togo">Togo</option><option value="Tokelau">Tokelau</option><option value="Tonga">Tonga</option><option value="Trinidad &amp; Tobago">Trinidad &amp; Tobago</option><option value="Tunisia">Tunisia</option><option value="Turkey">Turkey</option><option value="Turkmenistan">Turkmenistan</option><option value="Turks &amp; Caicos Is">Turks &amp; Caicos Is</option><option value="Tuvalu">Tuvalu</option><option value="Uganda">Uganda</option><option value="Ukraine">Ukraine</option><option value="United Arab Erimates">United Arab Emirates</option><option value="United Kingdom">United Kingdom</option><option value="United States of America">United States of America</option><option value="Uraguay">Uruguay</option><option value="Uzbekistan">Uzbekistan</option><option value="Vanuatu">Vanuatu</option><option value="Vatican City State">Vatican City State</option><option value="Venezuela">Venezuela</option><option value="Vietnam">Vietnam</option><option value="Virgin Islands (Brit)">Virgin Islands (Brit)</option><option value="Virgin Islands (USA)">Virgin Islands (USA)</option><option value="Wake Island">Wake Island</option><option value="Wallis &amp; Futana Is">Wallis &amp; Futana Is</option><option value="Yemen">Yemen</option><option value="Zaire">Zaire</option><option value="Zambia">Zambia</option><option value="Zimbabwe">Zimbabwe</option></select>     
+                    </div>                                                
                 </div>
 
                 <div class="field-container">
@@ -924,7 +1035,10 @@ function registration_form() {
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                     <input type="text" name="director_2_address_2" placeholder="City, State" data-selector="director" data-director-field="address_2" data-director-id="2" class="director-address-2 person-input custom-input-class">                
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                    <input type="text" name="director_2_address_3" placeholder="Country" data-selector="director" data-director-field="address_3" data-director-id="2" class="director-address-3 person-input custom-input-class">                                                                                 
+                    <!-- <input type="text" name="director_2_address_3" placeholder="Country" data-selector="director" data-director-field="address_3" data-director-id="2" class="director-address-3 person-input custom-input-class">                                                                                  -->
+                    <div class="custom-input-class-select-container">            
+                        <select name="director_2_address_3" placeholder="Country" data-selector="director" data-director-field="address_3" data-director-id="2" class="director-address-3 person-input custom-input-class"><option value="Afganistan">Afghanistan</option><option value="Albania">Albania</option><option value="Algeria">Algeria</option><option value="American Samoa">American Samoa</option><option value="Andorra">Andorra</option><option value="Angola">Angola</option><option value="Anguilla">Anguilla</option><option value="Antigua &amp; Barbuda">Antigua &amp; Barbuda</option><option value="Argentina">Argentina</option><option value="Armenia">Armenia</option><option value="Aruba">Aruba</option><option value="Australia">Australia</option><option value="Austria">Austria</option><option value="Azerbaijan">Azerbaijan</option><option value="Bahamas">Bahamas</option><option value="Bahrain">Bahrain</option><option value="Bangladesh">Bangladesh</option><option value="Barbados">Barbados</option><option value="Belarus">Belarus</option><option value="Belgium">Belgium</option><option value="Belize">Belize</option><option value="Benin">Benin</option><option value="Bermuda">Bermuda</option><option value="Bhutan">Bhutan</option><option value="Bolivia">Bolivia</option><option value="Bonaire">Bonaire</option><option value="Bosnia &amp; Herzegovina">Bosnia &amp; Herzegovina</option><option value="Botswana">Botswana</option><option value="Brazil">Brazil</option><option value="British Indian Ocean Ter">British Indian Ocean Ter</option><option value="Brunei">Brunei</option><option value="Bulgaria">Bulgaria</option><option value="Burkina Faso">Burkina Faso</option><option value="Burundi">Burundi</option><option value="Cambodia">Cambodia</option><option value="Cameroon">Cameroon</option><option value="Canada">Canada</option><option value="Canary Islands">Canary Islands</option><option value="Cape Verde">Cape Verde</option><option value="Cayman Islands">Cayman Islands</option><option value="Central African Republic">Central African Republic</option><option value="Chad">Chad</option><option value="Channel Islands">Channel Islands</option><option value="Chile">Chile</option><option value="China">China</option><option value="Christmas Island">Christmas Island</option><option value="Cocos Island">Cocos Island</option><option value="Colombia">Colombia</option><option value="Comoros">Comoros</option><option value="Congo">Congo</option><option value="Cook Islands">Cook Islands</option><option value="Costa Rica">Costa Rica</option><option value="Cote DIvoire">Cote D`Ivoire</option><option value="Croatia">Croatia</option><option value="Cuba">Cuba</option><option value="Curaco">Curacao</option><option value="Cyprus">Cyprus</option><option value="Czech Republic">Czech Republic</option><option value="Denmark">Denmark</option><option value="Djibouti">Djibouti</option><option value="Dominica">Dominica</option><option value="Dominican Republic">Dominican Republic</option><option value="East Timor">East Timor</option><option value="Ecuador">Ecuador</option><option value="Egypt">Egypt</option><option value="El Salvador">El Salvador</option><option value="Equatorial Guinea">Equatorial Guinea</option><option value="Eritrea">Eritrea</option><option value="Estonia">Estonia</option><option value="Ethiopia">Ethiopia</option><option value="Falkland Islands">Falkland Islands</option><option value="Faroe Islands">Faroe Islands</option><option value="Fiji">Fiji</option><option value="Finland">Finland</option><option value="France">France</option><option value="French Guiana">French Guiana</option><option value="French Polynesia">French Polynesia</option><option value="French Southern Ter">French Southern Ter</option><option value="Gabon">Gabon</option><option value="Gambia">Gambia</option><option value="Georgia">Georgia</option><option value="Germany">Germany</option><option value="Ghana">Ghana</option><option value="Gibraltar">Gibraltar</option><option value="Great Britain">Great Britain</option><option value="Greece">Greece</option><option value="Greenland">Greenland</option><option value="Grenada">Grenada</option><option value="Guadeloupe">Guadeloupe</option><option value="Guam">Guam</option><option value="Guatemala">Guatemala</option><option value="Guinea">Guinea</option><option value="Guyana">Guyana</option><option value="Haiti">Haiti</option><option value="Hawaii">Hawaii</option><option value="Honduras">Honduras</option><option value="Hong Kong">Hong Kong</option><option value="Hungary">Hungary</option><option value="Iceland">Iceland</option><option value="India">India</option><option value="Indonesia">Indonesia</option><option value="Iran">Iran</option><option value="Iraq">Iraq</option><option value="Ireland">Ireland</option><option value="Isle of Man">Isle of Man</option><option value="Israel">Israel</option><option value="Italy">Italy</option><option value="Jamaica">Jamaica</option><option value="Japan">Japan</option><option value="Jordan">Jordan</option><option value="Kazakhstan">Kazakhstan</option><option value="Kenya">Kenya</option><option value="Kiribati">Kiribati</option><option value="Korea North">Korea North</option><option value="Korea Sout">Korea South</option><option value="Kuwait">Kuwait</option><option value="Kyrgyzstan">Kyrgyzstan</option><option value="Laos">Laos</option><option value="Latvia">Latvia</option><option value="Lebanon">Lebanon</option><option value="Lesotho">Lesotho</option><option value="Liberia">Liberia</option><option value="Libya">Libya</option><option value="Liechtenstein">Liechtenstein</option><option value="Lithuania">Lithuania</option><option value="Luxembourg">Luxembourg</option><option value="Macau">Macau</option><option value="Macedonia">Macedonia</option><option value="Madagascar">Madagascar</option><option value="Malaysia">Malaysia</option><option value="Malawi">Malawi</option><option value="Maldives">Maldives</option><option value="Mali">Mali</option><option value="Malta">Malta</option><option value="Marshall Islands">Marshall Islands</option><option value="Martinique">Martinique</option><option value="Mauritania">Mauritania</option><option value="Mauritius">Mauritius</option><option value="Mayotte">Mayotte</option><option value="Mexico">Mexico</option><option value="Midway Islands">Midway Islands</option><option value="Moldova">Moldova</option><option value="Monaco">Monaco</option><option value="Mongolia">Mongolia</option><option value="Montserrat">Montserrat</option><option value="Morocco">Morocco</option><option value="Mozambique">Mozambique</option><option value="Myanmar">Myanmar</option><option value="Nambia">Nambia</option><option value="Nauru">Nauru</option><option value="Nepal">Nepal</option><option value="Netherland Antilles">Netherland Antilles</option><option value="Netherlands">Netherlands (Holland, Europe)</option><option value="Nevis">Nevis</option><option value="New Caledonia">New Caledonia</option><option value="New Zealand">New Zealand</option><option value="Nicaragua">Nicaragua</option><option value="Niger">Niger</option><option value="Nigeria">Nigeria</option><option value="Niue">Niue</option><option value="Norfolk Island">Norfolk Island</option><option value="Norway">Norway</option><option value="Oman">Oman</option><option value="Pakistan">Pakistan</option><option value="Palau Island">Palau Island</option><option value="Palestine">Palestine</option><option value="Panama">Panama</option><option value="Papua New Guinea">Papua New Guinea</option><option value="Paraguay">Paraguay</option><option value="Peru">Peru</option><option value="Phillipines">Philippines</option><option value="Pitcairn Island">Pitcairn Island</option><option value="Poland">Poland</option><option value="Portugal">Portugal</option><option value="Puerto Rico">Puerto Rico</option><option value="Qatar">Qatar</option><option value="Republic of Montenegro">Republic of Montenegro</option><option value="Republic of Serbia">Republic of Serbia</option><option value="Reunion">Reunion</option><option value="Romania">Romania</option><option value="Russia">Russia</option><option value="Rwanda">Rwanda</option><option value="St Barthelemy">St Barthelemy</option><option value="St Eustatius">St Eustatius</option><option value="St Helena">St Helena</option><option value="St Kitts-Nevis">St Kitts-Nevis</option><option value="St Lucia">St Lucia</option><option value="St Maarten">St Maarten</option><option value="St Pierre &amp; Miquelon">St Pierre &amp; Miquelon</option><option value="St Vincent &amp; Grenadines">St Vincent &amp; Grenadines</option><option value="Saipan">Saipan</option><option value="Samoa">Samoa</option><option value="Samoa American">Samoa American</option><option value="San Marino">San Marino</option><option value="Sao Tome &amp; Principe">Sao Tome &amp; Principe</option><option value="Saudi Arabia">Saudi Arabia</option><option value="Senegal">Senegal</option><option value="Serbia">Serbia</option><option value="Seychelles">Seychelles</option><option value="Sierra Leone">Sierra Leone</option><option value="Singapore">Singapore</option><option value="Slovakia">Slovakia</option><option value="Slovenia">Slovenia</option><option value="Solomon Islands">Solomon Islands</option><option value="Somalia">Somalia</option><option value="South Africa">South Africa</option><option value="Spain">Spain</option><option value="Sri Lanka">Sri Lanka</option><option value="Sudan">Sudan</option><option value="Suriname">Suriname</option><option value="Swaziland">Swaziland</option><option value="Sweden">Sweden</option><option value="Switzerland">Switzerland</option><option value="Syria">Syria</option><option value="Tahiti">Tahiti</option><option value="Taiwan">Taiwan</option><option value="Tajikistan">Tajikistan</option><option value="Tanzania">Tanzania</option><option value="Thailand">Thailand</option><option value="Togo">Togo</option><option value="Tokelau">Tokelau</option><option value="Tonga">Tonga</option><option value="Trinidad &amp; Tobago">Trinidad &amp; Tobago</option><option value="Tunisia">Tunisia</option><option value="Turkey">Turkey</option><option value="Turkmenistan">Turkmenistan</option><option value="Turks &amp; Caicos Is">Turks &amp; Caicos Is</option><option value="Tuvalu">Tuvalu</option><option value="Uganda">Uganda</option><option value="Ukraine">Ukraine</option><option value="United Arab Erimates">United Arab Emirates</option><option value="United Kingdom">United Kingdom</option><option value="United States of America">United States of America</option><option value="Uraguay">Uruguay</option><option value="Uzbekistan">Uzbekistan</option><option value="Vanuatu">Vanuatu</option><option value="Vatican City State">Vatican City State</option><option value="Venezuela">Venezuela</option><option value="Vietnam">Vietnam</option><option value="Virgin Islands (Brit)">Virgin Islands (Brit)</option><option value="Virgin Islands (USA)">Virgin Islands (USA)</option><option value="Wake Island">Wake Island</option><option value="Wallis &amp; Futana Is">Wallis &amp; Futana Is</option><option value="Yemen">Yemen</option><option value="Zaire">Zaire</option><option value="Zambia">Zambia</option><option value="Zimbabwe">Zimbabwe</option></select>     
+                    </div>
                 </div>
                 
                 <div class="cloneable">
@@ -937,7 +1051,10 @@ function registration_form() {
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                         <input type="text" name="director_3_address_2" placeholder="City, State" data-selector="director" data-director-field="address_2" data-director-id="3" class="director-address-2 person-input custom-input-class">                
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                        <input type="text" name="director_3_address_3" placeholder="Country" data-selector="director" data-director-field="address_3" data-director-id="3" class="director-address-3 person-input custom-input-class">                                                                                 
+                        <!-- <input type="text" name="director_3_address_3" placeholder="Country" data-selector="director" data-director-field="address_3" data-director-id="3" class="director-address-3 person-input custom-input-class">                                                                                  -->
+                        <div class="custom-input-class-select-container">            
+                            <select name="director_3_address_3" placeholder="Country" data-selector="director" data-director-field="address_3" data-director-id="3" class="director-address-3 person-input custom-input-class"><option value="Afganistan">Afghanistan</option><option value="Albania">Albania</option><option value="Algeria">Algeria</option><option value="American Samoa">American Samoa</option><option value="Andorra">Andorra</option><option value="Angola">Angola</option><option value="Anguilla">Anguilla</option><option value="Antigua &amp; Barbuda">Antigua &amp; Barbuda</option><option value="Argentina">Argentina</option><option value="Armenia">Armenia</option><option value="Aruba">Aruba</option><option value="Australia">Australia</option><option value="Austria">Austria</option><option value="Azerbaijan">Azerbaijan</option><option value="Bahamas">Bahamas</option><option value="Bahrain">Bahrain</option><option value="Bangladesh">Bangladesh</option><option value="Barbados">Barbados</option><option value="Belarus">Belarus</option><option value="Belgium">Belgium</option><option value="Belize">Belize</option><option value="Benin">Benin</option><option value="Bermuda">Bermuda</option><option value="Bhutan">Bhutan</option><option value="Bolivia">Bolivia</option><option value="Bonaire">Bonaire</option><option value="Bosnia &amp; Herzegovina">Bosnia &amp; Herzegovina</option><option value="Botswana">Botswana</option><option value="Brazil">Brazil</option><option value="British Indian Ocean Ter">British Indian Ocean Ter</option><option value="Brunei">Brunei</option><option value="Bulgaria">Bulgaria</option><option value="Burkina Faso">Burkina Faso</option><option value="Burundi">Burundi</option><option value="Cambodia">Cambodia</option><option value="Cameroon">Cameroon</option><option value="Canada">Canada</option><option value="Canary Islands">Canary Islands</option><option value="Cape Verde">Cape Verde</option><option value="Cayman Islands">Cayman Islands</option><option value="Central African Republic">Central African Republic</option><option value="Chad">Chad</option><option value="Channel Islands">Channel Islands</option><option value="Chile">Chile</option><option value="China">China</option><option value="Christmas Island">Christmas Island</option><option value="Cocos Island">Cocos Island</option><option value="Colombia">Colombia</option><option value="Comoros">Comoros</option><option value="Congo">Congo</option><option value="Cook Islands">Cook Islands</option><option value="Costa Rica">Costa Rica</option><option value="Cote DIvoire">Cote D`Ivoire</option><option value="Croatia">Croatia</option><option value="Cuba">Cuba</option><option value="Curaco">Curacao</option><option value="Cyprus">Cyprus</option><option value="Czech Republic">Czech Republic</option><option value="Denmark">Denmark</option><option value="Djibouti">Djibouti</option><option value="Dominica">Dominica</option><option value="Dominican Republic">Dominican Republic</option><option value="East Timor">East Timor</option><option value="Ecuador">Ecuador</option><option value="Egypt">Egypt</option><option value="El Salvador">El Salvador</option><option value="Equatorial Guinea">Equatorial Guinea</option><option value="Eritrea">Eritrea</option><option value="Estonia">Estonia</option><option value="Ethiopia">Ethiopia</option><option value="Falkland Islands">Falkland Islands</option><option value="Faroe Islands">Faroe Islands</option><option value="Fiji">Fiji</option><option value="Finland">Finland</option><option value="France">France</option><option value="French Guiana">French Guiana</option><option value="French Polynesia">French Polynesia</option><option value="French Southern Ter">French Southern Ter</option><option value="Gabon">Gabon</option><option value="Gambia">Gambia</option><option value="Georgia">Georgia</option><option value="Germany">Germany</option><option value="Ghana">Ghana</option><option value="Gibraltar">Gibraltar</option><option value="Great Britain">Great Britain</option><option value="Greece">Greece</option><option value="Greenland">Greenland</option><option value="Grenada">Grenada</option><option value="Guadeloupe">Guadeloupe</option><option value="Guam">Guam</option><option value="Guatemala">Guatemala</option><option value="Guinea">Guinea</option><option value="Guyana">Guyana</option><option value="Haiti">Haiti</option><option value="Hawaii">Hawaii</option><option value="Honduras">Honduras</option><option value="Hong Kong">Hong Kong</option><option value="Hungary">Hungary</option><option value="Iceland">Iceland</option><option value="India">India</option><option value="Indonesia">Indonesia</option><option value="Iran">Iran</option><option value="Iraq">Iraq</option><option value="Ireland">Ireland</option><option value="Isle of Man">Isle of Man</option><option value="Israel">Israel</option><option value="Italy">Italy</option><option value="Jamaica">Jamaica</option><option value="Japan">Japan</option><option value="Jordan">Jordan</option><option value="Kazakhstan">Kazakhstan</option><option value="Kenya">Kenya</option><option value="Kiribati">Kiribati</option><option value="Korea North">Korea North</option><option value="Korea Sout">Korea South</option><option value="Kuwait">Kuwait</option><option value="Kyrgyzstan">Kyrgyzstan</option><option value="Laos">Laos</option><option value="Latvia">Latvia</option><option value="Lebanon">Lebanon</option><option value="Lesotho">Lesotho</option><option value="Liberia">Liberia</option><option value="Libya">Libya</option><option value="Liechtenstein">Liechtenstein</option><option value="Lithuania">Lithuania</option><option value="Luxembourg">Luxembourg</option><option value="Macau">Macau</option><option value="Macedonia">Macedonia</option><option value="Madagascar">Madagascar</option><option value="Malaysia">Malaysia</option><option value="Malawi">Malawi</option><option value="Maldives">Maldives</option><option value="Mali">Mali</option><option value="Malta">Malta</option><option value="Marshall Islands">Marshall Islands</option><option value="Martinique">Martinique</option><option value="Mauritania">Mauritania</option><option value="Mauritius">Mauritius</option><option value="Mayotte">Mayotte</option><option value="Mexico">Mexico</option><option value="Midway Islands">Midway Islands</option><option value="Moldova">Moldova</option><option value="Monaco">Monaco</option><option value="Mongolia">Mongolia</option><option value="Montserrat">Montserrat</option><option value="Morocco">Morocco</option><option value="Mozambique">Mozambique</option><option value="Myanmar">Myanmar</option><option value="Nambia">Nambia</option><option value="Nauru">Nauru</option><option value="Nepal">Nepal</option><option value="Netherland Antilles">Netherland Antilles</option><option value="Netherlands">Netherlands (Holland, Europe)</option><option value="Nevis">Nevis</option><option value="New Caledonia">New Caledonia</option><option value="New Zealand">New Zealand</option><option value="Nicaragua">Nicaragua</option><option value="Niger">Niger</option><option value="Nigeria">Nigeria</option><option value="Niue">Niue</option><option value="Norfolk Island">Norfolk Island</option><option value="Norway">Norway</option><option value="Oman">Oman</option><option value="Pakistan">Pakistan</option><option value="Palau Island">Palau Island</option><option value="Palestine">Palestine</option><option value="Panama">Panama</option><option value="Papua New Guinea">Papua New Guinea</option><option value="Paraguay">Paraguay</option><option value="Peru">Peru</option><option value="Phillipines">Philippines</option><option value="Pitcairn Island">Pitcairn Island</option><option value="Poland">Poland</option><option value="Portugal">Portugal</option><option value="Puerto Rico">Puerto Rico</option><option value="Qatar">Qatar</option><option value="Republic of Montenegro">Republic of Montenegro</option><option value="Republic of Serbia">Republic of Serbia</option><option value="Reunion">Reunion</option><option value="Romania">Romania</option><option value="Russia">Russia</option><option value="Rwanda">Rwanda</option><option value="St Barthelemy">St Barthelemy</option><option value="St Eustatius">St Eustatius</option><option value="St Helena">St Helena</option><option value="St Kitts-Nevis">St Kitts-Nevis</option><option value="St Lucia">St Lucia</option><option value="St Maarten">St Maarten</option><option value="St Pierre &amp; Miquelon">St Pierre &amp; Miquelon</option><option value="St Vincent &amp; Grenadines">St Vincent &amp; Grenadines</option><option value="Saipan">Saipan</option><option value="Samoa">Samoa</option><option value="Samoa American">Samoa American</option><option value="San Marino">San Marino</option><option value="Sao Tome &amp; Principe">Sao Tome &amp; Principe</option><option value="Saudi Arabia">Saudi Arabia</option><option value="Senegal">Senegal</option><option value="Serbia">Serbia</option><option value="Seychelles">Seychelles</option><option value="Sierra Leone">Sierra Leone</option><option value="Singapore">Singapore</option><option value="Slovakia">Slovakia</option><option value="Slovenia">Slovenia</option><option value="Solomon Islands">Solomon Islands</option><option value="Somalia">Somalia</option><option value="South Africa">South Africa</option><option value="Spain">Spain</option><option value="Sri Lanka">Sri Lanka</option><option value="Sudan">Sudan</option><option value="Suriname">Suriname</option><option value="Swaziland">Swaziland</option><option value="Sweden">Sweden</option><option value="Switzerland">Switzerland</option><option value="Syria">Syria</option><option value="Tahiti">Tahiti</option><option value="Taiwan">Taiwan</option><option value="Tajikistan">Tajikistan</option><option value="Tanzania">Tanzania</option><option value="Thailand">Thailand</option><option value="Togo">Togo</option><option value="Tokelau">Tokelau</option><option value="Tonga">Tonga</option><option value="Trinidad &amp; Tobago">Trinidad &amp; Tobago</option><option value="Tunisia">Tunisia</option><option value="Turkey">Turkey</option><option value="Turkmenistan">Turkmenistan</option><option value="Turks &amp; Caicos Is">Turks &amp; Caicos Is</option><option value="Tuvalu">Tuvalu</option><option value="Uganda">Uganda</option><option value="Ukraine">Ukraine</option><option value="United Arab Erimates">United Arab Emirates</option><option value="United Kingdom">United Kingdom</option><option value="United States of America">United States of America</option><option value="Uraguay">Uruguay</option><option value="Uzbekistan">Uzbekistan</option><option value="Vanuatu">Vanuatu</option><option value="Vatican City State">Vatican City State</option><option value="Venezuela">Venezuela</option><option value="Vietnam">Vietnam</option><option value="Virgin Islands (Brit)">Virgin Islands (Brit)</option><option value="Virgin Islands (USA)">Virgin Islands (USA)</option><option value="Wake Island">Wake Island</option><option value="Wallis &amp; Futana Is">Wallis &amp; Futana Is</option><option value="Yemen">Yemen</option><option value="Zaire">Zaire</option><option value="Zambia">Zambia</option><option value="Zimbabwe">Zimbabwe</option></select>     
+                        </div>
                     </div>
                 </div>
                 <div class="pasteclone"></div>
@@ -996,7 +1113,10 @@ function registration_form() {
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                     <input type="text" name="secretary_1_address_2" placeholder="City, State" data-selector="secretary" data-secretary-field="address_2" data-secretary-id="1" class="secretary-address-2 person-input custom-input-class">                
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                    <input type="text" name="secretary_1_address_3" placeholder="Country" data-selector="secretary" data-secretary-field="address_3" data-secretary-id="1" class="secretary-address-3 person-input custom-input-class">                               
+                    <!-- <input type="text" name="secretary_1_address_3" placeholder="Country" data-selector="secretary" data-secretary-field="address_3" data-secretary-id="1" class="secretary-address-3 person-input custom-input-class">                                -->
+                    <div class="custom-input-class-select-container">            
+                        <select name="secretary_1_address_3" placeholder="Country" data-selector="secretary" data-secretary-field="address_3" data-secretary-id="1" class="secretary-address-3 person-input custom-input-class"><option value="Afganistan">Afghanistan</option><option value="Albania">Albania</option><option value="Algeria">Algeria</option><option value="American Samoa">American Samoa</option><option value="Andorra">Andorra</option><option value="Angola">Angola</option><option value="Anguilla">Anguilla</option><option value="Antigua &amp; Barbuda">Antigua &amp; Barbuda</option><option value="Argentina">Argentina</option><option value="Armenia">Armenia</option><option value="Aruba">Aruba</option><option value="Australia">Australia</option><option value="Austria">Austria</option><option value="Azerbaijan">Azerbaijan</option><option value="Bahamas">Bahamas</option><option value="Bahrain">Bahrain</option><option value="Bangladesh">Bangladesh</option><option value="Barbados">Barbados</option><option value="Belarus">Belarus</option><option value="Belgium">Belgium</option><option value="Belize">Belize</option><option value="Benin">Benin</option><option value="Bermuda">Bermuda</option><option value="Bhutan">Bhutan</option><option value="Bolivia">Bolivia</option><option value="Bonaire">Bonaire</option><option value="Bosnia &amp; Herzegovina">Bosnia &amp; Herzegovina</option><option value="Botswana">Botswana</option><option value="Brazil">Brazil</option><option value="British Indian Ocean Ter">British Indian Ocean Ter</option><option value="Brunei">Brunei</option><option value="Bulgaria">Bulgaria</option><option value="Burkina Faso">Burkina Faso</option><option value="Burundi">Burundi</option><option value="Cambodia">Cambodia</option><option value="Cameroon">Cameroon</option><option value="Canada">Canada</option><option value="Canary Islands">Canary Islands</option><option value="Cape Verde">Cape Verde</option><option value="Cayman Islands">Cayman Islands</option><option value="Central African Republic">Central African Republic</option><option value="Chad">Chad</option><option value="Channel Islands">Channel Islands</option><option value="Chile">Chile</option><option value="China">China</option><option value="Christmas Island">Christmas Island</option><option value="Cocos Island">Cocos Island</option><option value="Colombia">Colombia</option><option value="Comoros">Comoros</option><option value="Congo">Congo</option><option value="Cook Islands">Cook Islands</option><option value="Costa Rica">Costa Rica</option><option value="Cote DIvoire">Cote D`Ivoire</option><option value="Croatia">Croatia</option><option value="Cuba">Cuba</option><option value="Curaco">Curacao</option><option value="Cyprus">Cyprus</option><option value="Czech Republic">Czech Republic</option><option value="Denmark">Denmark</option><option value="Djibouti">Djibouti</option><option value="Dominica">Dominica</option><option value="Dominican Republic">Dominican Republic</option><option value="East Timor">East Timor</option><option value="Ecuador">Ecuador</option><option value="Egypt">Egypt</option><option value="El Salvador">El Salvador</option><option value="Equatorial Guinea">Equatorial Guinea</option><option value="Eritrea">Eritrea</option><option value="Estonia">Estonia</option><option value="Ethiopia">Ethiopia</option><option value="Falkland Islands">Falkland Islands</option><option value="Faroe Islands">Faroe Islands</option><option value="Fiji">Fiji</option><option value="Finland">Finland</option><option value="France">France</option><option value="French Guiana">French Guiana</option><option value="French Polynesia">French Polynesia</option><option value="French Southern Ter">French Southern Ter</option><option value="Gabon">Gabon</option><option value="Gambia">Gambia</option><option value="Georgia">Georgia</option><option value="Germany">Germany</option><option value="Ghana">Ghana</option><option value="Gibraltar">Gibraltar</option><option value="Great Britain">Great Britain</option><option value="Greece">Greece</option><option value="Greenland">Greenland</option><option value="Grenada">Grenada</option><option value="Guadeloupe">Guadeloupe</option><option value="Guam">Guam</option><option value="Guatemala">Guatemala</option><option value="Guinea">Guinea</option><option value="Guyana">Guyana</option><option value="Haiti">Haiti</option><option value="Hawaii">Hawaii</option><option value="Honduras">Honduras</option><option value="Hong Kong">Hong Kong</option><option value="Hungary">Hungary</option><option value="Iceland">Iceland</option><option value="India">India</option><option value="Indonesia">Indonesia</option><option value="Iran">Iran</option><option value="Iraq">Iraq</option><option value="Ireland">Ireland</option><option value="Isle of Man">Isle of Man</option><option value="Israel">Israel</option><option value="Italy">Italy</option><option value="Jamaica">Jamaica</option><option value="Japan">Japan</option><option value="Jordan">Jordan</option><option value="Kazakhstan">Kazakhstan</option><option value="Kenya">Kenya</option><option value="Kiribati">Kiribati</option><option value="Korea North">Korea North</option><option value="Korea Sout">Korea South</option><option value="Kuwait">Kuwait</option><option value="Kyrgyzstan">Kyrgyzstan</option><option value="Laos">Laos</option><option value="Latvia">Latvia</option><option value="Lebanon">Lebanon</option><option value="Lesotho">Lesotho</option><option value="Liberia">Liberia</option><option value="Libya">Libya</option><option value="Liechtenstein">Liechtenstein</option><option value="Lithuania">Lithuania</option><option value="Luxembourg">Luxembourg</option><option value="Macau">Macau</option><option value="Macedonia">Macedonia</option><option value="Madagascar">Madagascar</option><option value="Malaysia">Malaysia</option><option value="Malawi">Malawi</option><option value="Maldives">Maldives</option><option value="Mali">Mali</option><option value="Malta">Malta</option><option value="Marshall Islands">Marshall Islands</option><option value="Martinique">Martinique</option><option value="Mauritania">Mauritania</option><option value="Mauritius">Mauritius</option><option value="Mayotte">Mayotte</option><option value="Mexico">Mexico</option><option value="Midway Islands">Midway Islands</option><option value="Moldova">Moldova</option><option value="Monaco">Monaco</option><option value="Mongolia">Mongolia</option><option value="Montserrat">Montserrat</option><option value="Morocco">Morocco</option><option value="Mozambique">Mozambique</option><option value="Myanmar">Myanmar</option><option value="Nambia">Nambia</option><option value="Nauru">Nauru</option><option value="Nepal">Nepal</option><option value="Netherland Antilles">Netherland Antilles</option><option value="Netherlands">Netherlands (Holland, Europe)</option><option value="Nevis">Nevis</option><option value="New Caledonia">New Caledonia</option><option value="New Zealand">New Zealand</option><option value="Nicaragua">Nicaragua</option><option value="Niger">Niger</option><option value="Nigeria">Nigeria</option><option value="Niue">Niue</option><option value="Norfolk Island">Norfolk Island</option><option value="Norway">Norway</option><option value="Oman">Oman</option><option value="Pakistan">Pakistan</option><option value="Palau Island">Palau Island</option><option value="Palestine">Palestine</option><option value="Panama">Panama</option><option value="Papua New Guinea">Papua New Guinea</option><option value="Paraguay">Paraguay</option><option value="Peru">Peru</option><option value="Phillipines">Philippines</option><option value="Pitcairn Island">Pitcairn Island</option><option value="Poland">Poland</option><option value="Portugal">Portugal</option><option value="Puerto Rico">Puerto Rico</option><option value="Qatar">Qatar</option><option value="Republic of Montenegro">Republic of Montenegro</option><option value="Republic of Serbia">Republic of Serbia</option><option value="Reunion">Reunion</option><option value="Romania">Romania</option><option value="Russia">Russia</option><option value="Rwanda">Rwanda</option><option value="St Barthelemy">St Barthelemy</option><option value="St Eustatius">St Eustatius</option><option value="St Helena">St Helena</option><option value="St Kitts-Nevis">St Kitts-Nevis</option><option value="St Lucia">St Lucia</option><option value="St Maarten">St Maarten</option><option value="St Pierre &amp; Miquelon">St Pierre &amp; Miquelon</option><option value="St Vincent &amp; Grenadines">St Vincent &amp; Grenadines</option><option value="Saipan">Saipan</option><option value="Samoa">Samoa</option><option value="Samoa American">Samoa American</option><option value="San Marino">San Marino</option><option value="Sao Tome &amp; Principe">Sao Tome &amp; Principe</option><option value="Saudi Arabia">Saudi Arabia</option><option value="Senegal">Senegal</option><option value="Serbia">Serbia</option><option value="Seychelles">Seychelles</option><option value="Sierra Leone">Sierra Leone</option><option value="Singapore">Singapore</option><option value="Slovakia">Slovakia</option><option value="Slovenia">Slovenia</option><option value="Solomon Islands">Solomon Islands</option><option value="Somalia">Somalia</option><option value="South Africa">South Africa</option><option value="Spain">Spain</option><option value="Sri Lanka">Sri Lanka</option><option value="Sudan">Sudan</option><option value="Suriname">Suriname</option><option value="Swaziland">Swaziland</option><option value="Sweden">Sweden</option><option value="Switzerland">Switzerland</option><option value="Syria">Syria</option><option value="Tahiti">Tahiti</option><option value="Taiwan">Taiwan</option><option value="Tajikistan">Tajikistan</option><option value="Tanzania">Tanzania</option><option value="Thailand">Thailand</option><option value="Togo">Togo</option><option value="Tokelau">Tokelau</option><option value="Tonga">Tonga</option><option value="Trinidad &amp; Tobago">Trinidad &amp; Tobago</option><option value="Tunisia">Tunisia</option><option value="Turkey">Turkey</option><option value="Turkmenistan">Turkmenistan</option><option value="Turks &amp; Caicos Is">Turks &amp; Caicos Is</option><option value="Tuvalu">Tuvalu</option><option value="Uganda">Uganda</option><option value="Ukraine">Ukraine</option><option value="United Arab Erimates">United Arab Emirates</option><option value="United Kingdom">United Kingdom</option><option value="United States of America">United States of America</option><option value="Uraguay">Uruguay</option><option value="Uzbekistan">Uzbekistan</option><option value="Vanuatu">Vanuatu</option><option value="Vatican City State">Vatican City State</option><option value="Venezuela">Venezuela</option><option value="Vietnam">Vietnam</option><option value="Virgin Islands (Brit)">Virgin Islands (Brit)</option><option value="Virgin Islands (USA)">Virgin Islands (USA)</option><option value="Wake Island">Wake Island</option><option value="Wallis &amp; Futana Is">Wallis &amp; Futana Is</option><option value="Yemen">Yemen</option><option value="Zaire">Zaire</option><option value="Zambia">Zambia</option><option value="Zimbabwe">Zimbabwe</option></select>     
+                    </div>
                 </div>
             </div>   
         {{/if}}
@@ -1009,12 +1129,16 @@ function registration_form() {
             
             {{#services}}
                 <div class="field-container">
+                    {{#ifCond name "==" "Registered office annual fee (compulsory)"}}
+
+                    {{else}}
                     <h4 class="pull-left">{{name}}</h4>
                     <h4 class="pull-right"></h4>
                     <div class="clear"></div>
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+                    {{/ifCond}}
                     {{#ifCond name "==" "Bank accounts"}}
-                        <p>A bank account may be opened in the following jurisdictions for your company (multiple jurisdictions may be selected)</p>                    
+                        <p>A bank account may be opened in the following jurisdictions for your company (multiple jurisdictions may be selected).</p>                    
                     {{/ifCond}}
                     {{#ifCond name "==" "Credit/debit cards"}}
                         <p>Credit or debit cards are available in the following jurisdictions for your company.  Note that a bank account must be opened at the same bank before credit or debit cards may be issued:</p>                    
@@ -1031,54 +1155,62 @@ function registration_form() {
                             <option value="{{pivot.id}}" data-price="{{pivot.price}}">{{name}}</option>
                             {{/countries}}
                         </select> -->
-                        <div class="header">
-                            <div class="col-1-header">
-                                {{#ifCond name "==" "Credit/debit cards"}}
-                                <h6 for="service_country">Bank location</h6>
-                                {{else}}
-                                <h6 for="service_country">Location</h6>
-                                {{/ifCond}}
-                            </div>
-                            <div class="col-2-header">
-                                {{#ifCond name "==" "Credit/debit cards"}}
-                                <h6 for="service_country">Charge per card</h6>
-                                {{else}}
-                                <h6 for="service_country">Price</h6>
-                                {{/ifCond}}
-                            </div>
-                            <div class="col-3-header">
-                                {{#ifCond name "==" "Credit/debit cards"}}
-                                <h6 for="service_country">No. of cards to issue</h6>
-                                {{else}}
-                                <h6 for="service_country">Open account</h6>
-                                {{/ifCond}}
-                            </div>
-                        </div>
-                        <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
-                        {{#countries}}
-                            <div class="each-country">
-                                <div class="col-1">
-                                    <div id="service-country" class="service-country"><p>{{name}}</p></div>
-                                    <input type="hidden" name="service_{{../id}}_country_{{counter @index}}" class="service-{{../id}}-country-{{id}} service-{{../id}}-country" value="{{name}}" disabled="disabled">
+                        {{#ifCond name "==" "Registered office annual fee (compulsory)"}}
+                            {{#countries}}                           
+                            <input type="hidden" name="service_{{../id}}_country_{{counter @index}}" class="service-{{../id}}-country-{{id}} service-{{../id}}-country" value="{{name}}">
+                            <input type="hidden" name="service_{{../id}}_price_{{counter @index}}" class="service-{{../id}}-country-{{id}} service-{{../id}}-price" value="{{pivot.price}}">
+                            <input type="hidden" name="service_{{../id}}_country_{{counter @index}}_id" id="service_{{../id}}_country_{{counter @index}}_id" data-service-name="{{../name}}" data-service-id="{{../id}}" data-country-id="{{id}}" value="{{pivot.id}}" class="service-{{../id}}-country-id">
+                            {{/countries}}
+                        {{else}}
+                            <div class="header">
+                                <div class="col-1-header">
+                                    {{#ifCond name "==" "Credit/debit cards"}}
+                                    <h6 for="service_country">Bank location</h6>
+                                    {{else}}
+                                    <h6 for="service_country">Location</h6>
+                                    {{/ifCond}}
                                 </div>
-                                <div class="col-2">
-                                    <div id="service-price" class="service-price price"><p>{{pivot.price}}</p></div>
-                                    <input type="hidden" name="service_{{../id}}_price_{{counter @index}}" class="service-{{../id}}-country-{{id}} service-{{../id}}-price" value="{{pivot.price}}" disabled="disabled">
-                                </div>               
-                                {{#ifCond ../name "==" "Credit/debit cards"}}           
-                                <div class="col-3">
-                                    <input type="text" name="service_{{../id}}_country_{{counter @index}}_no_of_card" class="credit_card_in_country_{{id}} service-{{../id}}-credit-card-count credit-card-count custom-input-class-2" disabled="disabled">
-                                    <input type="hidden" name="service_{{../id}}_country_{{counter @index}}_id" value="{{pivot.id}}" class="service-{{../id}}-country-id">                
-                                </div>        
-                                {{else}}
-                                <div class="col-3">
-                                    <input type="checkbox" name="service_{{../id}}_country_{{counter @index}}_id" data-service-name="{{../name}}" data-service-id="{{../id}}" data-country-id="{{id}}" value="{{pivot.id}}" class="service-js-switch service-{{../id}}-country-id">
+                                <div class="col-2-header">
+                                    {{#ifCond name "==" "Credit/debit cards"}}
+                                    <h6 for="service_country">Charge per card</h6>
+                                    {{else}}
+                                    <h6 for="service_country">Price</h6>
+                                    {{/ifCond}}
                                 </div>
-                                {{/ifCond}}
-                                
+                                <div class="col-3-header">
+                                    {{#ifCond name "==" "Credit/debit cards"}}
+                                    <h6 for="service_country">No. of cards to issue</h6>
+                                    {{else}}
+                                    <h6 for="service_country">Open account</h6>
+                                    {{/ifCond}}
+                                </div>
                             </div>
-                            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                        {{/countries}}
+                            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+                            {{#countries}}
+                                <div class="each-country">
+                                    <div class="col-1">
+                                        <div id="service-country" class="service-country"><p>{{name}}</p></div>
+                                        <input type="hidden" name="service_{{../id}}_country_{{counter @index}}" class="service-{{../id}}-country-{{id}} service-{{../id}}-country" value="{{name}}" disabled="disabled">
+                                    </div>
+                                    <div class="col-2">
+                                        <div id="service-price" class="service-price price"><p>${{pivot.price}}</p></div>
+                                        <input type="hidden" name="service_{{../id}}_price_{{counter @index}}" class="service-{{../id}}-country-{{id}} service-{{../id}}-price" value="{{pivot.price}}" disabled="disabled">
+                                    </div>               
+                                    {{#ifCond ../name "==" "Credit/debit cards"}}           
+                                    <div class="col-3">
+                                        <input type="text" name="service_{{../id}}_country_{{counter @index}}_no_of_card" id="service_{{../id}}_country_{{counter @index}}_no_of_card" class="credit_card_in_country_{{id}} service-{{../id}}-credit-card-count credit-card-count custom-input-class-2" disabled="disabled">
+                                        <input type="hidden" name="service_{{../id}}_country_{{counter @index}}_id" value="{{pivot.id}}" class="service-{{../id}}-country-id">                
+                                    </div>        
+                                    {{else}}
+                                    <div class="col-3">
+                                        <input type="checkbox" name="service_{{../id}}_country_{{counter @index}}_id" id="service_{{../id}}_country_{{counter @index}}_id" data-service-name="{{../name}}" data-service-id="{{../id}}" data-country-id="{{id}}" value="{{pivot.id}}" class="service-js-switch service-{{../id}}-country-id">
+                                    </div>
+                                    {{/ifCond}}
+                                    
+                                </div>
+                                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+                            {{/countries}}
+                        {{/ifCond}}
                     </div>
                     <div class="clear"></div>
                 </div>    
@@ -1109,144 +1241,206 @@ function registration_form() {
                 {{/informationservices}}
             </div>            
         {{/if}}
-    </script>     
-
-    <script id="summarydirector-template" type="text/x-handlebars-template">                
-        {{#if directors.length}}            
-            <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>            
-            <h4>Directors:</h4>
-            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-            {{#directors}}
-                {{#if value}}     
-                    {{#if @first}}<input type="hidden" name="director_count" value="{{../directors.length}}">{{/if}}
-                    <div class="field-container half-field-container">
-                        <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>   
-
-                        <div class="input-container pull-left">                
-                            <label class="pull-left" for="summary_{{counter @index}}_{{name}}">{{value}}:</label>
-                        </div>     
-                        <div class="pull-right">
-                            <input type="hidden" name="director_{{counter @index}}_name" id="summary_{{name}}" value="{{value}}">                            
-
-                            <input type="text" name="director_{{counter @index}}_address" id="summary_{{address_name}}" value="{{address_value}}" class="custom-input-class one-row">
-                            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                            <input type="text" name="director_{{counter @index}}_address_2" id="summary_{{address_2_name}}" value="{{address_2_value}}" class="custom-input-class one-row">
-                            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                            <input type="text" name="director_{{counter @index}}_address_3" id="summary_{{address_3_name}}" value="{{address_3_value}}" class="custom-input-class one-row">
-                            <button class="custom-submit-class custom-submit-class-2">Upload Passport</button>
-                            <button class="custom-submit-class custom-submit-class-2">Upload Utility Bill</button>
-                        </div>      
-                        <div class="clear"></div>                    
-                    </div>
-                {{/if}}            
-            {{/directors}}
-        {{else}}
-            <div class="summary-director-price-container"><p class="pull-left">Nominee directors annual fee</p><div id="summary-director-price" class="price summary-price pull-right"><p>$0</p></div></div>
-            <div class="clear"></div>
-        {{/if}}            
     </script>    
 
     <script id="summaryshareholder-template" type="text/x-handlebars-template">
         {{#shareholders}}
             {{#if value}}
                 {{#if @first}}
-                <h4>Shareholders:</h4>
-                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                <input type="hidden" name="shareholder_count" value="{{../shareholders.length}}">
+                    <h4>Shareholders:</h4>                    
+                    <input type="hidden" name="shareholder_count" value="{{../shareholders.length}}">
                 {{/if}}
-                <div class="field-container half-field-container">
-                    <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+                <div class="field-container">
+                    <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
                     
-                    <div class="input-container pull-left">                
-                        <label class="pull-left" for="summary_{{counter @index}}_{{name}}">{{value}}:</label>
-                    </div>
-                    <div class="pull-right">
-                        <input type="hidden" name="shareholder_{{counter @index}}_name" id="summary_{{name}}" value="{{value}}">                       
+                    <div class="input-container col-1 pull-left">
+                        <div class="person-info">                
+                            <p class="shareholder_{{counter @index}}_name">{{value}}</label>
+                            <p class="shareholder_{{counter @index}}_address">{{address_value}}</p>
+                            <p class="shareholder_{{counter @index}}_address_2">{{address_2_value}}</p>
+                            <p class="shareholder_{{counter @index}}_address_3">{{address_3_value}}</p>
+                        </div>
+                        <div class="edit-form">
+                            <input type="text" name="shareholder_{{counter @index}}_name" id="summary_{{name}}" value="{{value}}" class="name-edit-input custom-input-class one-row">
+                            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+                            <input type="text" name="shareholder_{{counter @index}}_address" id="summary_{{address_name}}" value="{{address_value}}" class="address-edit-input custom-input-class one-row">
+                            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+                            <input type="text" name="shareholder_{{counter @index}}_address_2" id="summary_{{address_2_name}}" value="{{address_2_value}}" class="address-2-edit-input custom-input-class one-row">
+                            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+                            <!-- <input type="text" name="shareholder_{{counter @index}}_address_3" id="summary_{{address_3_name}}" value="{{address_3_value}}" class="address-3-edit-input custom-input-class one-row"> -->
+                            <div class="custom-input-class-select-container">            
+                                <select name="shareholder_{{counter @index}}_address_3" id="summary_{{address_3_name}}" value="{{address_3_value}}" class="address-3-edit-input custom-input-class one-row"><option value="Afganistan">Afghanistan</option><option value="Albania">Albania</option><option value="Algeria">Algeria</option><option value="American Samoa">American Samoa</option><option value="Andorra">Andorra</option><option value="Angola">Angola</option><option value="Anguilla">Anguilla</option><option value="Antigua &amp; Barbuda">Antigua &amp; Barbuda</option><option value="Argentina">Argentina</option><option value="Armenia">Armenia</option><option value="Aruba">Aruba</option><option value="Australia">Australia</option><option value="Austria">Austria</option><option value="Azerbaijan">Azerbaijan</option><option value="Bahamas">Bahamas</option><option value="Bahrain">Bahrain</option><option value="Bangladesh">Bangladesh</option><option value="Barbados">Barbados</option><option value="Belarus">Belarus</option><option value="Belgium">Belgium</option><option value="Belize">Belize</option><option value="Benin">Benin</option><option value="Bermuda">Bermuda</option><option value="Bhutan">Bhutan</option><option value="Bolivia">Bolivia</option><option value="Bonaire">Bonaire</option><option value="Bosnia &amp; Herzegovina">Bosnia &amp; Herzegovina</option><option value="Botswana">Botswana</option><option value="Brazil">Brazil</option><option value="British Indian Ocean Ter">British Indian Ocean Ter</option><option value="Brunei">Brunei</option><option value="Bulgaria">Bulgaria</option><option value="Burkina Faso">Burkina Faso</option><option value="Burundi">Burundi</option><option value="Cambodia">Cambodia</option><option value="Cameroon">Cameroon</option><option value="Canada">Canada</option><option value="Canary Islands">Canary Islands</option><option value="Cape Verde">Cape Verde</option><option value="Cayman Islands">Cayman Islands</option><option value="Central African Republic">Central African Republic</option><option value="Chad">Chad</option><option value="Channel Islands">Channel Islands</option><option value="Chile">Chile</option><option value="China">China</option><option value="Christmas Island">Christmas Island</option><option value="Cocos Island">Cocos Island</option><option value="Colombia">Colombia</option><option value="Comoros">Comoros</option><option value="Congo">Congo</option><option value="Cook Islands">Cook Islands</option><option value="Costa Rica">Costa Rica</option><option value="Cote DIvoire">Cote D`Ivoire</option><option value="Croatia">Croatia</option><option value="Cuba">Cuba</option><option value="Curaco">Curacao</option><option value="Cyprus">Cyprus</option><option value="Czech Republic">Czech Republic</option><option value="Denmark">Denmark</option><option value="Djibouti">Djibouti</option><option value="Dominica">Dominica</option><option value="Dominican Republic">Dominican Republic</option><option value="East Timor">East Timor</option><option value="Ecuador">Ecuador</option><option value="Egypt">Egypt</option><option value="El Salvador">El Salvador</option><option value="Equatorial Guinea">Equatorial Guinea</option><option value="Eritrea">Eritrea</option><option value="Estonia">Estonia</option><option value="Ethiopia">Ethiopia</option><option value="Falkland Islands">Falkland Islands</option><option value="Faroe Islands">Faroe Islands</option><option value="Fiji">Fiji</option><option value="Finland">Finland</option><option value="France">France</option><option value="French Guiana">French Guiana</option><option value="French Polynesia">French Polynesia</option><option value="French Southern Ter">French Southern Ter</option><option value="Gabon">Gabon</option><option value="Gambia">Gambia</option><option value="Georgia">Georgia</option><option value="Germany">Germany</option><option value="Ghana">Ghana</option><option value="Gibraltar">Gibraltar</option><option value="Great Britain">Great Britain</option><option value="Greece">Greece</option><option value="Greenland">Greenland</option><option value="Grenada">Grenada</option><option value="Guadeloupe">Guadeloupe</option><option value="Guam">Guam</option><option value="Guatemala">Guatemala</option><option value="Guinea">Guinea</option><option value="Guyana">Guyana</option><option value="Haiti">Haiti</option><option value="Hawaii">Hawaii</option><option value="Honduras">Honduras</option><option value="Hong Kong">Hong Kong</option><option value="Hungary">Hungary</option><option value="Iceland">Iceland</option><option value="India">India</option><option value="Indonesia">Indonesia</option><option value="Iran">Iran</option><option value="Iraq">Iraq</option><option value="Ireland">Ireland</option><option value="Isle of Man">Isle of Man</option><option value="Israel">Israel</option><option value="Italy">Italy</option><option value="Jamaica">Jamaica</option><option value="Japan">Japan</option><option value="Jordan">Jordan</option><option value="Kazakhstan">Kazakhstan</option><option value="Kenya">Kenya</option><option value="Kiribati">Kiribati</option><option value="Korea North">Korea North</option><option value="Korea Sout">Korea South</option><option value="Kuwait">Kuwait</option><option value="Kyrgyzstan">Kyrgyzstan</option><option value="Laos">Laos</option><option value="Latvia">Latvia</option><option value="Lebanon">Lebanon</option><option value="Lesotho">Lesotho</option><option value="Liberia">Liberia</option><option value="Libya">Libya</option><option value="Liechtenstein">Liechtenstein</option><option value="Lithuania">Lithuania</option><option value="Luxembourg">Luxembourg</option><option value="Macau">Macau</option><option value="Macedonia">Macedonia</option><option value="Madagascar">Madagascar</option><option value="Malaysia">Malaysia</option><option value="Malawi">Malawi</option><option value="Maldives">Maldives</option><option value="Mali">Mali</option><option value="Malta">Malta</option><option value="Marshall Islands">Marshall Islands</option><option value="Martinique">Martinique</option><option value="Mauritania">Mauritania</option><option value="Mauritius">Mauritius</option><option value="Mayotte">Mayotte</option><option value="Mexico">Mexico</option><option value="Midway Islands">Midway Islands</option><option value="Moldova">Moldova</option><option value="Monaco">Monaco</option><option value="Mongolia">Mongolia</option><option value="Montserrat">Montserrat</option><option value="Morocco">Morocco</option><option value="Mozambique">Mozambique</option><option value="Myanmar">Myanmar</option><option value="Nambia">Nambia</option><option value="Nauru">Nauru</option><option value="Nepal">Nepal</option><option value="Netherland Antilles">Netherland Antilles</option><option value="Netherlands">Netherlands (Holland, Europe)</option><option value="Nevis">Nevis</option><option value="New Caledonia">New Caledonia</option><option value="New Zealand">New Zealand</option><option value="Nicaragua">Nicaragua</option><option value="Niger">Niger</option><option value="Nigeria">Nigeria</option><option value="Niue">Niue</option><option value="Norfolk Island">Norfolk Island</option><option value="Norway">Norway</option><option value="Oman">Oman</option><option value="Pakistan">Pakistan</option><option value="Palau Island">Palau Island</option><option value="Palestine">Palestine</option><option value="Panama">Panama</option><option value="Papua New Guinea">Papua New Guinea</option><option value="Paraguay">Paraguay</option><option value="Peru">Peru</option><option value="Phillipines">Philippines</option><option value="Pitcairn Island">Pitcairn Island</option><option value="Poland">Poland</option><option value="Portugal">Portugal</option><option value="Puerto Rico">Puerto Rico</option><option value="Qatar">Qatar</option><option value="Republic of Montenegro">Republic of Montenegro</option><option value="Republic of Serbia">Republic of Serbia</option><option value="Reunion">Reunion</option><option value="Romania">Romania</option><option value="Russia">Russia</option><option value="Rwanda">Rwanda</option><option value="St Barthelemy">St Barthelemy</option><option value="St Eustatius">St Eustatius</option><option value="St Helena">St Helena</option><option value="St Kitts-Nevis">St Kitts-Nevis</option><option value="St Lucia">St Lucia</option><option value="St Maarten">St Maarten</option><option value="St Pierre &amp; Miquelon">St Pierre &amp; Miquelon</option><option value="St Vincent &amp; Grenadines">St Vincent &amp; Grenadines</option><option value="Saipan">Saipan</option><option value="Samoa">Samoa</option><option value="Samoa American">Samoa American</option><option value="San Marino">San Marino</option><option value="Sao Tome &amp; Principe">Sao Tome &amp; Principe</option><option value="Saudi Arabia">Saudi Arabia</option><option value="Senegal">Senegal</option><option value="Serbia">Serbia</option><option value="Seychelles">Seychelles</option><option value="Sierra Leone">Sierra Leone</option><option value="Singapore">Singapore</option><option value="Slovakia">Slovakia</option><option value="Slovenia">Slovenia</option><option value="Solomon Islands">Solomon Islands</option><option value="Somalia">Somalia</option><option value="South Africa">South Africa</option><option value="Spain">Spain</option><option value="Sri Lanka">Sri Lanka</option><option value="Sudan">Sudan</option><option value="Suriname">Suriname</option><option value="Swaziland">Swaziland</option><option value="Sweden">Sweden</option><option value="Switzerland">Switzerland</option><option value="Syria">Syria</option><option value="Tahiti">Tahiti</option><option value="Taiwan">Taiwan</option><option value="Tajikistan">Tajikistan</option><option value="Tanzania">Tanzania</option><option value="Thailand">Thailand</option><option value="Togo">Togo</option><option value="Tokelau">Tokelau</option><option value="Tonga">Tonga</option><option value="Trinidad &amp; Tobago">Trinidad &amp; Tobago</option><option value="Tunisia">Tunisia</option><option value="Turkey">Turkey</option><option value="Turkmenistan">Turkmenistan</option><option value="Turks &amp; Caicos Is">Turks &amp; Caicos Is</option><option value="Tuvalu">Tuvalu</option><option value="Uganda">Uganda</option><option value="Ukraine">Ukraine</option><option value="United Arab Erimates">United Arab Emirates</option><option value="United Kingdom">United Kingdom</option><option value="United States of America">United States of America</option><option value="Uraguay">Uruguay</option><option value="Uzbekistan">Uzbekistan</option><option value="Vanuatu">Vanuatu</option><option value="Vatican City State">Vatican City State</option><option value="Venezuela">Venezuela</option><option value="Vietnam">Vietnam</option><option value="Virgin Islands (Brit)">Virgin Islands (Brit)</option><option value="Virgin Islands (USA)">Virgin Islands (USA)</option><option value="Wake Island">Wake Island</option><option value="Wallis &amp; Futana Is">Wallis &amp; Futana Is</option><option value="Yemen">Yemen</option><option value="Zaire">Zaire</option><option value="Zambia">Zambia</option><option value="Zimbabwe">Zimbabwe</option></select>     
+                            </div>
 
-                        <input type="text" name="shareholder_{{counter @index}}_address" id="summary_{{address_name}}" value="{{address_value}}" class="custom-input-class one-row">
-                        <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                        <input type="text" name="shareholder_{{counter @index}}_address_2" id="summary_{{address_2_name}}" value="{{address_2_value}}" class="custom-input-class one-row">
-                        <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                        <input type="text" name="shareholder_{{counter @index}}_address_3" id="summary_{{address_3_name}}" value="{{address_3_value}}" class="custom-input-class one-row">
-                        <input type="hidden" name="shareholder_{{counter @index}}_amount" id="summary_{{amount_name}}" value="{{amount_value}}" class="custom-input-class small-input-2 one-row">
-                        <button class="custom-submit-class custom-submit-class-2">Upload Passport</button>
-                        <button class="custom-submit-class custom-submit-class-2">Upload Utility Bill</button>
+                            <input type="hidden" name="shareholder_{{counter @index}}_amount" id="summary_{{amount_name}}" value="{{amount_value}}" class="custom-input-class small-input-2 one-row">
+                            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+                            <button class="save-summary-btn custom-submit-class custom-submit-class-2">Save</button>                     
+                        </div>                      
+                    </div>
+                    <div class="input-container text-container col-2 pull-left">                
+                        <p>{{amount_value}} shares</p>                        
+                    </div>
+                    <div class="col-3 pull-right">                                            
+                        <button class="edit-summary-btn custom-submit-class custom-submit-class-2">Edit</button>
+                        <button class="upload-btn upload-passport-btn custom-submit-class custom-submit-class-2">Upload passport</button>
+                        <button class="upload-btn upload-bill-btn custom-submit-class custom-submit-class-2">Upload utility bill</button>
                     </div>
                     <div class="clear"></div>
-                </div>
-  
-                {{#if @last}} <div class="summary-shareholder-price-container"><p class="pull-left">Nominee shareholders annual fee</p><div id="summary-shareholder-price" class="price summary-price pull-right"><p>$0</p></div><div class="clear"></div></div> {{/if}}                                              
-                
-                {{#if @last}}
-                <!-- <div class="field-container">
-                    <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+                </div>                
+                {{#if @last}} 
+                    <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
+                    <div class="summary-shareholder-price-container">
+                        <div class="nominee-lbl-container pull-left col-1"><p>Nominee shareholders annual fee</p></div>
+                        <div class="pull-left col-2"><div class="nominee-cta-container"><button data-selector="nominee_shareholder" class="remove-btn custom-submit-class custom-submit-class-2">Remove</button></div></div>
+                        <div id="summary-shareholder-price" class="col-3 price summary-price pull-right"><p>$0</p></div>
+                        <div class="clear"></div>
+                    </div>
                     
-                    <div class="input-container pull-left">                
-                        <label for="summary_total_share">Total share allocation</label>
-                        <div class="small-input"></div>
-                        <input type="text" id="summary_total_share" disabled="true" class="custom-input-class small-input-2">
-                    </div>                
-                    <div class="clear"></div>
-                </div> -->
-                <input type="hidden" name="total_share" id="summary_total_share" disabled="true" class="custom-input-class small-input-2">
-                {{/if}}
+                    <input type="hidden" name="total_share" id="summary_total_share" disabled="true" class="custom-input-class small-input-2">
+                {{/if}}                                              
             {{/if}}
         {{/shareholders}}
-    </script>
+    </script> 
+
+    <script id="summarydirector-template" type="text/x-handlebars-template">                
+        <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>            
+        <h4>Directors:</h4>        
+        {{#if directors.length}}                        
+            {{#directors}}
+                {{#if value}}     
+                    {{#if @first}}<input type="hidden" name="director_count" value="{{../directors.length}}">{{/if}}
+                    <div class="field-container">
+                        <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>   
+
+                        <div class="input-container col-1 pull-left">                
+                            <div class="person-info">
+                                <p class="director_{{counter @index}}_name">{{value}}</label>
+                                <p class="director_{{counter @index}}_address">{{address_value}}</p>
+                                <p class="director_{{counter @index}}_address_2">{{address_2_value}}</p>
+                                <p class="director_{{counter @index}}_address_3">{{address_3_value}}</p>
+                            </div>
+                            <div class="edit-form">
+                                <input type="text" name="director_{{counter @index}}_name" id="summary_{{name}}" value="{{value}}" class="name-edit-input custom-input-class one-row">
+                                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+                                <input type="text" name="director_{{counter @index}}_address" id="summary_{{address_name}}" value="{{address_value}}" class="address-edit-input custom-input-class one-row">
+                                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+                                <input type="text" name="director_{{counter @index}}_address_2" id="summary_{{address_2_name}}" value="{{address_2_value}}" class="address-2-edit-input custom-input-class one-row">
+                                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+                                <input type="text" name="director_{{counter @index}}_address_3" id="summary_{{address_3_name}}" value="{{address_3_value}}" class="address-3-edit-input custom-input-class one-row">
+                                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+                                <button class="save-summary-btn custom-submit-class custom-submit-class-2">Save</button>                     
+                            </div>
+                        </div>
+                        <div class="col-2 text-container pull-left">
+                            
+                        </div>
+                        <div class="col-3 pull-right">        
+                            <button class="edit-summary-btn custom-submit-class custom-submit-class-2">Edit</button>    
+                            <button class="upload-btn upload-passport-btn custom-submit-class custom-submit-class-2">Upload passport</button>
+                            <button class="upload-btn upload-bill-btn custom-submit-class custom-submit-class-2">Upload utility bill</button>
+                        </div>      
+                        <div class="clear"></div>                    
+                    </div>
+                {{/if}}            
+            {{/directors}}
+        {{else}}
+            <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
+            <div class="summary-director-price-container">
+                <div class="nominee-lbl-container col-1 pull-left"><p>Professional directors annual fee</p></div>
+                <div class="col-2 pull-left"><div class="nominee-cta-container"><button data-selector="nominee_director" class="remove-btn custom-submit-class custom-submit-class-2">Remove</button></div></div>                
+                <div id="summary-director-price" class="col-3 price summary-price pull-right"><p>$0</p></div>
+            </div>            
+            <div class="clear"></div>
+        {{/if}}            
+    </script>        
 
     <script id="summarysecretary-template" type="text/x-handlebars-template">                
-        {{#if secretaries.length}}            
-            <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>            
-            <h4>Secretaries:</h4>
-            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+        <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>            
+        <h4>Secretaries:</h4>
+        {{#if secretaries.length}}                        
             {{#secretaries}}
                 {{#if value}}
                     {{#if @first}}<input type="hidden" name="secretary_count" value="{{../secretaries.length}}">{{/if}}
-                    <div class="field-container half-field-container">
-                        <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+                    <div class="field-container">
+                        <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>            
 
-                        <div class="input-container pull-left">                
-                            <label class="pull-left" for="summary_{{counter @index}}_{{name}}">{{value}}:</label>
+                        <div class="input-container col-1 pull-left">    
+                            <div class="person-info">            
+                                <p class="secretary_{{counter @index}}_name">{{value}}</label>
+                                <p class="secretary_{{counter @index}}_address">{{address_value}}</p>
+                                <p class="secretary_{{counter @index}}_address_2">{{address_2_value}}</p>
+                                <p class="secretary_{{counter @index}}_address_3">{{address_3_value}}</p>
+                            </div>
+                            <div class="edit-form">
+                                <input type="text" name="secretary_{{counter @index}}_name" id="summary_{{name}}" value="{{value}}" class="name-edit-input custom-input-class one-row">
+                                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+                                <input type="text" name="secretary_{{counter @index}}_address" id="summary_{{address_name}}" value="{{address_value}}" class="address-edit-input custom-input-class one-row">
+                                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+                                <input type="text" name="secretary_{{counter @index}}_address_2" id="summary_{{address_2_name}}" value="{{address_2_value}}" class="address-2-edit-input custom-input-class one-row">
+                                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+                                <input type="text" name="secretary_{{counter @index}}_address_3" id="summary_{{address_3_name}}" value="{{address_3_value}}" class="address-3-edit-input custom-input-class one-row">
+                                <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>                                        
+                                <button class="save-summary-btn custom-submit-class custom-submit-class-2">Save</button>                     
+                            </div>
                         </div>      
-                        <div class="pull-right">
-                            <input type="hidden" name="secretary_{{counter @index}}_name" id="summary_{{name}}" value="{{value}}">                            
-
-                            <input type="text" name="secretary_{{counter @index}}_address" id="summary_{{address_name}}" value="{{address_value}}" class="custom-input-class one-row">
-                            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                            <input type="text" name="secretary_{{counter @index}}_address_2" id="summary_{{address_2_name}}" value="{{address_2_value}}" class="custom-input-class one-row">
-                            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                            <input type="text" name="secretary_{{counter @index}}_address_3" id="summary_{{address_3_name}}" value="{{address_3_value}}" class="custom-input-class one-row">
-                            <button class="custom-submit-class custom-submit-class-2">Upload Passport</button>
-                            <button class="custom-submit-class custom-submit-class-2">Upload Utility Bill</button>
+                        <div class="col-2 text-container pull-left">
+                            
                         </div>   
+                        <div class="col-3 pull-right">        
+                            <button class="edit-summary-btn custom-submit-class custom-submit-class-2">Edit</button>    
+                            <button class="upload-btn upload-passport-btn custom-submit-class custom-submit-class-2">Upload passport</button>
+                            <button class="upload-btn upload-bill-btn custom-submit-class custom-submit-class-2">Upload utility bill</button>
+                        </div>  
                         <div class="clear"></div>                           
                     </div>
                 {{/if}}
             {{/secretaries}}
-        {{else}}            
-            <div class="summary-secretary-price-container"><p class="pull-left">Nominee secretaries annual fee</p><div id="summary-secretary-price" class="price summary-price pull-right"><p>$0</p></div></div>
-            <div class="clear"></div>   
+        {{else}}    
+            <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>        
+            <div class="summary-secretary-price-container">
+                <div class="nominee-lbl-container pull-left col-1"><p>Company secretary annual fee</p></div>
+                <div class="pull-left col-2"><div class="nominee-cta-container"><button data-selector="nominee_secretary" class="remove-btn custom-submit-class custom-submit-class-2">Remove</button></div></div>
+                <div id="summary-secretary-price" class="col-3 price summary-price pull-right"><p>$0</p></div>
+                <div class="clear"></div>
+            </div>                          
         {{/if}}     
     </script>
 
     <script id="summaryservice-template" type="text/x-handlebars-template">
         <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>            
         <h4>Other fees</h4>
-        <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>        
+        <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>        
         {{#services}}
             {{#if @first}}<input type="hidden" name="service_count" value="{{../services.length}}">{{/if}}                   
             {{#countries}}
                 {{#if @first}}<input type="hidden" name="service_{{counter @../index}}_country_count" value="{{../countries.length}}">{{/if}}                   
                 <input type="hidden" name="service_{{counter @../index}}_country_{{counter @index}}_id" value="{{service_country_id_value}}">
-                <input type="hidden" name="service_{{counter @../index}}_country_{{counter @index}}_no_of_card" value="{{services_credit_card_counts_value}}">
 
                 <div class="field-container">
-                    <div class="pull-left">                
-                        <p>{{../value}} in {{value}} {{#if services_credit_card_counts_value}} - {{services_credit_card_counts_value}} cards {{/if}}</p>
+                    <div class="pull-left col-1">  
+                        {{#ifCond ../value "==" "Registered office annual fee (compulsory)"}}              
+                            <p>{{../value}}</p>
+                        {{else}}
+                            <p>{{../value}} in {{value}} {{#if services_credit_card_counts_value}} - <span class="service_{{counter @../index}}_country_{{counter @index}}_no_of_card">{{services_credit_card_counts_value}}</span> cards {{/if}}</p>
+                        {{/ifCond}}
                     </div>
-                    <div class="price summary-price pull-right">${{service_price_value}}</div>      
+                    <div class="pull-left col-2">
+                        <div class="service-cta-container">
+                        {{#if services_credit_card_counts_value}}
+                            <input type="text" name="service_{{counter @../index}}_country_{{counter @index}}_no_of_card" value="{{services_credit_card_counts_value}}" class="edit-no-of-card custom-input-class small-input-2" data-price="{{service_price_value}}" data-noofcard="{{services_credit_card_counts_value}}">                            
+                            <button data-selector="{{services_credit_card_counts_name}}" class="remove-btn custom-submit-class custom-submit-class-2">Remove</button>
+                        {{else}}
+                            {{#ifCond ../value "==" "Registered office annual fee (compulsory)"}}
+                            {{else}}
+                                <button data-selector="service_{{counter @../index}}_country_{{counter @index}}_id" class="remove-btn custom-submit-class custom-submit-class-2">Remove</button>
+                            {{/ifCond}}
+                        {{/if}}                        
+                        </div>                        
+                    </div>
+                    <div class="price summary-price pull-right col-3">${{service_price_value}}</div>      
                     <div class="clear"></div>
-                </div>
+                    <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>        
+                </div>                
             {{/countries}}
         {{/services}}        
     </script>
@@ -1336,6 +1530,9 @@ function registration_form() {
                     <label for="name">3rd choice</label>
                     <input type="text" name="company_name[]" data-choice-id="3" class="company-name-choice custom-input-class" value="">
                 </div>
+
+                <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
+
                 <!-- <a href="#" id="next"><button data-id="0" data-hash="#" class="custom-submit-class back-btn">Back</button></a> -->
                 <a href="#" id="next"><button data-id="2" data-hash="2" class="custom-submit-class next-btn">Next</button></a>
 
@@ -1394,6 +1591,11 @@ function registration_form() {
     </div>
 
     <div id="step-4" class="reg-step">
+        <p>Below is a summary of your order.  Please review and make any corrections here.</p>
+        <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+        <p>In order to comply with our due diligence requirements, we are required to receive scanned copies of passports and recent utility bills (not older than 3 months) in respect of all persons listed here.  These may be uploaded using the buttons next to each person’s name.  You will not be able to finalise your order until all passports and utility bills have been uploaded.</p>
+
+        <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
         <form name="registration-page-form-4" id="registration-page-form-4">
             <div class="field-container">
                 <h3 class="pull-left"></h3>
@@ -1415,16 +1617,16 @@ function registration_form() {
                 <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>            
             
                 <div id="company-names-summary">
-                    <h4>Three proposed company names:</h4>
+                    <h4>Proposed companies names:</h4>
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
 
                     <div class="field-container half-field-container">
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
                         
-                        <div class="input-container pull-left">                
+                        <!-- <div class="input-container pull-left">                
                             <label for="company_type">One:</label>                            
-                        </div>                
-                        <div class="pull-right">
+                        </div>                 -->
+                        <div class="pull-left">
                             <input type="text" name="company_name_choices[]" id="company_name_choice_1" class="custom-input-class">
                         </div>
                         <div class="clear"></div>
@@ -1433,10 +1635,10 @@ function registration_form() {
                     <div class="field-container half-field-container">
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
                         
-                        <div class="input-container pull-left">                
+                        <!-- <div class="input-container pull-left">                
                             <label for="company_type">Two:</label>                            
-                        </div>
-                        <div class="pull-right">
+                        </div> -->
+                        <div class="pull-left">
                             <input type="text" name="company_name_choices[]" id="company_name_choice_2" class="custom-input-class">
                         </div>                
                         <div class="clear"></div>
@@ -1445,15 +1647,16 @@ function registration_form() {
                     <div class="field-container half-field-container">
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
                         
-                        <div class="input-container pull-left">                
+                        <!-- <div class="input-container pull-left">                
                             <label for="company_type">Three:</label>                            
-                        </div>                
-                        <div class="pull-right">
+                        </div> -->
+                        <div class="pull-left">
                             <input type="text" name="company_name_choices[]" id="company_name_choice_3" class="custom-input-class">
                         </div>
                         <div class="clear"></div>
                     </div>
                 </div>
+                <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
             </div>
             <div id="route-2-summary" class="route-specific-summary">
                 <div class="input-container pull-left">                
@@ -1493,13 +1696,13 @@ function registration_form() {
                 <div class="total-summary-price price pull-right"><p>$TBC</p></div>     
                 <div class="clear"></div> 
             </div>
-            
+            <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>        
             <div class="field-container">
                 <input type="checkbox" name="tnc" value="yes"> <label for="tnc">I have read and agree with the Terms and conditions</label>
             </div>
-            
+            <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>        
             <a href="#" id="next"><button data-id="3" data-hash="3" class="custom-submit-class back-btn">Back</button></a>
-            <a href="#"><button class="custom-submit-class payment-gateway-btn">Payment Gateway</button></a>
+            <a href="#"><button class="custom-submit-class payment-gateway-btn">Proceed to checkout</button></a>
             
         </form>        
     </div>';

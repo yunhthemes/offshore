@@ -15,13 +15,12 @@ class DatabaseSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
         $this->call(UserTableSeeder::class);                
-        // $this->call(CompanyTableSeeder::class);
-        // $this->call(CompanyTypeTableSeeder::class);
-        // $this->call(KeypersonnelSeeder::class);
-        // $this->call(ServiceSeeder::class);
         $this->call(CountrySeeder::class);
-
-
+        $this->call(CompanyTypeTableSeeder::class);
+        $this->call(KeypersonnelSeeder::class);
+        $this->call(ServiceSeeder::class);
+        $this->call(infoServiceSeeder::class);
+        $this->call(CompanyTableSeeder::class);
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
     }
@@ -61,19 +60,22 @@ class CompanyTypeTableSeeder extends Seeder
 
         DB::table('company_types')->insert([
             [
-                'name' => 'Cyprus limited liability company'                
+                'name' => 'Cyprus limited liability company',             
+                'price' => '2000',             
+                'price_eu' => '1900',             
+                'rules' => ''
             ],
             [
-                'name' => 'Mauritius Class 1 company'
+                'name' => 'Belize international business company',             
+                'price' => '3000',             
+                'price_eu' => '2900',             
+                'rules' => ''
             ],
             [
-                'name' => 'Cyprus branch of a UK company'
-            ],
-            [
-                'name' => 'Mauritius Class 1 company'
-            ],
-            [
-                'name' => 'Mauritius Class 2 company'
+                'name' => 'Test no shelf companies option',             
+                'price' => '1000',             
+                'price_eu' => '900',             
+                'rules' => ''
             ]
         ]);        
     }
@@ -92,32 +94,36 @@ class CompanyTableSeeder extends Seeder
 
         DB::table('companies')->insert([
             [
-                'name' => 'company 1',
-                'incoporation_date' => \Carbon\Carbon::createFromDate(2015,07,22)->toDateTimeString(),
-                'price' => '30000',         
+                'name' => 'Cyprus company a',
+                'incorporation_date' => \Carbon\Carbon::createFromDate(2015,07,22)->toDateTimeString(),
+                'price' => '1000',         
+                'price_eu' => '900',         
                 'shelf' => true,       
                 'company_type_id' => 1     
             ],
             [
-                'name' => 'company 2',
-                'incoporation_date' => \Carbon\Carbon::createFromDate(2014,07,22)->toDateTimeString(),
-                'price' => '40000', 
+                'name' => 'Cyprus company b',
+                'incorporation_date' => \Carbon\Carbon::createFromDate(2014,07,22)->toDateTimeString(),
+                'price' => '1100', 
+                'price_eu' => '1000', 
+                'shelf' => true,
+                'company_type_id' => 1
+            ],
+            [
+                'name' => 'Belize Services Ltd',
+                'incorporation_date' => \Carbon\Carbon::createFromDate(2013,07,22)->toDateTimeString(),
+                'price' => '1200', 
+                'price_eu' => '1100', 
                 'shelf' => true,
                 'company_type_id' => 2
             ],
             [
-                'name' => 'company 3',
-                'incoporation_date' => \Carbon\Carbon::createFromDate(2013,07,22)->toDateTimeString(),
-                'price' => '50000', 
+                'name' => 'Nat\'s Company Ltd',
+                'incorporation_date' => \Carbon\Carbon::createFromDate(2012,07,22)->toDateTimeString(),
+                'price' => '1300', 
+                'price_eu' => '1200', 
                 'shelf' => true,
-                'company_type_id' => 3
-            ],
-            [
-                'name' => 'new company',
-                'incoporation_date' => \Carbon\Carbon::createFromDate(2012,07,22)->toDateTimeString(),
-                'price' => '60000', 
-                'shelf' => false,
-                'company_type_id' => 4
+                'company_type_id' => 1
             ]
         ]);        
     }
@@ -132,32 +138,72 @@ class KeypersonnelSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('keypersonnel')->delete();
+        DB::table('directors')->delete();
 
-        DB::table('keypersonnel')->insert([
+        DB::table('directors')->insert([
             [
-                'name' => 'key personnel 1',                
-                'price' => '2000',         
-                'offshore' => true,                
-                'role' => 'director'                
+                'name_rules' => 'At least one director is required, who may be either a natural person or another company. The directors may be resident anywhere in the world. If the company will wish to qualify for benefits under the network of double tax treates which Cyprus has in place with other countries, then it will be necessary for the majority of directors to be resident in Cyprus. It is possible for a single person to be a sole director and shareholder.  Professional directors may be appointed if confidentiality is required.  Please tick the box below if you would like Offshore Company Solutions to provide professional directors.',                
+                'price' => '1000',         
+                'price_eu' => '900',                
+                'company_type_id' => 1
             ],
             [
-                'name' => 'key personnel 2',                
-                'price' => '3000',         
-                'offshore' => true,                
-                'role' => 'shareholder'
+                'name_rules' => 'At least one director is required, who may be either a natural person or another company. The directors may be resident anywhere in the world. If the company will wish to qualify for benefits under the network of double tax treates which Cyprus has in place with other countries, then it will be necessary for the majority of directors to be resident in Cyprus. It is possible for a single person to be a sole director and shareholder.  Professional directors may be appointed if confidentiality is required.  Please tick the box below if you would like Offshore Company Solutions to provide professional directors.',                
+                'price' => '1000',         
+                'price_eu' => '900',                
+                'company_type_id' => 2
             ],
             [
-                'name' => 'key personnel 3',                
-                'price' => '4000',         
-                'offshore' => true,                
-                'role' => 'secretary'
+                'name_rules' => 'At least one director is required, who may be either a natural person or another company. The directors may be resident anywhere in the world. If the company will wish to qualify for benefits under the network of double tax treates which Cyprus has in place with other countries, then it will be necessary for the majority of directors to be resident in Cyprus. It is possible for a single person to be a sole director and shareholder.  Professional directors may be appointed if confidentiality is required.  Please tick the box below if you would like Offshore Company Solutions to provide professional directors.',                
+                'price' => '1000',         
+                'price_eu' => '900',                
+                'company_type_id' => 3
+            ]
+        ]);    
+
+        DB::table('shareholders')->delete();
+
+        DB::table('shareholders')->insert([
+            [
+                'name_rules' => 'At least one shareholder is required, to whom  a minimum of one share must be issued. Shareholders may be either natural persons or other corporate entities. Should confidentiality be required, the shares may be held via nominee shareholders. Please tick the box below if you would like Offshore Company Solutions to provide professional shareholders. Bearer shares are not allowed.',                
+                'price' => '900',         
+                'price_eu' => '800',                
+                'company_type_id' => 1
             ],
             [
-                'name' => 'key personnel 4',                
-                'price' => '5000',         
-                'offshore' => true,                
-                'role' => 'director'
+                'name_rules' => 'At least one shareholder is required, to whom  a minimum of one share must be issued. Shareholders may be either natural persons or other corporate entities. Should confidentiality be required, the shares may be held via nominee shareholders. Please tick the box below if you would like Offshore Company Solutions to provide professional shareholders. Bearer shares are not allowed.',                
+                'price' => '900',         
+                'price_eu' => '800',                
+                'company_type_id' => 2
+            ],
+            [
+                'name_rules' => 'At least one shareholder is required, to whom  a minimum of one share must be issued. Shareholders may be either natural persons or other corporate entities. Should confidentiality be required, the shares may be held via nominee shareholders. Please tick the box below if you would like Offshore Company Solutions to provide professional shareholders. Bearer shares are not allowed.',                
+                'price' => '900',         
+                'price_eu' => '800',                
+                'company_type_id' => 3
+            ]
+        ]);    
+
+        DB::table('secretaries')->delete();
+
+        DB::table('secretaries')->insert([
+            [
+                'name_rules' => 'A company secretary must be appointed, who may be a natural person or company, resident in any country but preferably in Cyprus. The same person may act as both company secretary and director or company secretary and shareholder. It is possible for the same person to act as shareholder, director and secretary provided there is at least one other shareholder or director. secretary.Please tick the box below if you would like Offshore Company Solutions to provide a company secretary.',                
+                'price' => '800',         
+                'price_eu' => '700',                
+                'company_type_id' => 1
+            ],
+            [
+                'name_rules' => 'A company secretary must be appointed, who may be a natural person or company, resident in any country but preferably in Cyprus. The same person may act as both company secretary and director or company secretary and shareholder. It is possible for the same person to act as shareholder, director and secretary provided there is at least one other shareholder or director. secretary.Please tick the box below if you would like Offshore Company Solutions to provide a company secretary.',                
+                'price' => '800',         
+                'price_eu' => '700',                
+                'company_type_id' => 2
+            ],
+            [
+                'name_rules' => 'A company secretary must be appointed, who may be a natural person or company, resident in any country but preferably in Cyprus. The same person may act as both company secretary and director or company secretary and shareholder. It is possible for the same person to act as shareholder, director and secretary provided there is at least one other shareholder or director. secretary.Please tick the box below if you would like Offshore Company Solutions to provide a company secretary.',                
+                'price' => '800',         
+                'price_eu' => '700',                
+                'company_type_id' => 3
             ]
         ]);        
     }
@@ -177,22 +223,211 @@ class ServiceSeeder extends Seeder
 
         DB::table('services')->insert([
             [
-                'name' => 'service 1',                
-                'price' => '2000'                
+                'name' => 'Bank accounts',                
+                'company_type_id' => '1'                
             ],
             [
-                'name' => 'service 2',                
-                'price' => '3000'
+                'name' => 'Credit/debit cards',                
+                'company_type_id' => '1'
             ],
             [
-                'name' => 'service 3',                
-                'price' => '4000'
+                'name' => 'Registered office annual fee (compulsory)',                
+                'company_type_id' => '1'
             ],
             [
-                'name' => 'service 4',                
-                'price' => '5000'
+                'name' => 'Bank accounts',                
+                'company_type_id' => '2'                
+            ],
+            [
+                'name' => 'Credit/debit cards',                
+                'company_type_id' => '2'
+            ],
+            [
+                'name' => 'Registered office annual fee (compulsory)',                
+                'company_type_id' => '2'
+            ],
+            [
+                'name' => 'Bank accounts',                
+                'company_type_id' => '3'                
+            ],
+            [
+                'name' => 'Credit/debit cards',                
+                'company_type_id' => '3'
+            ],
+            [
+                'name' => 'Registered office annual fee (compulsory)',                
+                'company_type_id' => '3'
             ]
-        ]);        
+        ]);
+
+        DB::table('service_country')->delete();
+
+        DB::table('service_country')->insert([
+            [
+                'service_id' => '1',                
+                'country_id' => '229',                
+                'price' => '1000',                
+                'price_eu' => '900'
+            ],
+            [
+                'service_id' => '1',                
+                'country_id' => '230',                
+                'price' => '1200',                
+                'price_eu' => '1100'
+            ],
+            [
+                'service_id' => '1',                
+                'country_id' => '38',                
+                'price' => '1400',                
+                'price_eu' => '1300'
+            ],
+            [
+                'service_id' => '2',                
+                'country_id' => '229',                
+                'price' => '500',                
+                'price_eu' => '400'
+            ],
+            [
+                'service_id' => '2',                
+                'country_id' => '230',                
+                'price' => '600',                
+                'price_eu' => '500'
+            ],
+            [
+                'service_id' => '3',                
+                'country_id' => '1',                
+                'price' => '500',                
+                'price_eu' => '400'
+            ],
+            [
+                'service_id' => '4',                
+                'country_id' => '13',                
+                'price' => '1000',                
+                'price_eu' => '900'
+            ],
+            [
+                'service_id' => '4',                
+                'country_id' => '158',                
+                'price' => '1200',                
+                'price_eu' => '1100'
+            ],
+            [
+                'service_id' => '5',                
+                'country_id' => '13',                
+                'price' => '500',                
+                'price_eu' => '400'
+            ],
+            [
+                'service_id' => '5',                
+                'country_id' => '158',                
+                'price' => '600',                
+                'price_eu' => '500'
+            ],
+            [
+                'service_id' => '6',                
+                'country_id' => '1',                
+                'price' => '500',                
+                'price_eu' => '400'
+            ],
+            [
+                'service_id' => '7',                
+                'country_id' => '13',                
+                'price' => '1000',                
+                'price_eu' => '900'
+            ],
+            [
+                'service_id' => '7',                
+                'country_id' => '158',                
+                'price' => '1200',                
+                'price_eu' => '1100'
+            ],
+            [
+                'service_id' => '8',                
+                'country_id' => '13',                
+                'price' => '500',                
+                'price_eu' => '400'
+            ],
+            [
+                'service_id' => '8',                
+                'country_id' => '158',                
+                'price' => '600',                
+                'price_eu' => '500'
+            ],
+            [
+                'service_id' => '9',                
+                'country_id' => '1',                
+                'price' => '500',                
+                'price_eu' => '400'
+            ]
+        ]);                
+    }
+}
+
+class infoServiceSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        DB::table('information_services')->delete();
+
+        DB::table('information_services')->insert([
+            [
+                'name' => 'Local telephone number',                
+                'company_type_id' => '1'                
+            ],
+            [
+                'name' => 'Mailing address and forwarding',                
+                'company_type_id' => '1'
+            ],
+            [
+                'name' => 'Setting up a physical office presence',                
+                'company_type_id' => '1'                
+            ],
+            [
+                'name' => 'Establishing a merchant account',                
+                'company_type_id' => '1'
+            ],
+            [
+                'name' => 'Purchasing real estate',                
+                'company_type_id' => '1'                
+            ],
+            [
+                'name' => 'Economic citizenship possibilities',                
+                'company_type_id' => '1'
+            ],
+            [
+                'name' => 'Local telephone number',                
+                'company_type_id' => '2'                
+            ],
+            [
+                'name' => 'Mailing address and forwarding',                
+                'company_type_id' => '2'
+            ],
+            [
+                'name' => 'Setting up a physical office presence',                
+                'company_type_id' => '2'                
+            ],
+            [
+                'name' => 'Establishing a merchant account',                
+                'company_type_id' => '2'
+            ],
+            [
+                'name' => 'Purchasing real estate',                
+                'company_type_id' => '2'                
+            ],
+            [
+                'name' => 'Economic citizenship possibilities',                
+                'company_type_id' => '2'
+            ],
+            [
+                'name' => 'Info 1',                
+                'company_type_id' => '3'
+            ]
+        ]);                
     }
 }
 

@@ -139,48 +139,48 @@ class JurisdictionController extends Controller
                 endfor;
             }
 
-            $count = $request->service_3_count;
+            // $count = $request->service_3_count;
 
-            if(!empty($request->service_3_name) && !empty($request->input('service_3_price_1'))) {
+            // if(!empty($request->service_3_name) && !empty($request->input('service_3_price_1'))) {
 
-                $service = new Service();
-                $service->name = $request->service_3_name;
-                $service->company_type_id = $company_type->id;    
-                $service->save();                
+            //     $service = new Service();
+            //     $service->name = $request->service_3_name;
+            //     $service->company_type_id = $company_type->id;    
+            //     $service->save();                
 
-                for($i=1;$i<=$count;$i++):
-                    if(!empty($request->input('service_3_name')) && !empty($request->input('service_3_country_'.$i)) && !empty($request->input('service_3_price_'.$i)) && !empty($request->input('service_3_price_eu_'.$i))):
+            //     for($i=1;$i<=$count;$i++):
+            //         if(!empty($request->input('service_3_name')) && !empty($request->input('service_3_country_'.$i)) && !empty($request->input('service_3_price_'.$i)) && !empty($request->input('service_3_price_eu_'.$i))):
 
-                        $country = Country::find($request->input('service_3_country_'.$i));
-                        $price = (double) preg_replace("/[^0-9,.]/", "", $request->input('service_3_price_'.$i));
-                        $price_eu = (double) preg_replace("/[^0-9,.]/", "", $request->input('service_3_price_eu_'.$i));
-                        $country->services()->attach($service->id, ['price' => $price, 'price_eu' => $price_eu]);                                            
+            //             $country = Country::find($request->input('service_3_country_'.$i));
+            //             $price = (double) preg_replace("/[^0-9,.]/", "", $request->input('service_3_price_'.$i));
+            //             $price_eu = (double) preg_replace("/[^0-9,.]/", "", $request->input('service_3_price_eu_'.$i));
+            //             $country->services()->attach($service->id, ['price' => $price, 'price_eu' => $price_eu]);                                            
                         
-                    endif;                
-                endfor;
-            }
+            //         endif;                
+            //     endfor;
+            // }
 
-            $count = $request->service_4_count;
+            // $count = $request->service_4_count;
 
-            if(!empty($request->service_4_name) && !empty($request->input('service_4_price_1'))) {
+            // if(!empty($request->service_4_name) && !empty($request->input('service_4_price_1'))) {
 
-                $service = new Service();
-                $service->name = $request->service_4_name;
-                $service->company_type_id = $company_type->id;    
-                $service->save();                
+            //     $service = new Service();
+            //     $service->name = $request->service_4_name;
+            //     $service->company_type_id = $company_type->id;    
+            //     $service->save();                
 
-                for($i=1;$i<=$count;$i++):
-                    if(!empty($request->input('service_4_name')) && !empty($request->input('service_4_country_'.$i)) && !empty($request->input('service_4_price_'.$i)) && !empty($request->input('service_4_price_eu_'.$i))):
+            //     for($i=1;$i<=$count;$i++):
+            //         if(!empty($request->input('service_4_name')) && !empty($request->input('service_4_country_'.$i)) && !empty($request->input('service_4_price_'.$i)) && !empty($request->input('service_4_price_eu_'.$i))):
                         
-                        $country = Country::find($request->input('service_4_country_'.$i));
-                        $price = (double) preg_replace("/[^0-9,.]/", "", $request->input('service_4_price_'.$i));
-                        $price_eu = (double) preg_replace("/[^0-9,.]/", "", $request->input('service_4_price_eu_'.$i));
-                        $country->services()->attach($service->id, ['price' => $price, 'price_eu' => $price_eu]);     
-                        // $country->services()->attach($service->id, ['price' => $request->input('service_4_price_'.$i), 'price_eu' => $request->input('service_4_price_eu_'.$i)]);                    
+            //             $country = Country::find($request->input('service_4_country_'.$i));
+            //             $price = (double) preg_replace("/[^0-9,.]/", "", $request->input('service_4_price_'.$i));
+            //             $price_eu = (double) preg_replace("/[^0-9,.]/", "", $request->input('service_4_price_eu_'.$i));
+            //             $country->services()->attach($service->id, ['price' => $price, 'price_eu' => $price_eu]);     
+            //             // $country->services()->attach($service->id, ['price' => $request->input('service_4_price_'.$i), 'price_eu' => $request->input('service_4_price_eu_'.$i)]);                    
                         
-                    endif;                
-                endfor;
-            }
+            //         endif;                
+            //     endfor;
+            // }
 
             $count = $request->information_service_count;
 

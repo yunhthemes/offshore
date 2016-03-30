@@ -11,6 +11,7 @@
 <div class="item-list-tabs no-ajax" id="subnav" role="navigation">
 	<ul>
 		<?php bp_get_options_nav(); ?>
+		<li><a id="settings" href="<?php echo home_url( '/client-dashboard/' . bp_core_get_username( get_current_user_id() ) ) . '/settings'; ?>">Settings</a></li>
 	</ul>
 </div><!-- .item-list-tabs -->
 
@@ -23,6 +24,8 @@
  */
 do_action( 'bp_before_profile_content' ); ?>
 
+<div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
+
 <div class="profile">
 
 <?php switch ( bp_current_action() ) :
@@ -34,7 +37,7 @@ do_action( 'bp_before_profile_content' ); ?>
 
 	// Change Avatar
 	case 'change-avatar' :
-		bp_get_template_part( 'members/single/profile/change-avatar' );
+		bp_get_template_part( 'members/single/profile/change-av	atar' );
 		break;
 
 	// Change Cover Image

@@ -71,23 +71,23 @@
 					</div>
 					
 					<div class="each-service">
-						<h3 class="form-header">Bank account</h3>
-						{{ Form::hidden('service_1_name', 'Bank account', ['class'=>'custom-input-class']) }}
+						<h3 class="form-header">Bank accounts</h3>
+						{{ Form::hidden('service_1_name', 'Bank accounts', ['class'=>'custom-input-class']) }}
 
 						<div id="cloneable">
 							<div class="field-group">												
 								<div class="field-container">
-									{{ Form::label('service_1_country_1', 'Bank account country')}}
+									{{ Form::label('service_1_country_1', 'Bank accounts country')}}
 									<div class="custom-input-class-select-container">																				
 										{{ Form::select('service_1_country_1', $countries, null, ['class' => 'custom-input-class service_countries']) }}
 									</div>
 								</div>							
 								<div class="field-container">
-									{{ Form::label('service_1_price_1', 'Bank account price (USD)')}}
+									{{ Form::label('service_1_price_1', 'Bank accounts price (USD)')}}
 									{{ Form::text('service_1_price_1', null, ['class'=>'custom-input-class service_prices']) }}
 								</div>
 								<div class="field-container">
-									{{ Form::label('service_1_price_eu_1', 'Bank account price (EUR)')}}
+									{{ Form::label('service_1_price_eu_1', 'Bank accounts price (EUR)')}}
 									{{ Form::text('service_1_price_eu_1', null, ['class'=>'custom-input-class service_prices_eu']) }}
 								</div>
 							</div>
@@ -99,13 +99,13 @@
 					</div>
 					
 					<div class="each-service">
-						<h3 class="form-header">Credit/debit card</h3>
-						{{ Form::hidden('service_2_name', 'Credit card', ['class'=>'custom-input-class']) }}
+						<h3 class="form-header">Credit/debit cards</h3>
+						{{ Form::hidden('service_2_name', 'Credit/debit cards', ['class'=>'custom-input-class']) }}
 						
 						<div id="cloneable">
 							<div class="field-group">												
 								<div class="field-container">
-									{{ Form::label('service_2_country_1', 'Credit/debit card country')}}
+									{{ Form::label('service_2_country_1', 'Credit/debit cards country')}}
 									<div class="custom-input-class-select-container">										
 										{{ Form::select('service_2_country_1', $countries, null, ['class' => 'custom-input-class service_countries']) }}
 									</div>
@@ -126,7 +126,7 @@
 						<a href="#" class="add-more" data-service="service_2">Add country & price <i class="fa fa-plus"></i></a>
 					</div>
 
-					<div class="each-service">
+					<!-- <div class="each-service">
 						<h3 class="form-header">Mail forwarding</h3>
 						{{ Form::hidden('service_3_name', 'Mail forwarding', ['class'=>'custom-input-class']) }}
 
@@ -180,7 +180,7 @@
 
 						{{ Form::hidden('service_4_count', '1', ['id'=>'service_4_count']) }}
 						<a href="#" class="add-more" data-service="service_4">Add country & price <i class="fa fa-plus"></i></a>
-					</div>
+					</div> -->
 
 					<div class="each-service">
 						<h3 class="form-header">Information services</h3>

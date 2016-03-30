@@ -19,6 +19,7 @@
 <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}" />
 
 <script type="text/javascript" src="{{ URL::asset('js/libs/jquery-2.2.1.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('//code.jquery.com/ui/1.11.4/jquery-ui.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/plugins/bootstrap.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/plugins/jquery.validate.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/plugins/jquery.uploadifive.min.js') }}"></script>

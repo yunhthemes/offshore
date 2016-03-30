@@ -58,6 +58,8 @@
 				populate_fields(index, shareholder_id);
 			});
 		});
+
+		$('#company_incorporation_date').datepicker({ dateFormat: 'dd/mm/yy' });
 	});
 </script>
 

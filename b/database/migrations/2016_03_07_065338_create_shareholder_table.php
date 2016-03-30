@@ -15,9 +15,9 @@ class CreateShareholderTable extends Migration
         //
         Schema::create('shareholders', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name_rules');
-            $table->decimal('price', 10, 2); 
-            $table->decimal('price_eu', 10, 2); 
+            $table->text('name_rules');
+            $table->decimal('price', 10, 0); 
+            $table->decimal('price_eu', 10, 0); 
             $table->integer('company_type_id')->unsigned();
             $table->foreign('company_type_id')->references('id')->on('company_types');          
             $table->timestamps();

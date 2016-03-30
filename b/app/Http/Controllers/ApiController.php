@@ -27,10 +27,9 @@ class ApiController extends Controller
 
     public function usercompanies($id, Request $request) {
 
-    	$wpuser = Wpuser::with('companytypes')->find($id);
-    	if($wpuser) {
-    		$wpuser_compaines = $wpuser->companies;            	
-    	}else {
+        $wpuser_compaines = Company::with("companytypes")->where('wpuser_id', $id)->get();
+
+    	if(empty($wpuser_compaines)) {    		
     		return response()->json(['message' => 'user not found'], 202)->setCallback($request->input('callback'));
     	}
         

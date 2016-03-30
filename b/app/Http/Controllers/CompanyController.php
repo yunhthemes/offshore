@@ -76,6 +76,7 @@ class CompanyController extends Controller
                 $company->price = 0;
                 $company->price_eu = 0;
                 $company->company_type_id = $request->jurisdiction_id;
+                $company->renewal_date = date('Y-m-d H:i:s', strtotime(date("Y-m-d", time()) . " + 365 day"));
                 $company->save();
 
                 $company_id = $company->id;
@@ -84,8 +85,8 @@ class CompanyController extends Controller
             if(!empty($user_id) && !empty($company_id) && $user_id!==0):
 
                 $company = Company::find($company_id);
+                $company->renewal_date = date('Y-m-d H:i:s', strtotime(date("Y-m-d", time()) . " + 365 day"));
                 $wpuser = Wpuser::find($user_id);
-
                 $company->wpuser()->associate($wpuser);
                 $company->save();
 
@@ -140,7 +141,7 @@ class CompanyController extends Controller
 
                 foreach ($info_services_ids as $key => $value) {
                     $company->informationservice()->attach($value);
-                }                
+                }
 
                 return response()->json(['message' => 'Successfully added', 'response' => $request->all()], 200)->setCallback($request->input('callback'));
 

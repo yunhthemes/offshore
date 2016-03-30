@@ -15,7 +15,7 @@
 	                    <div class="wpb_wrapper"></div>
 	                </div>
 	            </div>
-	            <div class="wpb_column vc_column_container vc_col-sm-8">
+	            <div class="wpb_column vc_column_container vc_col-sm-10">
 	                <div class="vc_column-inner ">
 	                    <div class="wpb_wrapper">
 	                        <div class="wpb_raw_code wpb_content_element wpb_raw_html">
@@ -29,11 +29,11 @@
 	                                            	<span class="mkdf-icon-font-elegant arrow_right mkdf-delimiter-icon"></span>
 	                                            </span>
 	                                            <?php if(bp_is_user_profile()): ?>
-	                                            	<span class="mkdf-current">Profile</span>
+	                                            	<span class="mkdf-current">Client dashboard</span>
 	                                        	<?php elseif(bp_is_user_messages()): ?>
-	                                        		<span class="mkdf-current">Messages</span>
+	                                        		<span class="mkdf-current">Client dashboard</span>
 	                                        	<?php else: ?>
-	                                        		<span class="mkdf-current">Profile</span>
+	                                        		<span class="mkdf-current">Client dashboard</span>
 	                                        	<?php endif; ?>
 	                                            </div>
 	                                        </div>
@@ -45,19 +45,14 @@
 	                        <div class="wpb_raw_code wpb_content_element wpb_raw_html">
 	                            <div class="wpb_wrapper">
 	                                <div id="custom-page-title">
-	                                    <h1 style="color:#363636"><span>Profile</span></h1>
+	                                    <h1 style="color:#363636"><span>Client Dashboard</span></h1>
 	                                </div> 
 	                            </div>
 	                        </div>
 	                        <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
 	                    </div>
 	                </div>
-	            </div>
-	            <div class="wpb_column vc_column_container vc_col-sm-2">
-	                <div class="vc_column-inner ">
-	                    <div class="wpb_wrapper"></div>
-	                </div>
-	            </div>
+	            </div>	            
 	        </div>
 	    </div>
 	</div>
@@ -69,19 +64,18 @@
 	                    <div class="wpb_wrapper"></div>
 	                </div>
 	            </div>
-	            <div class="wpb_column vc_column_container vc_col-sm-8">
+	            <div class="wpb_column vc_column_container vc_col-sm-10">
 	                <div class="vc_column-inner ">
 	                    <div class="wpb_wrapper">
 	                        <div class="wpb_text_column wpb_content_element ">
 	                            <div class="wpb_wrapper">
-	                            	<div class="wpb_column vc_column_container vc_col-sm-3">
-	                            		<ul class="vertical-links">
-	                            			<li><a href="<?php echo home_url( '/member-dashboard/' ); ?>">Dashboard</a></li>
-	                            			<li><a href="<?php echo home_url( '/member-dashboard/' . bp_core_get_username( get_current_user_id() ) ); ?>" <?php if(bp_is_user_profile()): ?>class="active"<?php endif; ?>>Profile</a></li>
-	                            			<li><a href="<?php echo home_url( '/member-dashboard/' . bp_core_get_username( get_current_user_id() ) . '/messages/' ); ?>" <?php if(bp_is_user_messages()): ?>class="active"<?php endif; ?>>Messages</a></li>
-	                            		</ul>
-	                            	</div>
 	                            	<div class="wpb_column vc_column_container vc_col-sm-9">
+	                            		<ul class="tabs">
+	                            			<li><a href="<?php echo home_url( '/client-dashboard/' ); ?>">Dashboard</a></li>
+	                            			<li><a href="<?php echo home_url( '/client-dashboard/' . bp_core_get_username( get_current_user_id() ) ); ?>" <?php if(bp_is_user_profile()): ?>class="active"<?php endif; ?>>Profile</a></li>
+	                            			<li><a href="<?php echo home_url( '/client-dashboard/' . bp_core_get_username( get_current_user_id() ) . '/messages/' ); ?>" <?php if(bp_is_user_messages()): ?>class="active"<?php endif; ?>>Messages</a></li>
+	                            		</ul>
+	                            		<div id="tabs-content-seperator" class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
 	                            		<?php
 										/**
 										 * Fires before the display of member home content.
@@ -109,7 +103,7 @@
 											<div class="item-list-tabs no-ajax" id="object-nav" role="navigation">
 												<ul>
 
-													<?php bp_get_displayed_user_nav(); ?>
+													<?php //bp_get_displayed_user_nav(); ?>
 
 													<?php
 
@@ -190,12 +184,7 @@
 	                        </div>
 	                    </div>
 	                </div>
-	            </div>
-	            <div class="wpb_column vc_column_container vc_col-sm-2">
-	                <div class="vc_column-inner ">
-	                    <div class="wpb_wrapper"></div>
-	                </div>
-	            </div>
+	            </div>	            
 	        </div>
 	    </div>
 	</div>
