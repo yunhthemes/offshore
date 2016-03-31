@@ -920,6 +920,18 @@ label.align-label {
 .nominee-container.hidden {
   display: none;
 }
+input.error::-webkit-input-placeholder {
+  color: red!important;
+}
+input.error:-moz-placeholder {
+  color: red!important;
+}
+input.error::-moz-placeholder {
+  color: red!important;
+}
+input.error:-ms-input-placeholder {
+  color: red!important;
+}
 #registration-page-form-1-1 ul,
 #registration-page-form-1-2 ul {
   display: inline-block;
@@ -957,12 +969,25 @@ label.align-label {
 #registration-page-form-1-2 .custom-submit-class {
   margin-top: 0px;
 }
+#registration-page-form-1-1 input#new-incorporation {
+  display: none;
+}
 #registration-page-form-3 input[type="checkbox"] {
   display: inline-block;
 }
 #registration-page-form-3 input:disabled {
   background-color: #dddddd;
   border-color: #bfbfbf;
+}
+#registration-page-form-4 p.error,
+#registration-page-form-4 label.error {
+  color: red!important;
+}
+#registration-page-form-4 label#tnc-error,
+#registration-page-form-4 label#company_name_choice_3-error,
+#registration-page-form-4 #company_name_choice_2-error,
+#registration-page-form-4 #company_name_choice_1-error {
+  margin-left: 10px;
 }
 #registration-page-form-4 .half-field-container {
   width: 70%;
@@ -971,7 +996,9 @@ label.align-label {
   display: inline-block;
   width: 165px;
 }
-#registration-page-form-4 input {
+#registration-page-form-4 input,
+#registration-page-form-4 select,
+#registration-page-form-4 .custom-input-class-select-container {
   display: inline-block;
   width: 300px;
 }
@@ -1029,6 +1056,31 @@ label.align-label {
 }
 #registration-page-form-4 .text-container {
   text-align: center;
+}
+#registration-page-form-4 #summarydirector,
+#registration-page-form-4 #summarysecretary,
+#registration-page-form-4 #summaryshareholder {
+  position: relative;
+}
+#registration-page-form-4 #summarydirector #nominee_shareholder_annual_fee,
+#registration-page-form-4 #summarysecretary #nominee_shareholder_annual_fee,
+#registration-page-form-4 #summaryshareholder #nominee_shareholder_annual_fee,
+#registration-page-form-4 #summarydirector #nominee_director_annual_fee,
+#registration-page-form-4 #summarysecretary #nominee_director_annual_fee,
+#registration-page-form-4 #summaryshareholder #nominee_director_annual_fee,
+#registration-page-form-4 #summarydirector #nominee_secretary_annual_fee,
+#registration-page-form-4 #summarysecretary #nominee_secretary_annual_fee,
+#registration-page-form-4 #summaryshareholder #nominee_secretary_annual_fee {
+  visibility: hidden;
+  position: absolute;
+}
+#registration-page-form-4 #summarydirector #nominee_director_annual_fee-error,
+#registration-page-form-4 #summarysecretary #nominee_director_annual_fee-error,
+#registration-page-form-4 #summaryshareholder #nominee_director_annual_fee-error,
+#registration-page-form-4 #summarydirector #nominee_secretary_annual_fee-error,
+#registration-page-form-4 #summarysecretary #nominee_secretary_annual_fee-error,
+#registration-page-form-4 #summaryshareholder #nominee_secretary_annual_fee-error {
+  width: 100%!important;
 }
 .custom-input-container-left {
   width: 70%;

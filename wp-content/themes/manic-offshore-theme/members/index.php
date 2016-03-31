@@ -137,7 +137,7 @@
 				<h5 class="label">Next domiciliation renewal</h5>
 			</div>
 			<div class="value-container">
-				<p class="value">N/A</p>
+				<p class="value">{{renewal_date}}</p>
 			</div>
 		</div>
 		<div class="each-detail">

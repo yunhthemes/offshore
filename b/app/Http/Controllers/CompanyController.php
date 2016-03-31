@@ -31,7 +31,7 @@ class CompanyController extends Controller
     	// DB::enableQueryLog();
         // DB::getQueryLog();
 
-        $companies = Company::with('companytypes')->get();              
+        $companies = Company::with('companytypes')->where('shelf', 1)->get();              
         return view('company.index', ['companies'=>$companies]);            
     }
 
@@ -139,9 +139,11 @@ class CompanyController extends Controller
                 $info_services_ids = $request->info_services_id;
                 $company_info_services = array();
 
-                foreach ($info_services_ids as $key => $value) {
-                    $company->informationservice()->attach($value);
-                }
+                if($info_services_ids) {
+                    foreach ($info_services_ids as $key => $value) {
+                        $company->informationservice()->attach($value);
+                    }    
+                }                
 
                 return response()->json(['message' => 'Successfully added', 'response' => $request->all()], 200)->setCallback($request->input('callback'));
 

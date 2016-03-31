@@ -5,15 +5,14 @@
 	<div class="row">
 		<div class="col-md-12">
 			<div class="space50"></div>
-			<h1>Add new company</h1>
-			<a href="{{ route('admin.company.index') }}">Back</a>
-				
+			<h1>Add a shelf company</h1>
+			<a href="{{ route('admin.company.index') }}"><button class="custom-submit-class">Return to shelf companies list</button></a>
 			<div class="space50"></div>
 			
 			<div class="form-container">
 				{!! Form::open(array('route' => 'admin.company.store')) !!}
 					<div class="field-container">
-						{{ Form::label('company_type', 'Jurisdiction/Company type')}}
+						{{ Form::label('company_type', 'Company type')}}
 						<div class="custom-input-class-select-container">
 							{{ Form::select('company_type', $company_types, null, ['class'=>'custom-input-class']) }}
 						</div>
@@ -23,19 +22,19 @@
 						{{ Form::text('company_name', null, ['class'=>'custom-input-class']) }}
 					</div>
 					<div class="field-container">
-						{{ Form::label('company_incorporation_date', 'Incorporation date')}}
+						{{ Form::label('company_incorporation_date', 'Incorporated')}}
 						{{ Form::text('company_incorporation_date', null, ['class'=>'custom-input-class']) }}
 					</div>
 					<div class="field-container">
-						{{ Form::label('company_price', 'Price (USD)')}}
+						{{ Form::label('company_price', 'Price USD$')}}
 						{{ Form::text('company_price', null, ['class'=>'custom-input-class']) }}
 					</div>					
 					<div class="field-container">
-						{{ Form::label('company_price_eu', 'Price (EUR)')}}
+						{{ Form::label('company_price_eu', 'Price €')}}
 						{{ Form::text('company_price_eu', null, ['class'=>'custom-input-class']) }}
 					</div>					
 
-					{{ Form::submit('Submit', ['class'=>'custom-submit-class']) }}
+					{{ Form::submit('Save', ['class'=>'custom-submit-class']) }}
 			{!! Form::close() !!}
 			</div>
 

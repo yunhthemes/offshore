@@ -5,20 +5,20 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="space50"></div>
-				<h1>Jurisdictions</h1><a href="{{ route('admin.jurisdiction.create') }}">Create new</a>
-				
+				<h1>Company types</h1><a href="{{ route('admin.jurisdiction.create') }}"><button class="custom-submit-class">Add a company type</button></a>
+				<a href="{{ url('/admin') }}"><button class="custom-submit-class">Return to dashboard</button></a>				
 				<div class="space50"></div>
 								
 				<table class="table table-striped"> 
 					<thead> 
-						<tr><th>#</th><th>Name</th><th>Created At</th></tr></thead> 
+						<tr><th>Name</th></tr></thead> 
 					<tbody> 
 						@if($company_types->count() > 0)
 			              	@foreach($company_types as $k => $company_type)
 			                    <tr>
-			                    	<th scope="row"><a href="{{ route('admin.jurisdiction.show', $company_type->id) }}">{{ $company_type->id }}</a></th>
+			                    	<!-- <th scope="row"><a href="{{ route('admin.jurisdiction.show', $company_type->id) }}">{{ $company_type->id }}</a></th> -->
 			                    	<td><a href="{{ route('admin.jurisdiction.show', $company_type->id) }}">{{ $company_type->name }}</a></td>
-			                    	<td><a href="{{ route('admin.jurisdiction.show', $company_type->id) }}">{{ $company_type->created_at }}</a></td>
+			                    	<!-- <td><a href="{{ route('admin.jurisdiction.show', $company_type->id) }}">{{ $company_type->created_at }}</a></td> -->
 			                    </tr> 
 			              	@endforeach
 			            @else					
