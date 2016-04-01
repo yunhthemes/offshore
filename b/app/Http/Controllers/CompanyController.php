@@ -101,7 +101,9 @@ class CompanyController extends Controller
                     $address = $request->input('director_'.$i.'_address');
                     $address_2 = $request->input('director_'.$i.'_address_2');
                     $address_3 = $request->input('director_'.$i.'_address_3');
-                    $directors[] = new CompanyDirector(['name'=>$name, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3]);
+                    $address_4 = $request->input('director_'.$i.'_address_4');
+                    $telephone = $request->input('director_'.$i.'_telephone');
+                    $directors[] = new CompanyDirector(['name'=>$name, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3, 'address_3'=>$address_3, 'address_4'=>$address_4, 'telephone'=>$telephone]);
                 }
 
                 for($i=1;$i<=$request->secretary_count;$i++) {                
@@ -109,7 +111,9 @@ class CompanyController extends Controller
                     $address = $request->input('secretary_'.$i.'_address');
                     $address_2 = $request->input('secretary_'.$i.'_address_2');
                     $address_3 = $request->input('secretary_'.$i.'_address_3');
-                    $secretaries[] = new CompanySecretary(['name'=>$name, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3]);
+                    $address_4 = $request->input('secretary_'.$i.'_address_4');
+                    $telephone = $request->input('secretary_'.$i.'_telephone');
+                    $secretaries[] = new CompanySecretary(['name'=>$name, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3, 'address_3'=>$address_3, 'address_4'=>$address_4, 'telephone'=>$telephone]);
                 }
 
                 for($i=1;$i<=$request->shareholder_count;$i++) {                
@@ -117,8 +121,10 @@ class CompanyController extends Controller
                     $address = $request->input('shareholder_'.$i.'_address');
                     $address_2 = $request->input('shareholder_'.$i.'_address_2');
                     $address_3 = $request->input('shareholder_'.$i.'_address_3');
+                    $address_4 = $request->input('shareholder_'.$i.'_address_4');
+                    $telephone = $request->input('shareholder_'.$i.'_telephone');
                     $amount = $request->input('shareholder_'.$i.'_amount');
-                    $shareholders[] = new CompanyShareholder(['name'=>$name, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3, 'share_amount'=>$amount]);
+                    $shareholders[] = new CompanyShareholder(['name'=>$name, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3, 'address_4'=>$address_4, 'telephone'=>$telephone, 'share_amount'=>$amount]);
                 }
 
                 $company->companydirectors()->saveMany($directors);

@@ -223,6 +223,10 @@ class ServiceSeeder extends Seeder
 
         DB::table('services')->insert([
             [
+                'name' => 'Registered office annual fee (compulsory)',                
+                'company_type_id' => '1'
+            ],
+            [
                 'name' => 'Bank accounts',                
                 'company_type_id' => '1'                
             ],
@@ -232,8 +236,8 @@ class ServiceSeeder extends Seeder
             ],
             [
                 'name' => 'Registered office annual fee (compulsory)',                
-                'company_type_id' => '1'
-            ],
+                'company_type_id' => '2'
+            ],            
             [
                 'name' => 'Bank accounts',                
                 'company_type_id' => '2'                
@@ -241,10 +245,10 @@ class ServiceSeeder extends Seeder
             [
                 'name' => 'Credit/debit cards',                
                 'company_type_id' => '2'
-            ],
+            ],            
             [
                 'name' => 'Registered office annual fee (compulsory)',                
-                'company_type_id' => '2'
+                'company_type_id' => '3'
             ],
             [
                 'name' => 'Bank accounts',                
@@ -253,11 +257,7 @@ class ServiceSeeder extends Seeder
             [
                 'name' => 'Credit/debit cards',                
                 'company_type_id' => '3'
-            ],
-            [
-                'name' => 'Registered office annual fee (compulsory)',                
-                'company_type_id' => '3'
-            ]
+            ]            
         ]);
 
         DB::table('service_country')->delete();
@@ -265,100 +265,100 @@ class ServiceSeeder extends Seeder
         DB::table('service_country')->insert([
             [
                 'service_id' => '1',                
+                'country_id' => '1',                
+                'price' => '500',                
+                'price_eu' => '400'
+            ],
+            [
+                'service_id' => '2',                
                 'country_id' => '229',                
                 'price' => '1000',                
                 'price_eu' => '900'
             ],
             [
-                'service_id' => '1',                
+                'service_id' => '2',                
                 'country_id' => '230',                
                 'price' => '1200',                
                 'price_eu' => '1100'
             ],
             [
-                'service_id' => '1',                
+                'service_id' => '2',                
                 'country_id' => '38',                
                 'price' => '1400',                
                 'price_eu' => '1300'
             ],
             [
-                'service_id' => '2',                
+                'service_id' => '3',                
                 'country_id' => '229',                
                 'price' => '500',                
                 'price_eu' => '400'
             ],
             [
-                'service_id' => '2',                
+                'service_id' => '3',                
                 'country_id' => '230',                
                 'price' => '600',                
                 'price_eu' => '500'
-            ],
+            ],            
             [
-                'service_id' => '3',                
+                'service_id' => '4',                
                 'country_id' => '1',                
                 'price' => '500',                
                 'price_eu' => '400'
             ],
             [
-                'service_id' => '4',                
+                'service_id' => '5',                
                 'country_id' => '13',                
                 'price' => '1000',                
                 'price_eu' => '900'
             ],
             [
-                'service_id' => '4',                
+                'service_id' => '5',                
                 'country_id' => '158',                
                 'price' => '1200',                
                 'price_eu' => '1100'
-            ],
-            [
-                'service_id' => '5',                
-                'country_id' => '13',                
-                'price' => '500',                
-                'price_eu' => '400'
-            ],
-            [
-                'service_id' => '5',                
-                'country_id' => '158',                
-                'price' => '600',                
-                'price_eu' => '500'
             ],
             [
                 'service_id' => '6',                
+                'country_id' => '13',                
+                'price' => '500',                
+                'price_eu' => '400'
+            ],
+            [
+                'service_id' => '6',                
+                'country_id' => '158',                
+                'price' => '600',                
+                'price_eu' => '500'
+            ],            
+            [
+                'service_id' => '7',                
                 'country_id' => '1',                
                 'price' => '500',                
                 'price_eu' => '400'
             ],
             [
-                'service_id' => '7',                
+                'service_id' => '8',                
                 'country_id' => '13',                
                 'price' => '1000',                
                 'price_eu' => '900'
             ],
             [
-                'service_id' => '7',                
+                'service_id' => '8',                
                 'country_id' => '158',                
                 'price' => '1200',                
                 'price_eu' => '1100'
             ],
             [
-                'service_id' => '8',                
+                'service_id' => '9',                
                 'country_id' => '13',                
                 'price' => '500',                
                 'price_eu' => '400'
             ],
             [
-                'service_id' => '8',                
+                'service_id' => '9',                
                 'country_id' => '158',                
                 'price' => '600',                
                 'price_eu' => '500'
-            ],
-            [
-                'service_id' => '9',                
-                'country_id' => '1',                
-                'price' => '500',                
-                'price_eu' => '400'
-            ]
+            ]            
         ]);                
     }
 }

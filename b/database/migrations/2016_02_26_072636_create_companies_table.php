@@ -15,6 +15,7 @@ class CreateCompaniesTable extends Migration
         //
         Schema::create('companies', function (Blueprint $table) {
             $table->increments('id')->unique();
+            $table->string('code');
             $table->string('name');
             $table->date('incorporation_date');
             $table->decimal('price', 10, 0);

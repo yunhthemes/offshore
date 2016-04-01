@@ -48,4 +48,32 @@ class ApiController extends Controller
         return response()->json(['message' => 'Success', 'companydetails' => $wpuser_company_details], 200)->setCallback($request->input('callback'));
 
     }
+
+    public function uploadfiles(Request $request) {
+
+        $type = $request->type;
+
+        if ($request->hasFile('Filedata')) {
+            $file = $request->file('Filedata');            
+            $destinationPath = public_path() . "/uploads/";
+
+            $orgFilename     = $file->getClientOriginalName();
+            $filename        = str_random(6) . '_' . $file->getClientOriginalName();
+            $uploadSuccess   = $file->move($destinationPath, $filename);
+        }
+
+        if(!empty($uploadSuccess)) {
+            error_log("Destination: $destinationPath");
+            error_log("Filename: $filename");
+            error_log("Extension: ".$file->getClientOriginalExtension());
+            error_log("Original name: ".$file->getClientOriginalName());
+            error_log("Real path: ".$file->getRealPath());
+            return $filename . '||' . $orgFilename . '||' . $destinationPath;
+        }
+        else {
+            error_log("Error moving file: ".$file->getClientOriginalName());
+            return 'Erorr on ';
+        }          
+
+    }
 }

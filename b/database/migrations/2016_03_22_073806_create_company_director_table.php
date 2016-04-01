@@ -20,6 +20,10 @@ class CreateCompanyDirectorTable extends Migration
             $table->string('address');            
             $table->string('address_2');
             $table->string('address_3');
+            $table->string('address_4');
+            $table->string('telephone');
+            $table->string('passort');
+            $table->string('bill');
             $table->foreign('company_id')->references('id')->on('companies');
             $table->timestamps('created_at');
         });

@@ -26,38 +26,29 @@
 
 }
 
-.custom-submit-class{
+.custom-submit-class, .uploadifive-button{
 
-  //color: #0088cc !important;
-  //background-color: rgba(255, 255, 255, 1) !important;
-  color: #ffffff;
-  //background-color: rgba(0, 136, 204, 1);
-  background-color: @dark-blue;
-  
+  color: #ffffff!important;
+  background-image: none!important;
+  background-color: @dark-blue!important;
+  font-size: 14px!important;
+  line-height: 1.7em!important;
 
-  font-size: 14px;
-  line-height: 1.7em;
-
-  height: 42px;
-  font-family: Montserrat;
-  font-style: normal;
-  font-weight: 700;
-  text-transform: none;
-  letter-spacing: 0px;
-  border-width: 2px;
-  border-radius: 30px;
-  //padding-left: 30px;
-  //padding-right: 30px;
+  height: 42px!important;
+  font-family: Montserrat!important;
+  font-style: normal!important;
+  font-weight: 700!important;
+  text-transform: none!important;
+  letter-spacing: 0px!important;
+  border-width: 2px!important;
+  border-radius: 30px!important;
 
   cursor: pointer;
-  // /padding: 6px 25px;
   padding: 6px 30px;
-  border: 2px solid #08c;
-  //border-color: rgba(0, 136, 204, 1);
-  border-color: @dark-blue;
-  //border-color: rgba(0, 136, 204, 1) !important;
+  border: 2px solid #08c!important;
+  border-color: @dark-blue!important;
   display: inline-block;
-  position: relative;
+  position: relative!important;
   outline: 0;
   transition: color .2s ease-in-out,background-color .2s ease-in-out,border-color .2s ease-in-out;
   -webkit-appearance: none;
@@ -216,6 +207,10 @@
 #respond textarea, 
 .mkdf-content .searchform input[type=search], .mkdf-content .searchform input[type=text], .post-password-form input[type=password], .widget_product_search .searchform input[type=search], .widget_product_search .searchform input[type=text], .widget_search .searchform input[type=search], .widget_search .searchform input[type=text], .wpcf7-form-control.wpcf7-date, .wpcf7-form-control.wpcf7-number, .wpcf7-form-control.wpcf7-quiz, .wpcf7-form-control.wpcf7-select, .wpcf7-form-control.wpcf7-text, .wpcf7-form-control.wpcf7-textarea
 */
+
+.page-id-689 {
+  
+}
 
 .field-container {
   margin-bottom: 18px;
@@ -455,6 +450,10 @@ input.error {
   }
   .each-content {
     margin-bottom: 15px; 
+    &:last-child {
+      width: 26.3%;
+      text-align: right;
+    }
   }
   .custom-submit-class {
     margin-top: 0px;
@@ -478,6 +477,9 @@ input.error {
 }
 
 #registration-page-form-4 {
+  .go-step-2 {
+    display: none;
+  }
   p.error, label.error {
     color: red!important;
   }
@@ -486,6 +488,9 @@ input.error {
   }
   .half-field-container {
     width: 70%;
+  }
+  .half-field-container-2 {
+    width: 76%;
   }
   label {
     display: inline-block;
@@ -524,13 +529,16 @@ input.error {
     display: none;
   }
   .col-1 {
-    width: 30%;
+    width: 41%;
   }
   .col-2 {
-    width: 42%;
-    
+    width: 35%;    
+    .person-info {
+      text-align: left;
+    }
   }
   .custom-submit-class-2 {
+    width: 166px;
     &:nth-of-type(1) {
       margin-top: 0px;
     }
@@ -562,6 +570,10 @@ input.error {
     #nominee_director_annual_fee-error, #nominee_secretary_annual_fee-error {
       width: 100%!important;
     }
+  }
+
+  .shareholder-amount-input {
+    margin: 0 auto;
   }
 }
 
