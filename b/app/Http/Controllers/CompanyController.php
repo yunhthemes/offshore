@@ -161,10 +161,14 @@ class CompanyController extends Controller
 
         }else {
 
+            // return strtotime();
+
             if(!empty($request->company_name) && !empty($request->company_incorporation_date) && !empty($request->company_type) && !empty($request->company_price)) {
                 $company = new Company();
+                $company->code = $request->code;
                 $company->name = $request->company_name;
-                $company->incorporation_date = $request->company_incorporation_date;
+                $company_incorporation_date = str_replace('/', '-', $request->company_incorporation_date);
+                $company->incorporation_date = date('Y-m-d H:i:s', strtotime($company_incorporation_date));
                 $company->price = (double) preg_replace("/[^0-9,.]/", "", $request->company_price);
                 $company->price_eu = (double) preg_replace("/[^0-9,.]/", "", $request->company_price_eu);
                 $company->shelf = 1;
@@ -220,6 +224,12 @@ class CompanyController extends Controller
     public function edit($id)
     {
         //
+        $company = Company::find($id);
+        // return $company;
+
+        $company_types = CompanyType::lists('name', 'id');        
+
+        return view('company.edit', ['company'=>$company, 'company_types'=>$company_types]);
     }
 
     /**
@@ -232,6 +242,18 @@ class CompanyController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $company = Company::find($id);
+
+        $company->code = $request->code;
+        $company->name = $request->company_name;
+        $company_incorporation_date = str_replace('/', '-', $request->company_incorporation_date);
+        $company->incorporation_date = date('Y-m-d H:i:s', strtotime($company_incorporation_date));
+        $company->price_eu = $request->company_price_eu;
+        $company->price = $request->company_price;
+        $company->company_type_id = $request->company_type;
+        $company->save();
+
+        return redirect('admin/company');
     }
 
     /**
@@ -243,5 +265,24 @@ class CompanyController extends Controller
     public function destroy($id)
     {
         //
+        $ids = explode(',', $id);
+
+        $affectedRows = false;
+
+        foreach ($ids as $key => $each_id) {
+            $company = Company::find($each_id);
+
+            if($company->wpuser_id==NULL) {
+                $affectedRows = $company->delete();
+            }else {
+                $error = "There is a user subscribed under this company";                
+            }   
+        }
+
+        if($affectedRows) {
+            return response()->json(['message' => 'Successfully deleted'], 200);    
+        }else {
+            return response()->json(['message' => 'Request failed', 'error' => $error], 412);    
+        }
     }
 }

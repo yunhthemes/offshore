@@ -26,6 +26,29 @@
 
 }
 
+.table {
+  thead {
+    tr {
+      th {
+        vertical-align: top;
+      }
+    }
+  }
+}
+
+#demo {
+  td {
+    vertical-align: middle!important;
+  }  
+}
+
+.link-to {
+  color: @dark-grey;
+  &:hover {
+    color: @dark-blue;
+  }
+}
+
 .custom-submit-class{
 
   //color: #0088cc !important;
@@ -73,11 +96,35 @@
     background-color: @background-grey;
     border-color: @background-grey;
   }
+
+  &.custom-submit-class-2 {
+    margin-top: 0px;
+    vertical-align: middle;
+  }
 }
 
 .add-more {
   display: block;
   text-align: right;
+}
+
+.header,
+.sort-btns {
+    display: inline-block;
+    float: left;
+    cursor: pointer;
+}
+
+.sort-btns {
+    width: 10px;
+    margin: 0 0 0 10px;
+}
+
+.sort-btns .fa {
+    display: block;
+    font-size: 20px;
+    line-height: 12px;
+    cursor: pointer;
 }
 
 

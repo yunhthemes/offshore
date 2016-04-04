@@ -66,7 +66,7 @@ class JurisdictionController extends Controller
         $company_type->name = $request->company_type_name;
         $company_type->price = (double) preg_replace("/[^0-9,.]/", "", $request->company_type_price);
         $company_type->price_eu = (double) preg_replace("/[^0-9,.]/", "", $request->company_type_price_eu);
-        $company_type->rules = 'company rules?';
+        $company_type->rules = $request->company_name_rules;
         $company_type->save();
 
         if($company_type->id) {
@@ -97,6 +97,20 @@ class JurisdictionController extends Controller
                 $secretary->company_type_id = $company_type->id;       
                 $secretary->save();
             }
+
+            // Registered office annual fee (compulsory)
+
+            $service = new Service();
+            $service->name = $request->service_3_name;
+            $service->company_type_id = $company_type->id;    
+            $service->save();
+
+            $country = Country::find($request->input('service_3_country_1'));
+            $price = (double) preg_replace("/[^0-9,.]/", "", $request->input('service_3_price_1'));
+            $price_eu = (double) preg_replace("/[^0-9,.]/", "", $request->input('service_3_price_eu_1'));
+            $country->services()->attach($service->id, ['price' => $price, 'price_eu' => $price_eu]);
+
+            //////
 
             $count = $request->service_1_count;
 
@@ -137,7 +151,7 @@ class JurisdictionController extends Controller
                                         
                     endif;                
                 endfor;
-            }
+            }            
 
             // $count = $request->service_3_count;
 
@@ -259,6 +273,13 @@ class JurisdictionController extends Controller
     public function edit($id)
     {
         //
+        $company_type = CompanyType::with('directors', 'shareholders', 'secretaries', 'services.countries', 'informationservices')->find($id);
+
+        $countries = Country::lists('name', 'id');
+
+        // return $company_type;
+
+        return view('jurisdiction.edit', [ 'company_type' => $company_type, 'countries' => $countries ]);
     }
 
     /**
@@ -271,6 +292,134 @@ class JurisdictionController extends Controller
     public function update(Request $request, $id)
     {
         //
+        // return $request->all();
+
+        $company_type = CompanyType::find($id);
+        $company_type->name = $request->company_type_name;
+        $company_type->price = (double) preg_replace("/[^0-9,.]/", "", $request->company_type_price);
+        $company_type->price_eu = (double) preg_replace("/[^0-9,.]/", "", $request->company_type_price_eu);
+        $company_type->rules = $request->company_name_rules;
+        $company_type->save();
+
+        if($company_type->id) {
+
+            if(!empty($request->director_name_rules) && !empty($request->director_price) && !empty($request->director_price_eu)) {
+                $director = Director::find($request->director_id);
+                $director->name_rules = $request->director_name_rules;
+                $director->price = (double) preg_replace("/[^0-9,.]/", "", $request->director_price);   
+                $director->price_eu = (double) preg_replace("/[^0-9,.]/", "", $request->director_price_eu);   
+                $director->company_type_id = $company_type->id;   
+                $director->save();
+            }
+
+            if(!empty($request->shareholder_name_rules) && !empty($request->shareholder_price) && !empty($request->shareholder_price_eu)) {
+                $shareholder = Shareholder::find($request->shareholder_id);                
+                $shareholder->name_rules = $request->shareholder_name_rules;
+                $shareholder->price = (double) preg_replace("/[^0-9,.]/", "", $request->shareholder_price);
+                $shareholder->price_eu= (double) preg_replace("/[^0-9,.]/", "", $request->shareholder_price_eu);
+                $shareholder->company_type_id = $company_type->id;       
+                $shareholder->save();
+            }
+
+            if(!empty($request->secretary_name_rules) && !empty($request->secretary_price) && !empty($request->secretary_price_eu)) {
+                $secretary = Secretary::find($request->secretary_id);
+                $secretary->name_rules = $request->secretary_name_rules;
+                $secretary->price = (double) preg_replace("/[^0-9,.]/", "", $request->secretary_price);    
+                $secretary->price_eu = (double) preg_replace("/[^0-9,.]/", "", $request->secretary_price_eu);    
+                $secretary->company_type_id = $company_type->id;       
+                $secretary->save();
+            }
+
+            // Registered office annual fee (compulsory)
+
+            $service = Service::find($request->service_3_id);
+
+            $country = Country::find($request->input('service_3_country_1'));
+            $price = (double) preg_replace("/[^0-9,.]/", "", $request->input('service_3_price_1'));
+            $price_eu = (double) preg_replace("/[^0-9,.]/", "", $request->input('service_3_price_eu_1'));
+            $country->services()->attach($service->id, ['price' => $price, 'price_eu' => $price_eu]);
+
+            //////
+
+            $count = $request->service_1_count;
+
+            if(!empty($request->service_1_name) && !empty($request->input('service_1_price_1'))) {
+
+                // $service = new Service();
+                // $service->name = $request->service_1_name;
+                // $service->company_type_id = $company_type->id;    
+                // $service->save();
+
+                $service = Service::find($request->service_1_id);
+
+                for($i=1;$i<=$count;$i++):
+                    if(!empty($request->input('service_1_name')) && !empty($request->input('service_1_country_'.$i)) && !empty($request->input('service_1_price_'.$i)) && !empty($request->input('service_1_price_eu_'.$i))):
+                        
+                        $country = Country::find($request->input('service_1_country_'.$i));
+                        $price = (double) preg_replace("/[^0-9,.]/", "", $request->input('service_1_price_'.$i));
+                        $price_eu = (double) preg_replace("/[^0-9,.]/", "", $request->input('service_1_price_eu_'.$i));
+
+                        $service_country_id = $request->input('service_1_country_'.$i.'_id');
+
+                        if(empty($service_country_id))
+                            $country->services()->attach($service->id, ['price' => $price, 'price_eu' => $price_eu]);
+                        else
+                            $country->services()->updateExistingPivot($service->id, ['price' => $price, 'price_eu' => $price_eu]);
+                        
+                    endif;                
+                endfor;
+            }
+
+            $count = $request->service_2_count;
+
+            if(!empty($request->service_2_name) && !empty($request->input('service_2_price_1'))) {
+
+                // $service = new Service();
+                // $service->name = $request->service_2_name;
+                // $service->company_type_id = $company_type->id;    
+                // $service->save();
+
+                $service = Service::find($request->service_2_id);
+
+                for($i=1;$i<=$count;$i++):
+                    if(!empty($request->input('service_2_name')) && !empty($request->input('service_2_country_'.$i)) && !empty($request->input('service_2_price_'.$i)) && !empty($request->input('service_2_price_eu_'.$i))):
+                        
+                        $country = Country::find($request->input('service_2_country_'.$i));
+                        $price = (double) preg_replace("/[^0-9,.]/", "", $request->input('service_2_price_'.$i));
+                        $price_eu = (double) preg_replace("/[^0-9,.]/", "", $request->input('service_2_price_eu_'.$i));
+
+                        $service_country_id = $request->input('service_2_country_'.$i.'_id');
+
+                        if(empty($service_country_id))
+                            $country->services()->attach($service->id, ['price' => $price, 'price_eu' => $price_eu]);
+                        else
+                            $country->services()->updateExistingPivot($service->id, ['price' => $price, 'price_eu' => $price_eu]);                        
+                                        
+                    endif;                
+                endfor;
+            }
+
+            $count = $request->information_service_count;
+
+            for($i=1;$i<=$count;$i++):
+                if(!empty($request->input('information_service_'.$i))):
+
+                    $information_service_id = $request->input('informationservices_'.$i.'_id');
+
+                    if(!empty($information_service_id)) {
+                        $information_service = InformationService::find($information_service_id);    
+                    }else {
+                        $information_service = new InformationService();                        
+                    }                                
+                    $information_service->name = $request->input('information_service_'.$i);                    
+                    $information_service->company_type_id = $company_type->id;    
+                    $information_service->save();
+                endif;
+            endfor;
+            
+        }     
+
+        return redirect('admin/jurisdiction');
     }
 
     /**
@@ -282,5 +431,47 @@ class JurisdictionController extends Controller
     public function destroy($id)
     {
         //
+        $ids = explode(',', $id);
+
+        $affectedRows = false;
+
+        foreach ($ids as $key => $each_id) {         
+
+            $company_type = CompanyType::find($each_id);
+
+            $company = Company::where("company_type_id", $company_type->id)->get();
+
+            if(count($company) <= 0) {
+                
+                if($company_type) {
+
+                    Director::where("company_type_id", $company_type->id)->delete();
+                    Shareholder::where("company_type_id", $company_type->id)->delete();
+                    Secretary::where("company_type_id", $company_type->id)->delete();
+
+                    $services = Service::where("company_type_id", $company_type->id)->get();
+                    
+                    foreach ($services as $key => $service) {
+                        $service->countries()->detach();
+                        $service->delete();
+                    }
+
+                    InformationService::where("company_type_id", $company_type->id)->delete();
+
+                    $affectedRows = $company_type->delete();
+
+                }
+
+            }else {
+                $error = "There are companies created under " . $company_type->name . ". Please delete those companies first";                
+            }
+                
+        }        
+
+        if($affectedRows) {
+            return response()->json(['message' => 'Successfully deleted'], 200);    
+        }else {
+            return response()->json(['message' => 'Request failed', 'error' => $error], 412);    
+        }            
     }
 }

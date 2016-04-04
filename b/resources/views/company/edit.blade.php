@@ -5,41 +5,42 @@
 	<div class="row">
 		<div class="col-md-12">
 			<div class="space50"></div>
-			<h1>Add a shelf company</h1>
+			<h1>Edit a shelf company</h1>
 			<a href="{{ route('admin.company.index') }}"><button class="custom-submit-class">Return to shelf companies list</button></a>
 			<div class="space50"></div>
 			
 			<div class="form-container">
-				{!! Form::open(array('route' => 'admin.company.store')) !!}
+				{{ Form::open(['route' => ['admin.company.update', $company->id], 'method' => 'put' ]) }}
 					<div class="field-container">
 						{{ Form::label('company_type', 'Company type')}}
 						<div class="custom-input-class-select-container">
-							{{ Form::select('company_type', $company_types, null, ['class'=>'custom-input-class']) }}
+							{{ Form::select('company_type', $company_types, $company->company_type_id, ['class'=>'custom-input-class']) }}
 						</div>
 					</div>					
 					<div class="field-container">
 						{{ Form::label('code', 'Code')}}
-						{{ Form::text('code', null, ['class'=>'custom-input-class']) }}
+						{{ Form::text('code', $company->code, ['class'=>'custom-input-class']) }}
 					</div>
 					<div class="field-container">
 						{{ Form::label('company_name', 'Company name')}}
-						{{ Form::text('company_name', null, ['class'=>'custom-input-class']) }}
+						{{ Form::text('company_name', $company->name, ['class'=>'custom-input-class']) }}
 					</div>
 					<div class="field-container">
 						{{ Form::label('company_incorporation_date', 'Incorporated')}}
-						{{ Form::text('company_incorporation_date', null, ['class'=>'custom-input-class']) }}
+						{{ Form::text('company_incorporation_date', date('d/m/Y', strtotime($company->incorporation_date)), ['class'=>'custom-input-class']) }}
 					</div>
 					<div class="field-container">
 						{{ Form::label('company_price_eu', 'Price €')}}
-						{{ Form::text('company_price_eu', null, ['class'=>'custom-input-class']) }}
+						{{ Form::text('company_price_eu', $company->price_eu, ['class'=>'custom-input-class']) }}
 					</div>					
 					<div class="field-container">
 						{{ Form::label('company_price', 'Price USD$')}}
-						{{ Form::text('company_price', null, ['class'=>'custom-input-class']) }}
+						{{ Form::text('company_price', $company->price, ['class'=>'custom-input-class']) }}
 					</div>										
 
 					{{ Form::submit('Save', ['class'=>'custom-submit-class']) }}
-			{!! Form::close() !!}
+				{!! Form::close() !!}
+
 			</div>
 
 		</div>
@@ -48,20 +49,7 @@
 
 <script>
 	$(document).ready(function(){
-
-		// function populate_fields(index, shareholder_id) {		
-		// 	$('.populate-shareholder-fields').append('<div class="field-container"><input type="text" name="shareholder_'+shareholder_id+'_share_amount" placeholder="Shareholder '+(parseInt(index)+1)+' share amount" class="custom-input-class" /></div>')
-		// }
-
-		// $('#shareholder').on('change', function(e){
-		// 	var shareholder_ids_arr = $(this).val();
-			
-		// 	$('.populate-shareholder-fields').html('');
-		// 	$.each(shareholder_ids_arr, function(index, shareholder_id){
-		// 		populate_fields(index, shareholder_id);
-		// 	});
-		// });
-
+		
 		$('#company_incorporation_date').datepicker({ dateFormat: 'dd/mm/yy' });
 	});
 </script>
