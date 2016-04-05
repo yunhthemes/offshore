@@ -51,9 +51,9 @@
 	                            <div class="wpb_wrapper">
 	                            	<div class="wpb_column vc_column_container vc_col-sm-9">
 	                            		<ul class="tabs">
-	                            			<li><a class="active" href="<?php echo home_url( '/client-dashboard/' ); ?>" class="active">Dashboard</a></li>
-	                            			<li><a href="<?php echo home_url( '/client-dashboard/' . bp_core_get_username( get_current_user_id() ) ); ?>">Profile</a></li>
-	                            			<li><a href="<?php echo home_url( '/client-dashboard/' . bp_core_get_username( get_current_user_id() ) . '/messages/' ); ?>">Messages</a></li>
+	                            			<li><a class="active" href="<?php echo home_url( '/client-dashboard/' ); ?>" class="active">My Dashboard</a></li>
+	                            			<li><a href="<?php echo home_url( '/client-dashboard/' . bp_core_get_username( get_current_user_id() ) . '/messages/' ); ?>">My Messages</a></li>
+	                            			<li><a href="<?php echo home_url( '/client-dashboard/' . bp_core_get_username( get_current_user_id() ) ); ?>">My Profile</a></li>
 	                            		</ul>
 	                            		<div id="tabs-content-seperator" class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
 		                                <div id="user-companies-container">
@@ -85,11 +85,11 @@
                 <h6>Company</h6>
             </div>
             <div class="each-header">
-                <h6>Renewal date</h6>
-            </div>
-            <div class="each-header">
                 <h6>Jurisdiction</h6>
             </div>
+            <div class="each-header">
+                <h6>Renewal date</h6>
+            </div>            
             <div class="each-header"></div>
         </div>   
 
@@ -99,11 +99,11 @@
                     <p>{{ name }}</p>
                 </div>
                 <div class="each-content">
-                    <p>{{ renewal_date }}</p>    
-                </div>
-                <div class="each-content">
                     <p>{{ companytypes.name }}</p>
                 </div>
+                <div class="each-content">
+                    <p>{{ renewal_date }}</p>    
+                </div>                
                 <div class="each-content">
                     <a href="#" data-company-id="{{id}}" class="company-details"><button class="custom-submit-class">Company details</button></a>
                 </div>                        
@@ -328,11 +328,11 @@
             var data = template(newdata);
             
             appendToHtml(data, append_to_selector);
-        }
+        }        
 
         function init() {
         	var newdata = [];
-        	var response = makeJsonpRequest("", "<?php echo SITEURL; ?>/b/api/usercompanies/"+<?php echo get_current_user_id(); ?>, "GET");	
+        	var response = makeJsonpRequest("", "<?php echo SITEURL; ?>/b/api/usercompanies/"+<?php echo get_current_user_id(); ?>, "GET");	        	
 
         	response.done(function(data, textStatus, jqXHR){                    
                 if(jqXHR.status==200) {

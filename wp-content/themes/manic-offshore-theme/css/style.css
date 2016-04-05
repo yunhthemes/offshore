@@ -635,6 +635,23 @@ footer .widget .mkdf-icon-list-item:hover p {
   padding: 0px 20px;
   display: block;
 }
+.custom-submit-class.custom-submit-class-2:last-child,
+.uploadifive-button.custom-submit-class-2:last-child {
+  margin-top: 0px;
+}
+.edit-btn-container {
+  position: relative;
+  text-align: right;
+}
+.upload-btn-container {
+  position: relative;
+  text-align: right;
+}
+.upload-btn-container .files {
+  position: absolute;
+  left: -185px;
+  top: 12px;
+}
 .add-more {
   display: block;
 }
@@ -1054,12 +1071,18 @@ input.error:-ms-input-placeholder {
 #registration-page-form-4 .col-2 .person-info {
   text-align: left;
 }
+#registration-page-form-4 .upload-col-container {
+  width: 24%;
+}
+#registration-page-form-4 .ajax-file-upload {
+  background: none;
+}
+#registration-page-form-4 .ajax-file-upload-container {
+  position: absolute;
+}
 #registration-page-form-4 .custom-submit-class-2 {
   width: 166px;
   margin-top: 5px;
-}
-#registration-page-form-4 .custom-submit-class-2:nth-of-type(1) {
-  margin-top: 0px;
 }
 #registration-page-form-4 .nominee-cta-container,
 #registration-page-form-4 .service-cta-container {
@@ -1237,6 +1260,9 @@ body.home .rev_slider_wrapper {
 }
 body.home .rev_slider {
   height: 420px !important;
+}
+#homepage-icons-row {
+  background: none!important;
 }
 #homepage-icons-row .owl-item {
   position: relative;

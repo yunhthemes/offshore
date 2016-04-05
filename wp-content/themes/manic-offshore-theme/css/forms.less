@@ -71,6 +71,25 @@
     margin-top: 15px;
     padding: 0px 20px;
     display: block;
+
+    &:last-child {
+      margin-top: 0px;
+    }
+  }  
+}
+
+.edit-btn-container {
+  position: relative;
+  text-align: right;
+}
+
+.upload-btn-container {
+  position: relative;
+  text-align: right;
+  .files {
+    position: absolute;
+    left: -185px;
+    top: 12px;
   }
 }
 
@@ -537,10 +556,19 @@ input.error {
       text-align: left;
     }
   }
+  .upload-col-container {
+    width: 24%;
+  }
+  .ajax-file-upload {
+    background: none;
+  }
+  .ajax-file-upload-container {
+    position: absolute;
+  }
   .custom-submit-class-2 {
     width: 166px;
     &:nth-of-type(1) {
-      margin-top: 0px;
+      // margin-top: 0px;
     }
     margin-top: 5px;      
   }

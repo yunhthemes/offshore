@@ -33,14 +33,23 @@
 						{{ Form::textarea('secretary_name_rules', null, ['class'=>'custom-input-class']) }}
 					</div>
 
+					<div class="field-container">
+						{{ Form::label('company_type_price_eu', 'Incorporation charge €')}}
+						{{ Form::text('company_type_price_eu', null, ['class'=>'custom-input-class service_prices_eu']) }}
+					</div>					
+					<div class="field-container">
+						{{ Form::label('company_type_price', 'Incorporation charge USD$')}}
+						{{ Form::text('company_type_price', null, ['class'=>'custom-input-class service_prices']) }}
+					</div>	
+
 					{{ Form::hidden('service_3_name', 'Registered office annual fee (compulsory)') }}
 					{{ Form::hidden('service_3_country_1', '2') }}
 					<div class="field-container">
-						{{ Form::label('service_3_price_eu_1', 'Incorporation charge €')}}
+						{{ Form::label('service_3_price_eu_1', 'Registered office fee €')}}
 						{{ Form::text('service_3_price_eu_1', null, ['class'=>'custom-input-class service_prices_eu']) }}
 					</div>					
 					<div class="field-container">
-						{{ Form::label('service_3_price_1', 'Incorporation charge USD$')}}
+						{{ Form::label('service_3_price_1', 'Registered office fee USD$')}}
 						{{ Form::text('service_3_price_1', null, ['class'=>'custom-input-class service_prices']) }}
 					</div>	
 
@@ -111,13 +120,13 @@
 									</div>
 								</div>							
 								<div class="field-container">
-									{{ Form::label('service_2_price_1', 'Card fee USD$')}}
-									{{ Form::text('service_2_price_1', null, ['class'=>'custom-input-class service_prices']) }}
-								</div>
-								<div class="field-container">
 									{{ Form::label('service_2_price_eu_1', 'Card fee €')}}
 									{{ Form::text('service_2_price_eu_1', null, ['class'=>'custom-input-class service_prices_eu']) }}
 								</div>
+								<div class="field-container">
+									{{ Form::label('service_2_price_1', 'Card fee USD$')}}
+									{{ Form::text('service_2_price_1', null, ['class'=>'custom-input-class service_prices']) }}
+								</div>								
 							</div>
 						</div>
 						<div class="pasteclone"></div>

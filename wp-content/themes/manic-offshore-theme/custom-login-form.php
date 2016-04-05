@@ -8,6 +8,9 @@ function custom_menu_item_shortcode() {
 	    	<nav class="mkdf-main-menu mkdf-drop-down mkdf-default-nav">
 				<ul>
 					<li class="menu-item menu-item-type-post_type menu-item-object-page narrow">
+			    	    <a href="'.esc_url( get_permalink( get_page_by_title( 'Client services dashboard' ) ) ).'"><span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon null fa"></i></span><span class="item_text">Client Dashboard</span></span><span class="plus"></span></span></a>
+			    	</li>
+					<li class="menu-item menu-item-type-post_type menu-item-object-page narrow">
 			    	    <a href="#" class="" id="custom-right-header-livechat"><span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon null fa"></i></span><span class="item_text">24/7 Support, Chat Now</span></span><span class="plus"></span></span></a>
 			    	</li>
 			    	<li class="menu-item menu-item-type-post_type menu-item-object-page narrow">

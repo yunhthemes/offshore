@@ -27,9 +27,14 @@ class ApiController extends Controller
 
     public function usercompanies($id, Request $request) {
 
-        $wpuser_compaines = Company::with("companytypes")->where('wpuser_id', $id)->get();
+        $wpuser_compaines = Company::with("companytypes")->where('wpuser_id', $id)->get();        
 
-    	if(empty($wpuser_compaines)) {    		
+        foreach ($wpuser_compaines as $key => $wpuser_company) {
+            $wpuser_company->incorporation_date = date('d M Y', strtotime($wpuser_company->incorporation_date));
+            $wpuser_company->renewal_date = date('d M Y', strtotime($wpuser_company->renewal_date));
+        }
+
+    	if(empty($wpuser_compaines)) {		
     		return response()->json(['message' => 'user not found'], 202)->setCallback($request->input('callback'));
     	}
         
@@ -41,6 +46,9 @@ class ApiController extends Controller
 
         $wpuser_company_details = Company::with('companytypes','companyshareholders', 'companydirectors', 'companysecretaries', 'servicescountries', 'informationservice')->get()->find($id);
 
+        $wpuser_company_details->renewal_date = date('d M Y', strtotime($wpuser_company_details->renewal_date));
+        $wpuser_company_details->incorporation_date = date('d M Y', strtotime($wpuser_company_details->incorporation_date));
+
         if(!$wpuser_company_details) {
             return response()->json(['message' => 'company not found'], 202)->setCallback($request->input('callback'));
         }
@@ -51,10 +59,10 @@ class ApiController extends Controller
 
     public function uploadfiles(Request $request) {
 
-        $type = $request->type;
+        // $type = $request->type;
 
-        if ($request->hasFile('Filedata')) {
-            $file = $request->file('Filedata');            
+        if ($request->hasFile('files')) {
+            $file = $request->file('files');   
             $destinationPath = public_path() . "/uploads/";
 
             $orgFilename     = $file->getClientOriginalName();
@@ -68,7 +76,15 @@ class ApiController extends Controller
             error_log("Extension: ".$file->getClientOriginalExtension());
             error_log("Original name: ".$file->getClientOriginalName());
             error_log("Real path: ".$file->getRealPath());
-            return $filename . '||' . $orgFilename . '||' . $destinationPath;
+            return response()->json([
+                "file" => [
+                    "name" => $filename,
+                    "org_name" => $orgFilename,
+                    "destinationPath" => $destinationPath              
+                ]
+            ]);
+
+            // return $filename . '||' . $orgFilename . '||' . $destinationPath;
         }
         else {
             error_log("Error moving file: ".$file->getClientOriginalName());
