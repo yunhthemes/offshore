@@ -38,7 +38,7 @@
 						{{ Form::text('company_type_price_eu', null, ['class'=>'custom-input-class service_prices_eu']) }}
 					</div>					
 					<div class="field-container">
-						{{ Form::label('company_type_price', 'Incorporation charge USD$')}}
+						{{ Form::label('company_type_price', 'Incorporation charge $')}}
 						{{ Form::text('company_type_price', null, ['class'=>'custom-input-class service_prices']) }}
 					</div>	
 
@@ -49,7 +49,7 @@
 						{{ Form::text('service_3_price_eu_1', null, ['class'=>'custom-input-class service_prices_eu']) }}
 					</div>					
 					<div class="field-container">
-						{{ Form::label('service_3_price_1', 'Registered office fee USD$')}}
+						{{ Form::label('service_3_price_1', 'Registered office fee $')}}
 						{{ Form::text('service_3_price_1', null, ['class'=>'custom-input-class service_prices']) }}
 					</div>	
 
@@ -58,7 +58,7 @@
 						{{ Form::text('shareholder_price_eu', null, ['class'=>'custom-input-class']) }}
 					</div>
 					<div class="field-container">
-						{{ Form::label('shareholder_price', 'Shareholder fee USD$')}}
+						{{ Form::label('shareholder_price', 'Shareholder fee $')}}
 						{{ Form::text('shareholder_price', null, ['class'=>'custom-input-class']) }}
 					</div>						
 					<div class="field-container">
@@ -66,7 +66,7 @@
 						{{ Form::text('director_price_eu', null, ['class'=>'custom-input-class']) }}
 					</div>		
 					<div class="field-container">
-						{{ Form::label('director_price', 'Director fee USD$')}}
+						{{ Form::label('director_price', 'Director fee $')}}
 						{{ Form::text('director_price', null, ['class'=>'custom-input-class']) }}
 					</div>								
 					<div class="field-container">
@@ -74,7 +74,7 @@
 						{{ Form::text('secretary_price_eu', null, ['class'=>'custom-input-class']) }}
 					</div>
 					<div class="field-container">
-						{{ Form::label('secretary_price', 'Secretary fee USD$')}}
+						{{ Form::label('secretary_price', 'Secretary fee $')}}
 						{{ Form::text('secretary_price', null, ['class'=>'custom-input-class']) }}
 					</div>
 
@@ -96,7 +96,7 @@
 									{{ Form::text('service_1_price_eu_1', null, ['class'=>'custom-input-class service_prices_eu']) }}
 								</div>					
 								<div class="field-container">
-									{{ Form::label('service_1_price_1', 'Account fee USD$')}}
+									{{ Form::label('service_1_price_1', 'Account fee $')}}
 									{{ Form::text('service_1_price_1', null, ['class'=>'custom-input-class service_prices']) }}
 								</div>								
 							</div>
@@ -124,7 +124,7 @@
 									{{ Form::text('service_2_price_eu_1', null, ['class'=>'custom-input-class service_prices_eu']) }}
 								</div>
 								<div class="field-container">
-									{{ Form::label('service_2_price_1', 'Card fee USD$')}}
+									{{ Form::label('service_2_price_1', 'Card fee $')}}
 									{{ Form::text('service_2_price_1', null, ['class'=>'custom-input-class service_prices']) }}
 								</div>								
 							</div>
@@ -192,20 +192,37 @@
 					</div> -->
 
 					<div class="each-service">
-						<h3 class="form-header">Information services</h3>
+						<!-- <h3 class="form-header">Information services</h3>
 
 						<div id="cloneable">
 							<div class="field-group">
 								<div class="field-container">
-									{{ Form::label('information_service_1', 'Information services name')}}
-									{{ Form::text('information_service_1', null, ['class'=>'custom-input-class information_services']) }}
+									
 								</div>
 							</div>
 						</div>
-						<div class="pasteclone"></div>
+						<div class="pasteclone"></div> -->
 
-						{{ Form::hidden('information_service_count', '1', ['id'=>'information_service_count']) }}
-						<a href="#" class="add-more" data-service="information_service"><button class="custom-submit-class">Add information service</button></a>
+						<!-- {{ Form::label('information_service_1', 'Information services name')}} -->
+						{{ Form::hidden('information_service_1', 'Local telephone number', ['class'=>'custom-input-class information_services']) }}
+
+						<!-- {{ Form::label('information_service_2', 'Information services name')}} -->
+						{{ Form::hidden('information_service_2', 'Mailing address and forwarding', ['class'=>'custom-input-class information_services']) }}
+
+						<!-- {{ Form::label('information_service_3', 'Information services name')}} -->
+						{{ Form::hidden('information_service_3', 'Setting up a physical office presence', ['class'=>'custom-input-class information_services']) }}
+
+						<!-- {{ Form::label('information_service_4', 'Information services name')}} -->
+						{{ Form::hidden('information_service_4', 'Establishing a merchant account', ['class'=>'custom-input-class information_services']) }}
+
+						<!-- {{ Form::label('information_service_5', 'Information services name')}} -->
+						{{ Form::hidden('information_service_5', 'Purchasing real estate', ['class'=>'custom-input-class information_services']) }}
+
+						<!-- {{ Form::label('information_service_6', 'Information services name')}} -->
+						{{ Form::hidden('information_service_6', 'Economic citizenship possibilities', ['class'=>'custom-input-class information_services']) }}
+
+						{{ Form::hidden('information_service_count', '6', ['id'=>'information_service_count']) }}
+						<!-- <a href="#" class="add-more" data-service="information_service"><button class="custom-submit-class">Add information service</button></a> -->
 					</div>
 					
 					{{ Form::submit('Save', ['class'=>'custom-submit-class']) }}

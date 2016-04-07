@@ -97,6 +97,29 @@
   display: block;
 }
 
+.header,
+.sort-btns {    
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.sortable-header {
+  text-decoration: underline;
+}
+
+.sort-btns {
+    display: inline-block;
+    vertical-align: middle;
+    width: 10px;
+    margin: 0 0 0 8px;    
+}
+
+.sort-btns .fa {
+    display: block;
+    font-size: 15px;
+    line-height: 10px;
+    cursor: pointer;
+}
 
 
 //    ____ ___ ____ _   _ _   _ ____    _____ ___  ____  __  __ 
@@ -112,12 +135,19 @@
 #signup_form {  
   .intl-tel-input {
     width: 100%;
+    .flag-container {
+      padding: 0px;
+    }
     .selected-flag {
-      width: 55px;
+      width: 80px;
       height: 48px;
+      padding-left: 24px;
+      .iti-arrow {
+        right: 18px;
+      }
     }
     input {
-      padding-left: 80px!important;
+      padding-left: 95px!important;
     }
   }
   select, input[type=text] {
@@ -202,6 +232,9 @@
   .bp-required-field-label {
     display: none;
   }
+  .field_work-telephone, .field_home-telephone, .field_home-address, .field_home-address-2, .field_home-address-3, .field_home-address-4, .field_home-address-5, .field_home-address-6, .field_postal-address, .field_postal-address-2, .field_postal-address-3, .field_postal-address-4, .field_postal-address-5, .field_postal-address-6, .field_nationality, .field_date-of-birth {
+    display: none;
+  }
 }
 
 .error-container {
@@ -218,6 +251,27 @@
   .mkdf-two-columns-50-50 .mkdf-column .mkdf-column-inner{
     padding: 0 6px;
   }
+}
+
+#ui-datepicker-div {
+  z-index: 1000!important;
+}
+
+/// profile edit form
+
+#profile-edit-form {
+  .field_home-address-2, .field_home-address-3, .field_home-address-4, .field_home-address-5, .field_home-address-6, .field_postal-address-2, .field_postal-address-3, .field_postal-address-4, .field_postal-address-5, .field_postal-address-6 {
+    label {
+      visibility: hidden;
+      margin-top: -20px;
+    }
+  }
+  .field_nationality, .field_postal-address-6, .field_home-address-6 {
+    input {
+      display: none;
+
+    }
+  }  
 }
 
 
@@ -482,6 +536,24 @@ input.error {
 #registration-page-form-1-1 {
   input#new-incorporation {
     display: none;
+  }  
+}
+
+#registration-page-form-2 {
+  .intl-tel-input {
+    width: 100%;
+    &.allow-dropdown {
+      .selected-flag {
+        width: 80px;
+        padding-left: 24px;
+        .iti-arrow {
+          right: 20px;
+        }
+      }
+      input[type=text], input[type=tel] {
+        padding-left: 95px;
+      }
+    } 
   }
 }
 

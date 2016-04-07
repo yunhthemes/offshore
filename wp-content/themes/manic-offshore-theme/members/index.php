@@ -59,7 +59,7 @@
 		                                <div id="user-companies-container">
 			                                <div id="user-companies">
 			                                	<!-- JS CONTENT GOES HERE -->
-			                                </div>
+			                                </div>		                                	
 		                                </div>
 		                                <div id="user-company-details-container">
 		                                	<a href="#" class="back-to-dashboard"><i class="fa fa-chevron-left"></i> Back to dashboard</a>
@@ -77,41 +77,71 @@
 	    </div>
 	</div>
 </div>
-<script id="user-companies-template" type="text/x-handlebars-template">
-    <div id="company-lists">
-    {{#if companies}}
-    	<div class="header">
-            <div class="each-header">
-                <h6>Company</h6>
-            </div>
-            <div class="each-header">
-                <h6>Jurisdiction</h6>
-            </div>
-            <div class="each-header">
-                <h6>Renewal date</h6>
-            </div>            
-            <div class="each-header"></div>
-        </div>   
+<script id="user-companies-template" type="text/x-handlebars-template">	
+    <div id="company-lists" class="box jplist">
+    	<div class="box text-shadow">
+    		<div class="demo-tbl">
+		    {{#if companies}}
+		    	<div class="header jplist-panel">
+		    		<div class="header-row" data-control-type="sort-buttons-group"
+                        data-control-name="header-sort-buttons"
+                        data-control-action="sort"
+                        data-mode="single"
+                        data-datetime-format="{month}/{day}/{year}">
+			            <div class="each-header">
+			                <h6>
+			                	<span class="header sortable-header">Company</span>
+			                	<span class="sort-btns">
+	                                <i class="fa fa-caret-up" data-path=".company" data-type="text" data-order="asc" title="Sort by Company Asc"></i>
+	                                <i class="fa fa-caret-down" data-path=".company" data-type="text" data-order="desc" title="Sort by Company Desc"></i>
+	                            </span>
+			                </h6>
+			            </div>
+			            <div class="each-header">
+			                <h6>
+			                	<span class="header sortable-header">Jurisdiction</span>
+			                	<span class="sort-btns">
+	                                <i class="fa fa-caret-up" data-path=".jurisdiction" data-type="text" data-order="asc" title="Sort by Jurisdiction Asc"></i>
+	                                <i class="fa fa-caret-down" data-path=".jurisdiction" data-type="text" data-order="desc" title="Sort by Jurisdiction Desc"></i>
+	                            </span>
+			                </h6>
+			            </div>
+			            <div class="each-header">
+			                <h6>
+			                	<span class="header sortable-header">Renewal date</span>
+			                	<span class="sort-btns">
+	                                <i class="fa fa-caret-up" data-path=".datetime" data-type="datetime" data-order="asc" title="Sort by Date Asc"></i>
+	                                <i class="fa fa-caret-down" data-path=".datetime" data-type="datetime" data-order="desc" title="Sort by Date Desc"></i>
+	                            </span>
+			                </h6>
+			            </div>            
+			            <div class="each-header"></div>
+			        </div>
+		        </div>   
 
-        {{#companies}}                                       
-            <div class="content">
-                <div class="each-content">
-                    <p>{{ name }}</p>
-                </div>
-                <div class="each-content">
-                    <p>{{ companytypes.name }}</p>
-                </div>
-                <div class="each-content">
-                    <p>{{ renewal_date }}</p>    
-                </div>                
-                <div class="each-content">
-                    <a href="#" data-company-id="{{id}}" class="company-details"><button class="custom-submit-class">Company details</button></a>
-                </div>                        
-            </div>                               
-        {{/companies}}    	
-	{{else}}
-		<p>There is no compaines under this account.</p>
-	{{/if}}
+		        {{#companies}}                                       
+	            <div class="content">
+	            	<div class="content-row tbl-item">
+		                <div class="each-content">
+		                    <p class="company">{{ name }}</p>
+		                </div>
+		                <div class="each-content">
+		                    <p class="jurisdiction">{{ companytypes.name }}</p>
+		                </div>
+		                <div class="each-content">
+		                    <p class="datetime">{{ renewal_date }}</p>    
+		                </div>                
+		                <div class="each-content">
+		                    <a href="#" data-company-id="{{id}}" class="company-details"><button class="custom-submit-class">Company details</button></a>
+		                </div>                   
+	                </div>     
+	            </div>                               
+		        {{/companies}}    	
+			{{else}}
+				<p>There is no compaines under this account.</p>
+			{{/if}}
+			</div>
+		</div>
     </div>      
 </script>
 <script id="user-company-details-template" type="text/x-handlebars-template">
@@ -338,7 +368,21 @@
                 if(jqXHR.status==200) {
                     
                     newdata["companies"] = data.companies;                        
-                    createTemplateAndAppendHtml("#user-companies-template", newdata, "#user-companies");                    
+                    createTemplateAndAppendHtml("#user-companies-template", newdata, "#user-companies");
+
+                    // jplist plugin call
+				    $('#company-lists').jplist({
+				        itemsBox: '.demo-tbl',
+						itemPath: '.tbl-item',
+						panelPath: '.jplist-panel',
+						// storage: 'localstorage',
+						// storageName: 'jplist-table-sortable-cols'
+				    });
+
+			        //alternate up / down buttons on header click
+				    $('.demo-tbl .header').on('click', function () {
+				        $(this).next('.sort-btns').find('[data-path]:not(.jplist-selected):first').trigger('click');
+				    });                    
 
                 }
             });
@@ -359,14 +403,12 @@
 	                if(jqXHR.status==200) {
 	                    
 	                    newdata["companydetails"] = data.companydetails;                        
-                		createTemplateAndAppendHtml("#user-company-details-template", newdata, "#user-company-details");                    
+                		createTemplateAndAppendHtml("#user-company-details-template", newdata, "#user-company-details");                                    		
 
 	                }
 	            });
 
-	            failedRequest(response); 
-
-            	
+	            failedRequest(response);             	
 
             });
 
@@ -375,8 +417,8 @@
 
             	$("#user-companies-container").show();
             	$("#user-company-details-container").hide();
-            });
-        }
+            });            
+        }        
 
         init();
 

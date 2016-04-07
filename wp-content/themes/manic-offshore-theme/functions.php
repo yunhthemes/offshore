@@ -13,11 +13,14 @@ define("SITEURL", get_site_url());
 
 function mkdf_child_theme_enqueue_scripts() {
 	wp_register_style( 'childstyle', get_stylesheet_directory_uri() . '/style.css'  );
+
   wp_enqueue_style( 'childstyle' );
+  wp_enqueue_style( 'jquery-ui', '//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css' );
   wp_enqueue_style( 'switcherycss', get_stylesheet_directory_uri() . '/js/plugins/switchery/switchery.min.css' );
   wp_enqueue_style( 'intltelcss', get_stylesheet_directory_uri() . '/css/lib/intlTelInput.css' );
   // wp_enqueue_style( 'uploadifivecss', get_stylesheet_directory_uri() . '/css/lib/uploadifive.css' );
-	wp_enqueue_style( 'fileuploadcss', get_stylesheet_directory_uri() . '/css/lib/jquery.fileupload.css' );
+  wp_enqueue_style( 'fileuploadcss', get_stylesheet_directory_uri() . '/css/lib/jquery.fileupload.css' );
+	wp_enqueue_style( 'jplist', get_stylesheet_directory_uri() . '/css/lib/jplist.core.min.css' );
 
 }
 add_action('wp_enqueue_scripts', 'mkdf_child_theme_enqueue_scripts', 11);
@@ -30,6 +33,7 @@ if(!function_exists('deploy_mikado_scripts_customized')) {
     wp_dequeue_script('deploy_mikado_modules');
     wp_enqueue_script('deploy_mikado_modules', get_stylesheet_directory_uri().'/js/modules.js', array('jquery'), false, true);
 
+    wp_enqueue_script('jquery-ui', '//code.jquery.com/ui/1.11.4/jquery-ui.js', array('jquery'), false, true);
     wp_enqueue_script('manic_others', get_stylesheet_directory_uri().'/js/others.js', array('jquery'), false, true);
     wp_enqueue_script('validation', get_stylesheet_directory_uri().'/js/plugins/jquery.validate.min.js', array('jquery'), false, true);
     wp_enqueue_script('handlebars', get_stylesheet_directory_uri().'/js/plugins/handlebars-v4.0.5.js', array('jquery'), false, true);
@@ -39,6 +43,11 @@ if(!function_exists('deploy_mikado_scripts_customized')) {
     wp_enqueue_script('ui-widget', get_stylesheet_directory_uri().'/js/plugins/vendor/jquery.ui.widget.js', array('jquery'), false, true);
     wp_enqueue_script('iframe-transport', get_stylesheet_directory_uri().'/js/plugins/jquery.iframe-transport.js', array('jquery'), false, true);    
     wp_enqueue_script('fileupload', get_stylesheet_directory_uri().'/js/plugins/jquery.fileupload.js', array('jquery'), false, true);
+
+
+    wp_enqueue_script('jplist', get_stylesheet_directory_uri().'/js/plugins/jplist.core.min.js', array('jquery'), false, true);
+    wp_enqueue_script('jplistcounter', get_stylesheet_directory_uri().'/js/plugins/jplist.counter-control.min.js', array('jquery'), false, true);
+    wp_enqueue_script('jplistsort', get_stylesheet_directory_uri().'/js/plugins/jplist.sort-buttons.min.js', array('jquery'), false, true);    
   }
   add_action('wp_enqueue_scripts', 'deploy_mikado_scripts_customized');
 }

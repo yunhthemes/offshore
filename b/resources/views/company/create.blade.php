@@ -10,7 +10,7 @@
 			<div class="space50"></div>
 			
 			<div class="form-container">
-				{!! Form::open(array('route' => 'admin.company.store')) !!}
+				{!! Form::open(array('route' => 'admin.company.store', 'id' => 'add_company')) !!}
 					<div class="field-container">
 						{{ Form::label('company_type', 'Company type')}}
 						<div class="custom-input-class-select-container">
@@ -34,7 +34,7 @@
 						{{ Form::text('company_price_eu', null, ['class'=>'custom-input-class']) }}
 					</div>					
 					<div class="field-container">
-						{{ Form::label('company_price', 'Price USD$')}}
+						{{ Form::label('company_price', 'Price $')}}
 						{{ Form::text('company_price', null, ['class'=>'custom-input-class']) }}
 					</div>										
 
@@ -62,7 +62,26 @@
 		// 	});
 		// });
 
-		$('#company_incorporation_date').datepicker({ dateFormat: 'dd/mm/yy' });
+		$('#company_incorporation_date').datepicker({ dateFormat: 'dd/mm/y' });
+
+		$('#add_company').validate({
+			rules : {
+				'code': {
+					'required': true,
+					'code': true
+				},
+				'company_type': 'required',
+				'company_name': 'required',
+				'company_incorporation_date': 'required',
+				'company_price_eu': 'required',
+				'company_price': 'required'
+			}
+		});
+
+		$.validator.addMethod("code", function (value, element) 
+        {
+            return this.optional(element) || /^[A-Z]{1}[0-9]{4}$/.test(value);
+        }, "Invalid code");
 	});
 </script>
 

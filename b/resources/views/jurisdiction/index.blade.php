@@ -24,7 +24,7 @@
 
 									<th>{{ Form::checkbox('check_all', null, null, ["id"=>"check-all"]) }}</th>
 									<th>
-										<span class="header">Name</span>
+										<span class="header sortable-header">Name</span>
 										<span class="sort-btns">
 	                                        <i class="fa fa-caret-up" data-path=".name" data-type="text" data-order="asc" title="Sort by Name Asc"></i>
 	                                        <i class="fa fa-caret-down" data-path=".name" data-type="text" data-order="desc" title="Sort by Name Desc"></i>

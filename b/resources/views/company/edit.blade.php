@@ -10,7 +10,7 @@
 			<div class="space50"></div>
 			
 			<div class="form-container">
-				{{ Form::open(['route' => ['admin.company.update', $company->id], 'method' => 'put' ]) }}
+				{{ Form::open(['route' => ['admin.company.update', $company->id], 'method' => 'put', 'id' => 'edit_company' ]) }}
 					<div class="field-container">
 						{{ Form::label('company_type', 'Company type')}}
 						<div class="custom-input-class-select-container">
@@ -27,14 +27,14 @@
 					</div>
 					<div class="field-container">
 						{{ Form::label('company_incorporation_date', 'Incorporated')}}
-						{{ Form::text('company_incorporation_date', date('d/m/Y', strtotime($company->incorporation_date)), ['class'=>'custom-input-class']) }}
+						{{ Form::text('company_incorporation_date', date('d/m/y', strtotime($company->incorporation_date)), ['class'=>'custom-input-class']) }}
 					</div>
 					<div class="field-container">
 						{{ Form::label('company_price_eu', 'Price €')}}
 						{{ Form::text('company_price_eu', $company->price_eu, ['class'=>'custom-input-class']) }}
 					</div>					
 					<div class="field-container">
-						{{ Form::label('company_price', 'Price USD$')}}
+						{{ Form::label('company_price', 'Price $')}}
 						{{ Form::text('company_price', $company->price, ['class'=>'custom-input-class']) }}
 					</div>										
 
@@ -50,7 +50,27 @@
 <script>
 	$(document).ready(function(){
 		
-		$('#company_incorporation_date').datepicker({ dateFormat: 'dd/mm/yy' });
+		$('#company_incorporation_date').datepicker({ dateFormat: 'dd/mm/y' });
+
+		$('#edit_company').validate({
+			rules : {
+				'code': {
+					'required': true,
+					'code': true
+				},
+				'company_type': 'required',
+				'company_name': 'required',
+				'company_incorporation_date': 'required',
+				'company_price_eu': 'required',
+				'company_price': 'required'
+			}
+		});
+
+		$.validator.addMethod("code", function (value, element) 
+        {
+            return this.optional(element) || /^[A-Z]{1}[0-9]{4}$/.test(value);
+        }, "Invalid code");
+
 	});
 </script>
 

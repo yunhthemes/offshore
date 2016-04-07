@@ -45,7 +45,7 @@
 						{{ Form::text('service_3_price_eu_1', $company_type->services[0]->countries[0]->pivot->price_eu, ['class'=>'custom-input-class service_prices_eu']) }}
 					</div>					
 					<div class="field-container">
-						{{ Form::label('service_3_price_1', 'Incorporation charge USD$')}}
+						{{ Form::label('service_3_price_1', 'Incorporation charge $')}}
 						{{ Form::text('service_3_price_1', $company_type->services[0]->countries[0]->pivot->price, ['class'=>'custom-input-class service_prices']) }}
 					</div>	
 
@@ -54,7 +54,7 @@
 						{{ Form::text('shareholder_price_eu', $company_type->shareholders[0]->price_eu, ['class'=>'custom-input-class']) }}
 					</div>
 					<div class="field-container">
-						{{ Form::label('shareholder_price', 'Shareholder fee USD$')}}
+						{{ Form::label('shareholder_price', 'Shareholder fee $')}}
 						{{ Form::text('shareholder_price', $company_type->shareholders[0]->price, ['class'=>'custom-input-class']) }}
 					</div>						
 					<div class="field-container">
@@ -62,7 +62,7 @@
 						{{ Form::text('director_price_eu', $company_type->directors[0]->price_eu, ['class'=>'custom-input-class']) }}
 					</div>		
 					<div class="field-container">
-						{{ Form::label('director_price', 'Director fee USD$')}}
+						{{ Form::label('director_price', 'Director fee $')}}
 						{{ Form::text('director_price', $company_type->directors[0]->price, ['class'=>'custom-input-class']) }}
 					</div>								
 					<div class="field-container">
@@ -70,7 +70,7 @@
 						{{ Form::text('secretary_price_eu', $company_type->secretaries[0]->price_eu, ['class'=>'custom-input-class']) }}
 					</div>
 					<div class="field-container">
-						{{ Form::label('secretary_price', 'Secretary fee USD$')}}
+						{{ Form::label('secretary_price', 'Secretary fee $')}}
 						{{ Form::text('secretary_price', $company_type->secretaries[0]->price, ['class'=>'custom-input-class']) }}
 					</div>
 					
@@ -95,7 +95,7 @@
 										{{ Form::text('service_1_price_eu_'.intval($key+1), $country->pivot->price_eu, ['class'=>'custom-input-class service_prices_eu']) }}
 									</div>					
 									<div class="field-container">
-										{{ Form::label('service_1_price_'.intval($key+1), 'Account fee USD$')}}
+										{{ Form::label('service_1_price_'.intval($key+1), 'Account fee $')}}
 										{{ Form::text('service_1_price_'.intval($key+1), $country->pivot->price, ['class'=>'custom-input-class service_prices']) }}
 									</div>								
 								</div>
@@ -124,7 +124,7 @@
 										</div>
 									</div>							
 									<div class="field-container">
-										{{ Form::label('service_2_price_'.intval($key+1), 'Card fee USD$')}}
+										{{ Form::label('service_2_price_'.intval($key+1), 'Card fee $')}}
 										{{ Form::text('service_2_price_'.intval($key+1), $country->pivot->price_eu, ['class'=>'custom-input-class service_prices']) }}
 									</div>
 									<div class="field-container">
@@ -140,7 +140,7 @@
 						<a href="#" class="add-more" data-service="service_2"><button class="custom-submit-class">Add another card</button></a>
 					</div>					
 
-					<div class="each-service">
+					<!--<div class="each-service">
 						<h3 class="form-header">Information services</h3>
 						
 						@foreach($company_type->informationservices as $key => $informationservice)
@@ -152,13 +152,13 @@
 										{{ Form::text('information_service_'.intval($key+1), $informationservice->name, ['class'=>'custom-input-class information_services']) }}
 									</div>
 								</div>
-							@if ($informationservice == $company_type->informationservices->last()) </div><!-- end cloneable--> @endif
+							@if ($informationservice == $company_type->informationservices->last()) </div>@endif
 						@endforeach
 						<div class="pasteclone"></div>
 
 						{{ Form::hidden('information_service_count', count($company_type->informationservices), ['id'=>'information_service_count']) }}
 						<a href="#" class="add-more" data-service="information_service"><button class="custom-submit-class">Add information service</button></a>
-					</div>
+					</div>-->
 					
 					{{ Form::submit('Save', ['class'=>'custom-submit-class']) }}
 			{!! Form::close() !!}

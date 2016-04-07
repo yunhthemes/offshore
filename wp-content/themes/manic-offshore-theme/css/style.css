@@ -655,18 +655,45 @@ footer .widget .mkdf-icon-list-item:hover p {
 .add-more {
   display: block;
 }
+.header,
+.sort-btns {
+  vertical-align: middle;
+  cursor: pointer;
+}
+.sortable-header {
+  text-decoration: underline;
+}
+.sort-btns {
+  display: inline-block;
+  vertical-align: middle;
+  width: 10px;
+  margin: 0 0 0 8px;
+}
+.sort-btns .fa {
+  display: block;
+  font-size: 15px;
+  line-height: 10px;
+  cursor: pointer;
+}
 #signuppage-signup-form-row {
   padding-bottom: 70px;
 }
 #signup_form .intl-tel-input {
   width: 100%;
 }
+#signup_form .intl-tel-input .flag-container {
+  padding: 0px;
+}
 #signup_form .intl-tel-input .selected-flag {
-  width: 55px;
+  width: 80px;
   height: 48px;
+  padding-left: 24px;
+}
+#signup_form .intl-tel-input .selected-flag .iti-arrow {
+  right: 18px;
 }
 #signup_form .intl-tel-input input {
-  padding-left: 80px!important;
+  padding-left: 95px!important;
 }
 #signup_form select,
 #signup_form input[type=text] {
@@ -750,6 +777,24 @@ footer .widget .mkdf-icon-list-item:hover p {
 #signup_form .bp-required-field-label {
   display: none;
 }
+#signup_form .field_work-telephone,
+#signup_form .field_home-telephone,
+#signup_form .field_home-address,
+#signup_form .field_home-address-2,
+#signup_form .field_home-address-3,
+#signup_form .field_home-address-4,
+#signup_form .field_home-address-5,
+#signup_form .field_home-address-6,
+#signup_form .field_postal-address,
+#signup_form .field_postal-address-2,
+#signup_form .field_postal-address-3,
+#signup_form .field_postal-address-4,
+#signup_form .field_postal-address-5,
+#signup_form .field_postal-address-6,
+#signup_form .field_nationality,
+#signup_form .field_date-of-birth {
+  display: none;
+}
 .error-container {
   margin-bottom: 20px;
   color: red;
@@ -759,6 +804,27 @@ footer .widget .mkdf-icon-list-item:hover p {
 }
 #signuppage-signup-form-row .mkdf-two-columns-50-50 .mkdf-column .mkdf-column-inner {
   padding: 0 6px;
+}
+#ui-datepicker-div {
+  z-index: 1000!important;
+}
+#profile-edit-form .field_home-address-2 label,
+#profile-edit-form .field_home-address-3 label,
+#profile-edit-form .field_home-address-4 label,
+#profile-edit-form .field_home-address-5 label,
+#profile-edit-form .field_home-address-6 label,
+#profile-edit-form .field_postal-address-2 label,
+#profile-edit-form .field_postal-address-3 label,
+#profile-edit-form .field_postal-address-4 label,
+#profile-edit-form .field_postal-address-5 label,
+#profile-edit-form .field_postal-address-6 label {
+  visibility: hidden;
+  margin-top: -20px;
+}
+#profile-edit-form .field_nationality input,
+#profile-edit-form .field_postal-address-6 input,
+#profile-edit-form .field_home-address-6 input {
+  display: none;
 }
 /*
 #respond input[type=text], 
@@ -997,6 +1063,20 @@ input.error:-ms-input-placeholder {
 }
 #registration-page-form-1-1 input#new-incorporation {
   display: none;
+}
+#registration-page-form-2 .intl-tel-input {
+  width: 100%;
+}
+#registration-page-form-2 .intl-tel-input.allow-dropdown .selected-flag {
+  width: 80px;
+  padding-left: 24px;
+}
+#registration-page-form-2 .intl-tel-input.allow-dropdown .selected-flag .iti-arrow {
+  right: 20px;
+}
+#registration-page-form-2 .intl-tel-input.allow-dropdown input[type=text],
+#registration-page-form-2 .intl-tel-input.allow-dropdown input[type=tel] {
+  padding-left: 95px;
 }
 #registration-page-form-3 input[type="checkbox"] {
   display: inline-block;

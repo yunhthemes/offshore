@@ -156,6 +156,9 @@
 	                                $("#field_7").intlTelInput({
 	                                	utilsScript: "<?php echo JS; ?>/plugins/utils.js"
 	                                });
+	                                $("#field_10").intlTelInput({
+	                                	utilsScript: "<?php echo JS; ?>/plugins/utils.js"
+	                                });
 
 	                            });
 
@@ -214,14 +217,7 @@
 
 												<?php
 												$field_type = bp_xprofile_create_field_type( bp_get_the_profile_field_type() );											
-												if($field_type->name=="Drop Down Select Box"): ?>
-												<div class="custom-input-class-select-container">
-													<?php $field_type->edit_field_html(); ?>
-												</div>
-												<?php
-												else:
-													$field_type->edit_field_html();
-												endif;
+												$field_type->edit_field_html();
 
 												/**
 												 * Fires before the display of the visibility options for xprofile fields.
@@ -404,3 +400,8 @@
 	do_action( 'bp_after_register_page' ); ?>
 	<?php endif; // completed-confirmation signup step ?>
 </div>
+<script>
+(function($){
+	$('.field_title').find("select").wrap("<div class='custom-input-class-select-container'></div>");
+})(jQuery);
+</script>

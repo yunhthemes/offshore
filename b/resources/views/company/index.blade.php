@@ -27,30 +27,35 @@
 
 									<th>{{ Form::checkbox('check_all', null, null, ["id"=>"check-all"]) }}</th>
 									<th>
-										<span class="header">Code</span>
+										<span class="header sortable-header">Code</span>
 										<span class="sort-btns">
 	                                        <i class="fa fa-caret-up" data-path=".code" data-type="text" data-order="asc" title="Sort by Code Asc"></i>
 	                                        <i class="fa fa-caret-down" data-path=".code" data-type="text" data-order="desc" title="Sort by Code Desc"></i>
 	                                    </span>
 									</th>
 									<th>
-										<span class="header">Company name</span>
+										<span class="header sortable-header">Company name</span>
 										<span class="sort-btns">
 	                                        <i class="fa fa-caret-up" data-path=".name" data-type="text" data-order="asc" title="Sort by Name Asc"></i>
 	                                        <i class="fa fa-caret-down" data-path=".name" data-type="text" data-order="desc" title="Sort by Name Desc"></i>
 	                                    </span>
 									</th>
 									<th>
-										<span class="header">Company type</span>
+										<span class="header sortable-header">Company type</span>
 										<span class="sort-btns">
 	                                        <i class="fa fa-caret-up" data-path=".companytype" data-type="text" data-order="asc" title="Sort by Company Type Asc"></i>
 	                                        <i class="fa fa-caret-down" data-path=".companytype" data-type="text" data-order="desc" title="Sort by Company Type Desc"></i>
 	                                    </span>
 									</th>
-									<th><span class="header">Incorporated</span></th>
+									<th>
+										<span class="header sortable-header">Incorporated</span>
+										<span class="sort-btns">
+	                                        <i class="fa fa-caret-up" data-path=".date" data-type="datetime" data-order="asc" title="Sort by Date Asc"></i>
+	                                        <i class="fa fa-caret-down" data-path=".date" data-type="datetime" data-order="desc" title="Sort by Date Desc"></i>
+	                                    </span>
+									</th>
 									<th><span class="header">Price €</span></th>
-									<th><span class="header">Price USD$</span></th>
-									<th><span class="header">Shelf Company</span></th>
+									<th><span class="header">Price $</span></th>
 									<th></th>
 
 								</tr>
@@ -64,10 +69,9 @@
 					                    	<td class="code">{{ $company->code }}</td>
 					                    	<td class="name">{{ $company->name }}</td>
 					                    	<td class="companytype">{{ $company->companytypes->name }}</td>
-					                    	<td>{{ date('d M Y', strtotime($company->incorporation_date)) }}</td>
+					                    	<td><span class="date">{{ date('d M Y', strtotime($company->incorporation_date)) }}</span></td>	
 					                    	<td>{{ $company->price_eu }}</td>
-					                    	<td>{{ $company->price }}</td>			                    	
-					                    	<td>@if($company->shelf==1){{ 'yes' }}@else{{ 'no' }}@endif</td>			                    	
+					                    	<td>{{ $company->price }}</td>			                    						                    	
 					                    	<td><a href="{{ route('admin.company.edit', $company->id) }}"><button class="custom-submit-class custom-submit-class-2">Edit</button></a></td>
 					                    </tr> 
 					              	@endforeach			              	
