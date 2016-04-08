@@ -2,12 +2,12 @@
 	<div data-mkdf-parallax-speed="1" class="vc_row wpb_row vc_row-fluid mkdf-section vc_custom_1454399108366 mkdf-content-aligment-left mkdf-grid-section" style="">
 	    <div class="clearfix mkdf-section-inner">
 	        <div class="mkdf-section-inner-margin clearfix">
-	            <div class="wpb_column vc_column_container vc_col-sm-2">
+	            <!-- <div class="wpb_column vc_column_container vc_col-sm-1">
 	                <div class="vc_column-inner ">
 	                    <div class="wpb_wrapper"></div>
 	                </div>
-	            </div>
-	            <div class="wpb_column vc_column_container vc_col-sm-10">
+	            </div> -->
+	            <div class="wpb_column vc_column_container vc_col-sm-12">
 	                <div class="vc_column-inner ">
 	                    <div class="wpb_wrapper">
 	                        <div class="wpb_raw_code wpb_content_element wpb_raw_html">
@@ -39,17 +39,17 @@
 	<div data-mkdf-parallax-speed="1" class="vc_row wpb_row vc_row-fluid mkdf-section vc_custom_1454057007283 mkdf-content-aligment-left mkdf-grid-section" style="">
 	    <div class="clearfix mkdf-section-inner">
 	        <div class="mkdf-section-inner-margin clearfix">
-	        	<div class="wpb_column vc_column_container vc_col-sm-2">
+	        	<!-- <div class="wpb_column vc_column_container vc_col-sm-1">
 	                <div class="vc_column-inner ">
 	                    <div class="wpb_wrapper"></div>
 	                </div>
-	            </div>
-	            <div class="wpb_column vc_column_container vc_col-sm-10">
+	            </div> -->
+	            <div class="wpb_column vc_column_container vc_col-sm-12">
 	                <div class="vc_column-inner ">
 	                    <div class="wpb_wrapper">
 	                        <div class="wpb_text_column wpb_content_element ">
 	                            <div class="wpb_wrapper">
-	                            	<div class="wpb_column vc_column_container vc_col-sm-9">
+	                            	<div class="wpb_column vc_column_container vc_col-sm-12">
 	                            		<ul class="tabs">
 	                            			<li><a class="active" href="<?php echo home_url( '/client-dashboard/' ); ?>" class="active">My Dashboard</a></li>
 	                            			<li><a href="<?php echo home_url( '/client-dashboard/' . bp_core_get_username( get_current_user_id() ) . '/messages/' ); ?>">My Messages</a></li>

@@ -88,7 +88,7 @@
   text-align: right;
   .files {
     position: absolute;
-    left: -185px;
+    right: -185px;
     top: 12px;
   }
 }
@@ -257,9 +257,34 @@
   z-index: 1000!important;
 }
 
+.profile-fields {
+  .field_home-address-2, .field_home-address-3, .field_home-address-4, .field_home-address-5, .field_home-address-6, .field_postal-address-2, .field_postal-address-3, .field_postal-address-4, .field_postal-address-5, .field_postal-address-6 {
+    td.label {
+      visibility: hidden;
+    }
+  }
+}
+
 /// profile edit form
 
 #profile-edit-form {
+  .intl-tel-input {
+    width: 100%;
+    .flag-container {
+      padding: 0px;
+    }
+    .selected-flag {
+      width: 80px;
+      height: 48px;
+      padding-left: 24px;
+      .iti-arrow {
+        right: 18px;
+      }
+    }
+    input {
+      padding-left: 95px!important;
+    }
+  }
   .field_home-address-2, .field_home-address-3, .field_home-address-4, .field_home-address-5, .field_home-address-6, .field_postal-address-2, .field_postal-address-3, .field_postal-address-4, .field_postal-address-5, .field_postal-address-6 {
     label {
       visibility: hidden;

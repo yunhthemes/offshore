@@ -649,7 +649,7 @@ footer .widget .mkdf-icon-list-item:hover p {
 }
 .upload-btn-container .files {
   position: absolute;
-  left: -185px;
+  right: -185px;
   top: 12px;
 }
 .add-more {
@@ -807,6 +807,35 @@ footer .widget .mkdf-icon-list-item:hover p {
 }
 #ui-datepicker-div {
   z-index: 1000!important;
+}
+.profile-fields .field_home-address-2 td.label,
+.profile-fields .field_home-address-3 td.label,
+.profile-fields .field_home-address-4 td.label,
+.profile-fields .field_home-address-5 td.label,
+.profile-fields .field_home-address-6 td.label,
+.profile-fields .field_postal-address-2 td.label,
+.profile-fields .field_postal-address-3 td.label,
+.profile-fields .field_postal-address-4 td.label,
+.profile-fields .field_postal-address-5 td.label,
+.profile-fields .field_postal-address-6 td.label {
+  visibility: hidden;
+}
+#profile-edit-form .intl-tel-input {
+  width: 100%;
+}
+#profile-edit-form .intl-tel-input .flag-container {
+  padding: 0px;
+}
+#profile-edit-form .intl-tel-input .selected-flag {
+  width: 80px;
+  height: 48px;
+  padding-left: 24px;
+}
+#profile-edit-form .intl-tel-input .selected-flag .iti-arrow {
+  right: 18px;
+}
+#profile-edit-form .intl-tel-input input {
+  padding-left: 95px!important;
 }
 #profile-edit-form .field_home-address-2 label,
 #profile-edit-form .field_home-address-3 label,

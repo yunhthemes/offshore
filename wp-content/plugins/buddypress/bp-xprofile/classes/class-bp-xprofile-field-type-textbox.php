@@ -63,13 +63,12 @@ class BP_XProfile_Field_Type_Textbox extends BP_XProfile_Field_Type {
 			'type'  => 'text',
 			'value' => bp_get_the_profile_field_edit_value(),
 		) ); ?>
-		
-		<?php //if(bp_get_the_profile_field_name()!=="Home address 2" && bp_get_the_profile_field_name()!=="Home address 3" && bp_get_the_profile_field_name()!=="Home address 4" && bp_get_the_profile_field_name()!=="Home address 5" && bp_get_the_profile_field_name()!=="Home address 6" && bp_get_the_profile_field_name()!=="Postal address 2" && bp_get_the_profile_field_name()!=="Postal address 3" && bp_get_the_profile_field_name()!=="Postal address 4" && bp_get_the_profile_field_name()!=="Postal address 5" && bp_get_the_profile_field_name()!=="Postal address 6"): ?>
-			<label for="<?php bp_the_profile_field_input_name(); ?>">
-				<?php bp_the_profile_field_name(); ?>
-				<?php bp_the_profile_field_required_label(); ?>
-			</label>
-		<?php //endif; ?>
+
+		<label for="<?php bp_the_profile_field_input_name(); ?>">
+			<?php bp_the_profile_field_name(); ?>
+			<?php bp_the_profile_field_required_label(); ?>
+		</label>
+
 		<?php
 
 		/** This action is documented in bp-xprofile/bp-xprofile-classes */
