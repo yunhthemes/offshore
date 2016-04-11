@@ -9,7 +9,7 @@ class CompanyShareholder extends Model
     //
     protected $table = 'company_shareholders';
 
-    protected $fillable = array('name', 'address', 'address_2', 'address_3', 'share_amount');
+    protected $fillable = array('type', 'name', 'address', 'address_2', 'address_3', 'address_4', 'telephone', 'passport', 'bill', 'share_amount');
 
     public function companies()
     {

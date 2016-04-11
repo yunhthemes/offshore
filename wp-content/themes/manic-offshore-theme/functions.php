@@ -95,3 +95,10 @@ function nonreg_visitor_redirect() {
   }
 }
 add_filter('get_header','nonreg_visitor_redirect',1);
+
+add_action( 'xprofile_updated_profile', 'SaveEditsRedirect', 12 );
+function SaveEditsRedirect() {
+    global $bp;
+    wp_redirect( $bp->loggedin_user->domain );
+    exit;
+}

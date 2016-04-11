@@ -114,7 +114,7 @@
 	                                <i class="fa fa-caret-down" data-path=".datetime" data-type="datetime" data-order="desc" title="Sort by Date Desc"></i>
 	                            </span>
 			                </h6>
-			            </div>            
+			            </div>          
 			            <div class="each-header"></div>
 			        </div>
 		        </div>   
@@ -130,9 +130,13 @@
 		                </div>
 		                <div class="each-content">
 		                    <p class="datetime">{{ renewal_date }}</p>    
-		                </div>                
+		                </div>		                         
 		                <div class="each-content">
-		                    <a href="#" data-company-id="{{id}}" class="company-details"><button class="custom-submit-class">Company details</button></a>
+		                	{{#ifCond status "==" "0"}}
+								<a href="<?php echo get_permalink( get_page_by_path( 'Company formation order' ) ); ?>?savedcompany={{id}}" data-company-id="{{id}}"><button class="custom-submit-class">Continue registration</button></a>
+							{{else}}
+								<a href="#" data-company-id="{{id}}" class="company-details"><button class="custom-submit-class">Company details</button></a>
+		                    {{/ifCond}}		                    
 		                </div>                   
 	                </div>     
 	            </div>                               
@@ -363,6 +367,35 @@
         function init() {
         	var newdata = [];
         	var response = makeJsonpRequest("", "<?php echo SITEURL; ?>/b/api/usercompanies/"+<?php echo get_current_user_id(); ?>, "GET");	        	
+
+        	// add operator support for handlebar
+            Handlebars.registerHelper("ifCond", function (v1, operator, v2, options) {
+
+                switch (operator) {
+                    case "==":
+                        return (v1 == v2) ? options.fn(this) : options.inverse(this);
+                    case "===":
+                        return (v1 === v2) ? options.fn(this) : options.inverse(this);
+                    case "<":
+                        return (v1 < v2) ? options.fn(this) : options.inverse(this);
+                    case "<=":
+                        return (v1 <= v2) ? options.fn(this) : options.inverse(this);
+                    case ">":
+                        return (v1 > v2) ? options.fn(this) : options.inverse(this);
+                    case ">=":
+                        return (v1 >= v2) ? options.fn(this) : options.inverse(this);
+                    case "&&":
+                        return (v1 && v2) ? options.fn(this) : options.inverse(this);
+                    case "||":
+                        return (v1 || v2) ? options.fn(this) : options.inverse(this);
+                    default:
+                        return options.inverse(this);
+                }
+            });
+
+            Handlebars.registerHelper("counter", function (index){
+                return index + 1;
+            });
 
         	response.done(function(data, textStatus, jqXHR){                    
                 if(jqXHR.status==200) {

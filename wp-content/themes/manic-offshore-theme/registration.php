@@ -157,7 +157,7 @@ function registration_form() {
                     var errMessageArr = {};
 
                     for(var i=1;i<=3;i++) {
-                        errMessageArr["shareholder_"+i+"_name"] = "Name required";
+                        errMessageArr["shareholder_"+i+"_name"] = "Name required";                        
                         errMessageArr["shareholder_"+i+"_address"] = "Street required";
                         errMessageArr["shareholder_"+i+"_address_2"] = "City required";
                         errMessageArr["shareholder_"+i+"_address_4"] = "Country required";
@@ -454,25 +454,27 @@ function registration_form() {
                     });
                 }else if(formID==4) {
 
+                    var rulesArr = {};
+
+                    $(".passport_upload").each(function(i, obj){
+                        var selector = $(obj).data("fieldname");
+                        rulesArr[selector] = "required"
+                    });
+
+                    $(".bill_upload").each(function(i, obj){
+                        var selector = $(obj).data("fieldname");
+                        rulesArr[selector] = "required"
+                    });
+
+                    rulesArr["nominee_director_annual_fee"] = "required";
+                    rulesArr["nominee_secretary_annual_fee"] = "required";
+                    rulesArr["company_name_choices[]"] = "required";
+                    rulesArr["tnc"] = "required";
+
+                    var rulesJson = $.parseJSON(JSON.stringify(rulesArr));
+
                     $selector.validate({
-                        rules: {
-                            "nominee_director_annual_fee": "required",
-                            "nominee_secretary_annual_fee": "required",
-                            "summary_shareholder_1_name": "required",
-                            "summary_shareholder_1_address": "required",
-                            "summary_shareholder_1_address_2": "required",
-                            "summary_shareholder_1_address_3": "required",
-                            "summary_director_1_name": "required",
-                            "summary_director_1_address": "required",
-                            "summary_director_1_address_2": "required",
-                            "summary_director_1_address_3": "required",
-                            "summary_secretary_1_name": "required",
-                            "summary_secretary_1_address": "required",
-                            "summary_secretary_1_address_2": "required",
-                            "summary_secretary_1_address_3": "required",
-                            "company_name_choices[]": "required",
-                            "tnc": "required"
-                        },
+                        rules: rulesJson,
                         messages: {
                             "nominee_director_annual_fee": "Please assign at least one director for your company.",
                             "nominee_secretary_annual_fee": "Please assign at least one secretary for your company."
@@ -495,8 +497,8 @@ function registration_form() {
                             } else if (element.attr("name") == "tnc") {
                                 error.insertAfter($("label[for=tnc]"));
                             } else {
-                                // error.insertAfter(element);
-                                element.attr("placeholder", error.text());
+                                error.insertAfter(element);
+                                // element.attr("placeholder", error.text());
                             }
                         }
                     });
@@ -583,23 +585,26 @@ function registration_form() {
                 var lblName = selector.charAt(0).toUpperCase() + selector.slice(1);
 
                 $fieldContainer.find("label.name").html(lblName+" "+fieldID);
-                $fieldContainer.find("label.address").html(lblName+" "+fieldID+" address");
+                $fieldContainer.find("label.address").html(lblName+" "+fieldID+" address").data("person-id", fieldID);                
 
+                $fieldContainer.find("."+selector+"-type").attr("name", selector+"_"+fieldID+"_type").attr("id", selector+"_"+fieldID+"_type").attr("data-"+selector+"-id", fieldID);
                 $fieldContainer.find("."+selector+"-name").attr("name", selector+"_"+fieldID+"_name").attr("id", selector+"_"+fieldID+"_name").attr("data-"+selector+"-id", fieldID).val("");
                 $fieldContainer.find("."+selector+"-address").attr("name", selector+"_"+fieldID+"_address").attr("id", selector+"_"+fieldID+"_address").attr("data-"+selector+"-id", fieldID).val("");
                 $fieldContainer.find("."+selector+"-address-2").attr("name", selector+"_"+fieldID+"_address_2").attr("id", selector+"_"+fieldID+"_address_2").attr("data-"+selector+"-id", fieldID).val("");
                 $fieldContainer.find("."+selector+"-address-3").attr("name", selector+"_"+fieldID+"_address_3").attr("id", selector+"_"+fieldID+"_address_3").attr("data-"+selector+"-id", fieldID).val("");
                 $fieldContainer.find("."+selector+"-address-4").attr("name", selector+"_"+fieldID+"_address_4").attr("id", selector+"_"+fieldID+"_address_4").attr("data-"+selector+"-id", fieldID).val("");
                 $fieldContainer.find("."+selector+"-telephone").attr("name", selector+"_"+fieldID+"_telephone").attr("id", selector+"_"+fieldID+"_telephone").attr("data-"+selector+"-id", fieldID).val("");
-                $fieldContainer.find("."+selector+"-amount").attr("name", selector+"_"+fieldID+"_amount").attr("id", selector+"_"+fieldID+"_amount").attr("data-"+selector+"-id", fieldID).val("").rules("add", {
-                    required: {
-                        depends : function(elem) {
-                            if($fieldContainer.find("."+selector+"-telephone").val()!="") return true;
-                            else return false;
+                if(selector=="shareholder") {
+                    $fieldContainer.find("."+selector+"-amount").attr("name", selector+"_"+fieldID+"_amount").attr("id", selector+"_"+fieldID+"_amount").attr("data-"+selector+"-id", fieldID).val("").rules("add", {
+                        required: {
+                            depends : function(elem) {
+                                if($fieldContainer.find("."+selector+"-telephone").val()!="") return true;
+                                else return false;
+                            }
                         }
-                    }
-                });
+                    });
 
+                }               
 
             }
 
@@ -660,37 +665,6 @@ function registration_form() {
 
             function initFileUpload($selector) {
                 $selector.each(function(i, obj) {
-                    
-                    // $(obj).uploadifive({
-                    //     "auto"         : false,
-                    //     "multi"        : false,
-                    //     "queueSizeLimit" : 1,
-                    //     "simUploadLimit" : 1,
-                    //     "fileType"     : "application/pdf|image/*",
-                    //     "fileSizeLimit": "5MB",
-                    //     "buttonText"   : "Upload passport",
-                    //     "uploadLimit"  : 1,
-                    //     "uploadScript" : "'.SITEURL.'/b/api/uploadfiles",
-                    //     "onError"      : function(errorType) {
-                    //         // $uploadBtn.uploadifive("cancel", $(".uploadifive-queue-item").first().data("file"));
-                    //         // $uploadResponse.text(errorType).css("color","red");
-                    //     },
-                    //     "onUploadComplete" : function(file, data) {
-                    //         console.log(data);
-
-                    //         var data = data.split("||").concat();
-
-                    //         var shortText = jQuery.trim(data[1]).substring(0, 20).trim(this) + "...";
-
-                    //         console.log(data[0]);
-                    //         console.log(data[1]);
-                    //         console.log(shortText);
-
-                    //         $(this).parent().parent().find("input[type=hidden]").val(data[0]);
-                    //         // $(this).parent().parent().insertAfter("<p>"+shortText+"</p>");                            
-
-                    //     }
-                    // });
 
                     var selector = $(obj).attr("data-fieldname");
 
@@ -702,9 +676,10 @@ function registration_form() {
 
                             var shortText = jQuery.trim(data.result.file.org_name).substring(0, 20).trim(this) + "...";
 
-                            $("input[name=summary_"+selector).val(data.result.file.name);
+                            $("input[name="+selector+"]").val(data.result.file.name);
                             $("#"+selector+"_files").html("");
                             $("<p/>").text(shortText).appendTo("#"+selector+"_files");
+                            $("#"+selector+"_files").parent().find("label.error").hide();
 
                         }
                     }).prop("disabled", !$.support.fileInput)
@@ -849,6 +824,7 @@ function registration_form() {
                 var chosen_route = $("#chosen_route").val();
 
                 var directors = $("input.director-name").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
+                var director_type = $("select.director-type").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
                 var director_address = $("input.director-address").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
                 var director_address_2 = $("input.director-address-2").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
                 var director_address_3 = $("input.director-address-3").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
@@ -856,6 +832,7 @@ function registration_form() {
                 var director_telephone = $("input.director-telephone").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
 
                 var secretaries = $("input.secretary-name").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
+                var secretary_type = $("select.secretary-type").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
                 var secretary_address = $("input.secretary-address").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
                 var secretary_address_2 = $("input.secretary-address-2").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
                 var secretary_address_3 = $("input.secretary-address-3").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
@@ -863,6 +840,7 @@ function registration_form() {
                 var secretary_telephone = $("input.secretary-telephone").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
 
                 var shareholders = $("input.shareholder-name").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
+                var shareholder_type = $("select.shareholder-type").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
                 var shareholder_amounts = $("input.shareholder-amount").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
                 var shareholder_address = $("input.shareholder-address").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
                 var shareholder_address_2 = $("input.shareholder-address-2").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
@@ -896,6 +874,9 @@ function registration_form() {
 
                 // amend shareholders
                 for(index = 0; index < shareholders.length; index++) {
+                    if(shareholder_type[index] && shareholder_type[index].name) shareholders[index].type_name = shareholder_type[index].name;
+                    if(shareholder_type[index] && shareholder_type[index].value) shareholders[index].type_value = shareholder_type[index].value;
+
                     if(shareholder_amounts[index] && shareholder_amounts[index].name) shareholders[index].amount_name = shareholder_amounts[index].name;
                     if(shareholder_amounts[index] && shareholder_amounts[index].value) shareholders[index].amount_value = shareholder_amounts[index].value;
 
@@ -917,6 +898,9 @@ function registration_form() {
 
                 // amend directors
                 for(index = 0; index < directors.length; index++) {                    
+                    if(director_type[index] && director_type[index].name) directors[index].type_name = director_type[index].name;
+                    if(director_type[index] && director_type[index].value) directors[index].type_value = director_type[index].value;
+
                     if(director_address[index] && director_address[index].name) directors[index].address_name = director_address[index].name;
                     if(director_address[index] && director_address[index].value) directors[index].address_value = director_address[index].value;
 
@@ -934,6 +918,9 @@ function registration_form() {
                 }
 
                 if(secretaries.length > 0) {
+                    if(secretary_type[0] && secretary_type[0].name) secretaries[0].type_name = secretary_type[0].name;
+                    if(secretary_type[0] && secretary_type[0].value) secretaries[0].type_value = secretary_type[0].value;
+
                     if(secretary_address[0] && secretary_address[0].name) secretaries[0].address_name = secretary_address[0].name;
                     if(secretary_address[0] && secretary_address[0].value) secretaries[0].address_value = secretary_address[0].value;
 
@@ -1014,6 +1001,24 @@ function registration_form() {
 
                 initFileUpload($(".passport_upload"));
                 initFileUpload($(".bill_upload"));
+
+                $(".passport_upload").each(function(i, obj){
+                    var selector = $(obj).data("selector");
+                    var $this = $(this);                    
+
+                    if($("#"+selector+"_type").val()==2) {
+                        $this.prev("button").text("Upload incorporation certificate");
+                    }
+                });
+
+                $(".bill_upload").each(function(i, obj){
+                    var selector = $(obj).data("selector");
+                    var $this = $(this);                    
+
+                    if($("#"+selector+"_type").val()==2) {
+                        $this.prev("button").text("Upload memo & articles");
+                    }
+                });
 
                 
                 var $form4 = $("#registration-page-form-4");
@@ -1346,6 +1351,40 @@ function registration_form() {
                 // update_input_val(data, "#summary_"+selector+"_"+id+"_"+field); 
             });
 
+            $("#step-2").on("change", ".person-type", function(e){
+                
+                e.preventDefault();
+                if($(this).val()==2) {
+                    $(this).parent().parent().find(".person-name").attr("placeholder", "Company name");
+                    var selector = $(this).data("selector");
+                    selector = selector.charAt(0).toUpperCase() + selector.slice(1);
+                    var person_id = $(this).parent().parent().find(".person-address").data("person-id");
+                    $(this).parent().parent().find(".person-address").text(selector+" "+person_id+" registered office address");                        
+
+                    $(this).parent().parent().find(".person-name").rules("add", {
+                        required: true,
+                        messages: {
+                            required: "Company name required"
+                        }
+                    });
+
+                }else {
+                    $(this).parent().parent().find(".person-name").attr("placeholder", "Name");
+                    var selector = $(this).data("selector");
+                    selector = selector.charAt(0).toUpperCase() + selector.slice(1);
+                    var person_id = $(this).parent().parent().find(".person-address").data("person-id");
+                    $(this).parent().parent().find(".person-address").text(selector+" "+person_id+" address");    
+
+                    $(this).parent().parent().find(".person-name").rules("add", {
+                        required: true,
+                        messages: {
+                            required: "Name required"
+                        }
+                    });
+                }                
+
+            });
+
             ///////
 
             $(".payment-gateway-btn").on("click", function(e){
@@ -1380,23 +1419,43 @@ function registration_form() {
             $(".save-now").on("click", function(e){
                 e.preventDefault();
 
-                for(var i=1; i<=4; i++) {
-                    var $form;
-                    if(i==1)
-                        $form = $("#registration-page-form-1-1");
-                    else 
-                        $form = $("#registration-page-form-"+i);
+                // local storage save
+                // for(var i=1; i<=4; i++) {
+                //     var $form;
+                //     if(i==1)
+                //         $form = $("#registration-page-form-1-1");
+                //     else 
+                //         $form = $("#registration-page-form-"+i);
 
-                    var FormData = getFormData($form);
-                    var storage = $.localStorage;
-                    var saved;
+                //     var FormData = getFormData($form);
+                //     var storage = $.localStorage;
+                //     var saved;
 
-                    saved = storage.set("form_"+i+"_data", FormData);
-                }
+                //     saved = storage.set("form_"+i+"_data", FormData);
+                // }
 
-                if(saved) {
-                    alert("Your data has been saved.");
-                }
+                // if(saved) {
+                //     alert("Your data has been saved.");
+                // }
+
+                var $form4 = $("#registration-page-form-4");
+
+                var data = $form4.serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
+                var response = makeRequest(data, "'.SITEURL.'/b/admin/company", "POST");
+
+                $(this).text("Saved");//.prop("disabled", true)
+
+                response.done(function(data, textStatus, jqXHR){                    
+                    if(jqXHR.status==200) {
+                        alert("Successfully saved!");
+
+                        setTimeout(function(){ 
+                            window.location.href = "'.SITEURL.'/client-dashboard";
+                        }, 2000);
+                    }
+                });
+
+                failedRequest(response);
 
             });
 
@@ -1404,14 +1463,32 @@ function registration_form() {
             /// INIT
             ///////////
 
+            function getQueryParams(qs) {
+                qs = qs.split("+").join(" ");
+
+                var params = {},
+                    tokens,
+                    re = /[?&]?([^=]+)=([^&]*)/g;
+
+                while (tokens = re.exec(qs)) {
+                    params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+                }
+
+                return params;
+            }
+            
+
             function init() {
-                var storage = $.localStorage;
                 
-                for(var i=1; i<=4; i++) {
-                    if(storage.isSet("form_"+i+"_data")) {
-                        console.log(storage.get("form_"+i+"_data"));
-                    }    
-                }                
+                var query = getQueryParams(document.location.search);
+                if(query.savedcompany!=="") {                                      
+                    var user_id = "'.$user_id.'";
+
+                    console.log(query.savedcompany);
+                    console.log(user_id);
+
+                    // ajax here  
+                }
 
                 // add operator support for handlebar
                 Handlebars.registerHelper("ifCond", function (v1, operator, v2, options) {
@@ -1534,10 +1611,17 @@ function registration_form() {
             <div class="shareholder">
                 <div class="field-container">
                     <div class="custom-input-container-left pull-left">
-                        <label for="shareholder" class="name">Shareholder 1</label>
-                        <input type="text" name="shareholder_1_name" placeholder="Name" data-selector="shareholder" data-shareholder-field="name" data-shareholder-id="1" class="shareholder-name person-input custom-input-class">                
+                        <label for="shareholder_1_type">Shareholder 1</label>
+                        <div class="custom-input-class-select-container">            
+                            <select name="shareholder_1_type" id="shareholder_1_type" data-selector="shareholder" data-shareholder-field="type" data-shareholder-id="1" class="shareholder-type person-input custom-input-class person-type">
+                                <option value="1">This shareholder is an individual</option>
+                                <option value="2">This shareholder is a company</option>
+                            </select>
+                        </div>
+                        <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>                        
+                        <input type="text" name="shareholder_1_name" placeholder="Name" data-selector="shareholder" data-shareholder-field="name" data-shareholder-id="1" class="shareholder-name person-input custom-input-class person-name">                
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                        <label for="shareholder_1_address" class="address">Shareholder 1 address</label>
+                        <label for="shareholder_1_address" class="address person-address" data-person-id="1">Shareholder 1 address</label>
                         <input type="text" name="shareholder_1_address" placeholder="Street" data-selector="shareholder" data-shareholder-field="address" data-shareholder-id="1" class="shareholder-address person-input custom-input-class">                
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                         <input type="text" name="shareholder_1_address_2" placeholder="City" data-selector="shareholder" data-shareholder-field="address_2" data-shareholder-id="1" class="shareholder-address-2 person-input custom-input-class">                
@@ -1560,9 +1644,16 @@ function registration_form() {
                 <div class="field-container">
                     <div class="custom-input-container-left pull-left">
                         <label for="shareholder" class="name">Shareholder 2</label>
-                        <input type="text" name="shareholder_2_name" id="shareholder_2_name" placeholder="Name" data-selector="shareholder" data-shareholder-field="name" data-shareholder-id="2" class="shareholder-name person-input custom-input-class">
+                        <div class="custom-input-class-select-container">            
+                            <select name="shareholder_2_type" id="shareholder_2_type" data-selector="shareholder" data-shareholder-field="type" data-shareholder-id="2" class="shareholder-type person-input custom-input-class person-type">
+                                <option value="1">This shareholder is an individual</option>
+                                <option value="2">This shareholder is a company</option>
+                            </select>
+                        </div>
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                        <label for="shareholder_2_address" class="address">Shareholder 2 address</label>
+                        <input type="text" name="shareholder_2_name" id="shareholder_2_name" placeholder="Name" data-selector="shareholder" data-shareholder-field="name" data-shareholder-id="2" class="shareholder-name person-input custom-input-class person-name">
+                        <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+                        <label for="shareholder_2_address" class="address person-address" data-person-id="2">Shareholder 2 address</label>
                         <input type="text" name="shareholder_2_address" id="shareholder_2_address" placeholder="Street" data-selector="shareholder" data-shareholder-field="address" data-shareholder-id="2" class="shareholder-address person-input custom-input-class">                
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                         <input type="text" name="shareholder_2_address_2" id="shareholder_2_address_2" placeholder="City" data-selector="shareholder" data-shareholder-field="address_2" data-shareholder-id="2" class="shareholder-address-2 person-input custom-input-class">                
@@ -1585,9 +1676,16 @@ function registration_form() {
                     <div class="field-container">
                         <div class="custom-input-container-left pull-left">
                             <label for="shareholder" class="name">Shareholder 3</label>
-                            <input type="text" name="shareholder_3_name" id="shareholder_3_name" placeholder="Name" data-selector="shareholder" data-shareholder-field="name" data-shareholder-id="3" class="shareholder-name person-input custom-input-class">                
+                            <div class="custom-input-class-select-container">            
+                                <select name="shareholder_3_type" id="shareholder_3_type" data-selector="shareholder" data-shareholder-field="type" data-shareholder-id="3" class="shareholder-type person-input custom-input-class person-type">
+                                    <option value="1">This shareholder is an individual</option>
+                                    <option value="2">This shareholder is a company</option>
+                                </select>
+                            </div>
                             <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                            <label for="shareholder_3_address" class="address">Shareholder 3 address</label>
+                            <input type="text" name="shareholder_3_name" id="shareholder_3_name" placeholder="Name" data-selector="shareholder" data-shareholder-field="name" data-shareholder-id="3" class="shareholder-name person-input custom-input-class person-name">                
+                            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+                            <label for="shareholder_3_address" class="address person-address" data-person-id="3">Shareholder 3 address</label>
                             <input type="text" name="shareholder_3_address" id="shareholder_3_address" placeholder="Street" data-selector="shareholder" data-shareholder-field="address" data-shareholder-id="3" class="shareholder-address person-input custom-input-class">                
                             <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                             <input type="text" name="shareholder_3_address_2" id="shareholder_3_address_2" placeholder="City" data-selector="shareholder" data-shareholder-field="address_2" data-shareholder-id="3" class="shareholder-address-2 person-input custom-input-class">                
@@ -1696,9 +1794,16 @@ function registration_form() {
             <div class="director key-person-info">
                 <div class="field-container">
                     <label for="director" class="name">Director 1</label>
-                    <input type="text" name="director_1_name" placeholder="Name" data-selector="director" data-director-field="name" data-director-id="1" class="director-name person-input custom-input-class">   
+                    <div class="custom-input-class-select-container">            
+                        <select name="director_1_type" id="director_1_type" data-selector="director" data-director-field="type" data-director-id="1" class="director-type person-input custom-input-class person-type">
+                            <option value="1">This director is an individual</option>
+                            <option value="2">This director is a company</option>
+                        </select>
+                    </div>
+                    <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+                    <input type="text" name="director_1_name" placeholder="Name" data-selector="director" data-director-field="name" data-director-id="1" class="director-name person-input custom-input-class person-name">   
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                    <label for="director_1_address" class="address">Director 1 address</label>
+                    <label for="director_1_address" class="address person-address" data-person-id="1">Director 1 address</label>
                     <input type="text" name="director_1_address" placeholder="Street" data-selector="director" data-director-field="address" data-director-id="1" class="director-address person-input custom-input-class">                
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                     <input type="text" name="director_1_address_2" placeholder="City" data-selector="director" data-director-field="address_2" data-director-id="1" class="director-address-2 person-input custom-input-class">                
@@ -1714,9 +1819,16 @@ function registration_form() {
 
                 <div class="field-container">
                     <label for="director" class="name">Director 2</label>
-                    <input type="text" name="director_2_name" id="director_2_name" placeholder="Name" data-selector="director" data-director-field="name" data-director-id="2" class="director-name person-input custom-input-class">    
+                    <div class="custom-input-class-select-container">            
+                        <select name="director_2_type" id="director_2_type" data-selector="director" data-director-field="type" data-director-id="2" class="director-type person-input custom-input-class person-type">
+                            <option value="1">This director is an individual</option>
+                            <option value="2">This director is a company</option>
+                        </select>
+                    </div>
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                    <label for="director_2_address" class="address">Director 2 address</label>
+                    <input type="text" name="director_2_name" id="director_2_name" placeholder="Name" data-selector="director" data-director-field="name" data-director-id="2" class="director-name person-input custom-input-class person-name">    
+                    <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
+                    <label for="director_2_address" class="address person-address" data-person-id="2">Director 2 address</label>
                     <input type="text" name="director_2_address" id="director_2_address" placeholder="Street" data-selector="director" data-director-field="address" data-director-id="2" class="director-address person-input custom-input-class">                
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                     <input type="text" name="director_2_address_2" id="director_2_address_2" placeholder="City" data-selector="director" data-director-field="address_2" data-director-id="2" class="director-address-2 person-input custom-input-class">                
@@ -1733,9 +1845,16 @@ function registration_form() {
                 <div class="cloneable">
                     <div class="field-container">
                         <label for="director" class="name">Director 3</label>
-                        <input type="text" name="director_3_name" id="director_3_name" placeholder="Name" data-selector="director" data-director-field="name" data-director-id="3" class="director-name person-input custom-input-class">    
+                        <div class="custom-input-class-select-container">            
+                            <select name="director_3_type" id="director_3_type" data-selector="director" data-director-field="type" data-director-id="3" class="director-type person-input custom-input-class person-type">
+                                <option value="1">This director is an individual</option>
+                                <option value="2">This director is a company</option>
+                            </select>
+                        </div>
+                        <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+                        <input type="text" name="director_3_name" id="director_3_name" placeholder="Name" data-selector="director" data-director-field="name" data-director-id="3" class="director-name person-input custom-input-class person-name">    
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                        <label for="director_3_address" class="address">Director 3 address</label>
+                        <label for="director_3_address" class="address person-address" data-person-id="3">Director 3 address</label>
                         <input type="text" name="director_3_address" id="director_3_address" placeholder="Street" data-selector="director" data-director-field="address" data-director-id="3" class="director-address person-input custom-input-class">                
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                         <input type="text" name="director_3_address_2" id="director_3_address_2" placeholder="City" data-selector="director" data-director-field="address_2" data-director-id="3" class="director-address-2 person-input custom-input-class">                
@@ -1801,10 +1920,17 @@ function registration_form() {
             </div>                
             <div class="secretary key-person-info">
                 <div class="field-container">
-                    <label for="secretary" class="name">Secretary name</label>
-                    <input type="text" name="secretary_1_name" placeholder="Name" data-selector="secretary" data-secretary-field="name" data-secretary-id="1" class="secretary-name person-input custom-input-class">     
+                    <label for="secretary" class="name">Secretary</label>
+                    <div class="custom-input-class-select-container">            
+                        <select name="secretary_1_type" id="secretary_1_type" data-selector="secretary" data-secretary-field="type" data-secretary-id="1" class="secretary-type person-input custom-input-class person-type">
+                            <option value="1">This secretary is an individual</option>
+                            <option value="2">This secretary is a company</option>
+                        </select>
+                    </div>
+                    <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
+                    <input type="text" name="secretary_1_name" placeholder="Name" data-selector="secretary" data-secretary-field="name" data-secretary-id="1" class="secretary-name person-input custom-input-class person-name">     
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                    <label for="secretary_1_address" class="address">Secretary address</label>
+                    <label for="secretary_1_address" class="address person-address" data-person-id="1">Secretary address</label>
                     <input type="text" name="secretary_1_address" placeholder="Street" data-selector="secretary" data-secretary-field="address" data-secretary-id="1" class="secretary-address person-input custom-input-class">                
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                     <input type="text" name="secretary_1_address_2" placeholder="City" data-selector="secretary" data-secretary-field="address_2" data-secretary-id="1" class="secretary-address-2 person-input custom-input-class">                
@@ -1959,8 +2085,9 @@ function registration_form() {
                             <p class="shareholder_{{counter @index}}_address_2">{{address_2_value}}</p>
                             <p class="shareholder_{{counter @index}}_address_3">{{address_3_value}}</p>
                             <p class="shareholder_{{counter @index}}_address_4">{{address_4_value}}</p>
-                            <p class="shareholder_{{counter @index}}_telephone">{{telephone_value}}</p>
+                            <p class="shareholder_{{counter @index}}_telephone">{{telephone_value}}</p>                            
                             <input type="hidden" name="shareholder_{{counter @index}}_name" id="shareholder_{{counter @index}}_name" value="{{value}}">
+                            <input type="hidden" name="shareholder_{{counter @index}}_type" id="shareholder_{{counter @index}}_type" value="{{type_value}}">
                             <input type="hidden" name="shareholder_{{counter @index}}_address" id="shareholder_{{counter @index}}_address" value="{{address_value}}">
                             <input type="hidden" name="shareholder_{{counter @index}}_address_2" id="shareholder_{{counter @index}}_address_2" value="{{address_2_value}}">
                             <input type="hidden" name="shareholder_{{counter @index}}_address_3" id="shareholder_{{counter @index}}_address_3" value="{{address_3_value}}">
@@ -2001,22 +2128,22 @@ function registration_form() {
                             </span>
                         </div>
                         <div class="upload-btn-container">
-                            <input type="hidden" name="summary_shareholder_{{counter @index}}_passport" />
+                            <input type="text" name="shareholder_{{counter @index}}_passport" />
                             <span class="btn btn-success fileinput-button">                            
                                 <button class="upload-passport-btn custom-submit-class custom-submit-class-2">Upload passport</button>
                                 <!-- The file input field used as target for the file upload widget -->
-                                <input class="passport_upload" type="file" name="files" data-fieldname="shareholder_{{counter @index}}_passport" />
+                                <input class="passport_upload" type="file" name="files" data-fieldname="shareholder_{{counter @index}}_passport" data-selector="shareholder_{{counter @index}}" />
                             </span>
                             <!-- The container for the uploaded files -->
                             <div id="shareholder_{{counter @index}}_passport_files" class="files"></div>
                         </div>
                         
                         <div class="upload-btn-container">
-                            <input type="hidden" name="summary_shareholder_{{counter @index}}_bill" />
+                            <input type="text" name="shareholder_{{counter @index}}_bill" />
                             <span class="btn btn-success fileinput-button">                            
                                 <button class="upload-bill-btn custom-submit-class custom-submit-class-2">Upload utility bill</button>
                                 <!-- The file input field used as target for the file upload widget -->                            
-                                <input class="bill_upload" type="file" name="files" data-fieldname="shareholder_{{counter @index}}_bill" />
+                                <input class="bill_upload" type="file" name="files" data-fieldname="shareholder_{{counter @index}}_bill" data-selector="shareholder_{{counter @index}}" />
                             </span>                
                             <!-- The container for the uploaded files -->
                             <div id="shareholder_{{counter @index}}_bill_files" class="files"></div>        
@@ -2029,7 +2156,11 @@ function registration_form() {
                     <input type="checkbox" name="nominee_shareholder_annual_fee" id="nominee_shareholder_annual_fee" checked="checked" value="">
                     <div class="summary-shareholder-price-container">                        
                         <div class="nominee-lbl-container pull-left col-1"><p>Nominee shareholders annual fee</p></div>
-                        <div class="pull-left col-2"><div class="nominee-cta-container"><button data-selector="nominee_shareholder" class="remove-btn custom-submit-class custom-submit-class-2">Remove</button></div></div>
+                        <div class="pull-left col-2 col-2-w-button">
+                            <div class="nominee-cta-container">
+                                <button data-selector="nominee_shareholder" class="remove-btn custom-submit-class custom-submit-class-2">Remove</button>
+                            </div>
+                        </div>
                         <div id="summary-shareholder-price" class="col-3 price summary-price pull-right"><p>$0</p></div>
                         <div class="clear"></div>
                     </div>
@@ -2059,6 +2190,7 @@ function registration_form() {
                                 <p class="director_{{counter @index}}_address_4">{{address_4_value}}</p>
                                 <p class="director_{{counter @index}}_telephone">{{telephone_value}}</p>
                                 <input type="hidden" name="director_{{counter @index}}_name" id="director_{{counter @index}}_name" value="{{value}}">
+                                <input type="hidden" name="director_{{counter @index}}_type" id="director_{{counter @index}}_type" value="{{type_value}}">
                                 <input type="hidden" name="director_{{counter @index}}_address" id="director_{{counter @index}}_address" value="{{address_value}}">
                                 <input type="hidden" name="director_{{counter @index}}_address_2" id="director_{{counter @index}}_address_2" value="{{address_2_value}}">
                                 <input type="hidden" name="director_{{counter @index}}_address_3" id="director_{{counter @index}}_address_3" value="{{address_3_value}}">
@@ -2087,29 +2219,29 @@ function registration_form() {
                         <div class="col-2 text-container pull-left">
                             
                         </div>
-                        <div class="col-3 pull-right">
+                        <div class="col-3 pull-right upload-col-container">
                             <div class="edit-btn-container">    
                                 <span class="btn btn-success fileinput-button">                                                             
                                     <button class="edit-summary-btn custom-submit-class custom-submit-class-2">Edit</button>    
                                 </span>
                             </div>
                             <div class="upload-btn-container">
-                                <input type="hidden" name="summary_director_{{counter @index}}_passport" />
+                                <input type="text" name="director_{{counter @index}}_passport" />
                                 <span class="btn btn-success fileinput-button">                            
                                     <button class="upload-passport-btn custom-submit-class custom-submit-class-2">Upload passport</button>
                                     <!-- The file input field used as target for the file upload widget -->
-                                    <input class="passport_upload" type="file" name="files" data-fieldname="director_{{counter @index}}_passport" />
+                                    <input class="passport_upload" type="file" name="files" data-fieldname="director_{{counter @index}}_passport" data-selector="director_{{counter @index}}" />
                                 </span>
                                 <!-- The container for the uploaded files -->
                                 <div id="director_{{counter @index}}_passport_files" class="files"></div>
                             </div>
                             
                             <div class="upload-btn-container">
-                                <input type="hidden" name="summary_director_{{counter @index}}_bill" />
+                                <input type="text" name="director_{{counter @index}}_bill" />
                                 <span class="btn btn-success fileinput-button">                            
                                     <button class="upload-bill-btn custom-submit-class custom-submit-class-2">Upload utility bill</button>
                                     <!-- The file input field used as target for the file upload widget -->                            
-                                    <input class="bill_upload" type="file" name="files" data-fieldname="director_{{counter @index}}_bill" />
+                                    <input class="bill_upload" type="file" name="files" data-fieldname="director_{{counter @index}}_bill" data-selector="director_{{counter @index}}" />
                                 </span>                
                                 <!-- The container for the uploaded files -->
                                 <div id="director_{{counter @index}}_bill_files" class="files"></div>        
@@ -2126,7 +2258,7 @@ function registration_form() {
                 <p>Offshore Company Solutions to provide professional directors</p>
                 <div class="vc_empty_space" style="height: 20px"><span class="vc_empty_space_inner"></span></div>        
                 <div class="nominee-lbl-container col-1 pull-left"><p>Professional directors annual fee</p></div>
-                <div class="col-2 pull-left"><div class="nominee-cta-container"><button data-selector="nominee_director" class="remove-btn custom-submit-class custom-submit-class-2">Remove</button></div></div>                
+                <div class="col-2 pull-left col-2-w-button"><div class="nominee-cta-container"><button data-selector="nominee_director" class="remove-btn custom-submit-class custom-submit-class-2">Remove</button></div></div>                
                 <div id="summary-director-price" class="col-3 price summary-price pull-right"><p>$0</p></div>
             </div>   
             <a href="#" class="go-step-2 pull-right"><button class="custom-submit-class custom-submit-class-2">Assign Director</button></a>         
@@ -2153,6 +2285,7 @@ function registration_form() {
                                 <p class="secretary_{{counter @index}}_address_4">{{address_4_value}}</p>
                                 <p class="secretary_{{counter @index}}_telephone">{{telephone_value}}</p>
                                 <input type="hidden" name="secretary_{{counter @index}}_name" id="secretary_{{counter @index}}_name" value="{{value}}">
+                                <input type="hidden" name="secretary_{{counter @index}}_type" id="secretary_{{counter @index}}_type" value="{{type_value}}">
                                 <input type="hidden" name="secretary_{{counter @index}}_address" id="secretary_{{counter @index}}_address" value="{{address_value}}">
                                 <input type="hidden" name="secretary_{{counter @index}}_address_2" id="secretary_{{counter @index}}_address_2" value="{{address_2_value}}">
                                 <input type="hidden" name="secretary_{{counter @index}}_address_3" id="secretary_{{counter @index}}_address_3" value="{{address_3_value}}">
@@ -2180,29 +2313,29 @@ function registration_form() {
                         <div class="col-2 text-container pull-left">
                             
                         </div>   
-                        <div class="col-3 pull-right">                                                            
+                        <div class="col-3 pull-right upload-col-container">                                                            
                             <div class="edit-btn-container">    
                                 <span class="btn btn-success fileinput-button">                                                             
                                     <button class="edit-summary-btn custom-submit-class custom-submit-class-2">Edit</button>    
                                 </span>
                             </div>
                             <div class="upload-btn-container">
-                                <input type="hidden" name="summary_secretary_{{counter @index}}_passport" />
+                                <input type="text" name="secretary_{{counter @index}}_passport" />
                                 <span class="btn btn-success fileinput-button">                            
                                     <button class="upload-btn upload-passport-btn custom-submit-class custom-submit-class-2">Upload passport</button>
                                     <!-- The file input field used as target for the file upload widget -->
-                                    <input class="passport_upload" type="file" name="files" data-fieldname="secretary_{{counter @index}}_passport" />
+                                    <input class="passport_upload" type="file" name="files" data-fieldname="secretary_{{counter @index}}_passport" data-selector="secretary_{{counter @index}}" />
                                 </span>
                                 <!-- The container for the uploaded files -->
                                 <div id="secretary_{{counter @index}}_passport_files" class="files"></div>
                             </div>
                             
                             <div class="upload-btn-container">
-                                <input type="hidden" name="summary_secretary_{{counter @index}}_bill" />
+                                <input type="text" name="secretary_{{counter @index}}_bill" />
                                 <span class="btn btn-success fileinput-button">                            
                                     <button class="upload-btn upload-bill-btn custom-submit-class custom-submit-class-2">Upload utility bill</button>
                                     <!-- The file input field used as target for the file upload widget -->                            
-                                    <input class="bill_upload" type="file" name="files" data-fieldname="secretary_{{counter @index}}_bill" />
+                                    <input class="bill_upload" type="file" name="files" data-fieldname="secretary_{{counter @index}}_bill" data-selector="secretary_{{counter @index}}" />
                                 </span>                
                                 <!-- The container for the uploaded files -->
                                 <div id="secretary_{{counter @index}}_bill_files" class="files"></div>        
@@ -2219,7 +2352,7 @@ function registration_form() {
                 <p>Offshore Company Solutions to provide a company secretary</p>
                 <div class="vc_empty_space" style="height: 20px"><span class="vc_empty_space_inner"></span></div>        
                 <div class="nominee-lbl-container pull-left col-1"><p>Company secretary annual fee</p></div>
-                <div class="pull-left col-2"><div class="nominee-cta-container"><button data-selector="nominee_secretary" class="remove-btn custom-submit-class custom-submit-class-2">Remove</button></div></div>                
+                <div class="pull-left col-2 col-2-w-button"><div class="nominee-cta-container"><button data-selector="nominee_secretary" class="remove-btn custom-submit-class custom-submit-class-2">Remove</button></div></div>                
                 <div id="summary-secretary-price" class="col-3 price summary-price pull-right"><p>$0</p></div>
                 <div class="clear"></div>
             </div>                          

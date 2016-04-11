@@ -33,6 +33,7 @@ Route::group(['middleware' => ['web']], function () {
 Route::get('api/companytype/{id}', ['uses' => 'ApiController@companytype']);
 Route::get('api/usercompanies/{id}', ['uses' => 'ApiController@usercompanies']);
 Route::get('api/usercompanydetails/{id}', ['uses' => 'ApiController@usercompanydetails']);
+Route::post('api/retrievesavedcompany', ['uses' => 'ApiController@retrievesavedcompany']);
 Route::post('api/uploadfiles', ['uses' => 'ApiController@uploadfiles']);
 Route::get('admin', ['uses' => 'AdminController@index']);
 Route::group(['middleware' => 'web'], function() {

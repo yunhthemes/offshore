@@ -602,7 +602,7 @@ footer .widget .mkdf-icon-list-item:hover p {
   background-color: #008b9b !important;
   font-size: 14px!important;
   line-height: 1.7em!important;
-  height: 42px!important;
+  min-height: 42px!important;
   font-family: Montserrat!important;
   font-style: normal!important;
   font-weight: 700!important;
@@ -1180,6 +1180,9 @@ input.error:-ms-input-placeholder {
 #registration-page-form-4 .col-2 .person-info {
   text-align: left;
 }
+#registration-page-form-4 .col-2.col-2-w-button {
+  width: 41%;
+}
 #registration-page-form-4 .upload-col-container {
   width: 24%;
 }
@@ -1190,7 +1193,8 @@ input.error:-ms-input-placeholder {
   position: absolute;
 }
 #registration-page-form-4 .custom-submit-class-2 {
-  width: 166px;
+  width: 200px;
+  height: auto;
   margin-top: 5px;
 }
 #registration-page-form-4 .nominee-cta-container,
@@ -1235,6 +1239,15 @@ input.error:-ms-input-placeholder {
 }
 #registration-page-form-4 .shareholder-amount-input {
   margin: 0 auto;
+}
+#registration-page-form-4 .upload-btn-container input[type="text"] {
+  visibility: hidden;
+  position: absolute;
+}
+#registration-page-form-4 .upload-btn-container label.error {
+  position: absolute;
+  right: -170px;
+  top: 12px;
 }
 .custom-input-container-left {
   width: 70%;

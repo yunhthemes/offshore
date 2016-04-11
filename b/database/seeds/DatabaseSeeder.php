@@ -94,22 +94,16 @@ class CompanyTableSeeder extends Seeder
 
         DB::table('companies')->insert([
             [
-                'name' => 'Cyprus company a',
+                'code' => 'A3000',
+                'name' => 'Cyprus company Ltd',
                 'incorporation_date' => \Carbon\Carbon::createFromDate(2015,07,22)->toDateTimeString(),
-                'price' => '1000',         
-                'price_eu' => '900',         
-                'shelf' => true,       
-                'company_type_id' => 1     
-            ],
-            [
-                'name' => 'Cyprus company b',
-                'incorporation_date' => \Carbon\Carbon::createFromDate(2014,07,22)->toDateTimeString(),
-                'price' => '1100', 
-                'price_eu' => '1000', 
+                'price' => '1000', 
+                'price_eu' => '900', 
                 'shelf' => true,
                 'company_type_id' => 1
             ],
             [
+                'code' => 'A1478',
                 'name' => 'Belize Services Ltd',
                 'incorporation_date' => \Carbon\Carbon::createFromDate(2013,07,22)->toDateTimeString(),
                 'price' => '1200', 
@@ -118,12 +112,22 @@ class CompanyTableSeeder extends Seeder
                 'company_type_id' => 2
             ],
             [
-                'name' => 'Nat\'s Company Ltd',
-                'incorporation_date' => \Carbon\Carbon::createFromDate(2012,07,22)->toDateTimeString(),
-                'price' => '1300', 
-                'price_eu' => '1200', 
+                'code' => 'A5200',
+                'name' => 'Smith Ltd',
+                'incorporation_date' => \Carbon\Carbon::createFromDate(2013,02,01)->toDateTimeString(),
+                'price' => '1200', 
+                'price_eu' => '1000', 
                 'shelf' => true,
                 'company_type_id' => 1
+            ],
+            [
+                'code' => 'C1222',
+                'name' => 'Ben\'s Company GmbH',
+                'incorporation_date' => \Carbon\Carbon::createFromDate(2012,01,16)->toDateTimeString(),
+                'price' => '1000', 
+                'price_eu' => '800', 
+                'shelf' => true,
+                'company_type_id' => 2
             ]
         ]);        
     }

@@ -75,8 +75,8 @@ class CompanyController extends Controller
                 $company->incorporation_date = date('Y-m-d H:i:s');
                 $company->price = 0;
                 $company->price_eu = 0;
-                $company->company_type_id = $request->jurisdiction_id;
-                $company->renewal_date = date('Y-m-d H:i:s', strtotime(date("Y-m-d", time()) . " + 365 day"));
+                $company->shelf = 0;
+                $company->company_type_id = $request->jurisdiction_id;                
                 $company->save();
 
                 $company_id = $company->id;
@@ -95,36 +95,61 @@ class CompanyController extends Controller
                 $directors = array();
                 $secretaries = array();
                 $shareholders = array();
+                $incomplete = false;
 
                 for($i=1;$i<=$request->director_count;$i++) {                
                     $name = $request->input('director_'.$i.'_name');
+                    $type = $request->input('director_'.$i.'_type');
                     $address = $request->input('director_'.$i.'_address');
                     $address_2 = $request->input('director_'.$i.'_address_2');
                     $address_3 = $request->input('director_'.$i.'_address_3');
                     $address_4 = $request->input('director_'.$i.'_address_4');
                     $telephone = $request->input('director_'.$i.'_telephone');
-                    $directors[] = new CompanyDirector(['name'=>$name, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3, 'address_3'=>$address_3, 'address_4'=>$address_4, 'telephone'=>$telephone]);
+                    $passport = $request->input('director_'.$i.'_passport');
+                    $bill = $request->input('director_'.$i.'_bill');
+
+                    if(empty($passport) || empty($bill)) {
+                        $incomplete = true;
+                    }
+
+                    $directors[] = new CompanyDirector(['name'=>$name, 'type'=>$type, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3, 'address_3'=>$address_3, 'address_4'=>$address_4, 'telephone'=>$telephone, 'passport'=>$passport, 'bill'=>$bill]);
                 }
 
                 for($i=1;$i<=$request->secretary_count;$i++) {                
                     $name = $request->input('secretary_'.$i.'_name');
+                    $type = $request->input('secretary_'.$i.'_type');
                     $address = $request->input('secretary_'.$i.'_address');
                     $address_2 = $request->input('secretary_'.$i.'_address_2');
                     $address_3 = $request->input('secretary_'.$i.'_address_3');
                     $address_4 = $request->input('secretary_'.$i.'_address_4');
                     $telephone = $request->input('secretary_'.$i.'_telephone');
-                    $secretaries[] = new CompanySecretary(['name'=>$name, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3, 'address_3'=>$address_3, 'address_4'=>$address_4, 'telephone'=>$telephone]);
+                    $passport = $request->input('secretary_'.$i.'_passport');
+                    $bill = $request->input('secretary_'.$i.'_bill');
+
+                    if(empty($passport) || empty($bill)) {
+                        $incomplete = true;
+                    }
+
+                    $secretaries[] = new CompanySecretary(['name'=>$name, 'type'=>$type, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3, 'address_3'=>$address_3, 'address_4'=>$address_4, 'telephone'=>$telephone, 'passport'=>$passport, 'bill'=>$bill]);
                 }
 
                 for($i=1;$i<=$request->shareholder_count;$i++) {                
                     $name = $request->input('shareholder_'.$i.'_name');
+                    $type = $request->input('shareholder_'.$i.'_type');
                     $address = $request->input('shareholder_'.$i.'_address');
                     $address_2 = $request->input('shareholder_'.$i.'_address_2');
                     $address_3 = $request->input('shareholder_'.$i.'_address_3');
                     $address_4 = $request->input('shareholder_'.$i.'_address_4');
                     $telephone = $request->input('shareholder_'.$i.'_telephone');
+                    $passport = $request->input('shareholder_'.$i.'_passport');
+                    $bill = $request->input('shareholder_'.$i.'_bill');
                     $amount = $request->input('shareholder_'.$i.'_amount');
-                    $shareholders[] = new CompanyShareholder(['name'=>$name, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3, 'address_4'=>$address_4, 'telephone'=>$telephone, 'share_amount'=>$amount]);
+
+                    if(empty($passport) || empty($bill)) {
+                        $incomplete = true;
+                    }
+
+                    $shareholders[] = new CompanyShareholder(['name'=>$name, 'type'=>$type, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3, 'address_4'=>$address_4, 'telephone'=>$telephone, 'passport'=>$passport, 'bill'=>$bill, 'share_amount'=>$amount]);
                 }
 
                 $company->companydirectors()->saveMany($directors);
@@ -151,7 +176,17 @@ class CompanyController extends Controller
                     }    
                 }                
 
-                return response()->json(['message' => 'Successfully added', 'response' => $request->all()], 200)->setCallback($request->input('callback'));
+                if($incomplete==false){
+
+                    $company = Company::find($company_id);
+                    $company->status = 1;
+                    $company->renewal_date = date('Y-m-d H:i:s', strtotime(date("Y-m-d", time()) . " + 365 day"));
+                    $company->save();
+
+                    return response()->json(['message' => 'Successfully saved', 'response' => $request->all()], 200)->setCallback($request->input('callback'));    
+                }else {
+                    return response()->json(['message' => 'Successfully added', 'response' => $request->all()], 200)->setCallback($request->input('callback'));
+                }               
 
             else:
 

@@ -16,14 +16,15 @@ class CreateCompanyDirectorTable extends Migration
         Schema::create('company_directors', function (Blueprint $table) {
             $table->increments('id');            
             $table->integer('company_id')->unsigned();            
+            $table->string('type');
             $table->string('name');
             $table->string('address');            
             $table->string('address_2');
-            $table->string('address_3');
+            $table->string('address_3')->nullable(); // state
             $table->string('address_4');
             $table->string('telephone');
-            $table->string('passort');
-            $table->string('bill');
+            $table->string('passport')->nullable();
+            $table->string('bill')->nullable();
             $table->foreign('company_id')->references('id')->on('companies');
             $table->timestamps('created_at');
         });

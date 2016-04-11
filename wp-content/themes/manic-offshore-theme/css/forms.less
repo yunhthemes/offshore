@@ -34,7 +34,7 @@
   font-size: 14px!important;
   line-height: 1.7em!important;
 
-  height: 42px!important;
+  min-height: 42px!important;
   font-family: Montserrat!important;
   font-style: normal!important;
   font-weight: 700!important;
@@ -652,6 +652,9 @@ input.error {
     .person-info {
       text-align: left;
     }
+    &.col-2-w-button {
+      width: 41%;
+    }
   }
   .upload-col-container {
     width: 24%;
@@ -663,10 +666,9 @@ input.error {
     position: absolute;
   }
   .custom-submit-class-2 {
-    width: 166px;
-    &:nth-of-type(1) {
-      // margin-top: 0px;
-    }
+    width: 200px;
+    height: auto;
+    
     margin-top: 5px;      
   }
   .nominee-cta-container, .service-cta-container {
@@ -699,6 +701,18 @@ input.error {
 
   .shareholder-amount-input {
     margin: 0 auto;
+  }
+
+  .upload-btn-container {
+    input[type="text"] {
+      visibility: hidden;
+      position: absolute;
+    }
+    label.error {
+      position: absolute;
+      right: -170px;
+      top: 12px;
+    }
   }
 }
 
@@ -787,7 +801,7 @@ input.error {
 
   option{
     color: #767676;
-  }
+  }  
 
 }
 

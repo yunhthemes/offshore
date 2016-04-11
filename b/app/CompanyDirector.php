@@ -9,7 +9,7 @@ class CompanyDirector extends Model
     //
     protected $table = 'company_directors';
 
-    protected $fillable = array('name', 'address', 'address_2', 'address_3');
+    protected $fillable = array('type', 'name', 'address', 'address_2', 'address_3', 'address_4', 'telephone', 'passport', 'bill');
 
     public function companies()
     {
