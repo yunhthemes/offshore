@@ -70,14 +70,21 @@ class CompanyController extends Controller
             $company_id = $request->shelf_company_id;
 
             if(empty($company_id)) { // if not shelf create new company
-                $company = new Company;
+
+                $saved_company_id = $request->saved_company_id;
+
+                if($saved_company_id) {
+                    $company = Company::find($saved_company_id);    
+                }else {
+                    $company = new Company;                
+                }                          
                 $company->name = implode(", ", $request->company_name_choices);
                 $company->incorporation_date = date('Y-m-d H:i:s');
                 $company->price = 0;
                 $company->price_eu = 0;
                 $company->shelf = 0;
                 $company->company_type_id = $request->jurisdiction_id;                
-                $company->save();
+                $company->save();  
 
                 $company_id = $company->id;
             }            
@@ -88,6 +95,17 @@ class CompanyController extends Controller
                 $company->renewal_date = date('Y-m-d H:i:s', strtotime(date("Y-m-d", time()) . " + 365 day"));
                 $wpuser = Wpuser::find($user_id);
                 $company->wpuser()->associate($wpuser);
+
+                if(!empty($request->nominee_director_annual_fee)) {
+                    $company->nominee_director = 1;
+                }
+                if(!empty($request->nominee_shareholder_annual_fee)) {
+                    $company->nominee_shareholder = 1;
+                }
+                if(!empty($request->nominee_secretary_annual_fee)) {
+                    $company->nominee_secretary = 1;
+                }
+
                 $company->save();
 
                 // $company->wpusers()->attach($wpuser->ID); // might change to one to many which is to add user_id in compaines table
@@ -97,42 +115,10 @@ class CompanyController extends Controller
                 $shareholders = array();
                 $incomplete = false;
 
-                for($i=1;$i<=$request->director_count;$i++) {                
-                    $name = $request->input('director_'.$i.'_name');
-                    $type = $request->input('director_'.$i.'_type');
-                    $address = $request->input('director_'.$i.'_address');
-                    $address_2 = $request->input('director_'.$i.'_address_2');
-                    $address_3 = $request->input('director_'.$i.'_address_3');
-                    $address_4 = $request->input('director_'.$i.'_address_4');
-                    $telephone = $request->input('director_'.$i.'_telephone');
-                    $passport = $request->input('director_'.$i.'_passport');
-                    $bill = $request->input('director_'.$i.'_bill');
-
-                    if(empty($passport) || empty($bill)) {
-                        $incomplete = true;
-                    }
-
-                    $directors[] = new CompanyDirector(['name'=>$name, 'type'=>$type, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3, 'address_3'=>$address_3, 'address_4'=>$address_4, 'telephone'=>$telephone, 'passport'=>$passport, 'bill'=>$bill]);
-                }
-
-                for($i=1;$i<=$request->secretary_count;$i++) {                
-                    $name = $request->input('secretary_'.$i.'_name');
-                    $type = $request->input('secretary_'.$i.'_type');
-                    $address = $request->input('secretary_'.$i.'_address');
-                    $address_2 = $request->input('secretary_'.$i.'_address_2');
-                    $address_3 = $request->input('secretary_'.$i.'_address_3');
-                    $address_4 = $request->input('secretary_'.$i.'_address_4');
-                    $telephone = $request->input('secretary_'.$i.'_telephone');
-                    $passport = $request->input('secretary_'.$i.'_passport');
-                    $bill = $request->input('secretary_'.$i.'_bill');
-
-                    if(empty($passport) || empty($bill)) {
-                        $incomplete = true;
-                    }
-
-                    $secretaries[] = new CompanySecretary(['name'=>$name, 'type'=>$type, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3, 'address_3'=>$address_3, 'address_4'=>$address_4, 'telephone'=>$telephone, 'passport'=>$passport, 'bill'=>$bill]);
-                }
-
+                // delete if any old shareholders saved
+                $companyshareholders = $company->companyshareholders()->get();
+                if($companyshareholders) $company->companyshareholders()->delete();
+            
                 for($i=1;$i<=$request->shareholder_count;$i++) {                
                     $name = $request->input('shareholder_'.$i.'_name');
                     $type = $request->input('shareholder_'.$i.'_type');
@@ -152,9 +138,59 @@ class CompanyController extends Controller
                     $shareholders[] = new CompanyShareholder(['name'=>$name, 'type'=>$type, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3, 'address_4'=>$address_4, 'telephone'=>$telephone, 'passport'=>$passport, 'bill'=>$bill, 'share_amount'=>$amount]);
                 }
 
-                $company->companydirectors()->saveMany($directors);
-                $company->companysecretaries()->saveMany($secretaries);
                 $company->companyshareholders()->saveMany($shareholders);
+                
+                // delete if any old directors saved
+                $companydirectors = $company->companydirectors()->get();
+                if($companydirectors) $company->companydirectors()->delete();
+                
+                for($i=1;$i<=$request->director_count;$i++) {                
+                    $name = $request->input('director_'.$i.'_name');
+                    $type = $request->input('director_'.$i.'_type');
+                    $address = $request->input('director_'.$i.'_address');
+                    $address_2 = $request->input('director_'.$i.'_address_2');
+                    $address_3 = $request->input('director_'.$i.'_address_3');
+                    $address_4 = $request->input('director_'.$i.'_address_4');
+                    $telephone = $request->input('director_'.$i.'_telephone');
+                    $passport = $request->input('director_'.$i.'_passport');
+                    $bill = $request->input('director_'.$i.'_bill');
+
+                    if(empty($passport) || empty($bill)) {
+                        $incomplete = true;
+                    }                    
+
+                    $directors[] = new CompanyDirector(['name'=>$name, 'type'=>$type, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3, 'address_3'=>$address_3, 'address_4'=>$address_4, 'telephone'=>$telephone, 'passport'=>$passport, 'bill'=>$bill]);
+                }
+
+                $company->companydirectors()->saveMany($directors);
+
+                // delete if any old secretaries saved
+                $companysecretaries = $company->companysecretaries()->get();
+                if($companysecretaries) $company->companysecretaries()->delete();
+                   
+                for($i=1;$i<=$request->secretary_count;$i++) {                
+                    $name = $request->input('secretary_'.$i.'_name');
+                    $type = $request->input('secretary_'.$i.'_type');
+                    $address = $request->input('secretary_'.$i.'_address');
+                    $address_2 = $request->input('secretary_'.$i.'_address_2');
+                    $address_3 = $request->input('secretary_'.$i.'_address_3');
+                    $address_4 = $request->input('secretary_'.$i.'_address_4');
+                    $telephone = $request->input('secretary_'.$i.'_telephone');
+                    $passport = $request->input('secretary_'.$i.'_passport');
+                    $bill = $request->input('secretary_'.$i.'_bill');
+
+                    if(empty($passport) || empty($bill)) {
+                        $incomplete = true;
+                    }
+
+                    $secretaries[] = new CompanySecretary(['name'=>$name, 'type'=>$type, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3, 'address_3'=>$address_3, 'address_4'=>$address_4, 'telephone'=>$telephone, 'passport'=>$passport, 'bill'=>$bill]);
+                }
+                
+                $company->companysecretaries()->saveMany($secretaries);
+                
+                // if any old services
+                $servicescountries = $company->servicescountries()->get();
+                if($servicescountries) $company->servicescountries()->detach();
 
                 for($i=1;$i<=$request->service_count;$i++) {
                     $service_country_count = $request->input('service_'.$i.'_country_count');
@@ -171,10 +207,14 @@ class CompanyController extends Controller
                 $company_info_services = array();
 
                 if($info_services_ids) {
+                    // if any old info services
+                    $informationservices = $company->informationservice()->get();                
+                    if($informationservices) $company->informationservice()->detach();
+                        
                     foreach ($info_services_ids as $key => $value) {
                         $company->informationservice()->attach($value);
-                    }    
-                }                
+                    }                         
+                }
 
                 if($incomplete==false){
 

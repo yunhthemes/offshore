@@ -98,13 +98,13 @@ class ApiController extends Controller
         $user_id = $request->user_id;
         $company_id = $request->company_id;
 
-        $wpuser_compaines = Company::with('companytypes','companyshareholders', 'companydirectors', 'companysecretaries', 'servicescountries', 'informationservice')->where('wpuser_id', $user_id)->where('company_id', $company_id)->get();
+        $wpuser_compaines = Company::with('companytypes','companyshareholders', 'companydirectors', 'companysecretaries', 'servicescountries', 'informationservice')->where('wpuser_id', $user_id)->where('id', $company_id)->where('status', 0)->get();
 
         if(empty($wpuser_compaines)) {      
             return response()->json(['message' => 'company not found'], 202)->setCallback($request->input('callback'));
         }
         
-        return response()->json(['message' => 'Success', 'companies' => $wpuser_compaines], 200)->setCallback($request->input('callback'));
+        return response()->json(['message' => 'Success', 'companies' => $wpuser_compaines], 200);
 
     }
 

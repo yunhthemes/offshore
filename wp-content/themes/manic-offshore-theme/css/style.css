@@ -648,9 +648,7 @@ footer .widget .mkdf-icon-list-item:hover p {
   text-align: right;
 }
 .upload-btn-container .files {
-  position: absolute;
-  right: -185px;
-  top: 12px;
+  text-align: center;
 }
 .add-more {
   display: block;
@@ -1107,6 +1105,10 @@ input.error:-ms-input-placeholder {
 #registration-page-form-2 .intl-tel-input.allow-dropdown input[type=tel] {
   padding-left: 95px;
 }
+#registration-page-form-2 .inline-lbl {
+  display: inline-block;
+  margin-right: 5px;
+}
 #registration-page-form-3 input[type="checkbox"] {
   display: inline-block;
 }
@@ -1132,6 +1134,7 @@ input.error:-ms-input-placeholder {
 }
 #registration-page-form-4 .half-field-container-2 {
   width: 76%;
+  display: inline-block;
 }
 #registration-page-form-4 label {
   display: inline-block;
@@ -1175,16 +1178,13 @@ input.error:-ms-input-placeholder {
   width: 41%;
 }
 #registration-page-form-4 .col-2 {
-  width: 35%;
+  width: 28%;
 }
 #registration-page-form-4 .col-2 .person-info {
   text-align: left;
 }
 #registration-page-form-4 .col-2.col-2-w-button {
   width: 41%;
-}
-#registration-page-form-4 .upload-col-container {
-  width: 24%;
 }
 #registration-page-form-4 .ajax-file-upload {
   background: none;
@@ -1246,7 +1246,7 @@ input.error:-ms-input-placeholder {
 }
 #registration-page-form-4 .upload-btn-container label.error {
   position: absolute;
-  right: -170px;
+  right: -190px;
   top: 12px;
 }
 .custom-input-container-left {

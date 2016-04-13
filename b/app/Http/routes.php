@@ -36,7 +36,8 @@ Route::get('api/usercompanydetails/{id}', ['uses' => 'ApiController@usercompanyd
 Route::post('api/retrievesavedcompany', ['uses' => 'ApiController@retrievesavedcompany']);
 Route::post('api/uploadfiles', ['uses' => 'ApiController@uploadfiles']);
 Route::get('admin', ['uses' => 'AdminController@index']);
-Route::group(['middleware' => 'web'], function() {
-	Route::resource('admin/jurisdiction', 'JurisdictionController');	
+Route::post('admin/jurisdiction/getcompanyinclsaved', ['uses' => 'JurisdictionController@getcompanyinclsaved']);
+Route::group(['middleware' => 'web'], function() {	
+	Route::resource('admin/jurisdiction', 'JurisdictionController');
 });
 Route::resource('admin/company', 'CompanyController');

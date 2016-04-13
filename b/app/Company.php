@@ -41,7 +41,7 @@ class Company extends Model
 
     public function servicescountries()
     {
-        return $this->belongsToMany('App\ServiceCountry', 'company_service_country');
+        return $this->belongsToMany('App\ServiceCountry', 'company_service_country')->withPivot('credit_card_count');
     }
 
     public function wpuser()

@@ -87,9 +87,10 @@
   position: relative;
   text-align: right;
   .files {
-    position: absolute;
-    right: -185px;
-    top: 12px;
+    // position: absolute;
+    // right: -185px;
+    // top: 12px;
+    text-align: center;
   }
 }
 
@@ -580,6 +581,10 @@ input.error {
       }
     } 
   }
+  .inline-lbl {
+    display: inline-block;
+    margin-right: 5px;
+  }
 }
 
 #registration-page-form-3 {
@@ -595,6 +600,7 @@ input.error {
 #registration-page-form-4 {
   .go-step-2 {
     display: none;
+    // width: 24%;
   }
   p.error, label.error {
     color: red!important;
@@ -607,6 +613,7 @@ input.error {
   }
   .half-field-container-2 {
     width: 76%;
+    display: inline-block;
   }
   label {
     display: inline-block;
@@ -648,7 +655,8 @@ input.error {
     width: 41%;
   }
   .col-2 {
-    width: 35%;    
+    // width: 35%;    
+    width: 28%;    
     .person-info {
       text-align: left;
     }
@@ -656,8 +664,11 @@ input.error {
       width: 41%;
     }
   }
-  .upload-col-container {
-    width: 24%;
+  .upload-col-container, .remove-col-container {
+    // width: 24%;
+  }
+  .service-cta-col {
+    // width: 27%;
   }
   .ajax-file-upload {
     background: none;
@@ -710,7 +721,7 @@ input.error {
     }
     label.error {
       position: absolute;
-      right: -170px;
+      right: -190px;
       top: 12px;
     }
   }

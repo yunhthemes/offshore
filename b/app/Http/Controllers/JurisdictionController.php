@@ -245,7 +245,7 @@ class JurisdictionController extends Controller
         
         if($request->ajax() || $request->callback)
         {
-            $companies = CompanyType::with('companies','shareholders', 'directors', 'secretaries', 'services.countries', 'informationservices')->find($id);    
+            // $companies = CompanyType::with('companies','shareholders', 'directors', 'secretaries', 'services.countries', 'informationservices')->find($id);    
 
             $companies = CompanyType::with(['companies' => function($query){
                 $query->where('shelf', 1)->where('wpuser_id', NULL); // only shelf compaines without owner return
@@ -473,5 +473,26 @@ class JurisdictionController extends Controller
         }else {
             return response()->json(['message' => 'Request failed', 'error' => $error], 412);    
         }            
+    }
+
+    public function getcompanyinclsaved(Request $request) {
+
+        // return $request;
+
+        $id = $request->company_type_id;
+        $user_id = $request->user_id;
+
+        $companies = CompanyType::with(['companies' => function($query) use($user_id) {
+            $query->where('shelf', 1)->where('status', 0)->where(function($query) use($user_id) {
+                $query->where('wpuser_id', NULL)->orWhere('wpuser_id', $user_id);
+            }); // shelf compaines without owner and currently saved user_id return
+        }, 'shareholders', 'directors', 'secretaries', 'services.countries', 'informationservices'])->find($id);
+
+        foreach ($companies->companies as $key => $company) {
+            $company->incorporation_date = date('d M Y', strtotime($company->incorporation_date));
+        }
+
+        return response()->json($companies);        
+
     }
 }

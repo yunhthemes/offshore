@@ -25,6 +25,9 @@ class CreateCompaniesTable extends Migration
             $table->integer('company_type_id')->unsigned();
             $table->bigInteger('wpuser_id')->unsigned()->nullable();        
             $table->date('renewal_date')->nullable();
+            $table->boolean('nominee_director')->default(false);
+            $table->boolean('nominee_shareholder')->default(false);
+            $table->boolean('nominee_secretary')->default(false);
             $table->string('reg_no')->nullable();
             $table->string('tax_no')->nullable();
             $table->string('vat_reg_no')->nullable();
