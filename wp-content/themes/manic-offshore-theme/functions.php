@@ -43,12 +43,10 @@ if(!function_exists('deploy_mikado_scripts_customized')) {
     wp_enqueue_script('handlebars', get_stylesheet_directory_uri().'/js/plugins/handlebars-v4.0.5.js', array('jquery'), false, true);
     wp_enqueue_script('switchery', get_stylesheet_directory_uri().'/js/plugins/switchery/switchery.min.js', array('jquery'), false, true);
     wp_enqueue_script('intltel', get_stylesheet_directory_uri().'/js/plugins/intlTelInput.js', array('jquery'), false, true);
-    // wp_enqueue_script('uploadifive', get_stylesheet_directory_uri().'/js/plugins/jquery.uploadifive.min.js', array('jquery'), false, true);
     wp_enqueue_script('ui-widget', get_stylesheet_directory_uri().'/js/plugins/vendor/jquery.ui.widget.js', array('jquery'), false, true);
     wp_enqueue_script('iframe-transport', get_stylesheet_directory_uri().'/js/plugins/jquery.iframe-transport.js', array('jquery'), false, true);    
     wp_enqueue_script('fileupload', get_stylesheet_directory_uri().'/js/plugins/jquery.fileupload.js', array('jquery'), false, true);
     wp_enqueue_script('serializejson', get_stylesheet_directory_uri().'/js/plugins/jquery.serializejson.min.js', array('jquery'), false, true);
-    wp_enqueue_script('storage', get_stylesheet_directory_uri().'/js/plugins/jquery.storageapi.min.js', array('jquery'), false, true);
 
 
     wp_enqueue_script('jplist', get_stylesheet_directory_uri().'/js/plugins/jplist.core.min.js', array('jquery'), false, true);

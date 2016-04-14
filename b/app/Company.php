@@ -44,8 +44,9 @@ class Company extends Model
         return $this->belongsToMany('App\ServiceCountry', 'company_service_country')->withPivot('credit_card_count');
     }
 
-    public function wpuser()
+    public function wpusers()
     {
-        return $this->belongsTo('App\Wpuser', 'wpuser_id');
+        //return $this->belongsTo('App\Wpuser', 'wpuser_id');
+        return $this->belongsToMany('App\Wpuser', 'company_wpusers')->withPivot('renewal_date', 'nominee_director', 'nominee_shareholder', 'nominee_secretary', 'reg_no', 'tax_no', 'vat_reg_no', 'reg_office');
     }
 }

@@ -92,21 +92,33 @@ class CompanyController extends Controller
             if(!empty($user_id) && !empty($company_id) && $user_id!==0):
 
                 $company = Company::find($company_id);
-                $company->renewal_date = date('Y-m-d H:i:s', strtotime(date("Y-m-d", time()) . " + 365 day"));
-                $wpuser = Wpuser::find($user_id);
-                $company->wpuser()->associate($wpuser);
+                // $company->renewal_date = date('Y-m-d H:i:s', strtotime(date("Y-m-d", time()) . " + 365 day"));
+                // $wpuser = Wpuser::find($user_id);
+                // $company->wpuser()->associate($wpuser);
 
+                // if(!empty($request->nominee_director_annual_fee)) {
+                //     $company->nominee_director = 1;
+                // }
+                // if(!empty($request->nominee_shareholder_annual_fee)) {
+                //     $company->nominee_shareholder = 1;
+                // }
+                // if(!empty($request->nominee_secretary_annual_fee)) {
+                //     $company->nominee_secretary = 1;
+                // }
+
+
+                $renewal_date = date('Y-m-d H:i:s', strtotime(date("Y-m-d", time()) . " + 365 day"));
                 if(!empty($request->nominee_director_annual_fee)) {
-                    $company->nominee_director = 1;
+                    $nominee_director = 1;
                 }
                 if(!empty($request->nominee_shareholder_annual_fee)) {
-                    $company->nominee_shareholder = 1;
+                    $nominee_shareholder = 1;
                 }
                 if(!empty($request->nominee_secretary_annual_fee)) {
-                    $company->nominee_secretary = 1;
+                    $nominee_secretary = 1;
                 }
 
-                $company->save();
+                $company->wpusers()->attach($user_id, ['renewal_date'=>$renewal_date, 'nominee_director'=>$nominee_director, 'nominee_shareholder'=>$nominee_shareholder, 'nominee_secretary'=>$nominee_secretary]);
 
                 // $company->wpusers()->attach($wpuser->ID); // might change to one to many which is to add user_id in compaines table
 

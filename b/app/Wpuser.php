@@ -12,7 +12,8 @@ class Wpuser extends Model
 
     public function companies()
     {
-        return $this->hasMany('App\Company');
+    	// return $this->hasMany('App\Company');
+        return $this->belongsToMany('App\Company', 'company_wpusers');
     }
 
     

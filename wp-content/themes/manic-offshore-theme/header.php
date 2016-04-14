@@ -12,6 +12,10 @@
 
   <?php wp_head(); ?>
 
+  <script type="text/javascript">
+  var siteurl = '<?= get_site_url(); ?>';
+  </script>
+
   <!--Start of Zopim Live Chat Script-->
   <script type="text/javascript">
   window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=

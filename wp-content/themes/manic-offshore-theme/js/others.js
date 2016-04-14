@@ -46,6 +46,7 @@ jQuery(document).ready(function($) {
       // create new Date object for different city
       // using supplied offset
       var nd = new Date(utc + (3600000*offset));    
+
       if(nd=="Invalid Date"){
         return "";
       }
@@ -56,6 +57,39 @@ jQuery(document).ready(function($) {
   var utctime = $('#current_date_time').attr('data-utctime');
   var currentcountry = $('#current_date_time').attr('data-country');
 
-  $('#current_date_time').html(getTime(currentcountry, utctime));
+  // $('#current_date_time').html(getTime(currentcountry, utctime));
+
+  // console.log(moment().tz("America/Los_Angeles").format('MMMM Do YYYY, h:mm:ss'));
+
+  function makeRequest(Data, URL, Method) {
+
+      var request = $.ajax({
+          url: URL,
+          type: Method,
+          data: Data,
+          success: function(response) {
+              // if success remove current item
+              // console.log(response);
+          },
+          error: function( error ){
+              // Log any error.
+              console.log("ERROR:", error);
+          }
+      });
+
+      return request;
+  };
+
+  if(currentcountry) {
+    var response = makeRequest("", siteurl+"/b/api/gettimezonelist/"+currentcountry, "GET");
+
+    response.done(function(data, textStatus, jqXHR){                    
+      if(jqXHR.status==200) {
+
+        $('#current_date_time').html(data);
+
+      }
+    });
+  }  
 
 });

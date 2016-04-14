@@ -587,7 +587,7 @@ function registration_form() {
                 $fieldContainer.find("label.name").html(lblName+" "+fieldID);
                 $fieldContainer.find("label.address").html(lblName+" "+fieldID+" address").data("person-id", fieldID);                
 
-                $fieldContainer.find("."+selector+"-type").attr("name", selector+"_"+fieldID+"_type").attr("id", selector+"_"+fieldID+"_type").attr("data-"+selector+"-id", fieldID);
+                $fieldContainer.find("."+selector+"-type").attr("name", selector+"_"+fieldID+"_type").attr("id", selector+"_"+fieldID+"_type").attr("data-"+selector+"-id", fieldID).next(".switchery").remove();
                 $fieldContainer.find("."+selector+"-name").attr("name", selector+"_"+fieldID+"_name").attr("id", selector+"_"+fieldID+"_name").attr("data-"+selector+"-id", fieldID).val("");
                 $fieldContainer.find("."+selector+"-address").attr("name", selector+"_"+fieldID+"_address").attr("id", selector+"_"+fieldID+"_address").attr("data-"+selector+"-id", fieldID).val("");
                 $fieldContainer.find("."+selector+"-address-2").attr("name", selector+"_"+fieldID+"_address_2").attr("id", selector+"_"+fieldID+"_address_2").attr("data-"+selector+"-id", fieldID).val("");
@@ -754,13 +754,18 @@ function registration_form() {
 
             function initPlugin(selector) {
                 
-                // init plugin
-                var elems = Array.prototype.slice.call(document.querySelectorAll(selector));
+                if(selector.jquery) {
+                    var elems = [];
+                    elems.push(selector.get(-1));
+                }else {
+                    // init plugin
+                    var elems = Array.prototype.slice.call(document.querySelectorAll(selector));
+                }
 
                 elems.forEach(function(html) {
                     var init = new Switchery(html, { color: "#008b9b" });
 
-                    if(selector==".js-switch") {
+                    if($(html).hasClass("js-switch")) {
                         html.onchange = function() {
                             if(html.checked) {
                                 $(html).parent().parent().find(".key-person-info").hide();
@@ -771,9 +776,35 @@ function registration_form() {
                                 $(html).parent().parent().find(".nominee-container").hide();
                             } 
                         };
-                    }else if(selector==".person-type-1-switch") {
-                        
-                    }else if(selector==".service-js-switch") {
+                    }else if($(html).hasClass("person-type-1-switch")) {
+                        html.onchange = function() {
+                            var switch2_state = $(html).parent().find(".person-type-2-switch").is(":checked");
+                            var current_value;
+                            if(html.checked==false && switch2_state==false){
+                                $(html).parent().find(".person-type-2-switch").trigger("click");
+                                current_value = $(html).parent().find(".person-type-2-switch").val();
+                            }
+                            else if(html.checked==true && switch2_state==true) {
+                                $(html).parent().find(".person-type-2-switch").trigger("click");                                
+                                current_value = $(html).val(); // if switch 1 is checked, get switch 1 value
+                            }
+                            $(html).parent().parent().find(".person-type").val(current_value).trigger("change");
+                        }
+                    }else if($(html).hasClass("person-type-2-switch")) {
+                        html.onchange = function() {
+                            var switch1_state = $(html).parent().find(".person-type-1-switch").is(":checked");
+                            var current_value;
+                            if(html.checked==true && switch1_state==true) {
+                                $(html).parent().find(".person-type-1-switch").trigger("click");
+                                current_value = $(html).val();
+                            }
+                            else if(html.checked==false && switch1_state==false) {
+                                $(html).parent().find(".person-type-1-switch").trigger("click");                                
+                                current_value = $(html).parent().find(".person-type-1-switch").val();
+                            }
+                            $(html).parent().parent().find(".person-type").val(current_value).trigger("change");
+                        }
+                    }else if($(html).hasClass("service-js-switch")) {
                         html.onchange = function() {
                             var countryId = $(html).data("country-id");
                             var serviceId = $(html).data("service-id");
@@ -1065,9 +1096,9 @@ function registration_form() {
 
                             // console.log(savedData);           
 
-                            if(savedData.nominee_shareholder==1) $("#step-2").find("#nominee_shareholder").trigger("click");
-                            if(savedData.nominee_director==1) $("#step-2").find("#nominee_director").trigger("click");
-                            if(savedData.nominee_secretary==1) $("#step-2").find("#nominee_secretary").trigger("click");                            
+                            if(savedData.wpusers[0].pivot.nominee_shareholder==1) $("#step-2").find("#nominee_shareholder").trigger("click");
+                            if(savedData.wpusers[0].pivot.nominee_director==1) $("#step-2").find("#nominee_director").trigger("click");
+                            if(savedData.wpusers[0].pivot.nominee_secretary==1) $("#step-2").find("#nominee_secretary").trigger("click");                            
 
                             $.each(savedData.companyshareholders, function(i, shareholder){
                                 // console.log(shareholder)
@@ -1186,7 +1217,10 @@ function registration_form() {
                     cloneForm($(this).parent().find(".cloneable"));
                     updateClonedFields($(this).parent().find(".pasteclone"), $(this).data("selector"));     
                     initInputTel($(".pasteclone").find(".shareholder-telephone"));
-                    initInputTel($(".pasteclone").find(".director-telephone"));                
+                    initInputTel($(".pasteclone").find(".director-telephone"));     
+                    initPlugin($(".pasteclone").find(".person-type-1-switch"));
+                    initPlugin($(".pasteclone").find(".person-type-2-switch"));
+
                 }else {
                     alert("Can\'t add more than is 6 fields");
                 }
@@ -1817,19 +1851,19 @@ function registration_form() {
                 <div class="field-container">
                     <div class="custom-input-container-left pull-left">
                         <label for="shareholder_1_type">Shareholder 1</label>
-                        <!-- <div class="custom-input-class-select-container">            
+                        <div class="custom-input-class-select-container hide-select">            
                             <select name="shareholder_1_type" id="shareholder_1_type" data-selector="shareholder" data-shareholder-field="type" data-shareholder-id="1" class="shareholder-type person-input custom-input-class person-type">
                                 <option value="1">This shareholder is an individual</option>
                                 <option value="2">This shareholder is a company</option>
                             </select>
-                        </div> -->
+                        </div>
                         <div class="switch-container">
                             <p class="inline-lbl">This shareholder is</p>                            
                                                 
-                            <input type="checkbox" name="shareholder_1_type[]" id="shareholder_1_type" value="2" data-selector="shareholder" data-shareholder-field="type" data-shareholder-id="1" class="shareholder-type person-input custom-input-class person-type person-type-1-switch">
-                            <label for="shareholder_1_type[]" class="inline-lbl">an individual</label>                            
-                            <input type="checkbox" name="shareholder_1_type[]" id="shareholder_1_type" value="2" data-selector="shareholder" data-shareholder-field="type" data-shareholder-id="1" class="shareholder-type person-input custom-input-class person-type person-type-2-switch">
-                            <label for="shareholder_1_type[]" class="inline-lbl">a company</label>
+                            <input type="checkbox" name="shareholder_1_type_switch[]" value="1" data-selector="shareholder" data-shareholder-field="type" data-shareholder-id="1" class="shareholder-type person-input custom-input-class person-type-switch person-type-1-switch" checked="checked">
+                            <label for="shareholder_1_type_switch[]" class="inline-lbl">an individual</label>                            
+                            <input type="checkbox" name="shareholder_1_type_switch[]" value="2" data-selector="shareholder" data-shareholder-field="type" data-shareholder-id="1" class="shareholder-type person-input custom-input-class person-type-switch person-type-2-switch">
+                            <label for="shareholder_1_type_switch[]" class="inline-lbl">a company</label>
                         </div>
 
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>                        
@@ -1858,11 +1892,19 @@ function registration_form() {
                 <div class="field-container">
                     <div class="custom-input-container-left pull-left">
                         <label for="shareholder" class="name">Shareholder 2</label>
-                        <div class="custom-input-class-select-container">            
+                        <div class="custom-input-class-select-container hide-select">            
                             <select name="shareholder_2_type" id="shareholder_2_type" data-selector="shareholder" data-shareholder-field="type" data-shareholder-id="2" class="shareholder-type person-input custom-input-class person-type">
                                 <option value="1">This shareholder is an individual</option>
                                 <option value="2">This shareholder is a company</option>
                             </select>
+                        </div>
+                        <div class="switch-container">
+                            <p class="inline-lbl">This shareholder is</p>                            
+                                                
+                            <input type="checkbox" name="shareholder_2_type_switch[]" value="1" data-selector="shareholder" data-shareholder-field="type" data-shareholder-id="1" class="shareholder-type person-input custom-input-class person-type-switch person-type-1-switch" checked="checked">
+                            <label for="shareholder_2_type_switch[]" class="inline-lbl">an individual</label>                            
+                            <input type="checkbox" name="shareholder_2_type_switch[]" value="2" data-selector="shareholder" data-shareholder-field="type" data-shareholder-id="1" class="shareholder-type person-input custom-input-class person-type-switch person-type-2-switch">
+                            <label for="shareholder_2_type_switch[]" class="inline-lbl">a company</label>
                         </div>
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                         <input type="text" name="shareholder_2_name" id="shareholder_2_name" placeholder="Name" data-selector="shareholder" data-shareholder-field="name" data-shareholder-id="2" class="shareholder-name person-input custom-input-class person-name">
@@ -1890,11 +1932,19 @@ function registration_form() {
                     <div class="field-container">
                         <div class="custom-input-container-left pull-left">
                             <label for="shareholder" class="name">Shareholder 3</label>
-                            <div class="custom-input-class-select-container">            
+                            <div class="custom-input-class-select-container hide-select">            
                                 <select name="shareholder_3_type" id="shareholder_3_type" data-selector="shareholder" data-shareholder-field="type" data-shareholder-id="3" class="shareholder-type person-input custom-input-class person-type">
                                     <option value="1">This shareholder is an individual</option>
                                     <option value="2">This shareholder is a company</option>
                                 </select>
+                            </div>
+                            <div class="switch-container">
+                                <p class="inline-lbl">This shareholder is</p>                            
+                                                    
+                                <input type="checkbox" name="shareholder_3_type_switch[]" value="1" data-selector="shareholder" data-shareholder-field="type" data-shareholder-id="1" class="shareholder-type person-input custom-input-class person-type-switch person-type-1-switch" checked="checked">
+                                <label for="shareholder_3_type_switch[]" class="inline-lbl">an individual</label>                            
+                                <input type="checkbox" name="shareholder_3_type_switch[]" value="2" data-selector="shareholder" data-shareholder-field="type" data-shareholder-id="1" class="shareholder-type person-input custom-input-class person-type-switch person-type-2-switch">
+                                <label for="shareholder_3_type_switch[]" class="inline-lbl">a company</label>
                             </div>
                             <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                             <input type="text" name="shareholder_3_name" id="shareholder_3_name" placeholder="Name" data-selector="shareholder" data-shareholder-field="name" data-shareholder-id="3" class="shareholder-name person-input custom-input-class person-name">                
@@ -2008,11 +2058,19 @@ function registration_form() {
             <div class="director key-person-info">
                 <div class="field-container">
                     <label for="director" class="name">Director 1</label>
-                    <div class="custom-input-class-select-container">            
+                    <div class="custom-input-class-select-container hide-select">            
                         <select name="director_1_type" id="director_1_type" data-selector="director" data-director-field="type" data-director-id="1" class="director-type person-input custom-input-class person-type">
                             <option value="1">This director is an individual</option>
                             <option value="2">This director is a company</option>
                         </select>
+                    </div>
+                    <div class="switch-container">
+                        <p class="inline-lbl">This director is</p>                            
+                                            
+                        <input type="checkbox" name="director_1_type_switch[]" value="1" data-selector="director" data-director-field="type" data-director-id="1" class="director-type person-input custom-input-class person-type-switch person-type-1-switch" checked="checked">
+                        <label for="director_1_type_switch[]" class="inline-lbl">an individual</label>                            
+                        <input type="checkbox" name="director_1_type_switch[]" value="2" data-selector="director" data-director-field="type" data-director-id="1" class="director-type person-input custom-input-class person-type-switch person-type-2-switch">
+                        <label for="director_1_type_switch[]" class="inline-lbl">a company</label>
                     </div>
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
                     <input type="text" name="director_1_name" placeholder="Name" data-selector="director" data-director-field="name" data-director-id="1" class="director-name person-input custom-input-class person-name">   
@@ -2033,11 +2091,19 @@ function registration_form() {
 
                 <div class="field-container">
                     <label for="director" class="name">Director 2</label>
-                    <div class="custom-input-class-select-container">            
+                    <div class="custom-input-class-select-container hide-select">            
                         <select name="director_2_type" id="director_2_type" data-selector="director" data-director-field="type" data-director-id="2" class="director-type person-input custom-input-class person-type">
                             <option value="1">This director is an individual</option>
                             <option value="2">This director is a company</option>
                         </select>
+                    </div>
+                    <div class="switch-container">
+                        <p class="inline-lbl">This director is</p>                            
+                                            
+                        <input type="checkbox" name="director_2_type_switch[]" value="1" data-selector="director" data-director-field="type" data-director-id="2" class="director-type person-input custom-input-class person-type-switch person-type-1-switch" checked="checked">
+                        <label for="director_2_type_switch[]" class="inline-lbl">an individual</label>                            
+                        <input type="checkbox" name="director_2_type_switch[]" value="2" data-selector="director" data-director-field="type" data-director-id="2" class="director-type person-input custom-input-class person-type-switch person-type-2-switch">
+                        <label for="director_2_type_switch[]" class="inline-lbl">a company</label>
                     </div>
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                     <input type="text" name="director_2_name" id="director_2_name" placeholder="Name" data-selector="director" data-director-field="name" data-director-id="2" class="director-name person-input custom-input-class person-name">    
@@ -2059,11 +2125,19 @@ function registration_form() {
                 <div class="cloneable">
                     <div class="field-container">
                         <label for="director" class="name">Director 3</label>
-                        <div class="custom-input-class-select-container">            
+                        <div class="custom-input-class-select-container hide-select">            
                             <select name="director_3_type" id="director_3_type" data-selector="director" data-director-field="type" data-director-id="3" class="director-type person-input custom-input-class person-type">
                                 <option value="1">This director is an individual</option>
                                 <option value="2">This director is a company</option>
                             </select>
+                        </div>
+                        <div class="switch-container">
+                            <p class="inline-lbl">This director is</p>                            
+                                                
+                            <input type="checkbox" name="director_3_type_switch[]" value="1" data-selector="director" data-director-field="type" data-director-id="3" class="director-type person-input custom-input-class person-type-switch person-type-1-switch" checked="checked">
+                            <label for="director_3_type_switch[]" class="inline-lbl">an individual</label>                            
+                            <input type="checkbox" name="director_3_type_switch[]" value="2" data-selector="director" data-director-field="type" data-director-id="3" class="director-type person-input custom-input-class person-type-switch person-type-2-switch">
+                            <label for="director_3_type_switch[]" class="inline-lbl">a company</label>
                         </div>
                         <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
                         <input type="text" name="director_3_name" id="director_3_name" placeholder="Name" data-selector="director" data-director-field="name" data-director-id="3" class="director-name person-input custom-input-class person-name">    
@@ -2135,11 +2209,19 @@ function registration_form() {
             <div class="secretary key-person-info">
                 <div class="field-container">
                     <label for="secretary" class="name">Secretary</label>
-                    <div class="custom-input-class-select-container">            
+                    <div class="custom-input-class-select-container hide-select">            
                         <select name="secretary_1_type" id="secretary_1_type" data-selector="secretary" data-secretary-field="type" data-secretary-id="1" class="secretary-type person-input custom-input-class person-type">
                             <option value="1">This secretary is an individual</option>
                             <option value="2">This secretary is a company</option>
                         </select>
+                    </div>
+                    <div class="switch-container">
+                        <p class="inline-lbl">This secretary is</p>                            
+                                            
+                        <input type="checkbox" name="secretary_3_type_switch[]" value="1" data-selector="secretary" data-secretary-field="type" data-secretary-id="1" class="secretary-type person-input custom-input-class person-type-switch person-type-1-switch" checked="checked">
+                        <label for="secretary_3_type_switch[]" class="inline-lbl">an individual</label>                            
+                        <input type="checkbox" name="secretary_3_type_switch[]" value="2" data-selector="secretary" data-secretary-field="type" data-secretary-id="1" class="secretary-type person-input custom-input-class person-type-switch person-type-2-switch">
+                        <label for="secretary_3_type_switch[]" class="inline-lbl">a company</label>
                     </div>
                     <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>
                     <input type="text" name="secretary_1_name" placeholder="Name" data-selector="secretary" data-secretary-field="name" data-secretary-id="1" class="secretary-name person-input custom-input-class person-name">     

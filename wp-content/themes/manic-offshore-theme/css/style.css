@@ -1109,6 +1109,10 @@ input.error:-ms-input-placeholder {
   display: inline-block;
   margin-right: 5px;
 }
+#registration-page-form-2 .hide-select {
+  visibility: hidden;
+  position: absolute;
+}
 #registration-page-form-3 input[type="checkbox"] {
   display: inline-block;
 }

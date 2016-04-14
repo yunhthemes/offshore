@@ -248,7 +248,7 @@ class JurisdictionController extends Controller
             // $companies = CompanyType::with('companies','shareholders', 'directors', 'secretaries', 'services.countries', 'informationservices')->find($id);    
 
             $companies = CompanyType::with(['companies' => function($query){
-                $query->where('shelf', 1)->where('wpuser_id', NULL); // only shelf compaines without owner return
+                $query->where('shelf', 1)->where('status', 0); // only shelf compaines without owner return // ->where('wpuser_id', NULL)
             }, 'shareholders', 'directors', 'secretaries', 'services.countries', 'informationservices'])->find($id);
 
             foreach ($companies->companies as $key => $company) {
@@ -482,11 +482,14 @@ class JurisdictionController extends Controller
         $id = $request->company_type_id;
         $user_id = $request->user_id;
 
+        // shelf compaines without owner and currently saved user_id return
         $companies = CompanyType::with(['companies' => function($query) use($user_id) {
-            $query->where('shelf', 1)->where('status', 0)->where(function($query) use($user_id) {
-                $query->where('wpuser_id', NULL)->orWhere('wpuser_id', $user_id);
-            }); // shelf compaines without owner and currently saved user_id return
+            $query->where('shelf', 1)->where('status', 0);
         }, 'shareholders', 'directors', 'secretaries', 'services.countries', 'informationservices'])->find($id);
+
+        // , 'companies.wpusers' => function($query) {
+        //     $query->select('user_nicename');
+        // }
 
         foreach ($companies->companies as $key => $company) {
             $company->incorporation_date = date('d M Y', strtotime($company->incorporation_date));
