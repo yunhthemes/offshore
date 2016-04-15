@@ -129,7 +129,7 @@
 		                    <p class="jurisdiction">{{ companytypes.name }}</p>
 		                </div>
 		                <div class="each-content">
-		                    <p class="datetime">{{ renewal_date }}</p>    
+		                    <p class="datetime">{{ wpusers.0.pivot.renewal_date }}</p>    
 		                </div>		                         
 		                <div class="each-content">
 		                	{{#ifCond status "==" "0"}}
@@ -171,7 +171,7 @@
 				<h5 class="label">Next domiciliation renewal</h5>
 			</div>
 			<div class="value-container">
-				<p class="value">{{renewal_date}}</p>
+				<p class="value">{{wpusers.0.pivot.renewal_date}}</p>
 			</div>
 		</div>
 		<div class="each-detail">
@@ -430,7 +430,7 @@
             	$("#user-companies-container").hide();
             	$("#user-company-details-container").show();
 
-            	var response = makeJsonpRequest("", "<?php echo SITEURL; ?>/b/api/usercompanydetails/"+company_id, "GET");	
+            	var response = makeJsonpRequest("", "<?php echo SITEURL; ?>/b/api/usercompanydetails/"+company_id+"/<?php echo get_current_user_id(); ?>", "GET");	
 
 	        	response.done(function(data, textStatus, jqXHR){                    
 	                if(jqXHR.status==200) {

@@ -1601,9 +1601,9 @@ function registration_form() {
                         if(jqXHR.status==200) {
                             alert("Successfully submitted!");
 
-                            // setTimeout(function(){ 
-                            //     window.location.href = "'.SITEURL.'/client-dashboard";
-                            // }, 1000);
+                            setTimeout(function(){ 
+                                window.location.href = "'.SITEURL.'/client-dashboard";
+                            }, 1000);
                         }
                     });
 

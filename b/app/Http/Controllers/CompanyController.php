@@ -11,6 +11,8 @@ use App\CompanyType;
 use App\CompanyDirector;
 use App\CompanySecretary;
 use App\CompanyShareholder;
+use App\CompanyWpuserShareholder;
+use App\CompanyWpuser;
 use App\Country;
 use App\Wpuser;
 use App\InformationService;
@@ -108,28 +110,42 @@ class CompanyController extends Controller
 
 
                 $renewal_date = date('Y-m-d H:i:s', strtotime(date("Y-m-d", time()) . " + 365 day"));
-                if(!empty($request->nominee_director_annual_fee)) {
-                    $nominee_director = 1;
-                }
-                if(!empty($request->nominee_shareholder_annual_fee)) {
-                    $nominee_shareholder = 1;
-                }
-                if(!empty($request->nominee_secretary_annual_fee)) {
-                    $nominee_secretary = 1;
+                if(!empty($request->nominee_director_annual_fee)) $nominee_director = 1;
+                else $nominee_director = 0;
+
+                if(!empty($request->nominee_shareholder_annual_fee)) $nominee_shareholder = 1;
+                else $nominee_shareholder = 0;
+
+                if(!empty($request->nominee_secretary_annual_fee)) $nominee_secretary = 1;
+                else $nominee_secretary = 0;
+
+                // check if this user already saved this company
+                $company_wpuser = $company->wpusers()->where('wpuser_id', $user_id)->first();
+
+                if(count($company_wpuser)>0) {
+
+                    // delete if any old shareholders saved
+                    $companyshareholders = CompanyWpuser::find($company_wpuser->pivot->id)->companywpuser_shareholders()->get();
+                    if($companyshareholders) CompanyWpuser::find($company_wpuser->pivot->id)->companywpuser_shareholders()->delete();
+
+                    $company->wpusers()->detach($user_id); // if its saved remove pivot saved by that user first for overwritting purpose
+
                 }
 
-                $company->wpusers()->attach($user_id, ['renewal_date'=>$renewal_date, 'nominee_director'=>$nominee_director, 'nominee_shareholder'=>$nominee_shareholder, 'nominee_secretary'=>$nominee_secretary]);
+                $company->wpusers()->attach($user_id, ['renewal_date'=>$renewal_date, 'nominee_director'=>$nominee_director, 'nominee_shareholder'=>$nominee_shareholder, 'nominee_secretary'=>$nominee_secretary]); // enter new pivot data for that user
+                
+                $company_wpuser = $company->wpusers()->where('wpuser_id', $user_id)->first(); // get currently saved pivot id
 
-                // $company->wpusers()->attach($wpuser->ID); // might change to one to many which is to add user_id in compaines table
+                $company_wpuser_id = $company_wpuser->pivot->id;
 
                 $directors = array();
                 $secretaries = array();
                 $shareholders = array();
-                $incomplete = false;
+                $incomplete = false;         
 
                 // delete if any old shareholders saved
-                $companyshareholders = $company->companyshareholders()->get();
-                if($companyshareholders) $company->companyshareholders()->delete();
+                $companyshareholders = $company->companyshareholders()->get(); // to remove
+                if($companyshareholders) $company->companyshareholders()->delete(); // to remove
             
                 for($i=1;$i<=$request->shareholder_count;$i++) {                
                     $name = $request->input('shareholder_'.$i.'_name');
@@ -147,10 +163,18 @@ class CompanyController extends Controller
                         $incomplete = true;
                     }
 
-                    $shareholders[] = new CompanyShareholder(['name'=>$name, 'type'=>$type, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3, 'address_4'=>$address_4, 'telephone'=>$telephone, 'passport'=>$passport, 'bill'=>$bill, 'share_amount'=>$amount]);
-                }
+                    $shareholders[] = new CompanyShareholder(['name'=>$name, 'type'=>$type, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3, 'address_4'=>$address_4, 'telephone'=>$telephone, 'passport'=>$passport, 'bill'=>$bill, 'share_amount'=>$amount]); // to remove
 
-                $company->companyshareholders()->saveMany($shareholders);
+                    $companywpuser_shareholders[] = new CompanyWpuserShareholder(['name'=>$name, 'type'=>$type, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3, 'address_4'=>$address_4, 'telephone'=>$telephone, 'passport'=>$passport, 'bill'=>$bill, 'share_amount'=>$amount]);
+                }                
+
+                $company->companyshareholders()->saveMany($shareholders); // to remove
+
+                // find with currently saved companyuser pivot id and save shareholders for that user and company
+
+                $company_wpuser = CompanyWpuser::find($company_wpuser_id); 
+
+                $company_wpuser->companywpuser_shareholders()->saveMany($companywpuser_shareholders);
                 
                 // delete if any old directors saved
                 $companydirectors = $company->companydirectors()->get();
@@ -211,7 +235,9 @@ class CompanyController extends Controller
                         $service_country_id = $request->input('service_'.$i.'_country_'.$j.'_id'); 
                         $credit_card_count = ($request->input('service_'.$i.'_country_'.$j.'_no_of_card')) ? $request->input('service_'.$i.'_country_'.$j.'_no_of_card') : "";
 
-                        $company->servicescountries()->attach($service_country_id, ['credit_card_count'=>$credit_card_count]);
+                        $company->servicescountries()->attach($service_country_id, ['credit_card_count'=>$credit_card_count]); // to delete
+
+                        $company_wpuser->servicescountries()->attach($service_country_id, ['credit_card_count'=>$credit_card_count]);
                     }
                 }
 
@@ -232,7 +258,7 @@ class CompanyController extends Controller
 
                     $company = Company::find($company_id);
                     $company->status = 1;
-                    $company->renewal_date = date('Y-m-d H:i:s', strtotime(date("Y-m-d", time()) . " + 365 day"));
+                    // $company->renewal_date = date('Y-m-d H:i:s', strtotime(date("Y-m-d", time()) . " + 365 day"));
                     $company->save();
 
                     return response()->json(['message' => 'Successfully saved', 'response' => $request->all()], 200)->setCallback($request->input('callback'));    

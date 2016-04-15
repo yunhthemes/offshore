@@ -28,11 +28,13 @@ class ApiController extends Controller
     public function usercompanies($id, Request $request) {
 
         // $wpuser_compaines = Company::with("companytypes")->where('wpuser_id', $id)->get();        
-        $wpuser_compaines = Wpuser::find($id)->companies()->with("companytypes")->get();       
+        $wpuser_compaines = Wpuser::find($id)->companies()->with(["wpusers" => function($query) use($id) {
+            $query->select("user_nicename")->where('wpuser_id', $id);
+        }, "companytypes"])->get();      
 
         foreach ($wpuser_compaines as $key => $wpuser_company) {
             $wpuser_company->incorporation_date = date('d M Y', strtotime($wpuser_company->incorporation_date));
-            $wpuser_company->renewal_date = date('d M Y', strtotime($wpuser_company->renewal_date));
+            $wpuser_company->wpusers[0]->pivot->renewal_date = date('d M Y', strtotime($wpuser_company->wpusers[0]->pivot->renewal_date));
         }
 
     	if(empty($wpuser_compaines)) {		
@@ -43,11 +45,15 @@ class ApiController extends Controller
 
     }
 
-    public function usercompanydetails($id, Request $request) {
+    public function usercompanydetails($id, $user_id, Request $request) {
 
-        $wpuser_company_details = Company::with('companytypes','companyshareholders', 'companydirectors', 'companysecretaries', 'servicescountries', 'informationservice')->get()->find($id);
+        $wpuser_company_details = Company::with(['companytypes','companyshareholders', 'companydirectors', 'companysecretaries', 'servicescountries', 'informationservice', 'wpusers' => function($query) use($user_id) {
+            $query->select("user_nicename")->where('wpuser_id', $user_id);
+          }])->get()->find($id);
 
-        $wpuser_company_details->renewal_date = date('d M Y', strtotime($wpuser_company_details->renewal_date));
+        // return $wpuser_company_details;
+
+        $wpuser_company_details->wpusers[0]->pivot->renewal_date = date('d M Y', strtotime($wpuser_company_details->wpusers[0]->pivot->renewal_date));
         $wpuser_company_details->incorporation_date = date('d M Y', strtotime($wpuser_company_details->incorporation_date));
 
         if(!$wpuser_company_details) {
@@ -363,7 +369,7 @@ class ApiController extends Controller
         $timezone = timezone_identifiers_list(4096, $country_code);
         $timezonestr = $timezone[0];
         date_default_timezone_set($timezonestr);
-        $date= "Present time in Cyprus: ". date('D, d M Y H:i') . " hrs";
+        $date= "Present time in ".$country.": ". date('D, d M Y H:i') . " hrs";
 
         return $date;
     }
