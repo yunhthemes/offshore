@@ -1978,6 +1978,102 @@ body.home .rev_slider {
 #buddypress table.wp-profile-fields tr.alt td {
   background: #dddddd;
 }
+.company-chart {
+  min-height: 155px;
+}
+.company-chart * {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  position: relative;
+}
+.company-chart ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  position: relative;
+}
+.company-chart ul a {
+  display: block;
+  background: #008b9b;
+  border: 4px solid #fff;
+  text-align: center;
+  overflow: hidden;
+  font-size: .7em;
+  text-decoration: none;
+  font-weight: bold;
+  color: #fff;
+  height: 70px;
+  margin-bottom: -26px;
+  box-shadow: 4px 4px 9px -4px rgba(0, 0, 0, 0.4);
+  -webkit-transition: all linear .1s;
+  -moz-transition: all linear .1s;
+  transition: all linear .1s;
+}
+.company-chart ul a span {
+  top: 50%;
+  margin-top: -0.7em;
+  display: block;
+}
+.company-chart .big-company > li > a {
+  width: 18.5%;
+  margin: 0 auto 60px auto;
+}
+.company-chart .big-company:after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 0;
+  height: 30px;
+  border-left: 4px solid #646464;
+  z-index: 1;
+  bottom: -30px;
+  left: 50%;
+  margin-left: -4px;
+}
+.company-chart .companies {
+  position: absolute;
+  width: 100%;
+  left: 18.5%;
+  top: 120px;
+}
+.company-chart .companies:after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 39.5%;
+  height: 22px;
+  border-top: 4px solid #646464;
+  margin: 0 auto;
+  top: -22px;
+  left: 13%;
+}
+.company-chart .company:before {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 0;
+  height: 22px;
+  border-left: 4px solid #646464;
+  z-index: 1;
+  top: -22px;
+  left: 50%;
+  margin-left: -4px;
+}
+.company-chart .company {
+  border-left: 4px solid #646464;
+  width: 18.59894921190893%;
+  float: left;
+  margin-left: 1.751313485113835%;
+  margin-bottom: 60px;
+}
+.company-chart .company > a {
+  margin: 0 0 -26px -4px;
+  z-index: 1;
+}
+.company-chart .company > a:hover {
+  height: 80px;
+}
 .circle-container {
   text-align: center;
   min-height: 400px;

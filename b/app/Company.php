@@ -47,6 +47,13 @@ class Company extends Model
     public function wpusers()
     {
         //return $this->belongsTo('App\Wpuser', 'wpuser_id');
-        return $this->belongsToMany('App\Wpuser', 'company_wpusers')->withPivot('id','renewal_date', 'nominee_director', 'nominee_shareholder', 'nominee_secretary', 'reg_no', 'tax_no', 'vat_reg_no', 'reg_office');
+        return $this->belongsToMany('App\Wpuser', 'company_wpusers')->withPivot('id','renewal_date', 'nominee_director', 'nominee_shareholder', 'nominee_secretary', 'reg_no', 'tax_no', 'vat_reg_no', 'reg_office', 'status');
+    }
+
+    public function companywpuser_shareholders()
+    {
+        return $this->hasManyThrough(
+          'App\CompanyWpuserShareholder', 'App\CompanyWpuser', 'company_id', 'companywpuser_id'
+        );
     }
 }

@@ -12,6 +12,8 @@ use App\CompanyDirector;
 use App\CompanySecretary;
 use App\CompanyShareholder;
 use App\CompanyWpuserShareholder;
+use App\CompanyWpuserDirector;
+use App\CompanyWpuserSecretary;
 use App\CompanyWpuser;
 use App\Country;
 use App\Wpuser;
@@ -33,7 +35,13 @@ class CompanyController extends Controller
     	// DB::enableQueryLog();
         // DB::getQueryLog();
 
-        $companies = Company::with('companytypes')->where('shelf', 1)->get();              
+        $companies = Company::with('companytypes')->where('shelf', 1)->get();   
+
+        foreach ($companies as $key => $company) {
+            $company_wpusers = $company->wpusers()->get();
+            if($company_wpusers) $company->company_wpusers = $company_wpusers;
+        }
+
         return view('company.index', ['companies'=>$companies]);            
     }
 
@@ -128,6 +136,22 @@ class CompanyController extends Controller
                     $companyshareholders = CompanyWpuser::find($company_wpuser->pivot->id)->companywpuser_shareholders()->get();
                     if($companyshareholders) CompanyWpuser::find($company_wpuser->pivot->id)->companywpuser_shareholders()->delete();
 
+                    // delete if any old directors saved
+                    $companydirectors = CompanyWpuser::find($company_wpuser->pivot->id)->companywpuser_directors()->get();
+                    if($companydirectors) CompanyWpuser::find($company_wpuser->pivot->id)->companywpuser_directors()->delete();
+
+                    // delete if any old secretaries saved
+                    $companysecretaries = CompanyWpuser::find($company_wpuser->pivot->id)->companywpuser_secretaries()->get();
+                    if($companysecretaries) CompanyWpuser::find($company_wpuser->pivot->id)->companywpuser_secretaries()->delete();
+
+                    // delete if any old services saved
+                    $servicescountries = CompanyWpuser::find($company_wpuser->pivot->id)->servicescountries()->get();
+                    if($servicescountries) CompanyWpuser::find($company_wpuser->pivot->id)->servicescountries()->detach();                    
+
+                    // delete if any old infoservices saved
+                    $informationservices = CompanyWpuser::find($company_wpuser->pivot->id)->informationservices()->get();
+                    if($informationservices) CompanyWpuser::find($company_wpuser->pivot->id)->informationservices()->detach();                    
+
                     $company->wpusers()->detach($user_id); // if its saved remove pivot saved by that user first for overwritting purpose
 
                 }
@@ -141,6 +165,11 @@ class CompanyController extends Controller
                 $directors = array();
                 $secretaries = array();
                 $shareholders = array();
+
+                $companywpuser_directors = array();
+                $companywpuser_secretaries = array();
+                $companywpuser_shareholders = array();
+
                 $incomplete = false;         
 
                 // delete if any old shareholders saved
@@ -170,15 +199,17 @@ class CompanyController extends Controller
 
                 $company->companyshareholders()->saveMany($shareholders); // to remove
 
-                // find with currently saved companyuser pivot id and save shareholders for that user and company
+                // find with currently saved companyuser pivot id
 
                 $company_wpuser = CompanyWpuser::find($company_wpuser_id); 
+
+                // save shareholders for that user and company
 
                 $company_wpuser->companywpuser_shareholders()->saveMany($companywpuser_shareholders);
                 
                 // delete if any old directors saved
-                $companydirectors = $company->companydirectors()->get();
-                if($companydirectors) $company->companydirectors()->delete();
+                $companydirectors = $company->companydirectors()->get(); // to remove
+                if($companydirectors) $company->companydirectors()->delete(); // to remove
                 
                 for($i=1;$i<=$request->director_count;$i++) {                
                     $name = $request->input('director_'.$i.'_name');
@@ -196,12 +227,18 @@ class CompanyController extends Controller
                     }                    
 
                     $directors[] = new CompanyDirector(['name'=>$name, 'type'=>$type, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3, 'address_3'=>$address_3, 'address_4'=>$address_4, 'telephone'=>$telephone, 'passport'=>$passport, 'bill'=>$bill]);
+
+                    $companywpuser_directors[] = new CompanyWpuserDirector(['name'=>$name, 'type'=>$type, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3, 'address_3'=>$address_3, 'address_4'=>$address_4, 'telephone'=>$telephone, 'passport'=>$passport, 'bill'=>$bill]);
                 }
 
-                $company->companydirectors()->saveMany($directors);
+                $company->companydirectors()->saveMany($directors); // to remove
+
+                // find with currently saved companyuser pivot id and save directors for that user and company
+
+                $company_wpuser->companywpuser_directors()->saveMany($companywpuser_directors);
 
                 // delete if any old secretaries saved
-                $companysecretaries = $company->companysecretaries()->get();
+                $companysecretaries = $company->companysecretaries()->get(); 
                 if($companysecretaries) $company->companysecretaries()->delete();
                    
                 for($i=1;$i<=$request->secretary_count;$i++) {                
@@ -220,13 +257,20 @@ class CompanyController extends Controller
                     }
 
                     $secretaries[] = new CompanySecretary(['name'=>$name, 'type'=>$type, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3, 'address_3'=>$address_3, 'address_4'=>$address_4, 'telephone'=>$telephone, 'passport'=>$passport, 'bill'=>$bill]);
+
+                    $companywpuser_secretaries[] = new CompanyWpuserSecretary(['name'=>$name, 'type'=>$type, 'address'=>$address, 'address_2'=>$address_2, 'address_3'=>$address_3, 'address_3'=>$address_3, 'address_4'=>$address_4, 'telephone'=>$telephone, 'passport'=>$passport, 'bill'=>$bill]);
+
                 }
                 
                 $company->companysecretaries()->saveMany($secretaries);
+
+                // find with currently saved companyuser pivot id and save directors for that user and company
+
+                $company_wpuser->companywpuser_secretaries()->saveMany($companywpuser_secretaries);
                 
                 // if any old services
-                $servicescountries = $company->servicescountries()->get();
-                if($servicescountries) $company->servicescountries()->detach();
+                $servicescountries = $company->servicescountries()->get(); // to remove
+                if($servicescountries) $company->servicescountries()->detach(); // to remove
 
                 for($i=1;$i<=$request->service_count;$i++) {
                     $service_country_count = $request->input('service_'.$i.'_country_count');
@@ -235,7 +279,7 @@ class CompanyController extends Controller
                         $service_country_id = $request->input('service_'.$i.'_country_'.$j.'_id'); 
                         $credit_card_count = ($request->input('service_'.$i.'_country_'.$j.'_no_of_card')) ? $request->input('service_'.$i.'_country_'.$j.'_no_of_card') : "";
 
-                        $company->servicescountries()->attach($service_country_id, ['credit_card_count'=>$credit_card_count]); // to delete
+                        $company->servicescountries()->attach($service_country_id, ['credit_card_count'=>$credit_card_count]); // to remove
 
                         $company_wpuser->servicescountries()->attach($service_country_id, ['credit_card_count'=>$credit_card_count]);
                     }
@@ -246,12 +290,14 @@ class CompanyController extends Controller
 
                 if($info_services_ids) {
                     // if any old info services
-                    $informationservices = $company->informationservice()->get();                
-                    if($informationservices) $company->informationservice()->detach();
+                    $informationservices = $company->informationservice()->get(); // to remove
+                    if($informationservices) $company->informationservice()->detach(); // to remove
                         
                     foreach ($info_services_ids as $key => $value) {
-                        $company->informationservice()->attach($value);
-                    }                         
+                        $company->informationservice()->attach($value); // to remove
+
+                        $company_wpuser->informationservices()->attach($value);
+                    }
                 }
 
                 if($incomplete==false){
@@ -260,6 +306,10 @@ class CompanyController extends Controller
                     $company->status = 1;
                     // $company->renewal_date = date('Y-m-d H:i:s', strtotime(date("Y-m-d", time()) . " + 365 day"));
                     $company->save();
+
+                    $company_wpuser = CompanyWpuser::find($company_wpuser_id);
+                    $company_wpuser->status = 1;                    
+                    $company_wpuser->save();
 
                     return response()->json(['message' => 'Successfully saved', 'response' => $request->all()], 200)->setCallback($request->input('callback'));    
                 }else {

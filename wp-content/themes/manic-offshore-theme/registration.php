@@ -475,6 +475,18 @@ function registration_form() {
 
                     $selector.validate({
                         rules: rulesJson,
+                        invalidHandler: function(form, validator) {
+
+                            if (!validator.numberOfInvalids())
+                                return;
+
+                            var $firstErrorEl = $(validator.errorList[0].element);
+
+                            $("html, body").animate({
+                                scrollTop: $firstErrorEl.offset().top - 150
+                            }, 2000);
+
+                        },
                         messages: {
                             "nominee_director_annual_fee": "Please assign at least one director for your company.",
                             "nominee_secretary_annual_fee": "Please assign at least one secretary for your company."
@@ -674,7 +686,7 @@ function registration_form() {
                         dataType: "json",
                         done: function (e, data) {
 
-                            var shortText = jQuery.trim(data.result.file.org_name).substring(0, 20).trim(this) + "...";
+                            var shortText = jQuery.trim(data.result.file.org_name).substring(0, 30).trim(this) + "...";
 
                             $("input[name="+selector+"]").val(data.result.file.name);
                             $("#"+selector+"_files").html("");
@@ -1092,15 +1104,13 @@ function registration_form() {
 
                     response.done(function(data, textStatus, jqXHR){                    
                         if(jqXHR.status==200) {
-                            savedData = data.companies[0];  
+                            savedData = data.saved_data.companies[0];
 
-                            // console.log(savedData);           
+                            if(data.saved_data.nominee_shareholder==1) $("#step-2").find("#nominee_shareholder").trigger("click");
+                            if(data.saved_data.nominee_director==1) $("#step-2").find("#nominee_director").trigger("click");
+                            if(data.saved_data.nominee_secretary==1) $("#step-2").find("#nominee_secretary").trigger("click");                            
 
-                            if(savedData.wpusers[0].pivot.nominee_shareholder==1) $("#step-2").find("#nominee_shareholder").trigger("click");
-                            if(savedData.wpusers[0].pivot.nominee_director==1) $("#step-2").find("#nominee_director").trigger("click");
-                            if(savedData.wpusers[0].pivot.nominee_secretary==1) $("#step-2").find("#nominee_secretary").trigger("click");                            
-
-                            $.each(savedData.companyshareholders, function(i, shareholder){
+                            $.each(data.saved_data.companywpuser_shareholders, function(i, shareholder){
                                 // console.log(shareholder)
                                 var id = parseInt(i+1);
                                 if(id>3) $(".add-more-shareholder").trigger("click");
@@ -1116,7 +1126,7 @@ function registration_form() {
                                 
                             });
 
-                            $.each(savedData.companydirectors, function(i, director){
+                            $.each(data.saved_data.companywpuser_directors, function(i, director){
                                 // console.log(director)
                                 var id = parseInt(i+1);
                                 if(id>3) $(".add-more-director").trigger("click");
@@ -1131,7 +1141,7 @@ function registration_form() {
                                 
                             });
 
-                            $.each(savedData.companysecretaries, function(i, secretary){
+                            $.each(data.saved_data.companywpuser_secretaries, function(i, secretary){
                                 // console.log(secretary)
                                 var id = parseInt(i+1);
                                 if(id>3) $(".add-more-secretary").trigger("click");
@@ -1150,7 +1160,7 @@ function registration_form() {
 
                             ///////
 
-                            $.each(savedData.servicescountries, function(i, service){
+                            $.each(data.saved_data.servicescountries, function(i, service){
                                 var country_id = service.country_id;
                                 var service_id = service.service_id;
                                 var credit_card_count = service.pivot.credit_card_count;
@@ -1161,7 +1171,7 @@ function registration_form() {
                                 }
                             });
 
-                            $.each(savedData.informationservice, function(i, infoservice){
+                            $.each(data.saved_data.informationservices, function(i, infoservice){
                                 $("input[value="+infoservice.id+"].info-service-id").trigger("click");
                             });
 
@@ -1411,7 +1421,7 @@ function registration_form() {
 
                     response.done(function(dataResponse, textStatus, jqXHR){                    
                         if(jqXHR.status==200) {                            
-                            savedData = dataResponse.companies[0];     
+                            savedData = dataResponse.saved_data.companies[0];     
 
                             var getcompanyinclsavedData = {};
                             getcompanyinclsavedData.company_type_id = selectedCompanyTypeId;
@@ -1709,7 +1719,10 @@ function registration_form() {
                 });
             }
 
-            function getAllCompanyTypes(savedData=null) {
+            function getAllCompanyTypes(savedData) {
+
+                if (typeof(savedData)==="undefined") savedData = null;
+
                 // with cross domain
                 var response = makeJsonpRequest("", "'.SITEURL.'/b/admin/jurisdiction", "GET");
 
@@ -1760,8 +1773,8 @@ function registration_form() {
                     var response = getSavedData(data);
 
                     response.done(function(data, textStatus, jqXHR){                    
-                        if(jqXHR.status==200) {
-                            savedData = data.companies[0];                      
+                        if(jqXHR.status==200) {                           
+                            savedData = data.saved_data.companies[0];                      
                             getAllCompanyTypes(savedData);
                         }
                     });

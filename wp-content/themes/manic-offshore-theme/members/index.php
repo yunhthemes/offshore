@@ -135,7 +135,11 @@
 		                	{{#ifCond status "==" "0"}}
 								<a href="<?php echo get_permalink( get_page_by_path( 'Company formation order' ) ); ?>?savedcompany={{id}}" data-company-id="{{id}}"><button class="custom-submit-class">Continue registration</button></a>
 							{{else}}
+								{{#ifCond owner "==" "1"}}
 								<a href="#" data-company-id="{{id}}" class="company-details"><button class="custom-submit-class">Company details</button></a>
+								{{else}}
+								<p>Not available</p>
+								{{/ifCond}}
 		                    {{/ifCond}}		                    
 		                </div>                   
 	                </div>     
@@ -155,7 +159,7 @@
 				<h5 class="label">Company name</h5>
 			</div>
 			<div class="value-container">
-				<p class="value">{{name}}</p>
+				<p class="value">{{companies.0.name}}</p>
 			</div>
 		</div>
 		<div class="each-detail">
@@ -163,7 +167,7 @@
 				<h5 class="label">Jurisdiction</h5>
 			</div>
 			<div class="value-container">
-				<p class="value">{{companytypes.name}}</p>
+				<p class="value">{{companies.0.companytypes.name}}</p>
 			</div>
 		</div>
 		<div class="each-detail">
@@ -171,7 +175,7 @@
 				<h5 class="label">Next domiciliation renewal</h5>
 			</div>
 			<div class="value-container">
-				<p class="value">{{wpusers.0.pivot.renewal_date}}</p>
+				<p class="value">{{renewal_date}}</p>
 			</div>
 		</div>
 		<div class="each-detail">
@@ -179,7 +183,7 @@
 				<h5 class="label">Company type</h5>
 			</div>
 			<div class="value-container">
-				<p class="value">{{companytypes.name}}</p>
+				<p class="value">{{companies.0.companytypes.name}}</p>
 			</div>
 		</div>
 		<div class="each-detail">
@@ -187,7 +191,7 @@
 				<h5 class="label">Incorporation date</h5>
 			</div>
 			<div class="value-container">
-				<p class="value">{{incorporation_date}}</p>
+				<p class="value">{{companies.0.incorporation_date}}</p>
 			</div>
 		</div>
 		<div class="each-detail">
@@ -195,7 +199,7 @@
 				<h5 class="label">Company registration number</h5>
 			</div>
 			<div class="value-container">
-				<p class="value">N/A</p>
+				<p class="value">{{reg_no}}</p>
 			</div>
 		</div>
 		<div class="each-detail">
@@ -203,7 +207,7 @@
 				<h5 class="label">Company tax number</h5>
 			</div>
 			<div class="value-container">
-				<p class="value">N/A</p>
+				<p class="value">{{tax_no}}</p>
 			</div>
 		</div>
 		<div class="each-detail">
@@ -211,7 +215,7 @@
 				<h5 class="label">VAT registration number</h5>
 			</div>
 			<div class="value-container">
-				<p class="value">N/A</p>
+				<p class="value">{{vat_reg_no}}</p>
 			</div>
 		</div>
 		<div class="each-detail">
@@ -219,10 +223,10 @@
 				<h5 class="label">Registered office</h5>
 			</div>
 			<div class="value-container">
-	    		<p class="value">N/A</p>
-	    		<p class="value">N/A</p>
-	    		<p class="value">N/A</p>
-	    		<p class="value">N/A</p>
+	    		<p class="value">{{reg_office}}</p>
+	    		<p class="value">{{reg_office}}</p>
+	    		<p class="value">{{reg_office}}</p>
+	    		<p class="value">{{reg_office}}</p>
 	    	</div>
 		</div>
 		<div class="each-detail">
@@ -230,10 +234,10 @@
 				<h5 class="label">Directors</h5>
 			</div>
 			<div class="value-container">
-				{{#if companydirectors.length}}
-					{{#companydirectors}}
+				{{#if companywpuser_directors.length}}
+					{{#companywpuser_directors}}
 			    		<p class="value">{{name}}</p>
-		    		{{/companydirectors}}
+		    		{{/companywpuser_directors}}
 		    	{{else}}                              		
 		    		<p>Provided by offshore</p>
 		    	{{/if}}
@@ -244,10 +248,10 @@
 	    		<h5 class="label">Company secretary</h5>
 	    	</div>
 			<div class="value-container">
-				{{#if companysecretaries.length}}
-					{{#companysecretaries}}
+				{{#if companywpuser_secretaries.length}}
+					{{#companywpuser_secretaries}}
 			    		<p class="value">{{name}}</p>
-		    		{{/companysecretaries}}		  
+		    		{{/companywpuser_secretaries}}		  
 		    	{{else}}                              		
 		    		<p>Provided by offshore</p>
 		    	{{/if}}
@@ -258,12 +262,12 @@
 	    		<h5 class="label">Shareholders</h5>
 	    	</div>
 			<div class="value-container">
-				{{#if companyshareholders.length}}
-					{{#companyshareholders}}
+				{{#if companywpuser_shareholders.length}}
+					{{#companywpuser_shareholders}}
 					<div class="each-value">
 		    			<p class="value">{{name}}</p><p class="amount">{{share_amount}}</p>
 		    		</div>
-		    		{{/companyshareholders}}
+		    		{{/companywpuser_shareholders}}
 		    	{{else}}
 					<p>N/A</p>
 		    	{{/if}}

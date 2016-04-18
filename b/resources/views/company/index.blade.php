@@ -56,6 +56,7 @@
 									</th>
 									<th><span class="header">Price €</span></th>
 									<th><span class="header">Price $</span></th>
+									<th><span class="header">Status</span></th>
 									<th></th>
 
 								</tr>
@@ -72,6 +73,19 @@
 					                    	<td><span class="date">{{ date('d M Y', strtotime($company->incorporation_date)) }}</span></td>	
 					                    	<td>{{ $company->price_eu }}</td>
 					                    	<td>{{ $company->price }}</td>			                    						                    	
+					                    	<td>
+					                    		@if($company->company_wpusers->count() > 0)													
+													@foreach($company->company_wpusers as $company_wpuser)
+														@if($company_wpuser->pivot->status==1)
+															<p>Registered by {{ $company_wpuser->display_name }}</p>
+														@else
+															<p>Reserved by {{ $company_wpuser->display_name }}</p>
+														@endif
+													@endforeach
+					                    	 	@else 
+					                    	 		{{ "New" }}
+					                    	 	@endif
+					                    	 </td>			                    						                    	
 					                    	<td><a href="{{ route('admin.company.edit', $company->id) }}"><button class="custom-submit-class custom-submit-class-2">Edit</button></a></td>
 					                    </tr> 
 					              	@endforeach			              	

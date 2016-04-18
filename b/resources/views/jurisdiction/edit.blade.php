@@ -36,16 +36,25 @@
 						{{ Form::textarea('secretary_name_rules', $company_type->secretaries[0]->name_rules, ['class'=>'custom-input-class']) }}
 					</div>
 
+					<div class="field-container">
+						{{ Form::label('service_3_price_eu_1', 'Incorporation charge €')}}
+						{{ Form::text('service_3_price_eu_1', $company_type->price_eu, ['class'=>'custom-input-class service_prices_eu']) }}
+					</div>					
+					<div class="field-container">
+						{{ Form::label('service_3_price_1', 'Incorporation charge $')}}
+						{{ Form::text('service_3_price_1', $company_type->price, ['class'=>'custom-input-class service_prices']) }}
+					</div>
+
 					{{ Form::hidden('service_3_id', $company_type->services[0]->id) }}
 					{{ Form::hidden('service_3_name', 'Registered office annual fee (compulsory)') }}
 					{{ Form::hidden('service_3_country_1', '2') }}
 
 					<div class="field-container">
-						{{ Form::label('service_3_price_eu_1', 'Incorporation charge €')}}
+						{{ Form::label('service_3_price_eu_1', 'Registered office fee €')}}
 						{{ Form::text('service_3_price_eu_1', $company_type->services[0]->countries[0]->pivot->price_eu, ['class'=>'custom-input-class service_prices_eu']) }}
 					</div>					
 					<div class="field-container">
-						{{ Form::label('service_3_price_1', 'Incorporation charge $')}}
+						{{ Form::label('service_3_price_1', 'Registered office fee $')}}
 						{{ Form::text('service_3_price_1', $company_type->services[0]->countries[0]->pivot->price, ['class'=>'custom-input-class service_prices']) }}
 					</div>	
 

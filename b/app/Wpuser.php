@@ -16,5 +16,12 @@ class Wpuser extends Model
         return $this->belongsToMany('App\Company', 'company_wpusers');
     }
 
+    public function companywpuser_shareholders()
+    {
+        return $this->hasManyThrough(
+          'App\CompanyWpuserShareholder', 'App\CompanyWpuser', 'wpuser_id', 'companywpuser_id'
+        );
+    }
+
     
 }

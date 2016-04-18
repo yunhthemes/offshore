@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Company;
 use App\CompanyType;
+use App\CompanyWpuser;
 use App\Wpuser;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -27,40 +28,57 @@ class ApiController extends Controller
 
     public function usercompanies($id, Request $request) {
 
-        // $wpuser_compaines = Company::with("companytypes")->where('wpuser_id', $id)->get();        
-        $wpuser_compaines = Wpuser::find($id)->companies()->with(["wpusers" => function($query) use($id) {
-            $query->select("user_nicename")->where('wpuser_id', $id);
-        }, "companytypes"])->get();      
+        // $wpuser_compaines = Company::with("companytypes")->where('wpuser_id', $id)->get();         
 
-        foreach ($wpuser_compaines as $key => $wpuser_company) {
+        $wpuser_companies = Wpuser::find($id)->companies()->with(["wpusers" => function($query) use($id) {
+            $query->select("user_nicename")->where('wpuser_id', $id);
+        }, "companytypes"])->get();
+
+        foreach ($wpuser_companies as $key => $wpuser_company) {
+            $company_id = $wpuser_company->id;
+            $owner = false;
+
+            if($wpuser_company->status==1) {
+              // if company is bought, check whether its this user's company
+              $wpuser_companies_status = CompanyWpuser::where('company_id', $company_id)->where('wpuser_id', $id)->where('status', 1)->get();
+              if(count($wpuser_companies_status)>0) $owner = true;
+            }            
+
+            $wpuser_company->owner = $owner;
             $wpuser_company->incorporation_date = date('d M Y', strtotime($wpuser_company->incorporation_date));
             $wpuser_company->wpusers[0]->pivot->renewal_date = date('d M Y', strtotime($wpuser_company->wpusers[0]->pivot->renewal_date));
         }
 
-    	if(empty($wpuser_compaines)) {		
+    	if(empty($wpuser_companies)) {		
     		return response()->json(['message' => 'user not found'], 202)->setCallback($request->input('callback'));
     	}
         
-        return response()->json(['message' => 'Success', 'companies' => $wpuser_compaines], 200)->setCallback($request->input('callback'));
+        return response()->json(['message' => 'Success', 'companies' => $wpuser_companies], 200)->setCallback($request->input('callback'));
 
     }
 
     public function usercompanydetails($id, $user_id, Request $request) {
 
-        $wpuser_company_details = Company::with(['companytypes','companyshareholders', 'companydirectors', 'companysecretaries', 'servicescountries', 'informationservice', 'wpusers' => function($query) use($user_id) {
-            $query->select("user_nicename")->where('wpuser_id', $user_id);
-          }])->get()->find($id);
+        // $wpuser_company_details = Company::with(['companytypes','companyshareholders', 'companydirectors', 'companysecretaries', 'servicescountries', 'informationservice', 'wpusers' => function($query) use($user_id) {
+        //     $query->select("user_nicename")->where('wpuser_id', $user_id);
+        //   }])->get()->find($id);
 
-        // return $wpuser_company_details;
+        $companies = Company::with(['companytypes'])->where('id', $id)->get();
+        $wpusers = Wpuser::where('ID', $user_id)->first(['user_nicename']);
 
-        $wpuser_company_details->wpusers[0]->pivot->renewal_date = date('d M Y', strtotime($wpuser_company_details->wpusers[0]->pivot->renewal_date));
-        $wpuser_company_details->incorporation_date = date('d M Y', strtotime($wpuser_company_details->incorporation_date));
+        $wpuser_company_details = CompanyWpuser::with(['companywpuser_shareholders', 'companywpuser_directors', 'companywpuser_secretaries', 'servicescountries', 'informationservices'])->where('wpuser_id', $user_id)->where('company_id', $id)->where('status', 1)->first();
 
-        if(!$wpuser_company_details) {
-            return response()->json(['message' => 'company not found'], 202)->setCallback($request->input('callback'));
-        }
+        if($wpuser_company_details) {
+          $wpuser_company_details['companies'] = $companies;
+          $wpuser_company_details['wpusers'] = $wpusers;
 
-        return response()->json(['message' => 'Success', 'companydetails' => $wpuser_company_details], 200)->setCallback($request->input('callback'));
+          $wpuser_company_details->renewal_date = date('d M Y', strtotime($wpuser_company_details->renewal_date));
+          $wpuser_company_details->companies[0]->incorporation_date = date('d M Y', strtotime($wpuser_company_details->companies[0]->incorporation_date));
+
+          return response()->json(['message' => 'Success', 'companydetails' => $wpuser_company_details], 200)->setCallback($request->input('callback'));
+        }                
+
+        return response()->json(['message' => 'company not found'], 202)->setCallback($request->input('callback'));                
 
     }
 
@@ -105,15 +123,38 @@ class ApiController extends Controller
         $user_id = $request->user_id;
         $company_id = $request->company_id;
 
-        $wpuser_compaines = Company::with(['companytypes','companyshareholders', 'companydirectors', 'companysecretaries', 'servicescountries', 'informationservice', 'wpusers' => function($query) use($user_id) {
-          $query->select('user_nicename')->where('wpuser_id', $user_id);
-        }])->where('id', $company_id)->where('status', 0)->get(); //->where('wpuser_id', $user_id)
+        // $wpuser_companies = Company::with(['companytypes','companyshareholders', 'companydirectors', 'companysecretaries', 'servicescountries', 'informationservice', 'wpusers' => function($query) use($user_id) {
+        //   $query->select('user_nicename')->where('wpuser_id', $user_id);
+        // }])->where('id', $company_id)->where('status', 0)->get();
 
-        if(empty($wpuser_compaines)) {      
+        // return $wpuser_companies;
+
+        $companies = Company::with(['companytypes'])->where('id', $company_id)->get();
+        $wpusers = Wpuser::where('ID', $user_id)->first(['user_nicename']);
+
+        $wpuser_companies = CompanyWpuser::with(['companywpuser_shareholders', 'companywpuser_directors', 'companywpuser_secretaries', 'servicescountries', 'informationservices'])->where('wpuser_id', $user_id)->where('company_id', $company_id)->first();
+
+        $wpuser_companies['companies'] = $companies;
+        $wpuser_companies['wpusers'] = $wpusers;
+
+        // return $wpuser_companies;
+
+        // $wpuser_companies = Company::with(['wpusers' => function($query) use($user_id) {
+        //   $query->join('companywpuser_shareholders', 'company_wpusers.id', '=', 'companywpuser_shareholders.companywpuser_id')                
+        //         ->join('companywpuser_service_country', 'company_wpusers.id', '=', 'companywpuser_service_country.companywpuser_id')
+        //         ->select('companywpuser_shareholders.*', 'companywpuser_service_country.*')                
+        //         ->where('wpuser_id', $user_id);
+        // }])->where('id', $company_id)->get();
+
+        // $wpuser_companies = Company::find($company_id)->with(['wpusers' => function($query) use($user_id){
+        //   $query->select('user_nicename')->where('wpuser_id', $user_id);
+        // }])->get();
+
+        if(empty($wpuser_companies)) {      
             return response()->json(['message' => 'company not found'], 202)->setCallback($request->input('callback'));
         }
         
-        return response()->json(['message' => 'Success', 'companies' => $wpuser_compaines], 200);
+        return response()->json(['message' => 'Success', 'saved_data' => $wpuser_companies], 200);
 
     }
 
