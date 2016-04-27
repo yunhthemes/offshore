@@ -54,12 +54,16 @@ jQuery(document).ready(function($) {
       
   }
 
-  var utctime = $('#current_date_time').attr('data-utctime');
-  var currentcountry = $('#current_date_time').attr('data-country');
+  // var utctime = $('#current_date_time').attr('data-utctime');
 
   // $('#current_date_time').html(getTime(currentcountry, utctime));
 
   // console.log(moment().tz("America/Los_Angeles").format('MMMM Do YYYY, h:mm:ss'));
+
+  var currentcity = $('#current_date_time').attr('data-city');
+  var currentcountry = $('#current_date_time').attr('data-country');
+  
+  if(currentcity=="") currentcity="none";  
 
   function makeRequest(Data, URL, Method) {
 
@@ -81,7 +85,7 @@ jQuery(document).ready(function($) {
   };
 
   if(currentcountry) {
-    var response = makeRequest("", siteurl+"/b/api/gettimezonelist/"+currentcountry, "GET");
+    var response = makeRequest("", siteurl+"/b/api/gettimezonelist/"+currentcountry+"/"+currentcity, "GET");
 
     response.done(function(data, textStatus, jqXHR){                    
       if(jqXHR.status==200) {

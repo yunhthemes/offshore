@@ -1034,16 +1034,20 @@ label.align-label {
 .nominee-container.hidden {
   display: none;
 }
-input.error::-webkit-input-placeholder {
+input.error::-webkit-input-placeholder,
+textarea.error::-webkit-input-placeholder {
   color: red!important;
 }
-input.error:-moz-placeholder {
+input.error:-moz-placeholder,
+textarea.error:-moz-placeholder {
   color: red!important;
 }
-input.error::-moz-placeholder {
+input.error::-moz-placeholder,
+textarea.error::-moz-placeholder {
   color: red!important;
 }
-input.error:-ms-input-placeholder {
+input.error:-ms-input-placeholder,
+textarea.error:-ms-input-placeholder {
   color: red!important;
 }
 #registration-page-form-1-1 ul,
@@ -1811,6 +1815,12 @@ body.home .rev_slider {
   margin-top: 0px;
   min-width: 185px;
 }
+.dashboard .disabled-btn {
+  background-color: #DADADA!important;
+  color: #8D9394!important;
+  border: none!important;
+  cursor: default!important;
+}
 .dashboard #subnav ul li a {
   padding: 0px 20px!important;
   display: block;
@@ -1996,13 +2006,14 @@ body.home .rev_slider {
 .company-chart ul a {
   display: block;
   background: #008b9b;
-  border: 4px solid #fff;
+  border: 4px solid #ffffff;
   text-align: center;
   overflow: hidden;
-  font-size: .7em;
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
   text-decoration: none;
   font-weight: bold;
-  color: #fff;
+  color: #ffffff;
   height: 70px;
   margin-bottom: -26px;
   box-shadow: 4px 4px 9px -4px rgba(0, 0, 0, 0.4);
@@ -2011,42 +2022,57 @@ body.home .rev_slider {
   transition: all linear .1s;
 }
 .company-chart ul a span {
-  top: 50%;
+  top: 45%;
   margin-top: -0.7em;
   display: block;
 }
 .company-chart .big-company > li > a {
-  width: 18.5%;
+  width: 30%;
   margin: 0 auto 60px auto;
+}
+.company-chart .big-company-2 > li > a {
+  width: 40%;
 }
 .company-chart .big-company:after {
   content: "";
   display: block;
   position: absolute;
   width: 0;
-  height: 30px;
-  border-left: 4px solid #646464;
+  height: 38px;
+  border-left: 4px solid #000;
   z-index: 1;
-  bottom: -30px;
-  left: 50%;
+  bottom: 126px;
+  left: 50.3%;
   margin-left: -4px;
 }
 .company-chart .companies {
-  position: absolute;
+  margin: 0 auto;
+  text-align: center;
   width: 100%;
-  left: 18.5%;
-  top: 120px;
+  padding-left: 0px;
+  margin-left: 0px;
 }
 .company-chart .companies:after {
   content: "";
   display: block;
   position: absolute;
-  width: 39.5%;
+  width: 61%;
   height: 22px;
-  border-top: 4px solid #646464;
+  border-top: 4px solid #000;
   margin: 0 auto;
   top: -22px;
-  left: 13%;
+  left: 19.3%;
+}
+.company-chart .companies-2:after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 73.5%;
+  height: 22px;
+  border-top: 4px solid #000;
+  margin: 0 auto;
+  top: -22px;
+  left: 13.3%;
 }
 .company-chart .company:before {
   content: "";
@@ -2054,25 +2080,24 @@ body.home .rev_slider {
   position: absolute;
   width: 0;
   height: 22px;
-  border-left: 4px solid #646464;
+  border-left: 4px solid #000;
   z-index: 1;
   top: -22px;
   left: 50%;
   margin-left: -4px;
 }
 .company-chart .company {
-  border-left: 4px solid #646464;
-  width: 18.59894921190893%;
-  float: left;
-  margin-left: 1.751313485113835%;
+  border-left: 4px solid #000;
+  width: 30%;
+  display: inline-block;
   margin-bottom: 60px;
+}
+.company-chart .company-2 {
+  width: 24%;
 }
 .company-chart .company > a {
   margin: 0 0 -26px -4px;
   z-index: 1;
-}
-.company-chart .company > a:hover {
-  height: 80px;
 }
 .circle-container {
   text-align: center;
@@ -2160,4 +2185,41 @@ body.home .rev_slider {
 #user-company-details-container .back-to-dashboard {
   text-align: right;
   display: block;
+}
+#company-address p {
+  font-family: Montserrat, sans-serif;
+  color: #363636;
+}
+.wpcf7-form-control-wrap .intl-tel-input {
+  width: 100%;
+  margin-bottom: 30px;
+}
+.wpcf7-form-control-wrap .intl-tel-input .flag-container {
+  padding: 0px;
+}
+.wpcf7-form-control-wrap .intl-tel-input .selected-flag {
+  width: 80px!important;
+  height: 48px;
+  padding-left: 24px;
+}
+.wpcf7-form-control-wrap .intl-tel-input .selected-flag .iti-arrow {
+  right: 18px;
+}
+.wpcf7-form-control-wrap .intl-tel-input input {
+  padding-left: 95px!important;
+}
+form.wpcf7-form p:nth-of-type(10) {
+  width: 30%;
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+}
+form.wpcf7-form .ajax-loader {
+  bottom: 13px;
+  margin-left: 210px!important;
+}
+form.wpcf7-form .wpcf7-response-output {
+  display: inline-block;
+  width: 65%;
+  vertical-align: middle;
 }

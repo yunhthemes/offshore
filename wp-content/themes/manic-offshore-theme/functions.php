@@ -100,3 +100,25 @@ function SaveEditsRedirect() {
     wp_redirect( $bp->loggedin_user->domain );
     exit;
 }
+
+function wpse125952_redirect_to_request( $redirect_to, $request, $user ) {
+    // instead of using $redirect_to we're redirecting back to $request
+    // echo $request; exit();
+
+    $req_arr = explode('/', $request);
+
+    $index = count($req_arr) - 2;
+
+    if($req_arr[$index]=="offshore") {
+      return get_site_url();    
+    }else {
+      return $redirect_to;
+    }    
+}
+add_filter('login_redirect', 'wpse125952_redirect_to_request', 10, 3);
+
+function wpse_44020_logout_redirect($logouturl, $redir) {
+    // return $logouturl . '&amp;redirect_to='.get_permalink();
+    return $logouturl . '&amp;redirect_to=http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+}
+add_filter('logout_url', 'wpse_44020_logout_redirect', 10, 2);

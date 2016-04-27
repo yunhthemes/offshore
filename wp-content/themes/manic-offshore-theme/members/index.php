@@ -138,7 +138,7 @@
 								{{#ifCond owner "==" "1"}}
 								<a href="#" data-company-id="{{id}}" class="company-details"><button class="custom-submit-class">Company details</button></a>
 								{{else}}
-								<p>Not available</p>
+								<button class="custom-submit-class disabled-btn" disabled="true">Not available</button>
 								{{/ifCond}}
 		                    {{/ifCond}}		                    
 		                </div>                   

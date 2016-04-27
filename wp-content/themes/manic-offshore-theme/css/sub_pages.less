@@ -55,6 +55,13 @@
 		margin-top: 0px;
 		min-width: 185px;
 	}
+
+	.disabled-btn {
+		background-color: #DADADA!important;
+	    color: #8D9394!important;
+	    border: none!important;
+	    cursor: default!important;
+	}
 	
 	#subnav {
 		ul {
@@ -236,29 +243,30 @@
 
 .company-chart {
     min-height: 155px;
-	*{
+	* {
 	  -webkit-box-sizing: border-box;
 	  -moz-box-sizing: border-box;
 	  box-sizing: border-box;
 	  position: relative;
 	}	
-	ul{
+	ul {
 	  padding: 0;
 	  margin: 0;
 	  list-style: none;   
 	  position: relative;
 	}
 
-	ul a{
+	ul a {
 	  display: block;
 	  background: @dark-blue;
-	  border: 4px solid #fff;
+	  border: 4px solid @white;
 	  text-align: center;
 	  overflow: hidden;
-	  font-size: .7em;
+	  font-family: "Montserrat",sans-serif;
+	  font-size: 14px;
 	  text-decoration: none;
 	  font-weight: bold;
-	  color: #fff;
+	  color: @white;
 	  height: 70px;
 	  margin-bottom: -26px;
 	  box-shadow: 4px 4px 9px -4px rgba(0,0,0,0.4);
@@ -267,15 +275,19 @@
 	  transition: all linear .1s;
 	}
 
-	ul a span{
-	  top: 50%;
+	ul a span {
+	  top: 45%;
 	  margin-top: -0.7em;
-	  display: block;
+	  display: block;	  
 	}
 
-	.big-company > li > a{
-	  width: 18.5%;
+	.big-company > li > a {
+	  width: 30%;
 	  margin: 0 auto 60px auto;
+	}
+
+	.big-company-2 > li > a {
+		width: 40%;
 	}
 
 	.big-company:after {
@@ -283,60 +295,71 @@
 	    display: block;
 	    position: absolute;
 	    width: 0;
-	    height: 30px;
-	    border-left: 4px solid @grey;
+	    height: 38px;
+	    border-left: 4px solid #000;
 	    z-index: 1;
-	    bottom: -30px;
+	    bottom: 126px;
+	    left: 50.3%;
+	    margin-left: -4px;
+	}
+	.companies {
+      	margin: 0 auto;
+	    text-align: center;
+	    width: 100%;
+	    padding-left: 0px;
+	    margin-left: 0px;
+	}
+	.companies:after {
+		content: "";
+	    display: block;
+	    position: absolute;
+	    width: 61%;
+	    height: 22px;
+	    border-top: 4px solid #000;
+	    margin: 0 auto;
+	    top: -22px;
+	    left: 19.3%;   	    
+	}
+	.companies-2:after {
+		content: "";
+	    display: block;
+	    position: absolute;
+	    width: 73.5%;
+	    height: 22px;
+	    border-top: 4px solid #000;
+	    margin: 0 auto;
+	    top: -22px;
+	    left: 13.3%;
+	}
+
+	.company:before {
+      	content: "";
+	    display: block;
+	    position: absolute;
+	    width: 0;
+	    height: 22px;
+	    border-left: 4px solid #000;
+	    z-index: 1;
+	    top: -22px;
 	    left: 50%;
 	    margin-left: -4px;
 	}
-	.companies{
-	  position: absolute;
-	  width: 100%;
-	  left: 18.5%;
-	  top: 120px;
-	}
-	.companies:after{
-        content: "";
-	    display: block;
-	    position: absolute;
-	    width: 39.5%;
-	    height: 22px;
-	    border-top: 4px solid #646464;
-	    margin: 0 auto;
-	    top: -22px;
-	    left: 13%;
+
+	.company {
+	  	border-left: 4px solid #000;
+	    width: 30%;
+	    display: inline-block;
+	    margin-bottom: 60px;
 	}
 
-	.company:before{
-	  content: "";
-	  display: block;
-	  position: absolute;
-	  width: 0;
-	  height: 22px;
-	  border-left: 4px solid @grey;
-	  z-index: 1;
-	  top: -22px;
-	  left: 50%;
-	  margin-left: -4px;
+	.company-2 {
+		width: 24%;
 	}
 
-	.company{
-	  border-left: 4px solid @grey;
-	  width: 18.59894921190893%;
-	  float: left;
-	  margin-left: 1.751313485113835%;
-	  margin-bottom: 60px;
-	}
-
-	.company > a{
+	.company > a {
 	  margin: 0 0 -26px -4px;
 	  z-index: 1;
-	}
-
-	.company > a:hover{  
-	  height: 80px;
-	}
+	}	
 }
 
 .circle-container {
@@ -417,5 +440,56 @@
 	.back-to-dashboard {
 		text-align: right;
 		display: block;
+	}
+}
+
+// contact form
+
+#company-address {
+	p {
+		font-family: Montserrat,sans-serif;
+	    // font-size: 16px;
+		color: #363636;
+	}
+}
+
+.wpcf7-form-control-wrap {	
+	.intl-tel-input {
+	    width: 100%;
+	    margin-bottom: 30px;
+	    .flag-container {
+	      padding: 0px;
+	    }
+	    .selected-flag {
+	      width: 80px!important;
+	      height: 48px;
+	      padding-left: 24px;
+	      .iti-arrow {
+	        right: 18px;
+	      }
+	    }
+	    input {
+	      padding-left: 95px!important;
+	    }
+  	}  	
+}
+
+form.wpcf7-form {
+	p {
+		&:nth-of-type(10) {
+			width: 30%;
+		    display: inline-block;
+			position: relative;
+			vertical-align: middle;
+		}		
+	}
+	.ajax-loader {
+		bottom: 13px;
+	    margin-left: 210px!important;
+	}
+	.wpcf7-response-output {
+		display: inline-block;
+	    width: 65%;
+	    vertical-align: middle;
 	}
 }

@@ -158,7 +158,7 @@ class ApiController extends Controller
 
     }
 
-    public function gettimezonelist($country) {
+    public function gettimezonelist($country, $city) {
 
         $country_codes = array (
           'AF' => 'Afghanistan',
@@ -410,7 +410,11 @@ class ApiController extends Controller
         $timezone = timezone_identifiers_list(4096, $country_code);
         $timezonestr = $timezone[0];
         date_default_timezone_set($timezonestr);
-        $date= "Present time in ".$country.": ". date('D, d M Y H:i') . " hrs";
+
+        if($city && (!empty($city) && $city!=="none")) $name = $city;
+        else $name = $country;
+
+        $date= "Present time in ".$name.": ". date('D, d M Y H:i') . " hrs";
 
         return $date;
     }
