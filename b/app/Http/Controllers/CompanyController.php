@@ -300,7 +300,7 @@ class CompanyController extends Controller
                     }
                 }
 
-                if($incomplete==false){
+                if($request->action=='checkout'){
 
                     $company = Company::find($company_id);
                     $company->status = 1;
@@ -311,9 +311,11 @@ class CompanyController extends Controller
                     $company_wpuser->status = 1;                    
                     $company_wpuser->save();
 
-                    return response()->json(['message' => 'Successfully saved', 'response' => $request->all()], 200)->setCallback($request->input('callback'));    
+                    $wpuser_ids = CompanyWpuser::select('wpuser_id')->where("company_id", $company_id)->where("status", 0)->get();
+
+                    return response()->json(['message' => 'Successfully checkout', 'response' => $wpuser_ids], 200)->setCallback($request->input('callback'));    
                 }else {
-                    return response()->json(['message' => 'Successfully added', 'response' => $request->all()], 200)->setCallback($request->input('callback'));
+                    return response()->json(['message' => 'Successfully saved', 'response' => $request->all()], 200)->setCallback($request->input('callback'));
                 }               
 
             else:

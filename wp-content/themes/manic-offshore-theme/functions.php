@@ -105,14 +105,22 @@ function wpse125952_redirect_to_request( $redirect_to, $request, $user ) {
     // instead of using $redirect_to we're redirecting back to $request
     // echo $request; exit();
 
-    $req_arr = explode('/', $request);
+    $req_arr = explode('/', $request);    
 
-    $index = count($req_arr) - 2;
+    $last_index = count($req_arr) - 2;
+    $second_last_index = count($req_arr) - 3;
 
-    if($req_arr[$index]=="offshore") {
+    // print_r($req_arr[$last_index]);
+    // print_r($req_arr[$second_last_index]);
+
+    // print_r( get_page_by_path( $req_arr[$last_index] ) );
+
+    $url = home_url( $req_arr[$second_last_index].'/'.$req_arr[$last_index] );
+
+    if($req_arr[$last_index]=="offshore") {
       return get_site_url();    
     }else {
-      return $redirect_to;
+      return $url;
     }    
 }
 add_filter('login_redirect', 'wpse125952_redirect_to_request', 10, 3);
@@ -122,3 +130,34 @@ function wpse_44020_logout_redirect($logouturl, $redir) {
     return $logouturl . '&amp;redirect_to=http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 }
 add_filter('logout_url', 'wpse_44020_logout_redirect', 10, 2);
+
+
+///// inmail function to send when user bought shelf
+
+function bp_send_message(){
+  
+  global $bp;
+
+  //check_admin_referer(message_check”); // adjust if needed
+
+  $sender_id = 1; // moderator id ?
+  $recip_ids = $_POST['receipient_ids']; // denied image user id ?
+
+  if ( $thread_id = messages_new_message( array('sender_id' => $sender_id, 'subject' => 'Saved Company Status', 'content' => 'Sorry your saved company was bought by another user.', 'recipients' => $recip_ids ) ) ) {
+  
+    echo 'Saved company status message was sent.';
+
+    // bp_core_add_message( __( 'Saved company status message was sent.', 'buddypress' ) );
+    //bp_core_redirect( $bp->displayed_user->domain ); // adjust as needed
+
+  } else {    
+    echo 'There was an error sending that private message.';
+    // bp_core_add_message( __( 'There was an error sending that private message.', 'buddypress' ), 'error' );
+  }  
+  
+  die();
+
+}
+add_action('wp_ajax_bp_send_message', 'bp_send_message');
+add_action('wp_ajax_nopriv_bp_send_message', 'bp_send_message'); // not really needed
+

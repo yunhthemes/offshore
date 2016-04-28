@@ -1,0 +1,271 @@
+- saved uploaded file should also populate back
+- alignment summary page(done)
+- removing bank account in summary should remove credit card as well
+- showing number instead of country name in credit card service summary page - frontend only
+
+
+- security
+- upload to new server / link changes in wordpress
+- validation jurisdiction cms
+- payment / total re-calculation (done)
+- edit company detail in client dashboard?
+
+- edit share amount in summary page (done)
+- upload passport/bill (done)
+- add field compaines (done)
+- add field Registered office annual fee (compulsory) (done)
+- sorting admin panel (done)
+- edit/delete admin panel (done)
+
+# validation (done)
+# add hash for step (done)
+# final form to submit (done)
+
+
+Bank Account <-> Credit Card <-> Country
+1				 1 (Qty)		 Switzerland
+2				 2 (Qty)		 China				 
+
+
+- summary page edit (done)
+- euro/us price on frontend
+
+
+
+- restrict all member pages
+- 
+
+
+user_company_service
+
+uid						1
+companyid				5
+shareholder1name		
+shareholder1add
+director1name
+director1add
+secretary1name
+secretary1add
+
+
+ask if shelf can still buyable after one purchase - one to many or many to many ?
+
+- $ and euro frontend
+- upload function & edit/delete functionality & form validation
+- fix for credit card price with amount - done
+- add company details page - 
+- new page - done
+- add some css to make profile better - ok
+
+
+form submission - done
+
+updated summary page of four step process
+
+http://clients.manic.com.sg/offshore/member-dashboard/ - dashboard, profile and message
+http://clients.manic.com.sg/offshore/solutions/international-trade/ - static page
+
+new admin url
+http://clients.manic.com.sg/offshore/b/admin
+
+
+
+- The page heading should change from “Registration” to “Company formation order”.  Likewise, the breadcrumbs should show Home > Company formation order. (done)
+ 
+- The URL is messy.  I would suggest www.offshorecompanysolutions.com/company-formation-order/1 and then /2, /3 and /4 for the other pages. (done)
+ 
+- IP address detected should not be displayed here.  Presumably once the form is submitted it will be emailed through to the back office.  The IP needs to be recorded in that email. (done)
+ 
+- “Type of company” above the drop down menu is not needed, please delete. (done)
+ 
+- The drop down menu has two arrows instead of one.  We encountered the same problem elsewhere and fixed it. (done)
+ 
+- I am unable to check the message for the case where no shelf companies are available.  Perhaps you could add a second type of company with no shelf companies, ie “Belize international business company”. (done)
+ 
+- It would be better to have the list of shelf companies in a table, as per my previous email, instead of the details of each company taking up 3 lines.  There will be cases where the list will have 20 shelf companies, which would make it a very long page to scroll down.  Copying the table format here: (done)
+ 
+Company name                                                                Incorporated                     Price
+Somerset International Ltd                                          17 Feb 2014                        $1,200                   [Buy now]
+Houdini Associates Ltd                                                   12 Apr 2015                         $1,000                   [Buy now]
+World Ventures Ltd                                                        07 Nov 2015                        $1,000                   [Buy now]
+Hamilton Consulting Ltd                                                16 Feb 2016                        $800                       [Buy now]
+ 
+- Please also follow the above date format and not “2010-10-10”. (done)
+ 
+- We had this text above the New incorporation button but it has been removed: (done)
+ 
+- I would like Offshore Company Solutions to arrange a new incorporation for me (done)
+[Cyprus limited liability company] new incorporation charge: $1,000
+ 
+- Please reinstate this, as the user needs to know that price before asking for the new incorporation.  Please avoid changing things which have already been approved.  It’s impossible for us to keep track of what has already been approved unless we make screenshots of each subsequent version of the pages.  I don’t think this is necessary. (done)
+ 
+- Delete “Cyprus limited liability company” and “$10000.00” below the New incorporation button, as the company type is already displayed at the top. (done)
+ 
+- Change “1st Choice” to “1st choice”, etc, just as I had in my initial instructions.  I have already asked that a universal format be applied througout the site, where we only use capital letters for the first word of a term and not for subsequent words. (done)
+
+
+
+PAGE 2
+
+
+
+- “Company formation order” heading, URL and IP comments as above. (done)
+ 
+- The text within the 4 fields under Shareholder 1 should read Name, Street, City, State and the a 4th line should be added with a drop-down list of countries.  Likewise for the other shareholders. 
+ 
+- Change “Number of share” to “Number of shares” on the right. (done)
+ 
+- Change “Offshore Company Solutions to provide professional shareholders?” back to “Offshore Company Solutions to provide nominee shareholders?”.  I don’t know why this has been changed but it’s becoming extremely frustrating to have to re-check everything from scratch!  Once again, anything which has been approved should not be changed!  Do not make any changes whatsoever to content unless specifically requested.  Please make this clear to all staff. (done)
+ 
+- Change “Annual professional shareholder fee” to “Annual nominee shareholder fee”!!! (done)
+ 
+- The Yes/No buttons for nominee shareholders, professional directors and company secretary should be on the same line as each question, not below it. (done)
+ 
+- The text within the 4 fields under Director 1 should read Name, Street, City, State and the a 4th line should be added with a drop-down list of countries.  Likewise for the other directors. (done) 
+ 
+- Change “Offshore Company Solutions to provide a professional company secretary?” back to “Offshore Company Solutions to provide a company secretary?”. (done)
+ 
+- The text within the 4 fields under Secretary name should read Name, Street, City, State and the a 4th line should be added with a drop-down list of countries. (done)
+ 
+- Change “Annual professional secretary fee” to “Annual company secretary fee”. (done)
+
+
+
+PAGE 3
+
+- Company formation order” heading, URL and IP comments as above. (done)
+ 
+- Change “Bank account” heading to “Bank accounts” and insert this line below it: (done)
+ 
+A bank account may be opened in the following jurisdictions for your company (multiple jurisdictions may be selected): (done)
+ 
+- It’s not clear  that Location and Price are headings.  Maybe we need a blank line below. (done)
+ 
+- Under Bank account, change “Select service” to “Open account”. (done)
+ 
+- Change “Credit card” heading to “Credit/debit cards” and insert this line below it: (done)
+ 
+Credit or debit cards are available in the following jurisdictions for your company.  Note that a bank account must be opened at the same bank before credit or debit cards may be issued: (done)
+ 
+- Same comment re Location, Price and No of cards to issue headings.  Change “Location” to “Bank location” and “Price” to “Charge per card” in this section only. (done)
+ 
+- Delete Mail forwarding and Local telephone sections, as per my email of 11 March below.  (done)
+ 
+- The following services are to be listed under Other services, as per my email of 11 March, in this order: (done)
+ 
+Local telephone number                                         
+Mailing address and forwarding                               
+Setting up a physical office presence                     
+Establishing a merchant account                              
+Purchasing real estate                                                  
+Economic citizenship possibilities                        
+
+Page 4
+ 
+- “Company formation order” heading, URL and IP comments as above. (done)
+ 
+- Insert immediately below the 4 steps diagram:
+ 
+Below is a summary of your order.  Please review and make any corrections here.
+ 
+In order to comply with our due diligence requirements, we are required to receive scanned copies of passports and recent utility bills (not older than 3 months) in respect of all persons listed here.  These may be uploaded using the buttons next to each person’s name.  You will not be able to finalise your order until all passports and utility bills have been uploaded. (done)
+ 
+- Change “Three proposed company names:” to “Proposed companies names:” and remove One, Two and Three below.  The list of names to start at the left. (done)
+ 
+- We would prefer to see the shareholder details in the following format: (done)
+ 
+John Smith                                  500 shares                           [Edit]
+4 Central Avenue
+Mayfair                                                                          [Upload passport]
+London
+United Kingdom                                                                   [Upload utility bill]
+ 
+- Change “Upload Passport” to “Upload passport” and “Upload Utility Bill” to “Upload utility bill”, just like in my email below!  Note my previous comments re capital only for the first word!!! (done)
+ 
+- We need a “Remove” button for each of the nominee shareholder, professional director and company secretary services.
+ 
+- The rest of the page is not finished.  I am copying my notes of 11 March:
+ 
+Directors
+ 
+[director 1]                         [address]             [edit]                     [Upload passport]           [Upload utility bill]
+[director 2]                         [address]             [edit]                     [Upload passport]           [Upload utility bill]           
+ 
+Professional directors annual fee [if selected]                    [remove]                                                                                                             $1,000
+ 
+Secretary
+ 
+[secretary]                          [address]             [edit]                    [Upload passport]           [Upload utility bill]
+ 
+Company secretary annual fee [if selected]                         [remove]     
+
+                                                                                                        $1,000
+ 
+Registered office annual fee (compulsory)                                                                                                                                                           $500
+ 
+Bank account in [bank location]                                                 [remove]                                                                                                             $200
+Bank account in [bank location]                                                 [remove]                                                                                                             $300
+ 
+Credit/debit cards in [bank location] – [number] cards   [remove]                                                                                                             $200       [number field to be editable between 0 and 10]
+Credit/debit cards in [bank location] – [number] cards   [remove]                                                                                                             $200
+ 
+Total cost                                                                                                                                                                                                                             $6,800
+ 
+[Back]   [Proceed to checkout]
+ 
+- Director and secretary details to be shown in the same revised format as the shareholders above.
+
+
+
+
+<div class="header">	
+		    	<?php $i = 1; ?>		           			            			           		                                         
+				<?php while ( bp_profile_fields() ) : bp_the_profile_field(); ?>
+
+					<?php if ( bp_field_has_data() ) : ?>							
+
+						<div class="each-header <?php echo ($i==1) ? 'small-col' : '' ; ?>">
+			                <h6><?php bp_the_profile_field_name(); ?></h6>
+			            </div>													
+
+					<?php $i++; endif; ?>
+
+				<?php endwhile; ?>
+				</div>
+
+				<div class="content">
+					<?php $i = 1; ?>		           			            			           		                                         
+					<?php while ( bp_profile_fields() ) : bp_the_profile_field(); ?>
+
+						<?php if ( bp_field_has_data() ) : ?>							
+
+							<div class="each-content <?php echo ($i==1) ? 'small-col' : '' ; ?>">
+			                    <?php bp_the_profile_field_value(); ?>	
+			                </div>		                
+
+						<?php endif; ?>
+
+						<?php
+
+						/**
+						 * Fires after the display of a field table row for profile data.
+						 *
+						 * @since 1.1.0
+						 */
+						do_action( 'bp_profile_field_item' ); ?>
+
+					<?php endwhile; ?>
+	                
+	            </div>  
+
+
+
+
+
+summary page 
+
+- error message back button to page 2 (done)
+- 500$ to be on top (done)
+- new field 
+- valiation snapping... 
+- NaN error (done)

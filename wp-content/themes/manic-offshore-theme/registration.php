@@ -71,8 +71,18 @@ function registration_form() {
         $(document).ready(function(){     
 
             ///////////
+            //// GET CURRENT USER\'S COUNTRY
+            ///////////
+
+            var country;
+
+            $.getJSON("http://ipinfo.io", function(data){
+                country = data.country;
+            });
+
+            ///////////
             //// VALIDATIONS
-            ///////////     
+            ///////////                 
 
             $.extend( $.validator.prototype, {
                 checkForm: function () {
@@ -112,7 +122,6 @@ function registration_form() {
                         var notEqual = true;
                         value = $.trim(value);                        
                         for (i = 0; i < param.length; i++) {
-                            console.log($(param[i]));
                             if (value == $.trim($(param[i]).val())) { notEqual = false; }
                         }
                         return this.optional(element) || notEqual;
@@ -434,16 +443,23 @@ function registration_form() {
                 $el.next(".pasteclone").append(html);
             }
 
+            function updateFields() {
+
+            }
+
             function updateClonedFields($pasteclone, selector) {
                 var fieldID = $("."+selector).find(".field-container").length;
 
                 var $fieldContainer = $pasteclone.find(".field-container").last();
                 var lblName = selector.charAt(0).toUpperCase() + selector.slice(1);
 
+                // for name validation
                 var currentFieldName = "#"+selector+"_"+fieldID+"_name";
 
+                // for name validation
                 var allFieldIds = ["#shareholder_1_name","#shareholder_2_name","#shareholder_3_name","#shareholder_4_name","#shareholder_5_name","#director_1_name","#director_2_name","#director_3_name","#director_4_name","#director_5_name","#secretary_1_name"];
 
+                // for name validation
                 var otherFieldsIdsExceptCurrent = $.grep(allFieldIds, function(id, index) {
                    return id != currentFieldName
                 });
@@ -918,7 +934,7 @@ function registration_form() {
                     });                    
                 }                
 
-                // console.log(services);
+                console.log(services);
                 // console.log(info_services);
                 // console.log(secretaries);
                 
@@ -992,7 +1008,8 @@ function registration_form() {
                     nationalMode: false,
                     preferredCountries: []
                 });
-                $selector.intlTelInput("setCountry", "sg");
+
+                $selector.intlTelInput("setCountry", country);
             }
 
             function fillForm2WithSavedData() {
@@ -1077,6 +1094,51 @@ function registration_form() {
 
                             update_input_val(savedData.id, "#saved_company_id"); // previously saved company id 
 
+                            if(data.saved_data.companywpuser_shareholders.length>0) {                                        
+                                // fill summary page uploaded files if any
+                                $.each(data.saved_data.companywpuser_shareholders, function(i, shareholder){
+                                    var id = parseInt(i+1);
+                                    if(shareholder.passport) {
+                                        $("#step-4").find("input[name=shareholder_"+id+"_passport]").val(shareholder.passport);    
+                                        $("#step-4").find("div#shareholder_"+id+"_passport_files").text(shareholder.passport);
+                                    }
+                                    if(shareholder.bill) {
+                                        $("#step-4").find("input[name=shareholder_"+id+"_bill]").val(shareholder.bill);                                    
+                                        $("#step-4").find("div#shareholder_"+id+"_bill_files").text(shareholder.bill);
+                                    }
+                                });
+                            }
+
+                            if(data.saved_data.companywpuser_directors.length>0) {                                
+                                // fill summary page uploaded files if any
+                                $.each(data.saved_data.companywpuser_directors, function(i, director){
+                                    var id = parseInt(i+1);
+                                    if(director.passport) {
+                                        $("#step-4").find("input[name=director_"+id+"_passport]").val(director.passport);                                    
+                                        $("#step-4").find("div#director_"+id+"_passport_files").text(director.passport);    
+                                    }
+                                    if(director.bill) {
+                                        $("#step-4").find("input[name=director_"+id+"_bill]").val(director.bill);
+                                        $("#step-4").find("div#director_"+id+"_bill_files").text(director.bill);
+                                    }
+                                });
+                            }
+
+                            if(data.saved_data.companywpuser_secretaries.length>0) {                                
+                                // fill summary page uploaded files if any
+                                $.each(data.saved_data.companywpuser_secretaries, function(i, secretary){
+                                    var id = parseInt(i+1);
+                                    if(secretary.passport) {
+                                        $("#step-4").find("input[name=secretary_"+id+"_passport]").val(secretary.passport);
+                                        $("#step-4").find("div#secretary_"+id+"_passport_files").text(secretary.passport);
+                                    }
+                                    if(secretary.bill) {
+                                        $("#step-4").find("input[name=secretary_"+id+"_bill]").val(secretary.bill);    
+                                        $("#step-4").find("div#secretary_"+id+"_bill_files").text(secretary.bill);                                    
+                                    }
+                                });
+                            }
+
                         }
                     });
                 }
@@ -1121,9 +1183,9 @@ function registration_form() {
             $("#step-2").on("click", ".add-more", function(e){
                 e.preventDefault();                
                 
-                if($(this).parent().find(".pasteclone").children(".field-container").length < 4) {
-                    cloneForm($(this).parent().find(".cloneable"));
-                    updateClonedFields($(this).parent().find(".pasteclone"), $(this).data("selector"));     
+                if($(this).parent().parent().find(".pasteclone").children(".field-container").length < 4) {
+                    cloneForm($(this).parent().parent().find(".cloneable"));
+                    updateClonedFields($(this).parent().parent().find(".pasteclone"), $(this).data("selector"));     
                     initInputTel($(".pasteclone").find(".shareholder-telephone"));
                     initInputTel($(".pasteclone").find(".director-telephone"));     
                     initPlugin($(".pasteclone").find(".person-type-1-switch"));
@@ -1131,6 +1193,23 @@ function registration_form() {
 
                 }else {
                     alert("Can\'t add more than is 5");
+                }
+                
+            });
+
+            $("#step-2").on("click", ".remove", function(e){
+                e.preventDefault();
+
+                var selector = $(this).data("selector");
+
+                console.log("."+selector+" .field-container");
+                console.log($(this).parent().parent().find("."+selector+" .field-container"));
+
+                if($(this).parent().parent().find("."+selector+" .field-container").length > 1) {
+                    $(this).parent().parent().find(".pasteclone").children(".field-container").last().remove();        
+                }
+                else {
+                    alert("Company must have at least one " + selector);
                 }
                 
             });
@@ -1496,6 +1575,8 @@ function registration_form() {
                 e.preventDefault();
                 // console.log($("#registration-page-form-4").serializeArray().filter(function(k) { return $.trim(k.value) != ""; }));
 
+                $("#action").val("checkout");
+
                 var $form4 = $("#registration-page-form-4");
 
                 if($form4.valid()) {
@@ -1507,11 +1588,38 @@ function registration_form() {
 
                     response.done(function(data, textStatus, jqXHR){                    
                         if(jqXHR.status==200) {
-                            alert("Successfully submitted!");
+                            alert("Successfully submitted!");   
 
-                            setTimeout(function(){ 
-                                window.location.href = "'.SITEURL.'/client-dashboard";
-                            }, 1000);
+                            var wpuser_ids = [];
+
+                            $.each(data.response, function(i, each_data){
+                                wpuser_ids.push(each_data.wpuser_id);
+                            });
+
+                            if(wpuser_ids.length>0) {
+
+                                //// send in mail func
+
+                                var newdata = {};                
+                                newdata.receipient_ids = wpuser_ids;
+
+                                var response = makeRequest(newdata, "'.SITEURL.'/wp-admin/admin-ajax.php?action=bp_send_message", "POST");
+
+                                response.done(function(data, textStatus, jqXHR){
+                                    if(jqXHR.status==200) {      
+                                        console.log(data);
+
+                                        setTimeout(function(){ 
+                                            window.location.href = "'.SITEURL.'/client-dashboard";
+                                        }, 1000);
+                                    }
+                                }); 
+
+                            }else {
+                                setTimeout(function(){ 
+                                    window.location.href = "'.SITEURL.'/client-dashboard";
+                                }, 1000);
+                            }                                                    
                         }
                     });
 
@@ -1527,6 +1635,8 @@ function registration_form() {
 
             $(".save-now").on("click", function(e){
                 e.preventDefault();
+
+                $("#action").val("save");
 
                 // local storage save
                 // for(var i=1; i<=4; i++) {
@@ -1556,11 +1666,15 @@ function registration_form() {
 
                 response.done(function(data, textStatus, jqXHR){                    
                     if(jqXHR.status==200) {
+
+                        console.log(data);
+
                         alert("Successfully saved!");
 
                         setTimeout(function(){ 
                             window.location.href = "'.SITEURL.'/client-dashboard";
                         }, 1000);
+                        
                     }
                 });
 
@@ -1804,8 +1918,11 @@ function registration_form() {
                 <div class="pasteclone"></div>
             </div>
 
-            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-            <a href="#" data-selector="shareholder" class="add-more add-more-shareholder">Add More <i class="fa fa-plus"></i></a>
+            <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>                       
+            <div class="add-remove-btn-container">                
+                <a href="#" data-selector="shareholder" class="add-more add-more-shareholder">Add more <i class="fa fa-plus"></i></a>
+                <a href="#" data-selector="shareholder" class="remove remove-shareholder">Remove <i class="fa fa-minus"></i></a>
+            </div>
             <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
 
             <div class="field-container">
@@ -1923,8 +2040,11 @@ function registration_form() {
                     </div>
                 </div>
                 <div class="pasteclone"></div>
+            </div>
 
+            <div class="add-remove-btn-container">                
                 <a href="#" data-selector="director" class="add-more add-more-director">Add More <i class="fa fa-plus"></i></a>            
+                <a href="#" data-selector="director" class="remove remove-director">Remove <i class="fa fa-minus"></i></a>
             </div>
             
 
@@ -2085,8 +2205,8 @@ function registration_form() {
                                     </div>               
                                     {{#ifCond ../name "==" "Credit/debit cards"}}           
                                     <div class="col-3">
-                                        <input type="text" name="service_{{../id}}_country_{{counter @index}}_no_of_card" id="service_{{../id}}_country_{{counter @index}}_no_of_card" class="credit_card_in_country_{{id}} service-{{../id}}-credit-card-count credit-card-count custom-input-class-2 service-{{../id}}-country-{{id}}" disabled="disabled">
-                                        <input type="hidden" name="service_{{../id}}_country_{{counter @index}}_id" value="{{pivot.id}}" class="service-{{../id}}-country-id"  disabled="disabled">                
+                                        <input type="text" name="service_{{../id}}_country_{{counter @index}}_no_of_card" id="service_{{../id}}_country_{{counter @index}}_no_of_card" class="credit_card_in_country_{{id}} service-{{../id}}-credit-card-count credit-card-count custom-input-class-2 service-{{../id}}-country-{{id}}-card-count service-{{../id}}-country-{{id}}" disabled="disabled">
+                                        <input type="hidden" name="service_{{../id}}_country_{{counter @index}}_id" value="{{pivot.id}}" class="service-{{../id}}-country-id service-{{../id}}-country-{{id}}-card-count service-{{../id}}-country-{{id}}"  disabled="disabled">                
                                     </div>        
                                     {{else}}
                                     <div class="col-3">
@@ -2739,6 +2859,8 @@ function registration_form() {
             <div class="field-container">
                 <input type="checkbox" name="tnc" value="yes"> <label for="tnc">I have read and agree with the Terms and conditions</label>
             </div>
+            <input type="hidden" name="action" id="action" value="">
+
             <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>        
             <a href="#" id="next"><button data-id="3" data-hash="3" class="custom-submit-class back-btn">Back</button></a>
             <a href="#"><button class="custom-submit-class payment-gateway-btn">Proceed to checkout</button></a>

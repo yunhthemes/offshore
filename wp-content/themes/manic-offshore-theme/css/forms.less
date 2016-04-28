@@ -482,11 +482,20 @@ label {
 .reg-step {
   display: none;
 
-  .add-more {
+  .add-remove-btn-container {
+    text-align: right;
+  }
+
+  .add-more, .remove {
     font-family: "Open Sans",serif;
     font-size: 12px;
     color: #767676;
     text-align: right;
+    display: inline-block;
+  }
+
+  .add-more {
+    margin-right: 10px;
   }
 }
 
@@ -588,7 +597,7 @@ input.error, textarea.error {
   .hide-select {
     visibility: hidden;
     position: absolute;
-  }
+  }  
 }
 
 #registration-page-form-3 {
