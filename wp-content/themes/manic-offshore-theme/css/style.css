@@ -107,6 +107,138 @@
   font-size: 98px;
   line-height: 98px;
 }
+@media all and (max-width: 425px) {
+  .mkdf-mobile-header .mkdf-mobile-logo-wrapper a {
+    height: 22px!important;
+  }
+  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner {
+    padding-top: 10px;
+  }
+  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-icons-row .mkdf-carousel-navigation .owl-pagination {
+    margin-top: 40px;
+  }
+  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-icons-row .mkdf-carousel-navigation .owl-pagination .owl-page.active {
+    display: inline-block !important;
+  }
+  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-icons-row .mkdf-carousel-navigation .owl-pagination .owl-page.active span {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -o-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+  }
+  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-icons-row .wpb_wrapper .Deploy-button {
+    width: 100%;
+    text-align: center;
+  }
+  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-icons-row .mkdf-info-card-slider {
+    padding-top: 25px;
+  }
+  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner .homepage-corporate-solutions-column {
+    padding-top: 25px;
+  }
+  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-why-version-03 {
+    padding-bottom: 25px!important;
+  }
+  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-why-version-03 .homepage-why-column-version-04 {
+    margin-bottom: 25px;
+  }
+  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-why-version-03 .homepage-why-column-version-04 ul {
+    padding: 0 20px;
+  }
+  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-why-version-03 .homepage-why-column-version-04 ul li {
+    list-style-position: outside;
+  }
+  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner .vc_custom_1455183542356 {
+    background: none!important;
+  }
+  html h1,
+  body h1 {
+    font-size: 35px;
+    line-height: 1.2em;
+  }
+  html h3,
+  body h3 {
+    font-size: 17px;
+  }
+  html body,
+  body body {
+    font-size: 13px;
+  }
+  html .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner,
+  body .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner {
+    padding-top: 0px;
+  }
+  .offshore-banking .core-services-first-copy-column {
+    padding-right: 0px;
+  }
+  .offshore-banking .first-img {
+    margin-top: 40px;
+  }
+  .offshore-banking .first-img .vc_figure {
+    width: 100%;
+  }
+  .offshore-banking .first-img .vc_figure .vc_single_image-wrapper {
+    width: 100%;
+  }
+  .offshore-banking .first-img .vc_figure .vc_single_image-wrapper img {
+    width: 100%;
+  }
+  .international-trading-company .circle-container .arrow {
+    -webkit-transform: rotate(90deg) !important;
+    -moz-transform: rotate(90deg) !important;
+    -o-transform: rotate(90deg) !important;
+    -ms-transform: rotate(90deg) !important;
+    transform: rotate(90deg) !important;
+    display: block;
+  }
+  .international-trading-company .circle-container .circle-2 {
+    top: 5px!important;
+  }
+  .investment-holding-company .company-chart,
+  .group-holding-company .company-chart {
+    width: 100%;
+    margin: 0 auto;
+  }
+  .investment-holding-company .company-chart ul a,
+  .group-holding-company .company-chart ul a {
+    font-size: 12px;
+    line-height: 14px;
+  }
+  .dashboard ul.tabs li {
+    width: 30%;
+  }
+  .dashboard ul.tabs li a {
+    min-width: auto!important;
+    width: 100%!important;
+  }
+  .dashboard .custom-submit-class {
+    padding: 0!important;
+  }
+  .dashboard .each-content {
+    display: block!important;
+    width: 100%!important;
+  }
+  .dashboard .content-row.tbl-item {
+    border-bottom: 1px solid #646464;
+    padding-bottom: 10px;
+    padding-top: 10px;
+  }
+  .dashboard .content-row.tbl-item:nth-of-type(1) {
+    padding-top: 0px;
+  }
+  #buddypress div.item-list-tabs#subnav ul li {
+    width: 20%;
+  }
+  #buddypress div.item-list-tabs#subnav ul li a {
+    padding: 0!important;
+    text-align: center;
+  }
+  #buddypress div.message-search {
+    float: left;
+    margin: 0px;
+  }
+}
 body {
   font-size: 15px;
 }
@@ -1023,6 +1155,9 @@ label.country_options_label {
   text-align: right;
   display: inline-block;
 }
+.reg-step .remove {
+  display: none;
+}
 .reg-step .add-more {
   margin-right: 10px;
 }
@@ -1398,6 +1533,9 @@ body.home .rev_slider_wrapper {
 }
 body.home .rev_slider {
   height: 420px !important;
+}
+body.home #homepage-core-services-01 .mkdf-blog-box-whole-content .mkdf-boxes-item-title {
+  min-width: 170px;
 }
 #homepage-icons-row {
   background: none!important;
@@ -1790,6 +1928,7 @@ body.home .rev_slider {
   font-size: 24px;
 }
 .dashboard {
+  padding-top: 70px;
   padding-bottom: 80px !important;
 }
 .dashboard .profile table.profile-fields tr {
@@ -2197,6 +2336,7 @@ body.home .rev_slider {
 #company-address {
   font-family: Montserrat, sans-serif;
   color: #363636;
+  margin-top: 20px;
 }
 .wpcf7-form-control-wrap .intl-tel-input {
   width: 100%;

@@ -94,6 +94,19 @@ jQuery(document).ready(function($) {
 
       }
     });
-  }  
+  }
+
+  $(".mkdf-mobile-menu-opener a").on("click", function(e){
+      e.preventDefault();
+      if($(".mkdf-mobile-nav").css("display") == "none") {
+        $("body").css("height", "100%");
+        $(".mkdf-wrapper").css("height", "100%");
+        $(".mkdf-wrapper-inner").css("height", "100%");        
+      }else {
+        $("body").css("height", "auto");
+        $(".mkdf-wrapper").css("height", "auto");
+        $(".mkdf-wrapper-inner").css("height", "auto");
+      }
+  });
 
 });

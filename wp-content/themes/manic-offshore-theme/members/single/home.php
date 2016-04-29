@@ -8,7 +8,7 @@
 ?>
 <div id="buddypress" class="dashboard">
 	<div data-mkdf-parallax-speed="1" class="vc_row wpb_row vc_row-fluid mkdf-section vc_custom_1454399108366 mkdf-content-aligment-left mkdf-grid-section" style="">
-	    <div class="clearfix mkdf-section-inner">
+	    <div class="clearfix mkdf-full-section-inner">
 	        <div class="mkdf-section-inner-margin clearfix">
 	        	<!-- <div class="wpb_column vc_column_container vc_col-sm-1">
 	                <div class="vc_column-inner ">
@@ -57,7 +57,7 @@
 	    </div>
 	</div>
 	<div data-mkdf-parallax-speed="1" class="vc_row wpb_row vc_row-fluid mkdf-section vc_custom_1454057007283 mkdf-content-aligment-left mkdf-grid-section" style="">
-	    <div class="clearfix mkdf-section-inner">
+	    <div class="clearfix mkdf-full-section-inner">
 	        <div class="mkdf-section-inner-margin clearfix">
 	        	<!-- <div class="wpb_column vc_column_container vc_col-sm-1">
 	                <div class="vc_column-inner ">

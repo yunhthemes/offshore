@@ -696,10 +696,13 @@ function registration_form() {
                             if(html.checked) {
                                 $(html).parent().parent().find(".key-person-info").hide();
                                 $(html).parent().parent().find(".key-person-info").children(".field-container").children(".person-input").val("");
+                                $(html).parent().parent().find(".add-remove-btn-container-director").hide();
                                 $(html).parent().parent().find(".nominee-container").show();
+                                
                             }else {
                                 $(html).parent().parent().find(".key-person-info").show();
-                                $(html).parent().parent().find(".nominee-container").hide();
+                                $(html).parent().parent().find(".add-remove-btn-container-director").show();
+                                $(html).parent().parent().find(".nominee-container").hide();                                
                             } 
                         };
                     }else if($(html).hasClass("person-type-1-switch")) {
@@ -1075,14 +1078,16 @@ function registration_form() {
 
                             ///////
 
+                            console.log(data.saved_data.servicescountries)
+
                             $.each(data.saved_data.servicescountries, function(i, service){
                                 var country_id = service.country_id;
                                 var service_id = service.service_id;
                                 var credit_card_count = service.pivot.credit_card_count;
-                                if(i==1) { // bank account service                                   
+                                if(service_id==2) { // bank account service                                   
                                     $("#step-3").find(".service-"+service_id+"-country-"+country_id).trigger("click");
-                                }else if(i==2) { // credit card service
-                                    $("#step-3").find(".service-"+service_id+"-country-"+country_id).val(credit_card_count).trigger("keyup");
+                                }else if(service_id==3) { // credit card service
+                                    $("#step-3").find(".service-"+service_id+"-country-"+country_id+"-card-count").val(credit_card_count).trigger("keyup");
                                 }
                             });
 
@@ -1183,7 +1188,9 @@ function registration_form() {
             $("#step-2").on("click", ".add-more", function(e){
                 e.preventDefault();                
                 
-                if($(this).parent().parent().find(".pasteclone").children(".field-container").length < 4) {
+                $(this).parent().find(".remove").show();
+                
+                if($(this).parent().parent().find(".pasteclone").children(".field-container").length < 3) {
                     cloneForm($(this).parent().parent().find(".cloneable"));
                     updateClonedFields($(this).parent().parent().find(".pasteclone"), $(this).data("selector"));     
                     initInputTel($(".pasteclone").find(".shareholder-telephone"));
@@ -1202,15 +1209,14 @@ function registration_form() {
 
                 var selector = $(this).data("selector");
 
-                console.log("."+selector+" .field-container");
-                console.log($(this).parent().parent().find("."+selector+" .field-container"));
-
                 if($(this).parent().parent().find("."+selector+" .field-container").length > 1) {
-                    $(this).parent().parent().find(".pasteclone").children(".field-container").last().remove();        
+                    $(this).parent().parent().find(".pasteclone").children(".field-container").last().remove(); 
+
+                    if($(this).parent().parent().find(".pasteclone").children(".field-container").length < 1) $(this).parent().find(".remove").hide();
                 }
                 else {
                     alert("Company must have at least one " + selector);
-                }
+                }            
                 
             });
 
@@ -1290,6 +1296,7 @@ function registration_form() {
 
             });
 
+            // remove service in summary
             $("#step-4").on("click", ".remove-btn", function(e){
                 e.preventDefault();
                 $(this).parent().parent().parent().parent().remove();
@@ -1341,22 +1348,22 @@ function registration_form() {
 
             function initTheForms(data, selectedCompanyTypeId, selectedCompanyTypeName, selectedCompanyTypePrice) {
 
-                newdata["companies"] = data.companies;                        
-                createTemplateAndAppendHtml("#shelf-companies-template", newdata, "#shelf-companies");    
+                newdata["companies"] = data.companies;
+                createTemplateAndAppendHtml("#shelf-companies-template", newdata, "#shelf-companies");
 
-                prices["jurisdiction"] = data.price;                        
+                prices["jurisdiction"] = data.price;
                 
                 newdata["shareholders"] = data.shareholders;
                 createTemplateAndAppendHtml("#shareholder-template", newdata, "#shareholder");
-                prices["shareholders"] = data.shareholders[0].price;                         
+                prices["shareholders"] = data.shareholders[0].price;
 
                 newdata["directors"] = data.directors;
                 createTemplateAndAppendHtml("#director-template", newdata, "#director");
-                prices["directors"] = data.directors[0].price;                         
+                prices["directors"] = data.directors[0].price;
 
                 newdata["secretaries"] = data.secretaries;
                 createTemplateAndAppendHtml("#secretary-template", newdata, "#secretary");
-                prices["secretaries"] = data.secretaries[0].price;                         
+                prices["secretaries"] = data.secretaries[0].price;
 
                 newdata["services"] = data.services;
                 createTemplateAndAppendHtml("#service-template", newdata, "#service");             
@@ -1834,7 +1841,8 @@ function registration_form() {
                             <p>{{ incorporation_date }}</p>    
                         </div>
                         <div class="each-content">
-                            <p>${{ price }}</p>
+                            <span class="us"><p>${{ price }}</p></span>
+                            <span class="eu"><p>${{ price_eu }}</p></span>
                         </div>
                         <div class="each-content">
                             <button data-company-name="{{name}}" data-company-id="{{id}}" data-company-price="{{price}}" class="custom-submit-class buy-now" data-hash="2">Buy now</button>
@@ -2042,7 +2050,7 @@ function registration_form() {
                 <div class="pasteclone"></div>
             </div>
 
-            <div class="add-remove-btn-container">                
+            <div class="add-remove-btn-container add-remove-btn-container-director">                
                 <a href="#" data-selector="director" class="add-more add-more-director">Add More <i class="fa fa-plus"></i></a>            
                 <a href="#" data-selector="director" class="remove remove-director">Remove <i class="fa fa-minus"></i></a>
             </div>
@@ -2206,7 +2214,7 @@ function registration_form() {
                                     {{#ifCond ../name "==" "Credit/debit cards"}}           
                                     <div class="col-3">
                                         <input type="text" name="service_{{../id}}_country_{{counter @index}}_no_of_card" id="service_{{../id}}_country_{{counter @index}}_no_of_card" class="credit_card_in_country_{{id}} service-{{../id}}-credit-card-count credit-card-count custom-input-class-2 service-{{../id}}-country-{{id}}-card-count service-{{../id}}-country-{{id}}" disabled="disabled">
-                                        <input type="hidden" name="service_{{../id}}_country_{{counter @index}}_id" value="{{pivot.id}}" class="service-{{../id}}-country-id service-{{../id}}-country-{{id}}-card-count service-{{../id}}-country-{{id}}"  disabled="disabled">                
+                                        <input type="hidden" name="service_{{../id}}_country_{{counter @index}}_id" value="{{pivot.id}}" class="service-{{../id}}-country-id  service-{{../id}}-country-{{id}}"  disabled="disabled">                
                                     </div>        
                                     {{else}}
                                     <div class="col-3">

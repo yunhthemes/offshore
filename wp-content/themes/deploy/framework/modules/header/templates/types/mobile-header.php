@@ -16,8 +16,8 @@
                         </div>
                     <?php endif; ?>
                     <?php if($show_logo) : ?>
-                        <div class="mkdf-position-center">
-                            <div class="mkdf-position-center-inner">
+                        <div class="mkdf-position-right">
+                            <div class="mkdf-position-right-inner">
                                 <?php deploy_mikado_get_mobile_logo(); ?>
                             </div>
                         </div>
