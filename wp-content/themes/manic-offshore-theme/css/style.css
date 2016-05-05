@@ -1608,6 +1608,7 @@ body.home #homepage-core-services-01 .mkdf-blog-box-whole-content .mkdf-boxes-it
   background: #008b9b !important;
   border: 2px solid #008b9b !important;
   padding: 13px 30px;
+  width: 190px;
 }
 #homepage-icons-row .wpb_wrapper .tp-caption.Deploy-button:hover,
 #homepage-icons-row .wpb_wrapper .Deploy-button:hover {
@@ -1692,6 +1693,7 @@ body.home #homepage-core-services-01 .mkdf-blog-box-whole-content .mkdf-boxes-it
   margin-left: 0px;
   margin-right: 0px;
   overflow: hidden;
+  height: 300px;
 }
 #homepage-why-version-03 .homepage-why-column-version-04 {
   padding-left: 30px;
@@ -1931,6 +1933,19 @@ body.home #homepage-core-services-01 .mkdf-blog-box-whole-content .mkdf-boxes-it
   padding-top: 70px;
   padding-bottom: 80px !important;
 }
+.dashboard #profile-edit-form .bp-required-field-label {
+  display: none;
+}
+.dashboard .profile-fields a {
+  color: #646464;
+  cursor: default;
+}
+.dashboard .standard-form textarea {
+  width: 98.7%!important;
+}
+.dashboard ul.acfb-holder li {
+  float: none;
+}
 .dashboard .profile table.profile-fields tr {
   border: none;
 }
@@ -2040,10 +2055,6 @@ body.home #homepage-core-services-01 .mkdf-blog-box-whole-content .mkdf-boxes-it
   top: -3px;
   position: relative;
 }
-.dashboard .profile-fields a {
-  color: #363636;
-  text-decoration: underline;
-}
 .dashboard #general-personal-li {
   display: none;
 }
@@ -2120,6 +2131,17 @@ body.home #homepage-core-services-01 .mkdf-blog-box-whole-content .mkdf-boxes-it
 .dashboard form .field-visibility-settings-notoggle {
   display: none;
 }
+.dashboard form input[disabled] {
+  background: #DADADA!important;
+  border: 0px!important;
+  color: #8D9394!important;
+}
+#buddypress div.item-list-tabs ul li#starred-personal-li {
+  display: none;
+}
+#buddypress div.item-list-tabs ul li#notices-personal-li {
+  display: none;
+}
 #buddypress div.item-list-tabs ul li.current a,
 #buddypress div.item-list-tabs ul li.selected a {
   background-color: #363636;
@@ -2161,12 +2183,18 @@ body.home #homepage-core-services-01 .mkdf-blog-box-whole-content .mkdf-boxes-it
   text-decoration: none;
   font-weight: bold;
   color: #ffffff;
-  height: 70px;
+  height: 130px;
   margin-bottom: -26px;
   box-shadow: 4px 4px 9px -4px rgba(0, 0, 0, 0.4);
   -webkit-transition: all linear .1s;
   -moz-transition: all linear .1s;
   transition: all linear .1s;
+  line-height: 17px;
+  -webkit-border-radius: 100%;
+  border-radius: 100%;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
 }
 .company-chart ul a span {
   top: 45%;
@@ -2174,11 +2202,12 @@ body.home #homepage-core-services-01 .mkdf-blog-box-whole-content .mkdf-boxes-it
   display: block;
 }
 .company-chart .big-company > li > a {
-  width: 30%;
+  width: 28%;
+  height: 170px;
   margin: 0 auto 60px auto;
 }
 .company-chart .big-company-2 > li > a {
-  width: 40%;
+  height: 170px;
 }
 .company-chart .big-company:after {
   content: "";
@@ -2188,7 +2217,7 @@ body.home #homepage-core-services-01 .mkdf-blog-box-whole-content .mkdf-boxes-it
   height: 38px;
   border-left: 4px solid #000;
   z-index: 1;
-  bottom: 126px;
+  top: 170px;
   left: 50.3%;
   margin-left: -4px;
 }
@@ -2197,29 +2226,32 @@ body.home #homepage-core-services-01 .mkdf-blog-box-whole-content .mkdf-boxes-it
   text-align: center;
   width: 100%;
   padding-left: 0px;
+  margin-left: -9px;
+}
+.company-chart .companies-2 {
   margin-left: 0px;
 }
 .company-chart .companies:after {
   content: "";
   display: block;
   position: absolute;
-  width: 61%;
+  width: 48%;
   height: 22px;
   border-top: 4px solid #000;
   margin: 0 auto;
   top: -22px;
-  left: 19.3%;
+  left: 27.3%;
 }
 .company-chart .companies-2:after {
   content: "";
   display: block;
   position: absolute;
-  width: 73.5%;
+  width: 72%;
   height: 22px;
   border-top: 4px solid #000;
   margin: 0 auto;
   top: -22px;
-  left: 13.3%;
+  left: 15.2%;
 }
 .company-chart .company:before {
   content: "";
@@ -2234,13 +2266,13 @@ body.home #homepage-core-services-01 .mkdf-blog-box-whole-content .mkdf-boxes-it
   margin-left: -4px;
 }
 .company-chart .company {
-  border-left: 4px solid #000;
-  width: 30%;
+  width: 20%;
   display: inline-block;
   margin-bottom: 60px;
+  margin-left: 21px;
 }
 .company-chart .company-2 {
-  width: 24%;
+  width: 20%;
 }
 .company-chart .company > a {
   margin: 0 0 -26px -4px;

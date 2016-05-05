@@ -115,7 +115,7 @@ class BP_Messages_Component extends BP_Component {
 			'slug'                  => BP_MESSAGES_SLUG,
 			'has_directory'         => false,
 			'notification_callback' => 'messages_format_notifications',
-			'search_string'         => __( 'Search Messages...', 'buddypress' ),
+			'search_string'         => __( 'Search messages...', 'buddypress' ),
 			'global_tables'         => $global_tables,
 			'meta_tables'           => $meta_tables
 		) );
@@ -196,7 +196,7 @@ class BP_Messages_Component extends BP_Component {
 		);
 
 		$sub_nav[] = array(
-			'name'            => __( 'Compose', 'buddypress' ),
+			'name'            => __( 'New', 'buddypress' ),
 			'slug'            => 'compose',
 			'parent_url'      => $messages_link,
 			'parent_slug'     => $slug,

@@ -366,7 +366,14 @@
             var data = template(newdata);
             
             appendToHtml(data, append_to_selector);
-        }        
+        }      
+
+        function getFirstWord(str) {
+	        if (str.indexOf(' ') === -1)
+	            return str;
+	        else
+	            return str.substr(0, str.indexOf(' '));
+	    };  
 
         function init() {
         	var newdata = [];
@@ -403,8 +410,14 @@
 
         	response.done(function(data, textStatus, jqXHR){                    
                 if(jqXHR.status==200) {
+
+                	$.each(data.companies, function(index, value){
+                		value.companytypes.name = getFirstWord(value.companytypes.name);
+                	});
+
+                	console.log(data.companies);
                     
-                    newdata["companies"] = data.companies;                        
+                    newdata["companies"] = data.companies;        
                     createTemplateAndAppendHtml("#user-companies-template", newdata, "#user-companies");
 
                     // jplist plugin call

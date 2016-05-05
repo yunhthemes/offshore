@@ -269,3 +269,8 @@ summary page
 - new field 
 - valiation snapping... 
 - NaN error (done)
+
+
+buddypress/bp-messages/classes/class-bp-messages-component.php
+buddypress/bp-messages/bp-messages-template.php
+buddypress/bp-groups/classes/class-bp-groups-component.php

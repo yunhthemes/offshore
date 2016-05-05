@@ -11,7 +11,7 @@
 <div class="item-list-tabs no-ajax" id="subnav" role="navigation">
 	<ul>
 		<?php bp_get_options_nav(); ?>
-		<li><a id="settings" href="<?php echo home_url( '/client-dashboard/' . bp_core_get_username( get_current_user_id() ) ) . '/settings'; ?>">Settings</a></li>
+		<li><a id="settings" href="<?php echo home_url( '/client-dashboard/' . bp_core_get_username( get_current_user_id() ) ) . '/settings'; ?>">Change password</a></li>
 	</ul>
 </div><!-- .item-list-tabs -->
 

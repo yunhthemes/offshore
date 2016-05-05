@@ -777,7 +777,7 @@ function bp_message_search_form() {
 	ob_start(); ?>
 
 	<form action="" method="get" id="search-message-form">
-		<label for="messages_search" class="bp-screen-reader-text"><?php esc_html_e( 'Search Messages', 'buddypress' ); ?></label>
+		<label for="messages_search" class="bp-screen-reader-text"><?php esc_html_e( 'Search messages', 'buddypress' ); ?></label>
 		<input type="text" name="s" id="messages_search"<?php echo $search_placeholder . $search_value; ?> />
 		<input type="submit" class="button" id="messages_search_submit" name="messages_search_submit" value="<?php esc_html_e( 'Search', 'buddypress' ); ?>" />
 	</form>

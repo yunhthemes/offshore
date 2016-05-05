@@ -109,4 +109,10 @@ jQuery(document).ready(function($) {
       }
   });
 
+  /// cheat
+
+  $(".profile-fields a").attr("href","#");
+
+  if($("#field_2").length > 0) $("#field_2").find("option")[0].remove();
+
 });

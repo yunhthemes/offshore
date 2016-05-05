@@ -102,7 +102,7 @@ if ( bp_has_profile( 'profile_group_id=' . bp_get_current_profile_group_id() ) )
 	do_action( 'bp_after_profile_field_content' ); ?>
 
 	<div class="submit">
-		<input type="submit" name="profile-group-edit-submit" id="profile-group-edit-submit" value="<?php esc_attr_e( 'Save Changes', 'buddypress' ); ?> " />
+		<input type="submit" name="profile-group-edit-submit" id="profile-group-edit-submit" value="<?php esc_attr_e( 'Save changes', 'buddypress' ); ?> " />
 	</div>
 
 	<input type="hidden" name="field_ids" id="field_ids" value="<?php bp_the_profile_field_ids(); ?>" />
@@ -112,6 +112,11 @@ if ( bp_has_profile( 'profile_group_id=' . bp_get_current_profile_group_id() ) )
 </form>
 <script>
 	jQuery(document).ready(function($){
+
+		$(".field_first-name").find("input").prop("disabled", true);
+		$(".field_surname").find("input").prop("disabled", true);
+		$(".field_nationality").find("select").prop("disabled", true);
+		$(".field_date-of-birth").find("input").prop("disabled", true);
 
 		$(".field_title").find("select").wrap("<div class='custom-input-class-select-container'></div>");
 	
