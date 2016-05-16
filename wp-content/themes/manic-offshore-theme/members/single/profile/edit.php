@@ -16,6 +16,7 @@ do_action( 'bp_before_profile_edit_content' );
 if ( bp_has_profile( 'profile_group_id=' . bp_get_current_profile_group_id() ) ) :
 	while ( bp_profile_groups() ) : bp_the_profile_group(); ?>
 
+<p>All fields must be completed.</p>
 <form action="<?php bp_the_profile_group_edit_form_action(); ?>" method="post" id="profile-edit-form" class="standard-form <?php bp_the_profile_group_slug(); ?>">
 
 	<?php
@@ -115,7 +116,6 @@ if ( bp_has_profile( 'profile_group_id=' . bp_get_current_profile_group_id() ) )
 
 		$(".field_first-name").find("input").prop("disabled", true);
 		$(".field_surname").find("input").prop("disabled", true);
-		$(".field_nationality").find("select").prop("disabled", true);
 		$(".field_date-of-birth").find("input").prop("disabled", true);
 
 		$(".field_title").find("select").wrap("<div class='custom-input-class-select-container'></div>");
@@ -142,7 +142,7 @@ if ( bp_has_profile( 'profile_group_id=' . bp_get_current_profile_group_id() ) )
 		$(".field_postal-address-6").find("input").after("<select id='postal-address-country'></select>");
 		$(".field_postal-address-6").find("select").wrap("<div class='custom-input-class-select-container'></div>").html(html);
 
-		$(".field_nationality").find("input").after("<select id='nationality'></select>");
+		$(".field_nationality").find("input").after("<select id='nationality' disabled></select>");
 		$(".field_nationality").find("select").wrap("<div class='custom-input-class-select-container'></div>").html(html);
 
 		$(".field_nationality").find("#nationality").on('change', function(e){

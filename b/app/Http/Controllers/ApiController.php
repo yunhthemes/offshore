@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 use App\Company;
 use App\CompanyType;
 use App\CompanyWpuser;
+use App\CompanyWpuserShareholder;
+use App\CompanyWpuserDirector;
+use App\CompanyWpuserSecretary;
+use App\CompanyWpuserServiceCountry;
+use App\CompanyWpuserInformationService;
 use App\Wpuser;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -24,6 +29,37 @@ class ApiController extends Controller
 		}else
 			return response()->json(['message' => 'no resource was found'], 404);
     		
+    }
+
+    public function removeusercompanies($id, Request $request) {
+
+        $wpuser_id = $request->user_id;
+        $company_id = $request->company_id;
+
+        $company_wpuser_shareholder = CompanyWpuserShareholder::where("companywpuser_id", $id);
+        if($company_wpuser_shareholder) $company_wpuser_shareholder->delete();
+
+        $company_wpuser_director = CompanyWpuserDirector::where("companywpuser_id", $id);
+        if($company_wpuser_director) $company_wpuser_director->delete();
+
+        $company_wpuser_secretary = CompanyWpuserSecretary::where("companywpuser_id", $id);
+        if($company_wpuser_secretary) $company_wpuser_secretary->delete();
+
+        $company_wpuser_service_country = CompanyWpuserServiceCountry::where("companywpuser_id", $id);
+        if($company_wpuser_service_country) $company_wpuser_service_country->delete();
+
+        $company_wpuser_information_service = CompanyWpuserInformationService::where("companywpuser_id", $id);
+        if($company_wpuser_information_service) $company_wpuser_information_service->delete();
+
+        $company_wpuser = CompanyWpuser::find($id);        
+        if($company_wpuser) $affectedRows = $company_wpuser->delete();
+
+        if($affectedRows) {
+            return response()->json(['message' => 'Successfully deleted'], 200);    
+        }else {
+            return response()->json(['message' => 'Request failed', 'error' => $error], 412);    
+        }
+
     }
 
     public function usercompanies($id, Request $request) {

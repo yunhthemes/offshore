@@ -175,12 +175,12 @@ class BP_Messages_Component extends BP_Component {
 
 		if ( bp_is_active( $this->id, 'star' ) ) {
 			$sub_nav[] = array(
-				'name'            => __( 'Starred', 'buddypress' ),
+				'name'            => __( 'Archive', 'buddypress' ),
 				'slug'            => bp_get_messages_starred_slug(),
 				'parent_url'      => $messages_link,
 				'parent_slug'     => $slug,
 				'screen_function' => 'bp_messages_star_screen',
-				'position'        => 11,
+				'position'        => 40,
 				'user_has_access' => $access
 			);
 		}

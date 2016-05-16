@@ -1,11 +1,19 @@
-<?php
-/**
- * BuddyPress - Members Home
- *
- * @package BuddyPress
- * @subpackage bp-legacy
- */
-?>
+<div id="copy-banner" class="mkdf-title mkdf-standard-type mkdf-has-background mkdf-content-left-alignment mkdf-animation-no mkdf-title-image-not-responsive" style="color:#000000;height:330px;;background-image:url(http://clients.manic.com.sg/offshore/wp-content/uploads/2016/01/image-01.jpg)" data-height="330" data-background-width="&quot;1920&quot;">
+    <div class="mkdf-title-image"><img src="http://clients.manic.com.sg/offshore/wp-content/uploads/2016/01/image-01.jpg" alt="&nbsp;"> </div>
+    <!-- <div class="mkdf-title-holder" style="height:330px;">
+        <div class="mkdf-container clearfix">
+            <div class="mkdf-container-inner">
+                <div class="mkdf-title-subtitle-holder" style="">
+                    <div class="mkdf-title-subtitle-holder-inner">
+                        <h1 style="color:#000000"><span>Client services dashboard</span></h1>
+
+                        <div class="mkdf-breadcrumbs-holder"> <div class="mkdf-breadcrumbs"><div class="mkdf-breadcrumbs-inner"><a href="http://clients.manic.com.sg/offshore/">Home</a><span class="mkdf-delimiter"><span class="mkdf-icon-font-elegant arrow_right mkdf-delimiter-icon"></span></span><span class="mkdf-current">Members</span></div></div></div>
+                    </div>
+				</div>
+			</div>
+		</div>
+	</div> -->
+</div>
 <div id="buddypress" class="dashboard">
 	<div data-mkdf-parallax-speed="1" class="vc_row wpb_row vc_row-fluid mkdf-section vc_custom_1454399108366 mkdf-content-aligment-left mkdf-grid-section" style="">
 	    <div class="clearfix mkdf-full-section-inner">

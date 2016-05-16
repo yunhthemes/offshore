@@ -129,7 +129,11 @@
 		                    <p class="jurisdiction">{{ companytypes.name }}</p>
 		                </div>
 		                <div class="each-content">
-		                    <p class="datetime">{{ wpusers.0.pivot.renewal_date }}</p>    
+		                	{{#ifCond status "==" "0"}}
+								<p class="datetime">Registration incomplete</p>    
+		                	{{else}}
+		                    	<p class="datetime">{{ wpusers.0.pivot.renewal_date }}</p>    
+		                    {{/ifCond}}
 		                </div>		                         
 		                <div class="each-content">
 		                	{{#ifCond status "==" "0"}}
@@ -139,6 +143,7 @@
 								<a href="#" data-company-id="{{id}}" class="company-details"><button class="custom-submit-class">Company details</button></a>
 								{{else}}
 								<button class="custom-submit-class disabled-btn" disabled="true">Not available</button>
+								<a href="#" data-company-id="{{id}}" data-companywpuser-id="{{ wpusers.0.pivot.id }}" class="delete-saved-company"><i class="fa fa-times" aria-hidden="true"></i></a>
 								{{/ifCond}}
 		                    {{/ifCond}}		                    
 		                </div>                   
@@ -375,7 +380,8 @@
 	            return str.substr(0, str.indexOf(' '));
 	    };  
 
-        function init() {
+        function init() {        	
+
         	var newdata = [];
         	var response = makeJsonpRequest("", "<?php echo SITEURL; ?>/b/api/usercompanies/"+<?php echo get_current_user_id(); ?>, "GET");	        	
 
@@ -415,7 +421,7 @@
                 		value.companytypes.name = getFirstWord(value.companytypes.name);
                 	});
 
-                	console.log(data.companies);
+                	// console.log(data.companies);
                     
                     newdata["companies"] = data.companies;        
                     createTemplateAndAppendHtml("#user-companies-template", newdata, "#user-companies");
@@ -467,8 +473,33 @@
 
             	$("#user-companies-container").show();
             	$("#user-company-details-container").hide();
-            });            
-        }        
+            }); 
+
+            $("body").on("click", ".delete-saved-company", function(e){
+            	e.preventDefault();
+
+            	if (!confirm("Do you want to delete")){
+			      return false;
+			    }
+
+            	data = {};
+            	data.company_id = $(this).data('company-id'); 
+            	data.user_id = "<?php echo get_current_user_id(); ?>"; 
+
+            	var companywpuser_id = $(this).data("companywpuser-id");
+
+            	var response = makeRequest(data, "<?php echo SITEURL; ?>/b/api/removeusercompanies/"+companywpuser_id, "DELETE");
+
+            	response.done(function(data, textStatus, jqXHR){                    
+	                if(jqXHR.status==200) {
+	                    
+	                    $(this).parent().parent().remove();                                   		
+
+	                }
+	            });
+
+            });        
+        }
 
         init();
 

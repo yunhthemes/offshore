@@ -68,7 +68,7 @@ do_action( 'bp_before_member_messages_loop' ); ?>
 					do_action( 'bp_messages_inbox_list_header' ); ?>
 
 					<?php if ( bp_is_active( 'messages', 'star' ) ) : ?>
-						<th scope="col" class="thread-star"><span class="message-action-star"><span class="icon"></span> <span class="screen-reader-text"><?php _e( 'Star', 'buddypress' ); ?></span></span></th>
+						<th scope="col" class="thread-star"><span class="message-action-star"><!-- <span class="icon"></span> --> <span class="screen-reader-text"><?php _e( '', 'buddypress' ); ?></span></span></th>
 					<?php endif; ?>
 
 					<th scope="col" class="thread-options"><?php _e( 'Actions', 'buddypress' ); ?></th>

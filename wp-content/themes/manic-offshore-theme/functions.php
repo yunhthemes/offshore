@@ -161,3 +161,5 @@ function bp_send_message(){
 add_action('wp_ajax_bp_send_message', 'bp_send_message');
 add_action('wp_ajax_nopriv_bp_send_message', 'bp_send_message'); // not really needed
 
+remove_filter( 'the_content', 'wpautop' );
+remove_filter( 'the_excerpt', 'wpautop' );

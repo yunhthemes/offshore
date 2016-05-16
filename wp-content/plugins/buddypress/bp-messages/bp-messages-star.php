@@ -498,8 +498,8 @@ add_action( 'bp_enqueue_scripts', 'bp_messages_star_enqueue_scripts' );
 function bp_messages_star_bulk_management_dropdown() {
 ?>
 
-	<option value="star"><?php _e( 'Add star', 'buddypress' ); ?></option>
-	<option value="unstar"><?php _e( 'Remove star', 'buddypress' ); ?></option>
+	<option value="star"><?php _e( 'Archive', 'buddypress' ); ?></option>
+	<option value="unstar"><?php _e( 'Unarchive', 'buddypress' ); ?></option>
 
 <?php
 }

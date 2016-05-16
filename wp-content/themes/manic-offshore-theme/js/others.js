@@ -113,6 +113,60 @@ jQuery(document).ready(function($) {
 
   $(".profile-fields a").attr("href","#");
 
-  if($("#field_2").length > 0) $("#field_2").find("option")[0].remove();
+  if($(".field_title").find("select").length > 0) $(".field_title").find("select").find("option")[0].remove();
+
+  if($("#copy-banner").length > 0) {
+    
+    var bannerHtml = $("#copy-banner").clone();
+    console.log($(bannerHtml).attr("id", "copied-banner"));
+
+    $(".mkdf-content").find(".mkdf-content-inner").prepend(bannerHtml);
+
+  }
+
+  // url cheat
+  var currentUrl = document.location.href;
+  var oldUrl = document.location.href;
+
+  console.log(currentUrl);
+
+  if(currentUrl.substr(-1) == '/') {
+    currentUrl = currentUrl.substring(0, currentUrl.length - 1);
+    console.log(currentUrl)
+  }
+
+  if(currentUrl.indexOf('client-dashboard') > -1 || currentUrl.indexOf('profile') > -1 || currentUrl.indexOf('settings') > -1) {
+      var urlArr = currentUrl.split('/');
+      if(urlArr[2]=="clients.manic.com.sg" || urlArr[2]=="localhost:8888") {
+        urlArr.splice(5, 1);
+      }else {
+        urlArr.splice(4, 1);
+      }
+
+      console.log(urlArr)
+      var newUrl = urlArr.join("/");
+
+      history.pushState({}, null, newUrl);
+  }
+
+  // window.onbeforeunload = function(event)
+  // {
+  //     event.preventDefault()
+  //     document.location.href = oldUrl;
+  //     return true;
+  // };
+
+  // $(window).on('beforeunload', function(e){
+  //     // your logic here
+  //     e.preventDefault();
+  //     history.pushState({}, null, oldUrl);
+  //     return '';
+  // });
+
+
+  // hide star message
+  if($('body.inbox').find(".message-action-unstar").length > 0) {
+    // $('body.inbox').find(".message-action-unstar").parent().parent().remove();
+  }
 
 });

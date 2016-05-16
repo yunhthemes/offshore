@@ -16,8 +16,12 @@
 	}
 }
 
+#copy-banner {
+	display: none;
+}
+
 .dashboard {
-	padding-top: 70px;
+	// padding-top: 70px;
     padding-bottom: 80px !important;
 	#profile-edit-form {
 		.bp-required-field-label {
@@ -87,6 +91,17 @@
 	    border: none!important;
 	    cursor: default!important;
 	}
+	.delete-saved-company {
+		color: #8D9394;
+		margin-left: 10px;
+		vertical-align: middle;
+		i {
+			font-size: 20px;
+		}
+		&:hover { 
+			color: @dark-blue;
+		}
+	}	
 	
 	#subnav {
 		ul {
@@ -245,7 +260,7 @@
 		.field-visibility-settings-notoggle {
 			display: none;
 		}
-		input[disabled] {
+		select[disabled],input[disabled] {
 		    background: #DADADA!important;
 		    border: 0px!important;
 		    color: #8D9394!important;
@@ -259,7 +274,7 @@
 		ul {
 			li {
 				&#starred-personal-li {
-					display: none;
+					// display: none;
 				}
 				&#notices-personal-li {
 					display: none;
@@ -267,6 +282,13 @@
 			}
 		}
 	}
+	
+	.thread-star {
+		.icon {
+			display: none;
+		}
+	}
+	
 }
 
 #buddypress div.item-list-tabs ul li.current a, #buddypress div.item-list-tabs ul li.selected a {
@@ -412,7 +434,9 @@
 	position: relative;
 	.circle {
 		background-color: @dark-blue;
-		.round(100px);
+	    border: 4px solid #ffffff;
+		box-shadow: 4px 4px 9px -4px rgba(0, 0, 0, 0.4);
+		.round(100%);
 		width: 200px;
 		height: 200px;
 		display: inline-block;

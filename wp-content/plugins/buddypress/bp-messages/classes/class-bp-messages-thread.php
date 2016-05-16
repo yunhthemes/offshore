@@ -505,6 +505,11 @@ class BP_Messages_Thread {
 		$sql['where']  = "WHERE {$deleted_sql} {$user_id_sql} {$sender_sql} {$type_sql} {$search_sql} {$meta_query_sql['where']}";
 		$sql['misc']   = "GROUP BY m.thread_id ORDER BY date_sent DESC {$pag_sql}";
 
+		// zaw edit // to retrieve only unstarred message
+		if($r['box']=='inbox') {
+			$sql['where'] .= "AND NOT EXISTS (SELECT * FROM wp_bp_messages_meta mt WHERE mt.message_id = m.id)";
+		}
+
 		// Get thread IDs.
 		$thread_ids = $wpdb->get_results( implode( ' ', $sql ) );
 		if ( empty( $thread_ids ) ) {
@@ -514,6 +519,7 @@ class BP_Messages_Thread {
 		// Adjust $sql to work for thread total.
 		$sql['select'] = 'SELECT COUNT( DISTINCT m.thread_id )';
 		unset( $sql['misc'] );
+
 		$total_threads = $wpdb->get_var( implode( ' ', $sql ) );
 
 		// Sort threads by date_sent.

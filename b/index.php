@@ -18,7 +18,7 @@
 | loading any of our classes later on. It feels nice to relax.
 |
 */
-
+// echo __DIR__.'/bootstrap/autoload.php'; exit();
 require __DIR__.'/bootstrap/autoload.php';
 
 /*

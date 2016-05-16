@@ -77,6 +77,13 @@ function bp_has_message_threads( $args = array() ) {
 		'page_arg'     => 'mpage', // See https://buddypress.trac.wordpress.org/ticket/3679.
 		'meta_query'   => array()
 	), 'has_message_threads' );
+	// print_r($r);
+
+	// if($r['box']=="inbox") {
+		// $r['meta_query'][] = array( 'key' => 'starred_by_user', 'value' => 0 );
+		
+	// }	
+	// print_r($r);
 
 	// Load the messages loop global up with messages.
 	$messages_template = new BP_Messages_Box_Template( $r );

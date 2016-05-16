@@ -1618,14 +1618,14 @@ function registration_form() {
 
                                         setTimeout(function(){ 
                                             window.location.href = "'.SITEURL.'/client-dashboard";
-                                        }, 1000);
+                                        }, 500);
                                     }
                                 }); 
 
                             }else {
                                 setTimeout(function(){ 
                                     window.location.href = "'.SITEURL.'/client-dashboard";
-                                }, 1000);
+                                }, 500);
                             }                                                    
                         }
                     });
@@ -1841,8 +1841,7 @@ function registration_form() {
                             <p>{{ incorporation_date }}</p>    
                         </div>
                         <div class="each-content">
-                            <span class="us"><p>${{ price }}</p></span>
-                            <span class="eu"><p>${{ price_eu }}</p></span>
+                            <p>${{ price }}</p>                            
                         </div>
                         <div class="each-content">
                             <button data-company-name="{{name}}" data-company-id="{{id}}" data-company-price="{{price}}" class="custom-submit-class buy-now" data-hash="2">Buy now</button>
@@ -1934,7 +1933,7 @@ function registration_form() {
             <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
 
             <div class="field-container">
-                <div class="custom-input-container-left pull-left">
+                <div class="custom-input-container-left pull-left total-share-container">
                     <label for="total_share" class="align-label">Total shares to be issued</label>
                 </div>
                 <div class="custom-input-container-right pull-right">
