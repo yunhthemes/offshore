@@ -1858,7 +1858,7 @@ body.home #homepage-core-services-01 .mkdf-blog-box-whole-content .mkdf-boxes-it
     padding-left: 0px;
   }
 }
-.homepage-corporate-solutions-column {
+.home-page .homepage-corporate-solutions-column {
   padding-left: 40px;
 }
 #homepage-corporate-solutions-row .mkdf-blog-boxes-info-section {
@@ -2220,7 +2220,21 @@ body.home #homepage-core-services-01 .mkdf-blog-box-whole-content .mkdf-boxes-it
 #buddypress div.item-list-tabs ul li#notices-personal-li {
   display: none;
 }
+#buddypress .thread-star {
+  display: none;
+}
 #buddypress .thread-star .icon {
+  display: none;
+}
+#buddypress .thread-options .button {
+  border: none!important;
+  background: none!important;
+  color: #08c;
+  font-weight: 400;
+  font-size: inherit;
+  padding: 0px;
+}
+#buddypress table tr td.thread-info p.thread-excerpt {
   display: none;
 }
 #buddypress div.item-list-tabs ul li.current a,
@@ -2483,6 +2497,10 @@ form.wpcf7-form .ajax-loader {
 }
 form.wpcf7-form .wpcf7-response-output {
   display: inline-block;
-  width: 65%;
+  width: 100%;
   vertical-align: middle;
+}
+.company-list li a {
+  color: #646464;
+  text-decoration: underline;
 }

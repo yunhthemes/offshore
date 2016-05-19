@@ -126,7 +126,22 @@
 	                                        signup_password_confirm: {
 	                                            equalTo: "#signup_password"
 	                                        }
-	                                    }
+	                                    },
+						                messages: {
+						                    "field_2": "Title required",
+						                    "field_1": "First name required",
+						                    "field_6": "Surname required",
+						                    "signup_email": {
+						                        "required" : "Email required",
+						                        "email" : "Invalid email"
+						                    },
+						                    "field_10": "Telephone required",
+						                    "signup_username": "Username required",
+						                    "signup_password": "Password required"
+						                },
+						                errorPlacement: function(error, element) {                            
+						                    element.attr("placeholder", error.text());
+						                }
 	                                });
 
 	                                // var mobile_telephone;

@@ -36,7 +36,14 @@ if ( bp_has_profile( 'profile_group_id=' . bp_get_current_profile_group_id() ) )
 
 		<div class="clear"></div>
 
-		<?php while ( bp_profile_fields() ) : bp_the_profile_field(); ?>
+		<?php $index = 0; while ( bp_profile_fields() ) : bp_the_profile_field(); ?>
+
+			<?php if($index==2): ?>
+				<div class="editfield field_1 field_first-name required-field visibility-public alt field_type_textbox">				
+					<label for="email">Email</label>		
+					<input id="email" type="text" value="<?php echo bp_get_displayed_user_email(); ?>" aria-required="true" disabled="">					
+				</div>
+			<?php endif; ?>
 
 			<div<?php bp_field_css_class( 'editfield' ); ?>>
 
@@ -94,6 +101,8 @@ if ( bp_has_profile( 'profile_group_id=' . bp_get_current_profile_group_id() ) )
 
 				<p class="description"><?php bp_the_profile_field_description(); ?></p>
 			</div>
+
+			<?php $index++; ?>
 
 		<?php endwhile; ?>
 

@@ -77,6 +77,10 @@
 	    </div>
 	</div>
 </div>
+<div id="not-available-popup" style="display:none; cursor: default;">
+	<p>The selected shelf company is no longer available. Please make another selection.</p>
+	<a href="<?php echo home_url( '/company-formation-order/' ); ?>" class="custom-submit-class" style="min-height: auto!important;margin-top:10px;">Incorporate now!</a>
+</div>
 <script id="user-companies-template" type="text/x-handlebars-template">	
     <div id="company-lists" class="box jplist">
     	<div class="box text-shadow">
@@ -132,7 +136,11 @@
 		                	{{#ifCond status "==" "0"}}
 								<p class="datetime">Registration incomplete</p>    
 		                	{{else}}
-		                    	<p class="datetime">{{ wpusers.0.pivot.renewal_date }}</p>    
+		                		{{#ifCond owner "==" "1"}}
+									<p class="datetime">{{ wpusers.0.pivot.renewal_date }}</p> 
+		                		{{else}}
+		                			<p class="datetime">Registration incomplete</p>    		
+		                    	{{/ifCond}}   
 		                    {{/ifCond}}
 		                </div>		                         
 		                <div class="each-content">
@@ -142,7 +150,7 @@
 								{{#ifCond owner "==" "1"}}
 								<a href="#" data-company-id="{{id}}" class="company-details"><button class="custom-submit-class">Company details</button></a>
 								{{else}}
-								<button class="custom-submit-class disabled-btn" disabled="true">Not available</button>
+								<button class="custom-submit-class disabled-btn">Not available</button>
 								<a href="#" data-company-id="{{id}}" data-companywpuser-id="{{ wpusers.0.pivot.id }}" class="delete-saved-company"><i class="fa fa-times" aria-hidden="true"></i></a>
 								{{/ifCond}}
 		                    {{/ifCond}}		                    
@@ -498,7 +506,22 @@
 	                }
 	            });
 
-            });        
+            });       
+
+            $("body").on("click", ".disabled-btn", function(e){
+            	e.preventDefault();
+
+            	$.blockUI({ 
+            		message: $("#not-available-popup"),
+            		css: {
+						padding: "30px",
+						margin: 0,
+						border: '0px',
+						backgroundColor: '#fff',						
+            		},
+            		onOverlayClick: $.unblockUI
+            	});
+            });
         }
 
         init();

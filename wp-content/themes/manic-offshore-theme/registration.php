@@ -496,14 +496,17 @@ function registration_form() {
                             }
                         }
                     });
-                $fieldContainer.find("."+selector+"-address-3").attr("name", selector+"_"+fieldID+"_address_3").attr("id", selector+"_"+fieldID+"_address_3").attr("data-"+selector+"-id", fieldID).attr("placeholder", "State").val("").rules("add", {
-                        required: {
-                            depends : function(elem) {
-                                if($fieldContainer.find("."+selector+"-name").val()!="" || $fieldContainer.find("."+selector+"-address").val()!="" || $fieldContainer.find("."+selector+"-address-2").val()!="" || $fieldContainer.find("."+selector+"-address-4").val()!="" || $fieldContainer.find("."+selector+"-telephone").val()!="") return true;
-                                else return false;
-                            }
-                        }
-                    });
+                $fieldContainer.find("."+selector+"-address-3").attr("name", selector+"_"+fieldID+"_address_3").attr("id", selector+"_"+fieldID+"_address_3").attr("data-"+selector+"-id", fieldID).attr("placeholder", "State").val("");
+
+                // .rules("add", {
+                //         required: {
+                //             depends : function(elem) {
+                //                 if($fieldContainer.find("."+selector+"-name").val()!="" || $fieldContainer.find("."+selector+"-address").val()!="" || $fieldContainer.find("."+selector+"-address-2").val()!="" || $fieldContainer.find("."+selector+"-address-4").val()!="" || $fieldContainer.find("."+selector+"-telephone").val()!="") return true;
+                //                 else return false;
+                //             }
+                //         }
+                //     });
+
                 $fieldContainer.find("."+selector+"-address-4").attr("name", selector+"_"+fieldID+"_address_4").attr("id", selector+"_"+fieldID+"_address_4").attr("data-"+selector+"-id", fieldID).val("").rules("add", {
                         required: {
                             depends : function(elem) {
@@ -1213,6 +1216,8 @@ function registration_form() {
                     $(this).parent().parent().find(".pasteclone").children(".field-container").last().remove(); 
 
                     if($(this).parent().parent().find(".pasteclone").children(".field-container").length < 1) $(this).parent().find(".remove").hide();
+
+                    $("#step-2").find(".person-input").trigger("keyup");
                 }
                 else {
                     alert("Company must have at least one " + selector);
@@ -1676,7 +1681,7 @@ function registration_form() {
 
                         console.log(data);
 
-                        alert("Successfully saved!");
+                        alert("Your order has been saved.  You may return to your order to finalise it at any time by logging into your account. Please note that if you have selected a shelf company, it will only be available when you return to your order if it has not been bought by another client in the meantime.");
 
                         setTimeout(function(){ 
                             window.location.href = "'.SITEURL.'/client-dashboard";
@@ -2711,7 +2716,9 @@ function registration_form() {
 
     <div id="step-2" class="reg-step">
         <form id="registration-page-form-2">
-            
+            <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
+            <p>The same person cannot act as sole shareholder, director and secretary. One more person must be appointed to any of these positions or a nominee shareholder, professional director or company secretary provided by Offshore Company Solutions.</p>
+            <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
             <div id="shareholder" class="personnel">
                 <!-- JS CONTENT GOES HERE -->                
             </div>
@@ -2870,8 +2877,8 @@ function registration_form() {
 
             <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>        
             <a href="#" id="next"><button data-id="3" data-hash="3" class="custom-submit-class back-btn">Back</button></a>
-            <a href="#"><button class="custom-submit-class payment-gateway-btn">Proceed to checkout</button></a>
-            <a href="#"><button class="custom-submit-class save-now">Save now and checkout later</button></a>
+            <a href="#"><button class="custom-submit-class payment-gateway-btn">Submit order</button></a>
+            <a href="#"><button class="custom-submit-class save-now">Save incomplete order</button></a>
             
         </form>        
     </div>';

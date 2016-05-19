@@ -284,10 +284,32 @@
 	}
 	
 	.thread-star {
+		display: none;
 		.icon {
 			display: none;
 		}
+	}	
+
+	.thread-options {
+		.button {
+			border: none!important;
+			background: none!important;
+		    color: #08c;
+			font-weight: 400;
+			font-size: inherit;
+			padding: 0px;
+		}
 	}
+
+	table {
+		tr {
+			td.thread-info {
+				p.thread-excerpt {
+					display: none;
+				}
+			}
+		} 
+	} 
 	
 }
 
@@ -558,7 +580,16 @@ form.wpcf7-form {
 	}
 	.wpcf7-response-output {
 		display: inline-block;
-	    width: 65%;
+	    width: 100%;
 	    vertical-align: middle;
+	}
+}
+
+.company-list {
+	li {
+		a {
+			color: @grey;
+			text-decoration: underline;
+		}
 	}
 }

@@ -22,7 +22,22 @@ function signup_form( $username, $password, $email, $title, $first_name, $surnam
                     retype_password: {
                       equalTo: "#password"
                     }
-                }              
+                },
+                messages: {
+                    "title": "Title required",
+                    "first_name": "First name required",
+                    "surname": "Surname required",
+                    "email": {
+                        "required" : "Email required",
+                        "email" : "Invalid email"
+                    },
+                    "mobile_telephone": "Telephone required",
+                    "username": "Username required",
+                    "password": "Password required"
+                },
+                errorPlacement: function(error, element) {                            
+                    element.attr("placeholder", error.text());
+                }
             }); 
 
             var mobile_telephone;   

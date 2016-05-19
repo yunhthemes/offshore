@@ -26,17 +26,32 @@ do_action( 'bp_before_profile_loop_content' ); ?>
 
 				<table class="profile-fields">
 
-					<?php while ( bp_profile_fields() ) : bp_the_profile_field(); ?>
-
+					<?php $index = 0; while ( bp_profile_fields() ) : bp_the_profile_field(); ?>
+						
 						<?php if ( bp_field_has_data() ) : ?>
+							
+
+							<?php if($index==2): ?>
+							<tr class="field_1 field_email required-field visibility-public alt field_type_textbox">
+
+								<td class="label 1"><h6>Email</h6></td>
+
+								<td class="data">
+									<p><a href="#" rel="nofollow"><?php echo bp_get_displayed_user_email(); ?></a></p>
+								</td>
+
+							</tr>
+							<?php endif; ?>
 
 							<tr<?php bp_field_css_class(); ?>>
 
-								<td class="label"><h6><?php bp_the_profile_field_name(); ?></h6></td>
+								<td class="label <?php echo $index; ?>"><h6><?php bp_the_profile_field_name(); ?></h6></td>
 
 								<td class="data"><?php bp_the_profile_field_value(); ?></td>
 
 							</tr>
+
+							<?php $index++; ?>
 
 						<?php endif; ?>
 

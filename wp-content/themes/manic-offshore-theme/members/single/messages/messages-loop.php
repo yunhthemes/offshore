@@ -51,9 +51,12 @@ do_action( 'bp_before_member_messages_loop' ); ?>
 
 			<thead>
 				<tr>
-					<th scope="col" class="thread-checkbox bulk-select-all"><input id="select-all-messages" type="checkbox"><label class="bp-screen-reader-text" for="select-all-messages"><?php _e( 'Select all', 'buddypress' ); ?></label></th>
+					<?php if ( is_super_admin() ) : ?>
+						<th scope="col" class="thread-checkbox bulk-select-all"><input id="select-all-messages" type="checkbox"><label class="bp-screen-reader-text" for="select-all-messages"><?php _e( 'Select all', 'buddypress' ); ?></label></th>
+					<?php endif; ?>
 					<th scope="col" class="thread-from"><?php _e( 'From', 'buddypress' ); ?></th>
 					<th scope="col" class="thread-info"><?php _e( 'Subject', 'buddypress' ); ?></th>
+
 
 					<?php
 
@@ -70,8 +73,9 @@ do_action( 'bp_before_member_messages_loop' ); ?>
 					<?php if ( bp_is_active( 'messages', 'star' ) ) : ?>
 						<th scope="col" class="thread-star"><span class="message-action-star"><!-- <span class="icon"></span> --> <span class="screen-reader-text"><?php _e( '', 'buddypress' ); ?></span></span></th>
 					<?php endif; ?>
-
-					<th scope="col" class="thread-options"><?php _e( 'Actions', 'buddypress' ); ?></th>
+					<?php if ( is_super_admin() ) : ?>
+						<th scope="col" class="thread-options"><?php _e( 'Actions', 'buddypress' ); ?></th>
+					<?php endif; ?>
 				</tr>
 			</thead>
 
@@ -80,9 +84,11 @@ do_action( 'bp_before_member_messages_loop' ); ?>
 				<?php while ( bp_message_threads() ) : bp_message_thread(); ?>
 
 					<tr id="m-<?php bp_message_thread_id(); ?>" class="<?php bp_message_css_class(); ?><?php if ( bp_message_thread_has_unread() ) : ?> unread<?php else: ?> read<?php endif; ?>">
-						<td class="bulk-select-check">
-							<label for="bp-message-thread-<?php bp_message_thread_id(); ?>"><input type="checkbox" name="message_ids[]" id="bp-message-thread-<?php bp_message_thread_id(); ?>" class="message-check" value="<?php bp_message_thread_id(); ?>" /><span class="bp-screen-reader-text"><?php _e( 'Select this message', 'buddypress' ); ?></span></label>
-						</td>
+						<?php if ( is_super_admin() ) : ?>
+							<td class="bulk-select-check">
+								<label for="bp-message-thread-<?php bp_message_thread_id(); ?>"><input type="checkbox" name="message_ids[]" id="bp-message-thread-<?php bp_message_thread_id(); ?>" class="message-check" value="<?php bp_message_thread_id(); ?>" /><span class="bp-screen-reader-text"><?php _e( 'Select this message', 'buddypress' ); ?></span></label>
+							</td>
+						<?php endif; ?>
 
 						<?php if ( 'sentbox' != bp_current_action() ) : ?>
 							<td class="thread-from">
@@ -122,16 +128,17 @@ do_action( 'bp_before_member_messages_loop' ); ?>
 								<?php bp_the_message_star_action_link( array( 'thread_id' => bp_get_message_thread_id() ) ); ?>
 							</td>
 						<?php endif; ?>
-
+						<?php if ( is_super_admin() ) : ?>
 						<td class="thread-options">
-							<?php if ( bp_message_thread_has_unread() ) : ?>
-								<a class="read" href="<?php bp_the_message_thread_mark_read_url();?>"><?php _e( 'Read', 'buddypress' ); ?></a>
-							<?php else : ?>
-								<a class="unread" href="<?php bp_the_message_thread_mark_unread_url();?>"><?php _e( 'Unread', 'buddypress' ); ?></a>
-							<?php endif; ?>
-							 |
-							<a class="delete" href="<?php bp_message_thread_delete_link(); ?>"><?php _e( 'Delete', 'buddypress' ); ?></a>
-
+								<?php bp_the_message_star_action_link( array( 'thread_id' => bp_get_message_thread_id() ) ); ?>
+								 |
+								<?php if ( bp_message_thread_has_unread() ) : ?>
+									<a class="read" href="<?php bp_the_message_thread_mark_read_url();?>"><?php _e( 'Read', 'buddypress' ); ?></a>
+								<?php else : ?>
+									<a class="unread" href="<?php bp_the_message_thread_mark_unread_url();?>"><?php _e( 'Unread', 'buddypress' ); ?></a>
+								<?php endif; ?>
+								 |
+								<a class="delete" href="<?php bp_message_thread_delete_link(); ?>"><?php _e( 'Delete', 'buddypress' ); ?></a>						
 							<?php
 
 							/**
@@ -141,6 +148,7 @@ do_action( 'bp_before_member_messages_loop' ); ?>
 							 */
 							do_action( 'bp_messages_thread_options' ); ?>
 						</td>
+						<?php endif; ?>
 					</tr>
 
 				<?php endwhile; ?>
@@ -148,10 +156,11 @@ do_action( 'bp_before_member_messages_loop' ); ?>
 			</tbody>
 
 		</table><!-- #message-threads -->
-
-		<div class="messages-options-nav">
-			<?php bp_messages_bulk_management_dropdown(); ?>
-		</div><!-- .messages-options-nav -->
+		<?php if ( is_super_admin() ) : ?>
+			<div class="messages-options-nav">
+				<?php bp_messages_bulk_management_dropdown(); ?>
+			</div><!-- .messages-options-nav -->
+		<?php endif; ?>
 
 		<?php wp_nonce_field( 'messages_bulk_nonce', 'messages_bulk_nonce' ); ?>
 	</form>

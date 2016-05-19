@@ -52,6 +52,7 @@ if(!function_exists('deploy_mikado_scripts_customized')) {
     wp_enqueue_script('jplist', get_stylesheet_directory_uri().'/js/plugins/jplist.core.min.js', array('jquery'), false, true);
     wp_enqueue_script('jplistcounter', get_stylesheet_directory_uri().'/js/plugins/jplist.counter-control.min.js', array('jquery'), false, true);
     wp_enqueue_script('jplistsort', get_stylesheet_directory_uri().'/js/plugins/jplist.sort-buttons.min.js', array('jquery'), false, true);    
+    wp_enqueue_script('blockui', get_stylesheet_directory_uri().'/js/plugins/jquery.blockUI.js', array('jquery'), false, true);    
   }
   add_action('wp_enqueue_scripts', 'deploy_mikado_scripts_customized');
 }
@@ -75,6 +76,7 @@ function remove_admin_bar() {
 require 'signup.php';
 require 'registration.php';
 require 'custom-login-form.php';
+require 'company-list.php';
 
 // add_filter('bp_head','bp_guest_redirect',1);
 // function bp_guest_redirect() {

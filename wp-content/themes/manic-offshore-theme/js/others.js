@@ -128,11 +128,8 @@ jQuery(document).ready(function($) {
   var currentUrl = document.location.href;
   var oldUrl = document.location.href;
 
-  console.log(currentUrl);
-
   if(currentUrl.substr(-1) == '/') {
-    currentUrl = currentUrl.substring(0, currentUrl.length - 1);
-    console.log(currentUrl)
+    currentUrl = currentUrl.substring(0, currentUrl.length - 1);  
   }
 
   if(currentUrl.indexOf('client-dashboard') > -1 || currentUrl.indexOf('profile') > -1 || currentUrl.indexOf('settings') > -1) {
@@ -143,11 +140,15 @@ jQuery(document).ready(function($) {
         urlArr.splice(4, 1);
       }
 
-      console.log(urlArr)
-      var newUrl = urlArr.join("/");
+      var newUrl = urlArr.join("/");      
 
-      history.pushState({}, null, newUrl);
+      history.pushState({page: 'new'}, "new url", newUrl);
   }
+
+  $(window).on('load', function(){
+      // history.back();
+  });
+
 
   // window.onbeforeunload = function(event)
   // {
@@ -159,9 +160,33 @@ jQuery(document).ready(function($) {
   // $(window).on('beforeunload', function(e){
   //     // your logic here
   //     e.preventDefault();
-  //     history.pushState({}, null, oldUrl);
-  //     return '';
+  //     // history.pushState({}, null, oldUrl);
+  //     location.assign(oldUrl);
+  //     return 'Reload the page';
   // });
+
+  var a, b = false,
+    c = oldUrl;
+
+
+
+  // if(history.state.page == 'new') {
+  //   window.onbeforeunload = function (e) {
+  //     console.log(window.event);
+  //     if (b) return;
+  //     a = setTimeout(function () {
+  //         b = true;
+
+  //         window.location.href = c;
+  //         c = oldUrl;          
+  //     }, 500);
+  //     return "";
+  //   }  
+  // }
+  
+  window.onunload = function () {
+      clearTimeout(a);
+  }
 
 
   // hide star message

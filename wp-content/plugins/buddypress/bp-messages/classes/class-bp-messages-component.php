@@ -191,7 +191,7 @@ class BP_Messages_Component extends BP_Component {
 			'parent_url'      => $messages_link,
 			'parent_slug'     => $slug,
 			'screen_function' => 'messages_screen_sentbox',
-			'position'        => 20,
+			'position'        => 30,
 			'user_has_access' => $access
 		);
 
@@ -201,7 +201,7 @@ class BP_Messages_Component extends BP_Component {
 			'parent_url'      => $messages_link,
 			'parent_slug'     => $slug,
 			'screen_function' => 'messages_screen_compose',
-			'position'        => 30,
+			'position'        => 20,
 			'user_has_access' => $access
 		);
 
