@@ -418,5 +418,9 @@
 <script>
 (function($){
 	$('.field_title').find("select").wrap("<div class='custom-input-class-select-container'></div>");
+	$('.field_preferred-currency').find("select").wrap("<div class='custom-input-class-select-container'></div>");
+
+	if($(".field_title").find("select").length > 0) $(".field_title").find("select").find("option")[0].remove();
+  	if($(".field_preferred-currency").find("select").length > 0) $(".field_preferred-currency").find("select").find("option")[0].remove();
 })(jQuery);
 </script>

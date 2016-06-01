@@ -21,7 +21,7 @@ class CreateCompaniesTable extends Migration
             $table->decimal('price', 10, 0);
             $table->decimal('price_eu', 10, 0);
             $table->boolean('shelf');
-            $table->boolean('status')->default(false);
+            $table->boolean('status')->default(false);            
             $table->integer('company_type_id')->unsigned();
             // $table->bigInteger('wpuser_id')->unsigned()->nullable();        
             // $table->date('renewal_date')->nullable();

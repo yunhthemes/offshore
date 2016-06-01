@@ -127,7 +127,11 @@ if ( bp_has_profile( 'profile_group_id=' . bp_get_current_profile_group_id() ) )
 		$(".field_surname").find("input").prop("disabled", true);
 		$(".field_date-of-birth").find("input").prop("disabled", true);
 
+		if($(".field_title").find("select").length > 0) $(".field_title").find("select").find("option")[0].remove();
+  		if($(".field_preferred-currency").find("select").length > 0) $(".field_preferred-currency").find("select").find("option")[0].remove();
+
 		$(".field_title").find("select").wrap("<div class='custom-input-class-select-container'></div>");
+		$(".field_preferred-currency").find("select").wrap("<div class='custom-input-class-select-container'></div>");
 	
 		$(".field_home-address").find("input").attr("placeholder", "Street");
 		$(".field_home-address-2").find("input").attr("placeholder", "City");

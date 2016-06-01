@@ -34,6 +34,7 @@ Route::get('api/companytype/{id}', ['uses' => 'ApiController@companytype']);
 Route::get('api/usercompanies/{id}', ['uses' => 'ApiController@usercompanies']);
 Route::get('api/usercompanydetails/{id}/{user_id}', ['uses' => 'ApiController@usercompanydetails']);
 Route::delete('api/removeusercompanies/{company_wpuser_id}', ['uses' => 'ApiController@removeusercompanies']);
+Route::put('api/updateuserunavailablecompainesdeletestatus/{company_wpuser_id}', ['uses' => 'ApiController@updateuserunavailablecompainesdeletestatus']);
 Route::get('api/gettimezonelist/{country}/{city}', ['uses' => 'ApiController@gettimezonelist']);
 
 Route::post('api/retrievesavedcompany', ['uses' => 'ApiController@retrievesavedcompany']);

@@ -64,7 +64,14 @@ function get_ip_address() {
 
 function registration_form() {
     $ip = get_ip_address();
+    $current_user = wp_get_current_user();
     $user_id = get_current_user_id();
+    $user_name = $current_user->user_login;    
+    
+    global $wpdb;
+    $field_id = $wpdb->get_var( "SELECT parent_id FROM wp_bp_xprofile_fields WHERE name = 'USD$'");
+    $currency = $wpdb->get_var( "SELECT value FROM wp_bp_xprofile_data WHERE user_id = $user_id AND field_id = $field_id" );
+
     echo '
     <script>
     (function($) {
@@ -78,7 +85,7 @@ function registration_form() {
 
             $.getJSON("http://ipinfo.io", function(data){
                 country = data.country;
-            });
+            });            
 
             ///////////
             //// VALIDATIONS
@@ -601,6 +608,7 @@ function registration_form() {
                     $(obj).fileupload({
                         url: url,
                         dataType: "json",
+                        formData: { "user_name" : "'.$user_name.'" },
                         done: function (e, data) {
 
                             var shortText = jQuery.trim(data.result.file.org_name).substring(0, 30).trim(this);
@@ -1353,6 +1361,7 @@ function registration_form() {
 
             function initTheForms(data, selectedCompanyTypeId, selectedCompanyTypeName, selectedCompanyTypePrice) {
 
+                data.companies.currency = "'.$currency.'";
                 newdata["companies"] = data.companies;
                 createTemplateAndAppendHtml("#shelf-companies-template", newdata, "#shelf-companies");
 
@@ -1835,7 +1844,7 @@ function registration_form() {
                         <h6>Price</h6>
                     </div>
                     <div class="each-header"></div>
-                </div>   
+                </div>  
 
                 {{#companies}}                                       
                     <div class="content">
@@ -1845,8 +1854,12 @@ function registration_form() {
                         <div class="each-content">
                             <p>{{ incorporation_date }}</p>    
                         </div>
-                        <div class="each-content">
-                            <p>${{ price }}</p>                            
+                        <div class="each-content">  
+                            {{#ifCond ../companies.currency "==" "EURO€" }}                      
+                                <p>${{ price_eu }}</p>                            
+                            {{else}}
+                                <p>${{ price }}</p>                            
+                            {{/ifCond}}
                         </div>
                         <div class="each-content">
                             <button data-company-name="{{name}}" data-company-id="{{id}}" data-company-price="{{price}}" class="custom-submit-class buy-now" data-hash="2">Buy now</button>

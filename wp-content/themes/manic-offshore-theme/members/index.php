@@ -79,7 +79,7 @@
 </div>
 <div id="not-available-popup" style="display:none; cursor: default;">
 	<p>The selected shelf company is no longer available. Please make another selection.</p>
-	<a href="<?php echo home_url( '/company-formation-order/' ); ?>" class="custom-submit-class" style="min-height: auto!important;margin-top:10px;">Incorporate now!</a>
+	<a href="<?php echo home_url( '/company-formation-order/' ); ?>" id="redirect-now" class="custom-submit-class" style="min-height: auto!important;margin-top:10px;">Incorporate now!</a>
 </div>
 <script id="user-companies-template" type="text/x-handlebars-template">	
     <div id="company-lists" class="box jplist">
@@ -148,10 +148,14 @@
 								<a href="<?php echo get_permalink( get_page_by_path( 'Company formation order' ) ); ?>?savedcompany={{id}}" data-company-id="{{id}}"><button class="custom-submit-class">Continue registration</button></a>
 							{{else}}
 								{{#ifCond owner "==" "1"}}
-								<a href="#" data-company-id="{{id}}" class="company-details"><button class="custom-submit-class">Company details</button></a>
-								{{else}}
-								<button class="custom-submit-class disabled-btn">Not available</button>
-								<a href="#" data-company-id="{{id}}" data-companywpuser-id="{{ wpusers.0.pivot.id }}" class="delete-saved-company"><i class="fa fa-times" aria-hidden="true"></i></a>
+									<a href="#" data-company-id="{{id}}" class="company-details"><button class="custom-submit-class">Company details</button></a>
+								{{else}}									
+									{{#ifCond return "==" "1"}}
+										<button class="custom-submit-class expire-btn disabled-btn" data-companywpuser-id="{{ wpusers.0.pivot.id }}">Not available</button>
+										<a href="#" data-company-id="{{id}}" data-companywpuser-id="{{ wpusers.0.pivot.id }}" class="delete-saved-company"><i class="fa fa-times" aria-hidden="true"></i></a>
+									{{else}}
+										<button class="custom-submit-class expire-btn" data-companywpuser-id="{{ wpusers.0.pivot.id }}">Continue registration</button>
+									{{/ifCond}}
 								{{/ifCond}}
 		                    {{/ifCond}}		                    
 		                </div>                   
@@ -508,8 +512,12 @@
 
             });       
 
-            $("body").on("click", ".disabled-btn", function(e){
+            $("body").on("click", ".expire-btn", function(e){
             	e.preventDefault();
+
+            	var companywpuser_id = $(this).data("companywpuser-id");
+
+            	$("#not-available-popup").find("#redirect-now").attr('data-companywpuser-id', companywpuser_id);         	
 
             	$.blockUI({ 
             		message: $("#not-available-popup"),
@@ -521,6 +529,28 @@
             		},
             		onOverlayClick: $.unblockUI
             	});
+
+            	
+            });
+
+            $("body").on("click", "#redirect-now", function(e){
+            	e.preventDefault();
+
+            	data = {}; 
+
+            	var companywpuser_id = $(this).data("companywpuser-id");
+
+            	var response = makeRequest(data, "<?php echo SITEURL; ?>/b/api/updateuserunavailablecompainesdeletestatus/"+companywpuser_id, "PUT");
+
+            	var redirect_to_url = $(this).attr("href");
+
+            	response.done(function(data, textStatus, jqXHR){                    
+	                if(jqXHR.status==200) {
+	                    
+	                    window.location.href = redirect_to_url;
+
+	                }
+	            });
             });
         }
 

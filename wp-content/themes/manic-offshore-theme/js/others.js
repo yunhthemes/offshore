@@ -111,9 +111,7 @@ jQuery(document).ready(function($) {
 
   /// cheat
 
-  $(".profile-fields a").attr("href","#");
-
-  if($(".field_title").find("select").length > 0) $(".field_title").find("select").find("option")[0].remove();
+  $(".profile-fields a").attr("href","#");  
 
   if($("#copy-banner").length > 0) {
     
@@ -136,33 +134,34 @@ jQuery(document).ready(function($) {
 
   // console.log(urlArr)
   // console.log(urlArr.length) // url length 6 is profile landing page
+  if(currentUrl.indexOf('client-dashboard') > -1) {
+    if(urlArr.length == 6 || currentUrl.indexOf('profile') > -1 || currentUrl.indexOf('settings') > -1) {
 
-  if(urlArr.length == 6 || currentUrl.indexOf('profile') > -1 || currentUrl.indexOf('settings') > -1) {
-      
-      if(urlArr[2]=="clients.manic.com.sg" || urlArr[2]=="localhost:8888") {
-        urlArr.splice(5, 1);
-        urlArr = urlArr.slice(0, 5);
-      }else {
-        urlArr.splice(4, 1);
-        urlArr = urlArr.slice(0, 4);
-      }
+        if(urlArr[2]=="clients.manic.com.sg" || urlArr[2]=="localhost:8888") {
+          urlArr.splice(5, 1);
+          urlArr = urlArr.slice(0, 5);
+        }else {
+          urlArr.splice(4, 1);
+          urlArr = urlArr.slice(0, 4);
+        }
 
-      var newUrl = urlArr.join("/") + "/profile"; 
+        var newUrl = urlArr.join("/") + "/profile"; 
 
-      history.pushState({page: 'new'}, "new url", newUrl);
-  }
-  else {
-      
-      if(urlArr[2]=="clients.manic.com.sg" || urlArr[2]=="localhost:8888") {
-        urlArr.splice(5, 1);
-      }else {
-        urlArr.splice(4, 1);
-      }      
+        history.pushState({page: 'new'}, "new url", newUrl);
+    }
+    else {
+        
+        if(urlArr[2]=="clients.manic.com.sg" || urlArr[2]=="localhost:8888") {
+          urlArr.splice(5, 1);
+        }else {
+          urlArr.splice(4, 1);
+        }      
 
-      var newUrl = urlArr.join("/");      
+        var newUrl = urlArr.join("/");      
 
-      history.pushState({page: 'new'}, "new url", newUrl);
-  }
+        history.pushState({page: 'new'}, "new url", newUrl);
+    }
+  }  
 
   $(window).on('load', function(){
       // history.back();

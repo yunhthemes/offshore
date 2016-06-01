@@ -80,6 +80,9 @@
   .mkdf-main-menu > ul > li.mkdf-active-item > a {
     color: @light-blue !important;
     // color: #fff;
+    span.no {
+      background-color: @light-blue;
+    }
   }
 
 //}
@@ -264,6 +267,28 @@
     height: 0 !important;
     padding: 0 !important;
     overflow: hidden;
+  }
+  a.message {
+    position: relative;
+    top: -8px;
+    color: @dark-blue!important;
+    i {
+      font-size: 17px;
+    }
+    span {
+      display: inline-block;
+      background: @dark-blue;
+      width: 16px;
+      height: 16px;
+      .round(16px);
+      color: @white;
+      position: absolute;
+      top: -9px;
+      text-align: center;
+      left: 12px;
+      font-size: 10px;
+      .transition(.15s);
+    }
   }
 }
 

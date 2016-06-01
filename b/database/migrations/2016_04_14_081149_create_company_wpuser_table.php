@@ -26,6 +26,7 @@ class CreateCompanyWpuserTable extends Migration
             $table->string('vat_reg_no')->nullable();
             $table->string('reg_office')->nullable();            
             $table->boolean('status')->default(false);
+            $table->boolean('return')->default(false);
             $table->foreign('company_id')->references('id')->on('companies');
             $table->foreign('wpuser_id')->references('ID')->on('wp_users');
             $table->timestamps('created_at');

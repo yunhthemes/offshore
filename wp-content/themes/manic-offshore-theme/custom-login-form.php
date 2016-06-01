@@ -3,10 +3,15 @@ add_filter('widget_text', 'do_shortcode');
 
 function custom_menu_item_shortcode() {
 	if ( is_user_logged_in() ):
+		$message_url = esc_url( get_permalink( get_page_by_title( 'Client services dashboard' ) ) ) . bp_core_get_user_displayname( bp_loggedin_user_id() ) . '/messages';
+		$message_count = messages_get_unread_count();
 		echo '
 		<div id="custom-right-header">
 	    	<nav class="mkdf-main-menu mkdf-drop-down mkdf-default-nav">
 				<ul>
+					<li>
+						<a href="'.$message_url.'" class="message"><i class="fa fa-envelope" aria-hidden="true"></i><span class="no">'.$message_count.'</span></a>
+					</li>
 					<li class="menu-item menu-item-type-post_type menu-item-object-page narrow">
 			    	    <a href="'.esc_url( get_permalink( get_page_by_title( 'Client services dashboard' ) ) ).'"><span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon null fa"></i></span><span class="item_text">Client Dashboard</span></span><span class="plus"></span></span></a>
 			    	</li>

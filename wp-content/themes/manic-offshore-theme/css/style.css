@@ -471,6 +471,10 @@ header.mkdf-page-header .mkdf-menu-area .mkdf-vertical-align-containers > .mkdf-
 .mkdf-main-menu > ul > li.mkdf-active-item > a {
   color: #b1cfd4 !important;
 }
+.mkdf-main-menu > ul > li:hover > a span.no,
+.mkdf-main-menu > ul > li.mkdf-active-item > a span.no {
+  background-color: #b1cfd4;
+}
 #custom-right-header {
   position: relative;
   top: 4px;
@@ -628,6 +632,35 @@ header.mkdf-page-header .mkdf-menu-area .mkdf-vertical-align-containers > .mkdf-
   height: 0 !important;
   padding: 0 !important;
   overflow: hidden;
+}
+.mkdf-main-menu a.message {
+  position: relative;
+  top: -8px;
+  color: #008b9b !important;
+}
+.mkdf-main-menu a.message i {
+  font-size: 17px;
+}
+.mkdf-main-menu a.message span {
+  display: inline-block;
+  background: #008b9b;
+  width: 16px;
+  height: 16px;
+  -webkit-border-radius: 16px;
+  border-radius: 16px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  color: #ffffff;
+  position: absolute;
+  top: -9px;
+  text-align: center;
+  left: 12px;
+  font-size: 10px;
+  -webkit-transition: all 0.15s ease-out 0s;
+  -moz-transition: all 0.15s ease-out 0s;
+  -o-transition: all 0.15s ease-out 0s;
+  transition: all 0.15s ease-out 0s;
 }
 .mkdf-page-header .mkdf-sticky-header .mkdf-vertical-align-containers .mkdf-position-left {
   width: 100%;
@@ -2499,6 +2532,9 @@ form.wpcf7-form .wpcf7-response-output {
   display: inline-block;
   width: 100%;
   vertical-align: middle;
+}
+.company-list li {
+  margin-bottom: 0px !important;
 }
 .company-list li a {
   color: #646464;

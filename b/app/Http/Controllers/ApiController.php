@@ -21,14 +21,20 @@ class ApiController extends Controller
     //
     public function companytype($id) {
     	
-		$company_types = CompanyType::find($id);
+  		$company_types = CompanyType::find($id);
 
-		if($company_types) {
-			$company_types->companies;
-			return $company_types;
-		}else
-			return response()->json(['message' => 'no resource was found'], 404);
+  		if($company_types) {
+  			$company_types->companies;
+  			return $company_types;
+  		}else
+  			return response()->json(['message' => 'no resource was found'], 404);
     		
+    }
+
+    public function updateuserunavailablecompainesdeletestatus($id) {
+        $company_wpuser = CompanyWpuser::find($id);
+        $company_wpuser->return = 1;
+        $company_wpuser->save();
     }
 
     public function removeusercompanies($id, Request $request) {
@@ -73,14 +79,19 @@ class ApiController extends Controller
         foreach ($wpuser_companies as $key => $wpuser_company) {
             $company_id = $wpuser_company->id;
             $owner = false;
+            $return = false;
 
             if($wpuser_company->status==1) {
               // if company is bought, check whether its this user's company
               $wpuser_companies_status = CompanyWpuser::where('company_id', $company_id)->where('wpuser_id', $id)->where('status', 1)->get();
+              $wpuser_companies_return = CompanyWpuser::where('company_id', $company_id)->where('wpuser_id', $id)->where('return', 1)->get();
+
               if(count($wpuser_companies_status)>0) $owner = true;
+              if(count($wpuser_companies_return)>0) $return = true;
             }            
 
             $wpuser_company->owner = $owner;
+            $wpuser_company->return = $return;
             $wpuser_company->incorporation_date = date('d M Y', strtotime($wpuser_company->incorporation_date));
             $wpuser_company->wpusers[0]->pivot->renewal_date = date('d M Y', strtotime($wpuser_company->wpusers[0]->pivot->renewal_date));
         }
@@ -122,12 +133,18 @@ class ApiController extends Controller
 
         // $type = $request->type;
 
+        $user_name = $request->user_name;
+
         if ($request->hasFile('files')) {
             $file = $request->file('files');   
-            $destinationPath = public_path() . "/uploads/";
+            $destinationPath = public_path() . "/uploads/" . $user_name . "/";
+
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0777, true);
+            }
 
             $orgFilename     = $file->getClientOriginalName();
-            $filename        = str_random(6) . '_' . $file->getClientOriginalName();
+            $filename        = $file->getClientOriginalName();
             $uploadSuccess   = $file->move($destinationPath, $filename);
         }
 
