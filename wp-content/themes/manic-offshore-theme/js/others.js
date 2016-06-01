@@ -132,13 +132,32 @@ jQuery(document).ready(function($) {
     currentUrl = currentUrl.substring(0, currentUrl.length - 1);  
   }
 
-  if(currentUrl.indexOf('client-dashboard') > -1 || currentUrl.indexOf('profile') > -1 || currentUrl.indexOf('settings') > -1) {
-      var urlArr = currentUrl.split('/');
+  var urlArr = currentUrl.split('/');
+
+  // console.log(urlArr)
+  // console.log(urlArr.length) // url length 6 is profile landing page
+
+  if(urlArr.length == 6 || currentUrl.indexOf('profile') > -1 || currentUrl.indexOf('settings') > -1) {
+      
+      if(urlArr[2]=="clients.manic.com.sg" || urlArr[2]=="localhost:8888") {
+        urlArr.splice(5, 1);
+        urlArr = urlArr.slice(0, 5);
+      }else {
+        urlArr.splice(4, 1);
+        urlArr = urlArr.slice(0, 4);
+      }
+
+      var newUrl = urlArr.join("/") + "/profile"; 
+
+      history.pushState({page: 'new'}, "new url", newUrl);
+  }
+  else {
+      
       if(urlArr[2]=="clients.manic.com.sg" || urlArr[2]=="localhost:8888") {
         urlArr.splice(5, 1);
       }else {
         urlArr.splice(4, 1);
-      }
+      }      
 
       var newUrl = urlArr.join("/");      
 
