@@ -579,6 +579,9 @@ input.error, textarea.error {
 }
 
 #registration-page-form-2 {
+  .cloneable {
+    display: none;
+  }
   .intl-tel-input {
     width: 100%;
     &.allow-dropdown {
@@ -602,6 +605,21 @@ input.error, textarea.error {
     visibility: hidden;
     position: absolute;
   }  
+  .pasteclone {
+    label {
+      display: inline-block;
+    }  
+    .remove-this {
+      float: right;
+      font-family: "Open Sans",serif;
+      font-size: 15px;
+      color: #767676;
+      text-align: right;
+      display: inline-block;
+    }
+  }
+  
+
 }
 
 #registration-page-form-3 {

@@ -281,6 +281,7 @@ HTML;
 		if ( '' === $template_id ) {
 			die( 'Error: Vc_Templates_Panel_Editor::renderFrontendTemplate:1' );
 		}
+		WPBMap::addAllMappedShortcodes();
 		if ( 'my_templates' === $template_type ) {
 			$saved_templates = get_option( $this->option_name );
 			vc_frontend_editor()->setTemplateContent( $saved_templates[ $template_id ]['template'] );
@@ -409,6 +410,7 @@ HTML;
 		if ( ! isset( $template_id, $template_type ) || '' === $template_id || '' === $template_type ) {
 			die( 'Error: Vc_Templates_Panel_Editor::renderBackendTemplate:1' );
 		}
+		WPBMap::addAllMappedShortcodes();
 		if ( 'my_templates' === $template_type ) {
 			$saved_templates = get_option( $this->option_name );
 
@@ -447,11 +449,12 @@ HTML;
 		$template_id = vc_request_param( 'template_unique_id' );
 		$template_type = vc_request_param( 'template_type' );
 		global $current_user;
-		get_currentuserinfo();
+		wp_get_current_user();
 
 		if ( ! isset( $template_id, $template_type ) || '' === $template_id || '' === $template_type ) {
 			die( __( 'Error: wrong template id.', 'js_composer' ) );
 		}
+		WPBMap::addAllMappedShortcodes();
 		if ( 'my_templates' === $template_type ) {
 			$saved_templates = get_option( $this->option_name );
 
@@ -726,7 +729,7 @@ HTML;
 	 */
 	public function sortTemplatesByCategories( array $data ) {
 		$buffer = $data;
-		usort( $buffer, array( &$this, 'cmpCategory' ) );
+		uasort( $buffer, array( &$this, 'cmpCategory' ) );
 
 		return $buffer;
 	}
@@ -740,7 +743,7 @@ HTML;
 	 */
 	public function sortTemplatesByNameWeight( array $data ) {
 		$buffer = $data;
-		usort( $buffer, array( &$this, 'cmpNameWeight' ) );
+		uasort( $buffer, array( &$this, 'cmpNameWeight' ) );
 
 		return $buffer;
 	}

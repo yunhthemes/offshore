@@ -278,7 +278,8 @@
     span {
       display: inline-block;
       background: @dark-blue;
-      width: 16px;
+      // width: 16px;
+      padding: 0 5px;
       height: 16px;
       .round(16px);
       color: @white;
@@ -337,9 +338,35 @@
 }
 
 
+#sitewide-notice {
+  #message {
+    p {
+      background-color: #008B9B;
+      border: 1px solid #FFF;
+      color: #FFF;
+      position: relative;
+      strong {
+        text-transform: uppercase;
+      }
+      a {
+        position: absolute;
+        color: white;
+        right: -10px;
+        top: -13px;
+        background: #008B9B;
+        padding: 0 9px;
+        .round(100px);
+        font-size: 13px;
+        font-weight: bold;
+      }
+    }
+  }
+} 
 
-
-
+.arrow_right {
+  position: relative!important;
+  top: 2px!important;
+}
 
 
 

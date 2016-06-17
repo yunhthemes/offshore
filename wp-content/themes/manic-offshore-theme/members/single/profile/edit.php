@@ -38,7 +38,7 @@ if ( bp_has_profile( 'profile_group_id=' . bp_get_current_profile_group_id() ) )
 
 		<?php $index = 0; while ( bp_profile_fields() ) : bp_the_profile_field(); ?>
 
-			<?php if($index==2): ?>
+			<?php if($index==5): ?>
 				<div class="editfield field_1 field_first-name required-field visibility-public alt field_type_textbox">				
 					<label for="email">Email</label>		
 					<input id="email" type="text" value="<?php echo bp_get_displayed_user_email(); ?>" aria-required="true" disabled="">					
@@ -127,8 +127,8 @@ if ( bp_has_profile( 'profile_group_id=' . bp_get_current_profile_group_id() ) )
 		$(".field_surname").find("input").prop("disabled", true);
 		$(".field_date-of-birth").find("input").prop("disabled", true);
 
-		if($(".field_title").find("select").length > 0) $(".field_title").find("select").find("option")[0].remove();
-  		if($(".field_preferred-currency").find("select").length > 0) $(".field_preferred-currency").find("select").find("option")[0].remove();
+		// if($(".field_title").find("select").length > 0) $(".field_title").find("select").find("option")[0].remove();
+  		// if($(".field_preferred-currency").find("select").length > 0) $(".field_preferred-currency").find("select").find("option")[0].remove();
 
 		$(".field_title").find("select").wrap("<div class='custom-input-class-select-container'></div>");
 		$(".field_preferred-currency").find("select").wrap("<div class='custom-input-class-select-container'></div>");
@@ -176,10 +176,15 @@ if ( bp_has_profile( 'profile_group_id=' . bp_get_current_profile_group_id() ) )
 
 		$(".field_date-of-birth").find("input").datepicker({ dateFormat: 'dd/mm/y' });
 
+		// $(".field_work-telephone").find("input").attr("placeholder", "Telephone");
+		// $(".field_home-telephone").find("input").attr("placeholder", "Telephone");
+		// $(".field_mobile-telephone").find("input").attr("placeholder", "Telephone");
+
 		function initInputTel($selector) {
             $selector.intlTelInput({
                 utilsScript: "<?php echo JS; ?>/plugins/utils.js",
-                nationalMode: false
+                nationalMode: false,
+				autoPlaceholder: false
             });
             $selector.intlTelInput("setCountry", "sg");   
         }
@@ -188,7 +193,9 @@ if ( bp_has_profile( 'profile_group_id=' . bp_get_current_profile_group_id() ) )
 		initInputTel($(".field_home-telephone").find("input"));
 		initInputTel($(".field_mobile-telephone").find("input"));
 
-		$("#profile-edit-form").validate({
+
+		var $form = $("#profile-edit-form");
+		$form.validate({
 			rules: {
 				"field_19": {
 					"required": {
@@ -276,7 +283,22 @@ if ( bp_has_profile( 'profile_group_id=' . bp_get_current_profile_group_id() ) )
 					}
 				}
 			}
-		})
+		});
+
+		$("#profile-group-edit-submit").on("click", function(e){
+			e.preventDefault();
+
+
+			if($form.valid()) {
+				$(".field_first-name").find("input").prop("disabled", false);				
+				$(".field_surname").find("input").prop("disabled", false);
+				$(".field_nationality").find("input").prop("disabled", false);
+				// $(".field_date-of-birth").find("input").prop("disabled", false);
+
+				$form.submit();
+			}
+
+		});
 		
 	});
 </script>

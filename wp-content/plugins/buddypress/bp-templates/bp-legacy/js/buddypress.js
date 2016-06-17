@@ -1658,7 +1658,9 @@ jq(document).ready( function() {
 						link.prop('title', BP_PM_Star.strings.title_unstar_thread );
 					}
 				}
+				window.location.href = link.data('url');
 			}
+			console.log(link);
 		});
 		return false;
 	};

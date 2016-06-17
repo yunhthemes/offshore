@@ -342,6 +342,7 @@ $.Autocompleter = function(input, options) {
 	function parse(data) {
 		var parsed = [];
 		var rows = data.split("\n");
+		console.log(rows);
 		for (var i=0; i < rows.length; i++) {
 			var row = $.trim(rows[i]);
 			if (row) {

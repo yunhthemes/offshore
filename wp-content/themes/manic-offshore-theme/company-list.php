@@ -1,7 +1,29 @@
 <?php 
 
 function company_list() {
-    echo '<script>
+    $page = get_page_by_title( 'Offshore companies' );
+    extract( shortcode_atts( array(
+        'parent' => $page->ID,
+        'type' => 'page',
+        'perpage' => -1
+    ), $atts ) );
+    $output = '<div id="companylist"><div class="field-container"><div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div><ul class="solution-list">';
+    $args = array(
+        'post_parent' => $parent,
+        'post_type' => $type,
+        'posts_per_page' => $perpage,
+        'sort_column'   => 'menu_order',
+        'orderby'=> 'title', 
+        'order' => 'ASC'
+    );
+    $solution_query = new  WP_Query( $args );
+    while ( $solution_query->have_posts() ) : $solution_query->the_post();
+        $output .= '<li><a href="'.get_permalink().'">'.get_the_title().'</a></li>';
+    endwhile;
+    wp_reset_query();
+    $output .= '</ul></div></div>';
+    echo $output;
+    /*echo '<script>
     (function($) {
         $(document).ready(function(){
         	//////////
@@ -93,7 +115,7 @@ function company_list() {
                     if(jqXHR.status==200) {
 
                     	newdata["companylists"] = data;
-                        createTemplateAndAppendHtml("#companylist-template", newdata, "#companylist")
+                        // createTemplateAndAppendHtml("#companylist-template", newdata, "#companylist")
 
                     }
                 });
@@ -131,7 +153,9 @@ function company_list() {
     </script>
     <div id="companylist">
     	<!-- JS CONTENT GOES HERE -->
-    </div>';
+
+
+    </div>';*/
 }
 
 function compay_list_function() { 

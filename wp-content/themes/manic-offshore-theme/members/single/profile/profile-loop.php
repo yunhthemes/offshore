@@ -22,38 +22,39 @@ do_action( 'bp_before_profile_loop_content' ); ?>
 
 			<div class="bp-widget <?php bp_the_profile_group_slug(); ?>">
 
-				<!-- <h4><?php bp_the_profile_group_name(); ?></h4> -->
+				<!-- <h4><?php bp_the_profile_group_name(); ?></h4> -->				
 
 				<table class="profile-fields">
 
 					<?php $index = 0; while ( bp_profile_fields() ) : bp_the_profile_field(); ?>
 						
 						<?php if ( bp_field_has_data() ) : ?>
-							
 
-							<?php if($index==2): ?>
-							<tr class="field_1 field_email required-field visibility-public alt field_type_textbox">
+							<?php if(strpos(bp_the_profile_field_name(), 'telephone') || strpos(bp_the_profile_field_name(), 'address') || strpos(bp_the_profile_field_name(), 'currency')): ?>
+								<?php if($email==false): $email = true; ?>
+								<tr class="field_1 field_email required-field visibility-public alt field_type_textbox">
 
-								<td class="label 1"><h6>Email</h6></td>
+									<td class="label 1"><h6>Email</h6></td>
 
-								<td class="data">
-									<p><a href="#" rel="nofollow"><?php echo bp_get_displayed_user_email(); ?></a></p>
-								</td>
+									<td class="data">
+										<p><a href="#" rel="nofollow"><?php echo bp_get_displayed_user_email(); ?></a></p>
+									</td>
 
-							</tr>
+								</tr>
+								<?php endif; ?>
 							<?php endif; ?>
 
 							<tr<?php bp_field_css_class(); ?>>
 
-								<td class="label <?php echo $index; ?>"><h6><?php bp_the_profile_field_name(); ?></h6></td>
+								<td class="label <?php echo $index; ?>"><h6><?php echo bp_the_profile_field_name(); ?></h6></td>
 
 								<td class="data"><?php bp_the_profile_field_value(); ?></td>
 
-							</tr>
-
-							<?php $index++; ?>
+							</tr>							
 
 						<?php endif; ?>
+
+						<?php $index++; ?>
 
 						<?php
 

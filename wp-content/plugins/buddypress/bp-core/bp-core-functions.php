@@ -1034,7 +1034,7 @@ function bp_core_current_time( $gmt = true, $type = 'mysql' ) {
 	 *
 	 * @param string $value Current GMT time.
 	 */
-	return apply_filters( 'bp_core_current_time', current_time( $type, $gmt ) );
+	return apply_filters( 'bp_core_current_time', current_time( $type, false ) );
 }
 
 /**

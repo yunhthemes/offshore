@@ -3,8 +3,11 @@ add_filter('widget_text', 'do_shortcode');
 
 function custom_menu_item_shortcode() {
 	if ( is_user_logged_in() ):
-		$message_url = esc_url( get_permalink( get_page_by_title( 'Client services dashboard' ) ) ) . bp_core_get_user_displayname( bp_loggedin_user_id() ) . '/messages';
+		$message_url = esc_url( bp_loggedin_user_domain() . 'messages' );
 		$message_count = messages_get_unread_count();
+		if($message_count>99) {
+			$message_count = "99+";
+		}
 		echo '
 		<div id="custom-right-header">
 	    	<nav class="mkdf-main-menu mkdf-drop-down mkdf-default-nav">
@@ -53,11 +56,27 @@ function custom_menu_item_shortcode() {
 			    	        <span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon null fa"></i></span><span class="item_text">Sign In</span></span><span class="plus"></span></span>
 			    	    </a>
 			    	    <div id="custom-right-header-signin-box">
-			                 '.wp_login_form( $args ).'
+			                 <!-- '.wp_login_form( $args ).' -->
+			                 <form name="login" id="login" method="post">
+								<p class="login-username">
+									<label for="user_login"></label>
+									<input type="text" name="username" id="username" class="input" value="" size="20" placeholder="Username">
+								</p>
+								<p class="login-password">
+									<label for="user_pass"></label>
+									<input type="password" name="password" id="password" class="input" value="" size="20" placeholder="Password">
+								</p>
+								<!-- <a class="lost" href="'.wp_lostpassword_url().'">Lost your password?</a> -->
+								<p class="login-submit">
+									<input type="submit" id="wp-submit" class="button-primary" value="Sign in">
+									'.wp_nonce_field( 'ajax-login-nonce', 'security' ).'
+								</p>
+								<p class="status"></p>								
+							</form>
 			    	    </div>
 			    	</li>
 			    	<li class="menu-item menu-item-type-post_type menu-item-object-page narrow">
-			    	    <a href="http://clients.manic.com.sg/offshore/sign-up/"><span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon null fa"></i></span><span class="item_text">Sign Up</span></span><span class="plus"></span></span></a>
+			    	    <a href="'.esc_url( get_permalink( get_page_by_title( 'Sign Up' ) ) ).'"><span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon null fa"></i></span><span class="item_text">Sign Up</span></span><span class="plus"></span></span></a>
 			    	</li>
 			    </ul>
 		    </nav>

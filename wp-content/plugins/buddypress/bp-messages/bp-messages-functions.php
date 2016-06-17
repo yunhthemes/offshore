@@ -49,7 +49,7 @@ function messages_new_message( $args = '' ) {
 		'content'    => false,
 		'date_sent'  => bp_core_current_time(),
 		'error_type' => 'bool'
-	), 'messages_new_message' );
+	), 'messages_new_message' );	
 
 	// Bail if no sender or no content.
 	if ( empty( $r['sender_id'] ) || empty( $r['content'] ) ) {

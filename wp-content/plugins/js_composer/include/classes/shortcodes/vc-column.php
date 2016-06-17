@@ -57,8 +57,8 @@ class WPBakeryShortCode_VC_Column extends WPBakeryShortCode {
 						$output .= $this->$method_name();
 					} else {
 						$control_var = 'controls_' . $control;
-						if ( isset( $$control_var ) ) {
-							$output .= $$control_var;
+						if ( isset( ${$control_var} ) ) {
+							$output .= ${$control_var};
 						}
 					}
 				}
@@ -70,15 +70,12 @@ class WPBakeryShortCode_VC_Column extends WPBakeryShortCode {
 				return $output . $controls_add . $controls_edit . $controls_delete . $controls_end;
 			} elseif ( $editAccess ) {
 				return $output . $controls_add . $controls_edit . $controls_end;
-			} else {
-				return $output . $controls_add . $controls_end;
 			}
-
-			return $output . $controls_end;
+            return $output . $controls_add . $controls_end;
 		} elseif ( is_string( $controls ) ) {
 			$control_var = 'controls_' . $controls;
-			if ( 'add' === $controls || ( $editAccess && 'edit' == $controls || $allAccess ) && isset( $$control_var ) ) {
-				return $output . $$control_var . $controls_end;
+			if ( 'add' === $controls || ( $editAccess && 'edit' == $controls || $allAccess ) && isset( ${$control_var} ) ) {
+				return $output . ${$control_var} . $controls_end;
 			}
 
 			return $output . $controls_end;
@@ -87,11 +84,9 @@ class WPBakeryShortCode_VC_Column extends WPBakeryShortCode {
 			return $output . $controls_add . $controls_edit . $controls_delete . $controls_end;
 		} elseif ( $editAccess ) {
 			return $output . $controls_add . $controls_edit . $controls_end;
-		} else {
-			return $output . $controls_add . $controls_end;
 		}
-
-		return $output . $controls_end;
+        
+        return $output . $controls_add . $controls_end;
 	}
 
 	/**
@@ -191,7 +186,7 @@ class WPBakeryShortCode_VC_Column extends WPBakeryShortCode {
 			if ( isset( $this->settings['params'] ) ) {
 				$inner = '';
 				foreach ( $this->settings['params'] as $param ) {
-					$param_value = isset( $$param['param_name'] ) ? $$param['param_name'] : '';
+					$param_value = isset( ${$param['param_name']} ) ? ${$param['param_name']} : '';
 					if ( is_array( $param_value ) ) {
 						// Get first element from the array
 						reset( $param_value );

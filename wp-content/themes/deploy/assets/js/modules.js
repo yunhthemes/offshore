@@ -724,8 +724,20 @@ function mkdfInitVideoBackground(){
 	function mkdfSmoothTransition() {
 		var loader = $('body > .mkdf-smooth-transition-loader.mkdf-mimic-ajax');
 		if (loader.length) {
+			$(window).bind('pageshow', function(event) {
+				if (event.originalEvent.persisted) {
+					loader.fadeOut(500);
+				}
+			});
+
 			$('a').click(function(e) {
 				var a = $(this);
+
+				if(e.ctrlKey === 1) {
+					window.open($(this).attr('href'), '_blank');
+					return false;
+				}
+
 				if (
 					e.which == 1 && // check if the left mouse button has been pressed
 					a.attr('href').indexOf(window.location.host) >= 0 && // check if the link is to the same domain
@@ -1016,7 +1028,7 @@ function mkdfInitVideoBackground(){
     function mkdfInitMobileNavigation() {
         var navigationOpener = $('.mkdf-mobile-header .mkdf-mobile-menu-opener');
         var navigationHolder = $('.mkdf-mobile-header .mkdf-mobile-nav');
-        var dropdownOpener = $('.mkdf-mobile-nav .mobile_arrow, .mkdf-mobile-nav h4, .mkdf-mobile-nav a[href*=#]');
+        var dropdownOpener = $('.mkdf-mobile-nav .mobile_arrow, .mkdf-mobile-nav h4, .mkdf-mobile-nav a[href*="#"]');
         var animationSpeed = 200;
 
         //whole mobile menu opening / closing
@@ -1936,6 +1948,7 @@ function mkdfInitVideoBackground(){
     shortcodes.mkdfInitPortfolioSlider = mkdfInitPortfolioSlider;
     shortcodes.mkdfInitPortfolioLoadMore = mkdfInitPortfolioLoadMore;
     shortcodes.mkdfCheckSliderForHeaderStyle = mkdfCheckSliderForHeaderStyle;
+	shortcodes.mkdfComparisonPricingTables = mkdfComparisonPricingTables;
 
     $(document).ready(function() {
         mkdfInitCounter();
@@ -1973,6 +1986,7 @@ function mkdfInitVideoBackground(){
         mkdfSlider().init();
 		mkdfProcessCarousel.init();
 		mkdfTabbedGallery().init();
+		mkdfComparisonPricingTables().init();
     });
     
     $(window).resize(function() {
@@ -2476,8 +2490,6 @@ function mkdfInitVideoBackground(){
                     trackColor = pieChart.data('track-color');
                 }
 
-                console.log(barColor, trackColor);
-
                 percentageHolder.appear(function() {
                     initToCounterPieChart(pieChart);
                     percentageHolder.css('opacity', '1');
@@ -2600,7 +2612,7 @@ function mkdfInitVideoBackground(){
                     icon = thisTabContent.data('icon-html');
                 }
 
-                var tabNav = thisTabContent.parents('.mkdf-tabs').find('.mkdf-tabs-nav > li > a[href=#'+id+']');
+                var tabNav = thisTabContent.parents('.mkdf-tabs').find('.mkdf-tabs-nav > li > a[href="#'+id+'"]');
 
                 if(typeof(tabNav) !== 'undefined') {
                     tabNav.children('.mkdf-icon-frame').append(icon);
@@ -4383,7 +4395,7 @@ function mkdfInitVideoBackground(){
 						icon = thisTabContent.data('icon-html');
 					}
 
-					var tabNav = thisTabbedGallery.find('.mkdf-tg-nav > li > a[href=#'+id+']').get(0);
+					var tabNav = thisTabbedGallery.find('.mkdf-tg-nav > li > a[href="#'+id+'"]').get(0);
 					tabNav.innerHTML = icon + tabNav.innerHTML;
 				});
 			}
@@ -4407,6 +4419,44 @@ function mkdfInitVideoBackground(){
 			}
 		};
 	};
+
+	function mkdfComparisonPricingTables() {
+		var pricingTablesHolder = $('.mkdf-comparision-pricing-tables-holder');
+
+		var alterPricingTableColumn = function(holder) {
+			var featuresHolder = holder.find('.mkdf-cpt-features-item');
+			var pricingTables = holder.find('.mkdf-comparision-table-holder');
+
+			if(pricingTables.length) {
+				pricingTables.each(function() {
+					var currentPricingTable = $(this);
+					var pricingItems = currentPricingTable.find('.mkdf-cpt-table-content li');
+
+					if(pricingItems.length) {
+						pricingItems.each(function(i) {
+							var pricingItemFeature = featuresHolder[i];
+							var pricingItem = this;
+							var pricingItemContent = pricingItem.innerHTML;
+
+							if(typeof pricingItemFeature !== 'undefined') {
+								pricingItem.innerHTML = '<span class="mkdf-cpt-table-item-feature">'+ $(pricingItemFeature).text() +': </span>' + pricingItemContent;
+							}
+						});
+					}
+				});
+			}
+		};
+
+		return {
+			init: function() {
+				if(pricingTablesHolder.length) {
+					pricingTablesHolder.each(function() {
+						alterPricingTableColumn($(this));
+					});
+				}
+			}
+		}
+	}
 })(jQuery);
 (function($) {
     'use strict';

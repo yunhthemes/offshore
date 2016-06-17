@@ -44,7 +44,6 @@ class DeployMikadoSideAreaOpener extends DeployMikadoWidget {
 	            <span class="mkdf-sai-first-line"></span>
 	            <span class="mkdf-sai-second-line"></span>
 	            <span class="mkdf-sai-third-line"></span>
-
             </span>
         </a>
 

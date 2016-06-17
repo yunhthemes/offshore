@@ -30,6 +30,7 @@
     shortcodes.mkdfInitPortfolioSlider = mkdfInitPortfolioSlider;
     shortcodes.mkdfInitPortfolioLoadMore = mkdfInitPortfolioLoadMore;
     shortcodes.mkdfCheckSliderForHeaderStyle = mkdfCheckSliderForHeaderStyle;
+	shortcodes.mkdfComparisonPricingTables = mkdfComparisonPricingTables;
 
     $(document).ready(function() {
         mkdfInitCounter();
@@ -67,6 +68,7 @@
         mkdfSlider().init();
 		mkdfProcessCarousel.init();
 		mkdfTabbedGallery().init();
+		mkdfComparisonPricingTables().init();
     });
     
     $(window).resize(function() {
@@ -570,8 +572,6 @@
                     trackColor = pieChart.data('track-color');
                 }
 
-                console.log(barColor, trackColor);
-
                 percentageHolder.appear(function() {
                     initToCounterPieChart(pieChart);
                     percentageHolder.css('opacity', '1');
@@ -694,7 +694,7 @@
                     icon = thisTabContent.data('icon-html');
                 }
 
-                var tabNav = thisTabContent.parents('.mkdf-tabs').find('.mkdf-tabs-nav > li > a[href=#'+id+']');
+                var tabNav = thisTabContent.parents('.mkdf-tabs').find('.mkdf-tabs-nav > li > a[href="#'+id+'"]');
 
                 if(typeof(tabNav) !== 'undefined') {
                     tabNav.children('.mkdf-icon-frame').append(icon);
@@ -2477,7 +2477,7 @@
 						icon = thisTabContent.data('icon-html');
 					}
 
-					var tabNav = thisTabbedGallery.find('.mkdf-tg-nav > li > a[href=#'+id+']').get(0);
+					var tabNav = thisTabbedGallery.find('.mkdf-tg-nav > li > a[href="#'+id+'"]').get(0);
 					tabNav.innerHTML = icon + tabNav.innerHTML;
 				});
 			}
@@ -2501,4 +2501,42 @@
 			}
 		};
 	};
+
+	function mkdfComparisonPricingTables() {
+		var pricingTablesHolder = $('.mkdf-comparision-pricing-tables-holder');
+
+		var alterPricingTableColumn = function(holder) {
+			var featuresHolder = holder.find('.mkdf-cpt-features-item');
+			var pricingTables = holder.find('.mkdf-comparision-table-holder');
+
+			if(pricingTables.length) {
+				pricingTables.each(function() {
+					var currentPricingTable = $(this);
+					var pricingItems = currentPricingTable.find('.mkdf-cpt-table-content li');
+
+					if(pricingItems.length) {
+						pricingItems.each(function(i) {
+							var pricingItemFeature = featuresHolder[i];
+							var pricingItem = this;
+							var pricingItemContent = pricingItem.innerHTML;
+
+							if(typeof pricingItemFeature !== 'undefined') {
+								pricingItem.innerHTML = '<span class="mkdf-cpt-table-item-feature">'+ $(pricingItemFeature).text() +': </span>' + pricingItemContent;
+							}
+						});
+					}
+				});
+			}
+		};
+
+		return {
+			init: function() {
+				if(pricingTablesHolder.length) {
+					pricingTablesHolder.each(function() {
+						alterPricingTableColumn($(this));
+					});
+				}
+			}
+		}
+	}
 })(jQuery);

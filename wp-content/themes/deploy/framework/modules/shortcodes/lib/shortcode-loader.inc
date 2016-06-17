@@ -15,6 +15,7 @@ use Deploy\MikadofModules\PieCharts\PieChartWithIcon\PieChartWithIcon;
 use Deploy\MikadofModules\PieCharts\PieChartBasic\PieChartBasic;
 use Deploy\MikadofModules\Shortcodes\AnimationsHolder\AnimationsHolder;
 use Deploy\MikadofModules\Shortcodes\BlogCarousel\BlogCarousel;
+use Deploy\MikadofModules\Shortcodes\ComparisonPricingTables\ComparisonPricingTablesHolder;
 use Deploy\MikadofModules\Shortcodes\Icon\Icon;
 use Deploy\MikadofModules\Shortcodes\IconSlider\IconSlider;
 use Deploy\MikadofModules\Shortcodes\IconSlider\IconSliderItem;
@@ -56,6 +57,7 @@ use Deploy\MikadofModules\Shortcodes\IconWithText\IconWithText;
 use Deploy\MikadofModules\Shortcodes\TwitterSlider\TwitterSlider;
 use Deploy\MikadofModules\Shortcodes\Process\Process;
 use Deploy\MikadofModules\Shortcodes\TabbedGallery\TabbedGalleryItem;
+use Deploy\MikadofModules\Shortcodes\ComparisonPricingTables\ComparisonPricingTable;
 
 /**
  * Class ShortcodeLoader
@@ -167,6 +169,8 @@ class ShortcodeLoader {
 		$this->addShortcode(new TabbedGalleryItem());
 		$this->addShortcode(new InfoBox());
 		$this->addShortcode(new WorkingHours());
+		$this->addShortcode(new ComparisonPricingTablesHolder());
+		$this->addShortcode(new ComparisonPricingTable());
 	}
 	/**
 	 * Calls ShortcodeLoader::addShortcodes and than loops through added shortcodes and calls render method

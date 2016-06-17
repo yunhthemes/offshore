@@ -155,3 +155,5 @@ add_action('woocommerce_after_cart', 'woocommerce_cross_sell_display', 10);
 //change place of payment options on checkout page
 remove_action('woocommerce_checkout_order_review', 'woocommerce_checkout_payment', 20);
 add_action('woocommerce_checkout_after_order_review', 'woocommerce_checkout_payment');
+
+remove_action('woocommerce_before_shop_loop_item', 'woocommerce_template_loop_product_link_open', 10);

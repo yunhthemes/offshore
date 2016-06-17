@@ -1,7 +1,7 @@
 <li class="mkdf-blog-list-item clearfix">
-	<div class="mkdf-blog-list-item-inner">
+	<div class="mkdf-blog-list-item-inner <?php print_r($thumb_image_size); ?>">
 		<div class="mkdf-item-image">
-			<a href="<?php // echo esc_url(get_permalink()) ?>">
+			<a href="<?php echo get_post_meta(get_the_ID(), 'link_to_page', true); ?>">
 				<?php
 					 echo get_the_post_thumbnail(get_the_ID(), $thumb_image_size);
 				?>				
@@ -9,7 +9,7 @@
 		</div>
 		<div class="mkdf-item-text-holder">
 			<<?php echo esc_html( $title_tag)?> class="mkdf-item-title">
-				<a href="<?php echo esc_url(get_permalink()) ?>" >
+				<a href="<?php echo get_post_meta(get_the_ID(), 'link_to_page', true); ?>" >
 					<?php echo esc_attr(get_the_title()) ?>
 				</a>
 			</<?php echo esc_html($title_tag) ?>>

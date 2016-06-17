@@ -66,7 +66,7 @@ class BP_XProfile_Field_Type_Selectbox extends BP_XProfile_Field_Type {
 		} ?>
 
 		<label for="<?php bp_the_profile_field_input_name(); ?>">
-			<?php bp_the_profile_field_name(); ?>
+			<?php echo bp_the_profile_field_name(); ?>
 			<?php bp_the_profile_field_required_label(); ?>
 		</label>
 
@@ -101,7 +101,7 @@ class BP_XProfile_Field_Type_Selectbox extends BP_XProfile_Field_Type {
 		$original_option_values = maybe_unserialize( BP_XProfile_ProfileData::get_value_byid( $this->field_obj->id, $args['user_id'] ) );
 
 		$options = $this->field_obj->get_children();
-		$html    = '<option value="">' . /* translators: no option picked in select box */ esc_html__( '----', 'buddypress' ) . '</option>';
+		// $html    = '<option value="">' . /* translators: no option picked in select box */ esc_html__( '----', 'buddypress' ) . '</option>';
 
 		if ( empty( $original_option_values ) && !empty( $_POST['field_' . $this->field_obj->id] ) ) {
 			$original_option_values = sanitize_text_field(  $_POST['field_' . $this->field_obj->id] );

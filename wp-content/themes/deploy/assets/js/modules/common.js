@@ -660,8 +660,20 @@ function mkdfInitVideoBackground(){
 	function mkdfSmoothTransition() {
 		var loader = $('body > .mkdf-smooth-transition-loader.mkdf-mimic-ajax');
 		if (loader.length) {
+			$(window).bind('pageshow', function(event) {
+				if (event.originalEvent.persisted) {
+					loader.fadeOut(500);
+				}
+			});
+
 			$('a').click(function(e) {
 				var a = $(this);
+
+				if(e.ctrlKey === 1) {
+					window.open($(this).attr('href'), '_blank');
+					return false;
+				}
+
 				if (
 					e.which == 1 && // check if the left mouse button has been pressed
 					a.attr('href').indexOf(window.location.host) >= 0 && // check if the link is to the same domain

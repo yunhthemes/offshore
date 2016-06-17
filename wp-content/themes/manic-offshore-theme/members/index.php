@@ -79,7 +79,7 @@
 </div>
 <div id="not-available-popup" style="display:none; cursor: default;">
 	<p>The selected shelf company is no longer available. Please make another selection.</p>
-	<a href="<?php echo home_url( '/company-formation-order/' ); ?>" id="redirect-now" class="custom-submit-class" style="min-height: auto!important;margin-top:10px;">Incorporate now!</a>
+	<a href="<?php echo home_url( '/company-formation-order/' ); ?>" id="redirect-now" class="custom-submit-class" style="min-height: auto!important;margin-top:10px;">Continue registration</a>
 </div>
 <script id="user-companies-template" type="text/x-handlebars-template">	
     <div id="company-lists" class="box jplist">
@@ -119,7 +119,15 @@
 	                            </span>
 			                </h6>
 			            </div>          
-			            <div class="each-header"></div>
+			            <div class="each-header">
+			            	<h6 style="display:none;">
+			                	<span class="header sortable-header">Action</span>
+			                	<span class="sort-btns">
+	                                <i class="fa fa-caret-up" data-selected="true" data-path=".action" data-type="action" data-order="asc" title="Sort by Action Asc"></i>
+	                                <i class="fa fa-caret-down" data-path=".action" data-type="action" data-order="desc" title="Sort by Action Desc"></i>
+	                            </span>
+			                </h6>
+			            </div>
 			        </div>
 		        </div>   
 
@@ -145,15 +153,19 @@
 		                </div>		                         
 		                <div class="each-content">
 		                	{{#ifCond status "==" "0"}}
+		                		<span class="action" style="display:none;">1</span>
 								<a href="<?php echo get_permalink( get_page_by_path( 'Company formation order' ) ); ?>?savedcompany={{id}}" data-company-id="{{id}}"><button class="custom-submit-class">Continue registration</button></a>
 							{{else}}
 								{{#ifCond owner "==" "1"}}
+									<span class="action" style="display:none;">3</span>
 									<a href="#" data-company-id="{{id}}" class="company-details"><button class="custom-submit-class">Company details</button></a>
 								{{else}}									
 									{{#ifCond return "==" "1"}}
+										<span class="action" style="display:none;">4</span>
 										<button class="custom-submit-class expire-btn disabled-btn" data-companywpuser-id="{{ wpusers.0.pivot.id }}">Not available</button>
 										<a href="#" data-company-id="{{id}}" data-companywpuser-id="{{ wpusers.0.pivot.id }}" class="delete-saved-company"><i class="fa fa-times" aria-hidden="true"></i></a>
 									{{else}}
+										<span class="action" style="display:none;">2</span>
 										<button class="custom-submit-class expire-btn" data-companywpuser-id="{{ wpusers.0.pivot.id }}">Continue registration</button>
 									{{/ifCond}}
 								{{/ifCond}}
@@ -498,14 +510,17 @@
             	data.company_id = $(this).data('company-id'); 
             	data.user_id = "<?php echo get_current_user_id(); ?>"; 
 
-            	var companywpuser_id = $(this).data("companywpuser-id");
+            	var $this = $(this);
+
+            	var companywpuser_id = $this.data("companywpuser-id");
 
             	var response = makeRequest(data, "<?php echo SITEURL; ?>/b/api/removeusercompanies/"+companywpuser_id, "DELETE");
 
             	response.done(function(data, textStatus, jqXHR){                    
 	                if(jqXHR.status==200) {
 	                    
-	                    $(this).parent().parent().remove();                                   		
+	                    // $(this).parent().parent().remove();                                   		
+	                    $this.parent().parent().remove();
 
 	                }
 	            });

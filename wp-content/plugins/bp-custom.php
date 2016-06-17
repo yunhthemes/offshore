@@ -1,7 +1,7 @@
 <?php
 // hacks and mods will go here
 /**
- * Amended copy of messages_add_autocomplete_js()
+ * 
  */
-
+add_filter( 'bp_do_register_theme_directory', '__return_true' );
 ?>

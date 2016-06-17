@@ -147,6 +147,8 @@ jQuery(document).ready(function($) {
 
         var newUrl = urlArr.join("/") + "/profile"; 
 
+        // console.log(newUrl);
+
         history.pushState({page: 'new'}, "new url", newUrl);
     }
     else {
@@ -183,11 +185,11 @@ jQuery(document).ready(function($) {
   //     return 'Reload the page';
   // });
 
-  var a, b = false,
-    c = oldUrl;
+  // var a, b = false,
+  //   c = oldUrl;
 
 
-
+  // // if url has been changed
   // if(history.state.page == 'new') {
   //   window.onbeforeunload = function (e) {
   //     console.log(window.event);
@@ -195,16 +197,16 @@ jQuery(document).ready(function($) {
   //     a = setTimeout(function () {
   //         b = true;
 
-  //         window.location.href = c;
+  //         // window.location.href = c;
   //         c = oldUrl;          
   //     }, 500);
   //     return "";
   //   }  
   // }
   
-  window.onunload = function () {
-      clearTimeout(a);
-  }
+  // window.onunload = function () {
+  //     clearTimeout(a);
+  // }
 
 
   // hide star message

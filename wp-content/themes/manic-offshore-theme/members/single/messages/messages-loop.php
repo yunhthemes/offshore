@@ -46,7 +46,7 @@ do_action( 'bp_before_member_messages_loop' ); ?>
 	do_action( 'bp_before_member_messages_threads' ); ?>
 
 	<form action="<?php echo bp_loggedin_user_domain() . bp_get_messages_slug() . '/' . bp_current_action() ?>/bulk-manage/" method="post" id="messages-bulk-management">
-
+		
 		<table id="message-threads" class="messages-notices">
 
 			<thead>
@@ -54,8 +54,9 @@ do_action( 'bp_before_member_messages_loop' ); ?>
 					<?php if ( is_super_admin() ) : ?>
 						<th scope="col" class="thread-checkbox bulk-select-all"><input id="select-all-messages" type="checkbox"><label class="bp-screen-reader-text" for="select-all-messages"><?php _e( 'Select all', 'buddypress' ); ?></label></th>
 					<?php endif; ?>
-					<th scope="col" class="thread-from"><?php _e( 'From', 'buddypress' ); ?></th>
+					<!-- <th scope="col" class="thread-from"><?php _e( 'From', 'buddypress' ); ?></th> -->
 					<th scope="col" class="thread-info"><?php _e( 'Subject', 'buddypress' ); ?></th>
+					<th scope="col" class="thread-time"><?php _e( 'Time', 'buddypress' ); ?></th>
 
 
 					<?php
@@ -91,19 +92,19 @@ do_action( 'bp_before_member_messages_loop' ); ?>
 						<?php endif; ?>
 
 						<?php if ( 'sentbox' != bp_current_action() ) : ?>
-							<td class="thread-from">
+							<!--<td class="thread-from">
 								<?php bp_message_thread_avatar( array( 'width' => 25, 'height' => 25 ) ); ?>
 								<span class="from"><?php _e( 'From:', 'buddypress' ); ?></span> <?php bp_message_thread_from(); ?>
 								<?php bp_message_thread_total_and_unread_count(); ?>
 								<span class="activity"><?php bp_message_thread_last_post_date(); ?></span>
-							</td>
+							</td>-->
 						<?php else: ?>
-							<td class="thread-from">
+							<!--<td class="thread-from">
 								<?php bp_message_thread_avatar( array( 'width' => 25, 'height' => 25 ) ); ?>
 								<span class="to"><?php _e( 'To:', 'buddypress' ); ?></span> <?php bp_message_thread_to(); ?>
 								<?php bp_message_thread_total_and_unread_count(); ?>
 								<span class="activity"><?php bp_message_thread_last_post_date(); ?></span>
-							</td>
+							</td>-->
 						<?php endif; ?>
 
 						<td class="thread-info">
@@ -111,8 +112,25 @@ do_action( 'bp_before_member_messages_loop' ); ?>
 							<p class="thread-excerpt"><?php bp_message_thread_excerpt(); ?></p>
 						</td>
 
-						<?php
+						<td class="thread-time">	
+							<?php
+							// have to use Singapore first to then set to another country to get accurate result!
 
+							$code = get_country_code('Singapore'); // base country code
+							$timezone = get_time_zone($code, '');					
+							$date = date('Y-m-d H:i:s', strtotime(bp_get_message_thread_last_post_date_raw()));
+							$date = new DateTime($date, new DateTimeZone($timezone));					
+							?>
+							<span class="activity">
+							<?php
+								$users_country = bp_profile_field_data_r('field=Nationality');
+								$code = get_country_code($users_country); // user country code			
+								$timezone = get_time_zone($code, '');
+								$date->setTimezone(new DateTimeZone($timezone));
+								echo $date->format('F d, Y g:i a');
+							?></span>
+						</td>						
+						<?php
 						/**
 						 * Fires inside the messages box table row to add a new column.
 						 *
@@ -130,8 +148,8 @@ do_action( 'bp_before_member_messages_loop' ); ?>
 						<?php endif; ?>
 						<?php if ( is_super_admin() ) : ?>
 						<td class="thread-options">
-								<?php bp_the_message_star_action_link( array( 'thread_id' => bp_get_message_thread_id() ) ); ?>
-								 |
+								<!-- <?php bp_the_message_star_action_link( array( 'thread_id' => bp_get_message_thread_id() ) ); ?>
+								 | -->
 								<?php if ( bp_message_thread_has_unread() ) : ?>
 									<a class="read" href="<?php bp_the_message_thread_mark_read_url();?>"><?php _e( 'Read', 'buddypress' ); ?></a>
 								<?php else : ?>

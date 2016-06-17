@@ -5,6 +5,8 @@
  * @package BuddyPress
  * @subpackage bp-legacy
  */
+global $wp_query;
+$page = get_page_by_title( 'Sign up' );
 ?>
 <div id="signup-page-wrapper">
 	<div data-mkdf-parallax-speed="1" class="vc_row wpb_row vc_row-fluid mkdf-section vc_custom_1454399108366 mkdf-content-aligment-left mkdf-grid-section" style="">
@@ -67,7 +69,8 @@
 							
 	                        <div class="wpb_text_column wpb_content_element ">
 	                            <div class="wpb_wrapper">
-	                                <p>Please complete the details below in order to register with Offshore Company Solutions. All information provided will be kept in strict confidence and will not be released to any third party.</p>
+	                                <!-- <p>Please complete the details below in order to register with Offshore Company Solutions. All information provided will be kept in strict confidence and will not be released to any third party.</p> -->
+	                                <p><?php echo $page->post_content; ?></p>
 	                            </div>
 	                        </div>
 	                        <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
@@ -120,7 +123,7 @@
 	                                            required: true,
 	                                            email: true
 	                                        },
-	                                        field_10: "required",
+	                                        field_7: "required",
 	                                        signup_username: "required",
 	                                        signup_password: "required",
 	                                        signup_password_confirm: {
@@ -135,7 +138,7 @@
 						                        "required" : "Email required",
 						                        "email" : "Invalid email"
 						                    },
-						                    "field_10": "Telephone required",
+						                    "field_7": "Mobile telephone required",
 						                    "signup_username": "Username required",
 						                    "signup_password": "Password required"
 						                },
@@ -168,12 +171,27 @@
 	                                //     }
 	                                // }
 
-	                                $("#field_7").intlTelInput({
-	                                	utilsScript: "<?php echo JS; ?>/plugins/utils.js"
-	                                });
-	                                $("#field_10").intlTelInput({
-	                                	utilsScript: "<?php echo JS; ?>/plugins/utils.js"
-	                                });
+	                                var country;
+
+						            $.getJSON("http://ipinfo.io", function(data){
+						                country = data.country;
+						            
+
+		                                $("#field_7").intlTelInput({
+		                                	utilsScript: "<?php echo JS; ?>/plugins/utils.js",
+		                                	nationalMode: false,
+	                    					preferredCountries: [],
+	                    					autoPlaceholder: false
+		                                });
+
+		                                $("#field_7").intlTelInput("setCountry", country);
+
+	                                }); 
+
+	                                // $("#field_10").intlTelInput({
+	                                // 	utilsScript: "<?php echo JS; ?>/plugins/utils.js"
+	                                // });
+	                                // $("#field_10").intlTelInput("setCountry", country);
 
 	                            });
 
@@ -417,10 +435,16 @@
 </div>
 <script>
 (function($){
+	$(".field_title").find("label").text("Title*");
+	$(".field_first-name").find("label").text("First name*");
+	$(".field_surname").find("label").text("Surname*");
+	$(".field_mobile-telephone").find("label").text("Mobile telephone*");
+	$(".field_preferred-currency").find("label").text("Preferred currency*");
+
 	$('.field_title').find("select").wrap("<div class='custom-input-class-select-container'></div>");
 	$('.field_preferred-currency').find("select").wrap("<div class='custom-input-class-select-container'></div>");
 
-	if($(".field_title").find("select").length > 0) $(".field_title").find("select").find("option")[0].remove();
-  	if($(".field_preferred-currency").find("select").length > 0) $(".field_preferred-currency").find("select").find("option")[0].remove();
+	// if($(".field_title").find("select").length > 0) $(".field_title").find("select").find("option")[0].remove();
+  	// if($(".field_preferred-currency").find("select").length > 0) $(".field_preferred-currency").find("select").find("option")[0].remove();
 })(jQuery);
 </script>

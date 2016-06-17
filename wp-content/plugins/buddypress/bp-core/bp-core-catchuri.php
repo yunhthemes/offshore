@@ -298,13 +298,14 @@ function bp_core_set_uri_globals() {
 				}
 			}
 
+			// removed by zaw bcaz of js url change
 			// If the slug matches neither a member type nor a specific member, 404.
-			if ( ! bp_displayed_user_id() && ! bp_get_current_member_type() && $after_member_slug ) {
-				// Prevent components from loading their templates.
-				$bp->current_component = '';
-				bp_do_404();
-				return;
-			}
+			// if ( ! bp_displayed_user_id() && ! bp_get_current_member_type() && $after_member_slug ) {
+			// 	// Prevent components from loading their templates.
+			// 	$bp->current_component = '';
+			// 	bp_do_404();
+			// 	return;
+			// }
 
 			// If the displayed user is marked as a spammer, 404 (unless logged-in user is a super admin).
 			if ( bp_displayed_user_id() && bp_is_user_spammer( bp_displayed_user_id() ) ) {

@@ -267,7 +267,7 @@
     function mkdfInitMobileNavigation() {
         var navigationOpener = $('.mkdf-mobile-header .mkdf-mobile-menu-opener');
         var navigationHolder = $('.mkdf-mobile-header .mkdf-mobile-nav');
-        var dropdownOpener = $('.mkdf-mobile-nav .mobile_arrow, .mkdf-mobile-nav h4, .mkdf-mobile-nav a[href*=#]');
+        var dropdownOpener = $('.mkdf-mobile-nav .mobile_arrow, .mkdf-mobile-nav h4, .mkdf-mobile-nav a[href*="#"]');
         var animationSpeed = 200;
 
         //whole mobile menu opening / closing

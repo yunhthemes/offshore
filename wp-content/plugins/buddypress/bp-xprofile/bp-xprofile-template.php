@@ -447,7 +447,7 @@ function bp_the_profile_field_id() {
  * Outputs the XProfile field name.
  */
 function bp_the_profile_field_name() {
-	echo bp_get_the_profile_field_name();
+	return bp_get_the_profile_field_name();
 }
 
 	/**
@@ -816,6 +816,15 @@ function bp_unserialize_profile_field( $value ) {
 	}
 
 	return $value;
+}
+
+/**
+ * Return XProfile field data.
+ *
+ * @param string|array $args Array of arguments for field data.
+ */
+function bp_profile_field_data_r( $args = '' ) {
+	return bp_get_profile_field_data( $args );
 }
 
 /**

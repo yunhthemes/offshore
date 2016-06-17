@@ -346,6 +346,7 @@ class Vc_Frontend_Editor implements Vc_Editor_Interface {
 	 *
 	 */
 	function setPost() {
+        global $post;
 		$this->post = get_post(); // fixes #1342 if no get/post params set
 		$this->post_id = vc_get_param( 'post_id' );
 		if ( vc_post_param( 'post_id' ) ) {
@@ -384,7 +385,7 @@ class Vc_Frontend_Editor implements Vc_Editor_Interface {
 	 */
 	function renderEditor() {
 		global $current_user;
-		get_currentuserinfo();
+		wp_get_current_user();
 		$this->current_user = $current_user;
 		$this->post_url = vc_str_remove_protocol( get_permalink( $this->post_id ) );
 
@@ -508,13 +509,18 @@ class Vc_Frontend_Editor implements Vc_Editor_Interface {
 	 * @return bool
 	 */
 	function showButton( $post_id = null ) {
+		$type = get_post_type();
+
 		return self::inlineEnabled() && ! in_array( get_post_status(), array(
 			'private',
 			'trash',
+		) ) && ! in_array( $type, array(
+			'templatera',
+			'vc_grid_item',
 		) ) && vc_user_access()->wpAny( array(
-			'edit_post',
-			$post_id,
-		) )->get() && vc_check_post_type( get_post_type() );
+				'edit_post',
+				$post_id,
+			) )->get() && vc_check_post_type( $type );
 	}
 
 	/**

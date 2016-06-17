@@ -278,7 +278,7 @@ class BP_Legacy extends BP_Theme_Compat {
 		$min = bp_core_get_minified_asset_suffix();
 
 		// Locate the BP JS file.
-		$asset = $this->locate_asset_in_stack( "buddypress{$min}.js", 'js' );
+		$asset = $this->locate_asset_in_stack( "buddypress.js", 'js' );
 
 		// Enqueue the global JS, if found - AJAX will not work
 		// without it.
@@ -485,6 +485,7 @@ class BP_Legacy extends BP_Theme_Compat {
 	 * @see https://buddypress.trac.wordpress.org/ticket/4802
 	 */
 	public function sitewide_notices() {
+		
 		// Do not show notices if user is not logged in.
 		if ( ! is_user_logged_in() )
 			return;
@@ -1679,7 +1680,7 @@ function bp_legacy_theme_ajax_messages_delete() {
  *
  * @since 1.2.0
  */
-function bp_legacy_theme_ajax_messages_autocomplete_results() {
+function bp_legacy_theme_ajax_messages_autocomplete_results() {	
 
 	/**
 	 * Filters the max results default value for ajax messages autocomplete results.
@@ -1700,7 +1701,7 @@ function bp_legacy_theme_ajax_messages_autocomplete_results() {
 
 	$suggestions = bp_core_get_suggestions( array(
 		'limit'        => $limit,
-		'only_friends' => $only_friends,
+		'only_friends' => false,
 		'term'         => $term,
 		'type'         => 'members',
 	) );
@@ -1710,15 +1711,9 @@ function bp_legacy_theme_ajax_messages_autocomplete_results() {
 
 			// Note that the final line break acts as a delimiter for the
 			// autocomplete JavaScript and thus should not be removed.
-			printf( '<span id="%s" href="#"></span><img src="%s" style="width: 15px"> &nbsp; %s (%s)' . "\n",
-				esc_attr( 'link-' . $user->ID ),
-				esc_url( $user->image ),
-				esc_html( $user->name ),
-				esc_html( $user->ID )
-			);
+			printf( '%s' . "\n", esc_html( $user->ID ));
 		}
 	}
-
 	exit;
 }
 
@@ -1736,7 +1731,7 @@ function bp_legacy_theme_ajax_messages_star_handler() {
 	check_ajax_referer( 'bp-messages-star-' . (int) $_POST['message_id'], 'nonce' );
 
 	// Check capability.
-	if ( ! is_user_logged_in() || ! bp_core_can_edit_settings() ) {
+	if ( ! is_user_logged_in() ) { // || ! bp_core_can_edit_settings()
 		return;
 	}
 

@@ -8,7 +8,7 @@ define('MIKADO_ASSETS_ROOT_DIR', get_template_directory().'/assets');
 define('MIKADO_FRAMEWORK_ROOT', get_template_directory_uri().'/framework');
 define('MIKADO_FRAMEWORK_ROOT_DIR', get_template_directory().'/framework');
 define('MIKADO_FRAMEWORK_MODULES_ROOT_DIR', get_template_directory().'/framework/modules');
-define('MIKADO_THEME_ENV', 'dev');
+define('MIKADO_THEME_ENV', 'prod');
 
 //include necessary files
 include_once get_template_directory().'/framework/mkd-framework.php';

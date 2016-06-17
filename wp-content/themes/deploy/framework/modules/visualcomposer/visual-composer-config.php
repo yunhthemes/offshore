@@ -76,6 +76,11 @@ if ( ! function_exists('deploy_mikado_configure_visual_composer') ) {
 			vc_remove_param('vc_row', 'gap');
             vc_remove_param('vc_row', 'columns_placement');
             vc_remove_param('vc_row', 'equal_height');
+            vc_remove_param('vc_row_inner', 'gap');
+		    vc_remove_param('vc_row_inner', 'content_placement');
+		    vc_remove_param('vc_row_inner', 'equal_height');
+		    vc_remove_param('vc_row', 'parallax_speed_video');
+		    vc_remove_param('vc_row', 'parallax_speed_bg');
 		}
 
 	}
@@ -178,6 +183,7 @@ if ( class_exists( 'WPBakeryShortCodesContainer' ) ) {
 	class WPBakeryShortCode_Mkdf_Animations_Holder extends WPBakeryShortCodesContainer {}
 	class WPBakeryShortCode_Mkdf_Process_Carousel_Holder extends WPBakeryShortCodesContainer {}
 	class WPBakeryShortCode_Mkdf_Tabbed_Gallery_Holder extends WPBakeryShortCodesContainer {}
+	class WPBakeryShortCode_Mkdf_Comparison_Pricing_Tables_Holder extends WPBakeryShortCodesContainer {}
 }
 
 if ( class_exists( 'WPBakeryShortCode' ) ) {

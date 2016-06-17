@@ -260,6 +260,12 @@ Total cost                                                                      
 
 
 
+Array ( [select] => SELECT COUNT( DISTINCT m.thread_id ) [from] => FROM wp_bp_messages_recipients r INNER JOIN wp_bp_messages_messages m ON m.thread_id = r.thread_id [where] => WHERE r.is_deleted = 0 AND r.user_id = 1 AND r.sender_only = 0 )
+
+
+
+SELECT DISTINCT m.thread_id FROM wp_bp_messages_recipients r INNER JOIN wp_bp_messages_messages m ON m.thread_id = r.thread_id WHERE NOT EXISTS (SELECT * FROM wp_bp_messages_meta mt WHERE mt.message_id = m.id) AND r.is_deleted = 0 AND r.user_id = 1 AND r.sender_only = 0
+
 
 
 summary page 
@@ -272,5 +278,23 @@ summary page
 
 
 buddypress/bp-messages/classes/class-bp-messages-component.php
+buddypress/bp-messages/classes/class-bp-messages-thred.php
 buddypress/bp-messages/bp-messages-template.php
+buddypress/bp-messages/bp-messages-star.php
+buddypress/bp-members/bp-members-function.php
 buddypress/bp-groups/classes/class-bp-groups-component.php
+buddypress/bp-core/bp-core-catch-uri.php
+
+/wp-content/themes/deploy/framework/modules/header/templates/parts/sticky-navigation.php
+/wp-content/themes/deploy/framework/modules/shortcodes/blog-list/templates/boxes.php
+/wp-content/themes/deploy/assets/js/third-party.js
+/wp-content/themes/deploy/functions.php
+/wp-content/themes/deploy/assets/js/ajax-login-script.js
+
+
+
+[vc_row content_width="grid" css=".vc_custom_1454399108366{padding-top: 70px !important;background-color: #d8d8d8 !important;}"][vc_column width="1/4"][/vc_column][vc_column width="2/4"][vc_raw_html]JTNDZGl2JTIwaWQlM0QlMjJjdXN0b20tYnJlYWRjcnVtYiUyMiUzRSUzQyUyRmRpdiUzRQ==[/vc_raw_html][vc_empty_space height="29px"][vc_raw_html]JTNDZGl2JTIwaWQlM0QlMjJjdXN0b20tcGFnZS10aXRsZSUyMiUzRSUzQyUyRmRpdiUzRQ==[/vc_raw_html][vc_empty_space height="29"][vc_column_text]
+
+Before ordering a company, you will need to register with Offshore Company Solutions using the form below. All information provided will be kept in strict confidence and will never be released to any third party.
+
+[/vc_column_text][vc_empty_space height="29"][mkdf_custom_font font_family="Georgia" font_size="16" line_height="20" font_style="italic" font_weight="400" letter_spacing="0" text_transform="Capitalize" text_align="left" content_custom_font="* Required" color="#979797"][/vc_column][vc_column width="1/4"][/vc_column][/vc_row][vc_row content_width="grid" css=".vc_custom_1454399114965{padding-top: 0px !important;padding-bottom: 70px !important;background-color: #d8d8d8 !important;}" el_id="signuppage-signup-form-row"][vc_column width="1/4"][/vc_column][vc_column width="2/4"][vc_empty_space height="29"][custom_signup][vc_raw_html][/vc_raw_html][/vc_column][vc_column width="1/4"][/vc_column][/vc_row][vc_row][vc_column][vc_column_text] [/vc_column_text][/vc_column][/vc_row]

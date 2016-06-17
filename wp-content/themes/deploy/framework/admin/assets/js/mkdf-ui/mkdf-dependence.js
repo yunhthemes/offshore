@@ -14,7 +14,7 @@
 	}
 
     function mkdfInitRadioChange() {
-        $(document).on('change', 'input[type=radio].dependence', function () {
+        $(document).on('change', 'input[type="radio"].dependence', function () {
             var dataHide = $(this).data('hide');
             var dataShow = $(this).data('show');
             if(typeof(dataHide)!== 'undefined' && dataHide !== '') {

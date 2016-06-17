@@ -434,7 +434,7 @@ if(!function_exists('deploy_mikado_main_menu_styles')) {
             .header-widget.widget_nav_menu ul.menu li ul li a {
             border-color: <?php echo esc_attr($deploy_mikado_options['dropdown_separator_color']); ?>;
             }
-        <?php } ?>s
+        <?php } ?>
 
         <?php if(!empty($deploy_mikado_options['dropdown_vertical_separator_color'])) { ?>
             .mkdf-drop-down .wide .second ul li{

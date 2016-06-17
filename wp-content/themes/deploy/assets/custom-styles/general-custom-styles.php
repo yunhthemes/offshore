@@ -349,7 +349,8 @@ if(!function_exists('deploy_mikado_design_styles')) {
 
 		if (deploy_mikado_options()->getOptionValue('page_background_color')) {
 			$background_color_selector = array(
-
+				'.mkdf-wrapper-inner',
+				'.mkdf-content'
 			);
 			echo deploy_mikado_dynamic_css($background_color_selector, array('background-color' => deploy_mikado_options()->getOptionValue('page_background_color')));
 		}

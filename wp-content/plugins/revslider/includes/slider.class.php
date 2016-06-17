@@ -110,13 +110,13 @@ class RevSliderSlider extends RevSliderElementsBase{
 			$arrAliases = $this->getAllSliderAliases();
 			$strAliases = "";
 			
-			if(!empty($arrAliases)){
+			if(!empty($arrAliases) && is_array($arrAliases)){
 				$arrAliases = array_slice($arrAliases, 0, 6); //show 6 other, will be enough
 				
-				$strAliases = "'".implode("' or '", sanitize_text_field($arrAliases))."'";
+				$strAliases = "'".sanitize_text_field(implode("' or '", $arrAliases))."'";
 			}
 				
-			$errorMessage = 'Slider with alias <strong>'.esc_attr($alias).'</strong> not found.';
+			$errorMessage = 'Slider with alias <strong>'.sanitize_text_field(esc_attr($alias)).'</strong> not found.';
 			if(!empty($strAliases))
 				$errorMessage .= ' <br>Maybe you mean: '.$strAliases;
 				
@@ -264,7 +264,9 @@ class RevSliderSlider extends RevSliderElementsBase{
 			$where .= $this->db->prepare(" and id != %s  AND `type` != 'template'", array($this->id));
 		}
 		
+		
 		$response = $this->db->fetch(RevSliderGlobals::$table_sliders,$where);
+		
 		return(!empty($response));
 		
 	}
@@ -360,6 +362,7 @@ class RevSliderSlider extends RevSliderElementsBase{
 		$arrData["title"] = $title;
 		$arrData["alias"] = $alias;
 		$arrData["params"] = $jsonParams;
+		$arrData["type"] = '';
 		
 		if(empty($sliderID)){	//create slider	
 			
@@ -403,6 +406,8 @@ class RevSliderSlider extends RevSliderElementsBase{
 		$this->validateInited();
 		
 		$this->db->delete(RevSliderGlobals::$table_slides, $this->db->prepare("slider_id = %s", array($this->id)));
+		
+		do_action('revslider_slider_deleteAllSlides', $this->id);
 	}
 	
 
@@ -439,9 +444,20 @@ class RevSliderSlider extends RevSliderElementsBase{
 	 * 
 	 * duplicate slider in datatase
 	 */
-	private function duplicateSlider($title = false){
+	private function duplicateSlider($title = false, $prefix = false){
 		
 		$this->validateInited();
+		
+		//insert a new slider
+		$sqlSelect = $this->db->prepare("select ".RevSliderGlobals::FIELDS_SLIDER." from ".RevSliderGlobals::$table_sliders." where id = %s", array($this->id));
+		$sqlInsert = "insert into ".RevSliderGlobals::$table_sliders." (".RevSliderGlobals::FIELDS_SLIDER.") ($sqlSelect)";
+		
+		$this->db->runSql($sqlInsert);
+		$lastID = $this->db->getLastInsertID();
+		RevSliderFunctions::validateNotEmpty($lastID);
+		
+		
+		$params = $this->arrParams;
 		
 		if($title === false){
 			//get slider number:
@@ -452,11 +468,15 @@ class RevSliderSlider extends RevSliderElementsBase{
 			$newSliderTitle = "Slider".$newSliderSerial;
 			$newSliderAlias = "slider".$newSliderSerial;
 		}else{
-			$newSliderTitle = sanitize_text_field($title);
-			$newSliderAlias = sanitize_title($title);
-			
+			if($prefix !== false){
+				$newSliderTitle = sanitize_text_field($title.' '.$params['title']);
+				$newSliderAlias = sanitize_title($title.' '.$params['title']);
+			}else{
+				$newSliderTitle = sanitize_text_field($title);
+				$newSliderAlias = sanitize_title($title);
+			}
 			// Check Duplicate Alias
-			$sqlTitle = $this->db->fetch(RevSliderGlobals::$table_sliders, $this->db->prepare("alias = %s", array(sanitize_title($title))));
+			$sqlTitle = $this->db->fetch(RevSliderGlobals::$table_sliders, $this->db->prepare("alias = %s", array($newSliderAlias)));
 			if(!empty($sqlTitle)){
 				$response = $this->db->fetch(RevSliderGlobals::$table_sliders);
 				$numSliders = count($response);
@@ -466,24 +486,18 @@ class RevSliderSlider extends RevSliderElementsBase{
 			}
 		}
 		
-		//insert a new slider
-		$sqlSelect = $this->db->prepare("select ".RevSliderGlobals::FIELDS_SLIDER." from ".RevSliderGlobals::$table_sliders." where id = %s", array($this->id));
-		$sqlInsert = "insert into ".RevSliderGlobals::$table_sliders." (".RevSliderGlobals::FIELDS_SLIDER.") ($sqlSelect)";
+		//update params
 		
-		$this->db->runSql($sqlInsert);
-		$lastID = $this->db->getLastInsertID();
-		RevSliderFunctions::validateNotEmpty($lastID);
+		$params["title"] = $newSliderTitle;
+		$params["alias"] = $newSliderAlias;
+		$params["shortcode"] = "[rev_slider alias=\"". $newSliderAlias ."\"]";
 		
 		//update the new slider with the title and the alias values
 		$arrUpdate = array();
 		$arrUpdate["title"] = $newSliderTitle;
 		$arrUpdate["alias"] = $newSliderAlias;
 		
-		//update params
-		$params = $this->arrParams;
-		$params["title"] = $newSliderTitle;
-		$params["alias"] = $newSliderAlias;
-		$params["shortcode"] = "[rev_slider alias=\"". $newSliderAlias ."\"]";
+		
 
 		$jsonParams = json_encode($params);
 		$arrUpdate["params"] = $jsonParams;
@@ -686,6 +700,7 @@ class RevSliderSlider extends RevSliderElementsBase{
 		$usedCaptions = array();
 		$usedAnimations = array();
 		$usedImages = array();
+		$usedSVG = array();
 		$usedVideos = array();
 		$usedNavigations = array();
 		
@@ -731,7 +746,7 @@ class RevSliderSlider extends RevSliderElementsBase{
 						if(isset($layer['endanimation']) && $layer['endanimation'] != '' && strpos($layer['endanimation'], 'customout') !== false) $usedAnimations[str_replace('customout-', '', $layer['endanimation'])] = true;
 						if(isset($layer['image_url']) && $layer['image_url'] != '') $usedImages[$layer['image_url']] = true; //image_url if image caption
 						
-						if(isset($layer['type']) && $layer['type'] == 'video'){
+						if(isset($layer['type']) && ($layer['type'] == 'video' || $layer['type'] == 'audio')){
 							
 							$video_data = (isset($layer['video_data'])) ? (array) $layer['video_data'] : array();
 							
@@ -744,53 +759,33 @@ class RevSliderSlider extends RevSliderElementsBase{
 								if(isset($video_data['urlOgv']) && $video_data['urlOgv'] != '') $usedVideos[$video_data['urlOgv']] = true;
 								
 							}elseif(!empty($video_data) && isset($video_data['video_type']) && $video_data['video_type'] != 'html5'){ //video cover image
-								if(isset($video_data['previewimage']) && $video_data['previewimage'] != '') $usedImages[$video_data['previewimage']] = true;
+								if($video_data['video_type'] == 'audio'){
+									if(isset($video_data['urlAudio']) && $video_data['urlAudio'] != '') $usedVideos[$video_data['urlAudio']] = true;
+								}else{
+									if(isset($video_data['previewimage']) && $video_data['previewimage'] != '') $usedImages[$video_data['previewimage']] = true;
+								}
+							}
+							
+							if($video_data['video_type'] != 'html5'){
+								$video_data['urlMp4'] = '';
+								$video_data['urlWebm'] = '';
+								$video_data['urlOgv'] = '';
+							}
+							if($video_data['video_type'] != 'audio'){
+								$video_data['urlAudio'] = '';
 							}
 						}
 						
+						if(isset($layer['type']) && $layer['type'] == 'svg'){
+							if(isset($layer['svg']) && isset($layer['svg']->src)){
+								$usedSVG[$layer['svg']->src] = true;
+							}
+						}
 					}
 				}
 			}
 		}
 		
-		/*if(!empty($arrStaticSlide) && count($arrStaticSlide) > 0){
-			foreach($arrStaticSlide as $key => $slide){
-				if(isset($slide['params']['image']) && $slide['params']['image'] != '') $usedImages[$slide['params']['image']] = true; //['params']['image'] background url
-				
-				//html5 video
-				if(isset($slide['params']['background_type']) && $slide['params']['background_type'] == 'html5'){
-					if(isset($slide['params']['slide_bg_html_mpeg']) && $slide['params']['slide_bg_html_mpeg'] != '') $usedVideos[$slide['params']['slide_bg_html_mpeg']] = true;
-					if(isset($slide['params']['slide_bg_html_webm']) && $slide['params']['slide_bg_html_webm'] != '') $usedVideos[$slide['params']['slide_bg_html_webm']] = true;
-					if(isset($slide['params']['slide_bg_html_ogv']) && $slide['params']['slide_bg_html_ogv'] != '') $usedVideos[$slide['params']['slide_bg_html_ogv']] = true;
-				}
-				
-				if(isset($slide['layers']) && !empty($slide['layers']) && count($slide['layers']) > 0){
-					foreach($slide['layers'] as $lKey => $layer){
-						if(isset($layer['style']) && $layer['style'] != '') $usedCaptions[$layer['style']] = true;
-						if(isset($layer['animation']) && $layer['animation'] != '' && strpos($layer['animation'], 'customin') !== false) $usedAnimations[str_replace('customin-', '', $layer['animation'])] = true;
-						if(isset($layer['endanimation']) && $layer['endanimation'] != '' && strpos($layer['endanimation'], 'customout') !== false) $usedAnimations[str_replace('customout-', '', $layer['endanimation'])] = true;
-						if(isset($layer['image_url']) && $layer['image_url'] != '') $usedImages[$layer['image_url']] = true; //image_url if image caption
-						
-						if(isset($layer['type']) && $layer['type'] == 'video'){
-							
-							$video_data = (isset($layer['video_data'])) ? (array) $layer['video_data'] : array();
-							
-							if(!empty($video_data) && isset($video_data['video_type']) && $video_data['video_type'] == 'html5'){
-
-								if(isset($video_data['urlPoster']) && $video_data['urlPoster'] != '') $usedImages[$video_data['urlPoster']] = true;
-								
-								if(isset($video_data['urlMp4']) && $video_data['urlMp4'] != '') $usedVideos[$video_data['urlMp4']] = true;
-								if(isset($video_data['urlWebm']) && $video_data['urlWebm'] != '') $usedVideos[$video_data['urlWebm']] = true;
-								if(isset($video_data['urlOgv']) && $video_data['urlOgv'] != '') $usedVideos[$video_data['urlOgv']] = true;
-								
-							}elseif(!empty($video_data) && isset($video_data['video_type']) && $video_data['video_type'] != 'html5'){ //video cover image
-								if(isset($video_data['previewimage']) && $video_data['previewimage'] != '') $usedImages[$video_data['previewimage']] = true;
-							}
-						}
-					}
-				}
-			}
-		}*/
 		
 		$arrSliderExport = array("params"=>$sliderParams,"slides"=>$arrSlides);
 		if(!empty($arrStaticSlide))
@@ -831,7 +826,7 @@ class RevSliderSlider extends RevSliderElementsBase{
 			$animation = array();
 			foreach($usedAnimations as $anim => $val){
 				$anima = RevSliderOperations::getFullCustomAnimationByID($anim);
-				if($anima !== false) $animation[] = RevSliderOperations::getFullCustomAnimationByID($anim);
+				if($anima !== false) $animation[] = $anima;
 				
 			}
 			if(!empty($animation)) $animations = serialize($animation);
@@ -855,6 +850,26 @@ class RevSliderSlider extends RevSliderElementsBase{
 			
 			//either the function uses die() or all is cool
 			$usepcl = true;
+		}
+		
+		//add svg to the zip
+		if(!empty($usedSVG)){
+			$content_url = content_url();
+			$content_path = ABSPATH . 'wp-content';
+			foreach($usedSVG as $file => $val){
+				if(strpos($file, 'http') !== false){ //remove all up to wp-content folder
+					$checkpath = str_replace($content_url, '', $file); 
+					
+					if(is_file($content_path.$checkpath)){
+						/*if(!$usepcl){
+							$zip->addFile($content_path.$checkpath, 'svg/'.$checkpath);
+						}else{
+							$v_list = $pclzip->add($content_path.$checkpath, PCLZIP_OPT_REMOVE_PATH, $content_path, PCLZIP_OPT_ADD_PATH, 'svg/');
+						}*/
+						$strExport = str_replace($file, $checkpath, $strExport);
+					}
+				}
+			}
 		}
 		
 		//add images to zip
@@ -979,25 +994,6 @@ class RevSliderSlider extends RevSliderElementsBase{
 		@unlink(RevSliderGlobals::$uploadsUrlExportZip); //delete file after sending it to user
 		
 		exit();
-		
-		/*else{ //fallback, do old export
-			$this->validateInited();
-		
-			$sliderParams = $this->getParamsForExport();
-			$arrSlides = $this->getSlidesForExport();
-			
-			$arrSliderExport = array("params"=>$sliderParams,"slides"=>$arrSlides);
-			
-			$strExport = serialize($arrSliderExport);
-			
-			if(!empty($this->alias))
-				$filename = $this->alias.".txt";
-			else
-				$filename = "slider_export.txt";
-			 
-			RevSliderFunctions::downloadFile($strExport,$filename);
-		}*/
-		
 	}
 	
 	
@@ -1081,6 +1077,7 @@ class RevSliderSlider extends RevSliderElementsBase{
 				$navigations = ( $wp_filesystem->exists( $d_path.'navigation.txt' ) ) ? $wp_filesystem->get_contents( $d_path.'navigation.txt' ) : '';
 				
 				$uid_check = ( $wp_filesystem->exists( $d_path.'info.cfg' ) ) ? $wp_filesystem->get_contents( $d_path.'info.cfg' ) : '';
+				$version_check = ( $wp_filesystem->exists( $d_path.'version.cfg' ) ) ? $wp_filesystem->get_contents( $d_path.'version.cfg' ) : '';
 				
 				if($is_template !== false){
 					if($uid_check != $is_template){
@@ -1135,8 +1132,6 @@ class RevSliderSlider extends RevSliderElementsBase{
 						$content = str_replace(array('customin-'.$animation['id'].'"', 'customout-'.$animation['id'].'"'), array('customin-'.$anim_id.'"', 'customout-'.$anim_id.'"'), $content);	
 					}
 					dmp(__("animations imported!",'revslider'));
-				}else{
-					dmp(__("no custom animations found, if slider uses custom animations, the provided export may be broken...",'revslider'));
 				}
 				
 				//overwrite/append static-captions.css
@@ -1155,7 +1150,6 @@ class RevSliderSlider extends RevSliderElementsBase{
 				//overwrite/create dynamic-captions.css
 				//parse css to classes
 				$dynamicCss = RevSliderCssParser::parseCssToArray($dynamic);
-				
 				if(is_array($dynamicCss) && $dynamicCss !== false && count($dynamicCss) > 0){
 					foreach($dynamicCss as $class => $styles){
 						//check if static style or dynamic style
@@ -1198,8 +1192,6 @@ class RevSliderSlider extends RevSliderElementsBase{
 						}
 					}
 					dmp(__("dynamic styles imported!",'revslider'));
-				}else{
-					dmp(__("no dynamic styles found, if slider uses dynamic styles, the provided export may be broken...",'revslider'));
 				}
 				
 				//update/insert custom animations
@@ -1267,6 +1259,8 @@ class RevSliderSlider extends RevSliderElementsBase{
 				unset($sliderParams['enable_static_layers']);
 			}
 			
+			$sliderParams['version'] = $version_check;
+			
 			$json_params = json_encode($sliderParams);
 			
 			//update slider or create new
@@ -1288,15 +1282,25 @@ class RevSliderSlider extends RevSliderElementsBase{
 						$talias = $arrInsert['alias'] . $ti;
 						$ti++;
 					}
+					
 					if($talias !== $arrInsert['alias']){
+						$sliderParams['title'] = $talias;
+						$sliderParams['alias'] = $talias;
 						$arrInsert['title'] = $talias;
 						$arrInsert['alias'] = $talias;
+						$json_params = json_encode($sliderParams);
+						$arrInsert['params'] = $json_params;
 					}
 				}
 				
 				if($is_template !== false){ //add that we are an template
 					$arrInsert['type'] = 'template';
+					$sliderParams['uid'] = $is_template;
+					$json_params = json_encode($sliderParams);
+					$arrInsert['params'] = $json_params;
 				}
+				
+				
 				
 				$sliderID = $this->db->insert(RevSliderGlobals::$table_sliders,$arrInsert);
 			}
@@ -1312,9 +1316,11 @@ class RevSliderSlider extends RevSliderElementsBase{
 			
 			$alreadyImported = array();
 			
+			$content_url = content_url();
+			$content_path = ABSPATH . 'wp-content';
+			
 			//wpml compatibility
 			$slider_map = array();
-			
 			foreach($arrSlides as $sl_key => $slide){
 				$params = $slide["params"];
 				$layers = $slide["layers"];
@@ -1357,6 +1363,7 @@ class RevSliderSlider extends RevSliderElementsBase{
 					}
 				}
 				
+				
 				//convert layers images:
 				foreach($layers as $key=>$layer){					
 					//import if exists in zip folder
@@ -1365,7 +1372,7 @@ class RevSliderSlider extends RevSliderElementsBase{
 							$layer["image_url"] = RevSliderBase::check_file_in_zip($d_path, $layer["image_url"], $sliderParams["alias"], $alreadyImported);
 							$layer["image_url"] = RevSliderFunctionsWP::getImageUrlFromPath($layer["image_url"]);
 						}
-						if(isset($layer['type']) && $layer['type'] == 'video'){
+						if(isset($layer['type']) && ($layer['type'] == 'video' || $layer['type'] == 'audio')){
 							
 							$video_data = (isset($layer['video_data'])) ? (array) $layer['video_data'] : array();
 							
@@ -1386,13 +1393,25 @@ class RevSliderSlider extends RevSliderElementsBase{
 								}
 								
 							}elseif(!empty($video_data) && isset($video_data['video_type']) && $video_data['video_type'] != 'html5'){ //video cover image
-								if(isset($video_data['previewimage']) && $video_data['previewimage'] != ''){
-									$video_data['previewimage'] = RevSliderFunctionsWP::getImageUrlFromPath(RevSliderBase::check_file_in_zip($d_path, $video_data["previewimage"], $sliderParams["alias"], $alreadyImported));
+								if($video_data['video_type'] == 'audio'){
+									if(isset($video_data['urlAudio']) && $video_data['urlAudio'] != ''){
+										$video_data['urlAudio'] = RevSliderFunctionsWP::getImageUrlFromPath(RevSliderBase::check_file_in_zip($d_path, $video_data["urlAudio"], $sliderParams["alias"], $alreadyImported, true));
+									}
+								}else{
+									if(isset($video_data['previewimage']) && $video_data['previewimage'] != ''){
+										$video_data['previewimage'] = RevSliderFunctionsWP::getImageUrlFromPath(RevSliderBase::check_file_in_zip($d_path, $video_data["previewimage"], $sliderParams["alias"], $alreadyImported));
+									}
 								}
 							}
 							
 							$layer['video_data'] = $video_data;
 							
+						}
+						
+						if(isset($layer['type']) && $layer['type'] == 'svg'){
+							if(isset($layer['svg']) && isset($layer['svg']->src)){
+								$layer['svg']->src = $content_url.$layer['svg']->src;
+							}
 						}
 						
 					}
@@ -1591,8 +1610,49 @@ class RevSliderSlider extends RevSliderElementsBase{
 								}
 							}
 							$layer["image_url"] = RevSliderFunctionsWP::getImageUrlFromPath($layer["image_url"]);
-							$layer['text'] = stripslashes($layer['text']);
+						}
+						
+						$layer['text'] = stripslashes($layer['text']);
 							
+						if(isset($layer['type']) && ($layer['type'] == 'video' || $layer['type'] == 'audio')){
+							
+							$video_data = (isset($layer['video_data'])) ? (array) $layer['video_data'] : array();
+							
+							if(!empty($video_data) && isset($video_data['video_type']) && $video_data['video_type'] == 'html5'){
+
+								if(isset($video_data['urlPoster']) && $video_data['urlPoster'] != ''){
+									$video_data['urlPoster'] = RevSliderFunctionsWP::getImageUrlFromPath(RevSliderBase::check_file_in_zip($d_path, $video_data["urlPoster"], $sliderParams["alias"], $alreadyImported));
+								}
+								
+								if(isset($video_data['urlMp4']) && $video_data['urlMp4'] != ''){
+									$video_data['urlMp4'] = RevSliderFunctionsWP::getImageUrlFromPath(RevSliderBase::check_file_in_zip($d_path, $video_data["urlMp4"], $sliderParams["alias"], $alreadyImported, true));
+								}
+								if(isset($video_data['urlWebm']) && $video_data['urlWebm'] != ''){
+									$video_data['urlWebm'] = RevSliderFunctionsWP::getImageUrlFromPath(RevSliderBase::check_file_in_zip($d_path, $video_data["urlWebm"], $sliderParams["alias"], $alreadyImported, true));
+								}
+								if(isset($video_data['urlOgv']) && $video_data['urlOgv'] != ''){
+									$video_data['urlOgv'] = RevSliderFunctionsWP::getImageUrlFromPath(RevSliderBase::check_file_in_zip($d_path, $video_data["urlOgv"], $sliderParams["alias"], $alreadyImported, true));
+								}
+								
+							}elseif(!empty($video_data) && isset($video_data['video_type']) && $video_data['video_type'] != 'html5'){ //video cover image
+								if($video_data['video_type'] == 'audio'){
+									if(isset($video_data['urlAudio']) && $video_data['urlAudio'] != ''){
+										$video_data['urlAudio'] = RevSliderFunctionsWP::getImageUrlFromPath(RevSliderBase::check_file_in_zip($d_path, $video_data["urlAudio"], $sliderParams["alias"], $alreadyImported, true));
+									}
+								}else{
+									if(isset($video_data['previewimage']) && $video_data['previewimage'] != ''){
+										$video_data['previewimage'] = RevSliderFunctionsWP::getImageUrlFromPath(RevSliderBase::check_file_in_zip($d_path, $video_data["previewimage"], $sliderParams["alias"], $alreadyImported));
+									}
+								}
+							}
+							
+							$layer['video_data'] = $video_data;
+						}
+						
+						if(isset($layer['type']) && $layer['type'] == 'svg'){
+							if(isset($layer['svg']) && isset($layer['svg']->src)){
+								$layer['svg']->src = $content_url.$layer['svg']->src;
+							}
 						}
 						
 						if(isset($layer['layer_action'])){
@@ -1605,14 +1665,14 @@ class RevSliderSlider extends RevSliderElementsBase{
 							}
 						}
 						
-						$link_slide = RevSliderFunctions::getVal($value, 'link_slide', false);
+						$link_slide = RevSliderFunctions::getVal($layer, 'link_slide', false);
 						if($link_slide != false && $link_slide !== 'nothing'){ //link to slide/scrollunder is set, move it to actions
 							if(!isset($layer['layer_action'])) $layer['layer_action'] = new stdClass();
 							
 							switch($link_slide){
 								case 'link':
-									$link = RevSliderFunctions::getVal($value, 'link');
-									$link_open_in = RevSliderFunctions::getVal($value, 'link_open_in');
+									$link = RevSliderFunctions::getVal($layer, 'link');
+									$link_open_in = RevSliderFunctions::getVal($layer, 'link_open_in');
 									$layer['layer_action']->action = array('a' => 'link');
 									$layer['layer_action']->link_type = array('a' => 'a');
 									$layer['layer_action']->image_link = array('a' => $link);
@@ -1822,6 +1882,33 @@ class RevSliderSlider extends RevSliderElementsBase{
 		RevSliderFunctions::validateNotEmpty($sliderID,"Slider ID");
 		$this->initByID($sliderID);
 		$this->duplicateSlider(RevSliderFunctions::getVal($data, "title"));
+	}
+
+	
+	/**
+	 * delete slider from input data
+	 * @since: 5.2.5
+	 */
+	public function duplicateSliderPackageFromData($data){
+		$tmpl = new RevSliderTemplate();
+		
+		$slider_uid = RevSliderFunctions::getVal($data, "slideruid");
+		
+		$uids = $tmpl->get_package_uids($slider_uid);
+		
+		foreach($uids as $sid => $uid){
+			if($sid < 0){ //one or more still needs to be downloaded...
+				return __('Please install Package first to use this feature', 'revslider');
+			}
+		}
+		
+		foreach($uids as $sliderID => $uid){
+			$slider = new RevSlider();
+			$slider->initByID($sliderID);
+			$slider->duplicateSlider(RevSliderFunctions::getVal($data, "title"), true);
+		}
+		
+		return true;
 	}
 	
 	
@@ -2174,6 +2261,7 @@ class RevSliderSlider extends RevSliderElementsBase{
 		
 		$templateKey = 0;
 		$numTemplates = count($slideTemplates);
+		
 		
 		foreach($arrPosts as $postData){
 			$slideTemplate = clone($slideTemplates[$templateKey]);
@@ -2639,8 +2727,10 @@ class RevSliderSlider extends RevSliderElementsBase{
 				if($this->getParam('fetch_type', 'cat_tag') == 'next_prev'){
 					$numSlides = 2;
 				}else{
-					$this->getSlidesFromPosts($publishedOnly);
-					$numSlides = count($this->arrSlides);
+					$numSlides = $this->getParam('max_slider_posts', count($this->arrSlides));
+					if(intval($numSlides) == 0) $numSlides = '∞';
+					//$this->getSlidesFromPosts($publishedOnly);
+					//$numSlides = count($this->arrSlides);
 				}
 			break;
 			case 'facebook':
@@ -3207,22 +3297,29 @@ class RevSliderSlider extends RevSliderElementsBase{
 		
 		$is_gal = false;
 		$additional = array();
-		if(!empty($gal_ids)){
+
+		if(!empty($gal_ids) && $gal_ids[0]){
 			$strPosts = $gal_ids;
 			$strPosts = apply_filters('revslider_set_posts_list_gal', $strPosts, $this->getID());
 			$is_gal = true;
 		}else{
-			$strPosts = $this->getParam("posts_list", "");
-			$additional['order'] = $this->getParam("posts_sort_direction", "DESC");
-			$additional['orderby'] = $this->getParam("post_sortby", "");
-			
+			if(isset($gal_ids[0])){
+				unset($gal_ids[0]);
+				$strPosts = implode(",", $gal_ids);
+				$additional['order'] = "none";
+				$additional['orderby'] = "post__in";
+			}else {
+				$strPosts = $this->getParam("posts_list", "");	
+				$additional['order'] = $this->getParam("posts_sort_direction", "DESC");
+				$additional['orderby'] = $this->getParam("post_sortby", "");
+			}
 			$strPosts = apply_filters('revslider_set_posts_list', $strPosts, $this->getID());
 		}
 		
 		$slider_id = $this->getID();
 		
 		$arrPosts = RevSliderFunctionsWP::getPostsByIDs($strPosts, $slider_id, $is_gal, $additional);
-		
+
 		return($arrPosts);
 	}
 	

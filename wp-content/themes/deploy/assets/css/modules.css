@@ -17004,6 +17004,175 @@ input.wpcf7-form-control.wpcf7-submit:last-child, .carousel-inner .mkdf-slider-c
   position: relative;
 }
 
+/* Working Hours styles
+   ========================================================================== */
+.mkdf-comparision-pricing-tables-holder {
+  font-size: 16px;
+  color: #545454;
+  font-weight: 600;
+}
+
+.mkdf-comparision-pricing-tables-holder:before, .mkdf-comparision-pricing-tables-holder:after {
+  content: " ";
+  /* 1 */
+  display: table;
+  /* 2 */
+}
+
+.mkdf-comparision-pricing-tables-holder:after {
+  clear: both;
+}
+
+.mkdf-comparision-pricing-tables-holder {
+  *zoom: 1;
+}
+
+.mkdf-comparision-pricing-tables-holder ul {
+  list-style-type: none;
+  margin: 0;
+}
+
+.mkdf-comparision-pricing-tables-holder h3, .mkdf-comparision-pricing-tables-holder p {
+  margin: 0;
+}
+
+.mkdf-comparision-pricing-tables-holder h3 {
+  color: #545454;
+}
+
+.mkdf-comparision-pricing-tables-holder * {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.mkdf-comparision-pricing-tables-holder .mkdf-cpt-table {
+  float: left;
+}
+
+.mkdf-comparision-pricing-tables-holder .mkdf-cpt-table-item-feature {
+  display: none;
+}
+
+.mkdf-comparision-pricing-tables-holder.mkdf-two-columns .mkdf-cpt-table {
+  width: 33.33%;
+}
+
+.mkdf-comparision-pricing-tables-holder.mkdf-three-columns .mkdf-cpt-table {
+  width: 25%;
+}
+
+.mkdf-comparision-pricing-tables-holder.mkdf-four-columns .mkdf-cpt-table {
+  width: 20%;
+}
+
+.mkdf-comparision-pricing-tables-holder .mkdf-cpt-features-holder .mkdf-cpt-features-title.mkdf-cpt-table-head-holder {
+  padding-left: 38px;
+}
+
+.mkdf-comparision-pricing-tables-holder .mkdf-cpt-features-holder .mkdf-cpt-features-title.mkdf-cpt-table-head-holder h3 {
+  font-weight: 400;
+}
+
+.mkdf-comparision-pricing-tables-holder .mkdf-cpt-features-holder .mkdf-cpt-table-content li {
+  padding: 10px 10px 10px 38px;
+}
+
+.mkdf-comparision-pricing-tables-holder .mkdf-cpt-features-holder .mkdf-cpt-table-content li span {
+  display: block;
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.mkdf-comparision-pricing-tables-holder .mkdf-cpt-table {
+  border-right: none;
+  border-left: none;
+}
+
+.mkdf-comparision-pricing-tables-holder .mkdf-cpt-table:not(.mkdf-cpt-features-holder) {
+  text-align: center;
+}
+
+.mkdf-comparision-pricing-tables-holder .mkdf-cpt-table:not(.mkdf-cpt-features-holder) .mkdf-cpt-table-head-holder,
+.mkdf-comparision-pricing-tables-holder .mkdf-cpt-table:not(.mkdf-cpt-features-holder) .mkdf-cpt-table-content {
+  border-left: none;
+}
+
+.mkdf-comparision-pricing-tables-holder .mkdf-cpt-table:not(.mkdf-cpt-features-holder) li {
+  line-height: 83px;
+}
+
+.mkdf-comparision-pricing-tables-holder .mkdf-cpt-table .mkdf-cpt-table-head-holder,
+.mkdf-comparision-pricing-tables-holder .mkdf-cpt-table .mkdf-cpt-table-content {
+  border-left: 2px solid #ececec;
+  border-right: 2px solid #ececec;
+}
+
+.mkdf-comparision-pricing-tables-holder .mkdf-cpt-table .mkdf-cpt-table-border-top {
+  width: 100%;
+  height: 6px;
+}
+
+.mkdf-comparision-pricing-tables-holder .mkdf-cpt-table .mkdf-cpt-table-head-holder {
+  display: table;
+  background-color: #fff;
+  height: 137px;
+  width: 100%;
+  padding: 10px;
+  border-bottom: 2px solid #ececec;
+}
+
+.mkdf-comparision-pricing-tables-holder .mkdf-cpt-table .mkdf-cpt-table-head-holder .mkdf-cpt-table-head-holder-inner {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.mkdf-comparision-pricing-tables-holder .mkdf-cpt-table .mkdf-cpt-table-head-holder .mkdf-cpt-table-title {
+  margin-bottom: 4px;
+}
+
+.mkdf-comparision-pricing-tables-holder .mkdf-cpt-table .mkdf-cpt-table-head-holder .mkdf-cpt-table-price {
+  font-size: 16px;
+}
+
+.mkdf-comparision-pricing-tables-holder .mkdf-cpt-table .mkdf-cpt-table-head-holder .mkdf-cpt-table-currency {
+  font-size: 16px;
+}
+
+.mkdf-comparision-pricing-tables-holder .mkdf-cpt-table .mkdf-cpt-table-head-holder .mkdf-cpt-table-period {
+  font-size: 14px;
+  color: #868686;
+  font-weight: 400;
+}
+
+.mkdf-comparision-pricing-tables-holder .mkdf-cpt-table .mkdf-cpt-table-content li {
+  height: 85px;
+  border-bottom: 2px solid #ececec;
+}
+
+.mkdf-comparision-pricing-tables-holder .mkdf-cpt-table .mkdf-cpt-table-content li:nth-child(odd) {
+  background-color: #f2f9fc;
+}
+
+.mkdf-comparision-pricing-tables-holder .mkdf-cpt-table .mkdf-cpt-table-content li:nth-child(even) {
+  background-color: #fff;
+}
+
+.mkdf-comparision-pricing-tables-holder .mkdf-cpt-table .mkdf-cpt-table-footer {
+  background-color: #fff;
+  border-left: 2px solid #ececec;
+  border-bottom: 2px solid #ececec;
+  padding: 25px 0;
+  position: relative;
+  margin-left: -2px;
+}
+
+.mkdf-comparision-pricing-tables-holder .mkdf-cpt-table:last-child .mkdf-cpt-table-footer {
+  border-right: 2px solid #ececec;
+}
+
 /* ==========================================================================
    9. Widgets styles
    ========================================================================== */
