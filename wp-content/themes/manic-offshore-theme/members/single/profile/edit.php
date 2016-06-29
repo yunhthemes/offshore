@@ -105,7 +105,15 @@ if ( bp_has_profile( 'profile_group_id=' . bp_get_current_profile_group_id() ) )
 			<?php $index++; ?>
 
 		<?php endwhile; ?>
-
+		
+		<?php 
+		$author_meta = get_user_by('id', get_current_user_id());		
+		$author_registered = $author_meta->user_registered;		
+		?>
+		<div class="editfield field_1 field_first-name required-field visibility-public alt field_type_textbox">				
+			<label for="email">Account registered</label>		
+			<input id="email" type="text" value="<?php if($author_registered) echo date("d M Y", strtotime($author_registered)) . ' at ' . date("H:i", strtotime($author_registered)); ?>" aria-required="true" disabled="">					
+		</div>		
 	<?php
 
 	/** This action is documented in bp-templates/bp-legacy/buddypress/members/single/profile/profile-wp.php */

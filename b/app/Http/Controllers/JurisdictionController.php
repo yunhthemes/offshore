@@ -11,6 +11,7 @@ use App\Director;
 use App\Shareholder;
 use App\Secretary;
 use App\Service;
+use App\ServiceCountry;
 use App\InformationService;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -28,7 +29,7 @@ class JurisdictionController extends Controller
         //
         if($request->ajax() || $request->callback)
         {
-            $company_types = CompanyType::with('directors', 'shareholders', 'secretaries', 'services', 'informationservices')->get();    
+            $company_types = CompanyType::with('directors', 'shareholders', 'secretaries', 'services', 'informationservices')->orderBy('name', 'ASC')->get();
             return response()->json($company_types)->setCallback($request->input('callback'));
         }
 
@@ -337,7 +338,9 @@ class JurisdictionController extends Controller
             $country = Country::find($request->input('service_3_country_1'));
             $price = (double) preg_replace("/[^0-9,.]/", "", $request->input('service_3_price_1'));
             $price_eu = (double) preg_replace("/[^0-9,.]/", "", $request->input('service_3_price_eu_1'));
-            $country->services()->attach($service->id, ['price' => $price, 'price_eu' => $price_eu]);
+            $service_country_id = $request->input('service_3_country_1_id');
+
+            $country->services()->updateExistingPivot($service->id, ['price' => $price, 'price_eu' => $price_eu]);
 
             //////
 
@@ -361,10 +364,16 @@ class JurisdictionController extends Controller
 
                         $service_country_id = $request->input('service_1_country_'.$i.'_id');
 
-                        if(empty($service_country_id))
-                            $country->services()->attach($service->id, ['price' => $price, 'price_eu' => $price_eu]);
-                        else
-                            $country->services()->updateExistingPivot($service->id, ['price' => $price, 'price_eu' => $price_eu]);
+                        if(!empty($service_country_id)) {
+                            $service_country = ServiceCountry::find($service_country_id);
+                            // return $service_country_id;
+                            // return $service_country;
+                            $old_country_id = $service_country->country_id;
+
+                            $old_country = Country::find($old_country_id);
+                            $old_country->services()->detach($service->id);   
+                        }
+                        $country->services()->attach($service->id, ['price' => $price, 'price_eu' => $price_eu]);
                         
                     endif;                
                 endfor;
@@ -390,10 +399,20 @@ class JurisdictionController extends Controller
 
                         $service_country_id = $request->input('service_2_country_'.$i.'_id');
 
-                        if(empty($service_country_id))
-                            $country->services()->attach($service->id, ['price' => $price, 'price_eu' => $price_eu]);
-                        else
-                            $country->services()->updateExistingPivot($service->id, ['price' => $price, 'price_eu' => $price_eu]);                        
+                        // return $service_country_id;
+
+                        if(!empty($service_country_id)) 
+                        {
+                            $service_country = ServiceCountry::find($service_country_id);
+                            $old_country_id = $service_country->country_id;
+
+                            $old_country = Country::find($old_country_id);
+                            $old_country->services()->detach($service->id);   
+                        }
+                        // else
+                        //     $country->services()->updateExistingPivot($service->id, ['price' => $price, 'price_eu' => $price_eu]);                        
+
+                        $country->services()->attach($service->id, ['price' => $price, 'price_eu' => $price_eu]);
                                         
                     endif;                
                 endfor;

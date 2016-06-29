@@ -53,6 +53,7 @@ if(!function_exists('deploy_mikado_scripts_customized')) {
     wp_enqueue_script('jplistcounter', get_stylesheet_directory_uri().'/js/plugins/jplist.counter-control.min.js', array('jquery'), false, true);
     wp_enqueue_script('jplistsort', get_stylesheet_directory_uri().'/js/plugins/jplist.sort-buttons.min.js', array('jquery'), false, true);    
     wp_enqueue_script('blockui', get_stylesheet_directory_uri().'/js/plugins/jquery.blockUI.js', array('jquery'), false, true);    
+    wp_enqueue_script('hashchange', get_stylesheet_directory_uri().'/js/plugins/jquery.ba-hashchange.min.js', array('jquery'), false, true);    
   }
   add_action('wp_enqueue_scripts', 'deploy_mikado_scripts_customized');
 }
@@ -85,6 +86,7 @@ require 'company-price.php';
 require 'contact-us-btn.php';
 require 'solution-list-carousel.php';
 require 'offshore-company-choices.php';
+require 'company-types-carousel.php';
 
 // add_filter('bp_head','bp_guest_redirect',1);
 // function bp_guest_redirect() {

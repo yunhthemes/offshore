@@ -65,7 +65,14 @@ do_action( 'bp_before_profile_loop_content' ); ?>
 						 */
 						do_action( 'bp_profile_field_item' ); ?>
 
-					<?php endwhile; ?>
+					<?php endwhile;
+					$author_meta = get_user_by('id', get_current_user_id());		
+					$author_registered = $author_meta->user_registered;		
+					?>
+					<tr class="optional-field visibility-public alt field_type_textbox">
+						<td class="label 5"><h6>Account registered</h6></td>
+						<td class="data"><p><?php if($author_registered) echo date("d M Y", strtotime($author_registered)) . ' at ' . date("H:i", strtotime($author_registered)); ?></p></td>
+					</tr>
 
 				</table>
 			</div>

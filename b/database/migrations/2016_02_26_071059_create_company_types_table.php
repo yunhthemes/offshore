@@ -18,7 +18,7 @@ class CreateCompanyTypesTable extends Migration
             $table->string('name');            
             $table->decimal('price', 10, 0);            
             $table->decimal('price_eu', 10, 0);            
-            $table->string('rules');            
+            $table->text('rules');            
             $table->timestamps();
         });
     }

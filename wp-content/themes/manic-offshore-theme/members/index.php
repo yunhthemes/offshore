@@ -79,7 +79,7 @@
 </div>
 <div id="not-available-popup" style="display:none; cursor: default;">
 	<p>The selected shelf company is no longer available. Please make another selection.</p>
-	<a href="<?php echo home_url( '/company-formation-order/' ); ?>" id="redirect-now" class="custom-submit-class" style="min-height: auto!important;margin-top:10px;">Continue registration</a>
+	<a href="<?php echo home_url( '/company-formation-order' ); ?>" id="redirect-now" class="custom-submit-class" style="min-height: auto!important;margin-top:10px;">Continue registration</a>
 </div>
 <script id="user-companies-template" type="text/x-handlebars-template">	
     <div id="company-lists" class="box jplist">
@@ -161,13 +161,15 @@
 									<a href="#" data-company-id="{{id}}" class="company-details"><button class="custom-submit-class">Company details</button></a>
 								{{else}}									
 									{{#ifCond return "==" "1"}}
-										<span class="action" style="display:none;">4</span>
+										<!-- <span class="action" style="display:none;">4</span>
 										<button class="custom-submit-class expire-btn disabled-btn" data-companywpuser-id="{{ wpusers.0.pivot.id }}">Not available</button>
-										<a href="#" data-company-id="{{id}}" data-companywpuser-id="{{ wpusers.0.pivot.id }}" class="delete-saved-company"><i class="fa fa-times" aria-hidden="true"></i></a>
+										<a href="#" data-company-id="{{id}}" data-companywpuser-id="{{ wpusers.0.pivot.id }}" class="delete-saved-company"><i class="fa fa-times" aria-hidden="true"></i></a> -->
 									{{else}}
-										<span class="action" style="display:none;">2</span>
-										<button class="custom-submit-class expire-btn" data-companywpuser-id="{{ wpusers.0.pivot.id }}">Continue registration</button>
+										<!-- <span class="action" style="display:none;">2</span>
+										<button class="custom-submit-class expire-btn" data-company-id="{{id}}" data-companywpuser-id="{{ wpusers.0.pivot.id }}">Continue registration</button> -->
 									{{/ifCond}}
+									<span class="action" style="display:none;">2</span>
+									<button class="custom-submit-class expire-btn" data-company-id="{{id}}" data-companywpuser-id="{{ wpusers.0.pivot.id }}">Continue registration</button>
 								{{/ifCond}}
 		                    {{/ifCond}}		                    
 		                </div>                   
@@ -440,15 +442,38 @@
 
         	response.done(function(data, textStatus, jqXHR){                    
                 if(jqXHR.status==200) {
+                	console.log(data.companies);
 
                 	$.each(data.companies, function(index, value){
-                		value.companytypes.name = getFirstWord(value.companytypes.name);
-                	});
 
-                	// console.log(data.companies);
+                		value.companytypes.name = getFirstWord(value.companytypes.name);
+                		
+                		// only delete when user return after clicking continue registration
+                		if(value.return===true) {
+                			new_data = {};
+				        	new_data.company_id = value.id; 
+				        	new_data.user_id = "<?php echo get_current_user_id(); ?>"; 
+
+				        	var companywpuser_id = value.wpusers[0].pivot.id;
+
+				        	var response = makeRequest(new_data, "<?php echo SITEURL; ?>/b/api/removeusercompanies/"+companywpuser_id, "DELETE");
+
+				        	response.done(function(r_data, textStatus, jqXHR){
+				                if(jqXHR.status==200) {
+
+				                	console.log("deleted..");
+				                                             		
+				                }
+				            });
+
+				        	// remove deleted company in js
+				            data.companies.splice(index,1);
+                		}
+
+                	});
                     
                     newdata["companies"] = data.companies;        
-                    createTemplateAndAppendHtml("#user-companies-template", newdata, "#user-companies");
+                    createTemplateAndAppendHtml("#user-companies-template", newdata, "#user-companies");                    
 
                     // jplist plugin call
 				    $('#company-lists').jplist({
@@ -530,9 +555,10 @@
             $("body").on("click", ".expire-btn", function(e){
             	e.preventDefault();
 
-            	var companywpuser_id = $(this).data("companywpuser-id");
+            	var companywpuser_id = $(this).data("companywpuser-id"),
+            		company_id = $(this).data('company-id');
 
-            	$("#not-available-popup").find("#redirect-now").attr('data-companywpuser-id', companywpuser_id);         	
+            	$("#not-available-popup").find("#redirect-now").attr('data-companywpuser-id', companywpuser_id).attr('data-company-id', company_id);
 
             	$.blockUI({ 
             		message: $("#not-available-popup"),
@@ -554,10 +580,11 @@
             	data = {}; 
 
             	var companywpuser_id = $(this).data("companywpuser-id");
+            	var company_id = $(this).data('company-id');
 
             	var response = makeRequest(data, "<?php echo SITEURL; ?>/b/api/updateuserunavailablecompainesdeletestatus/"+companywpuser_id, "PUT");
 
-            	var redirect_to_url = $(this).attr("href");
+            	var redirect_to_url = $(this).attr("href") + "?refertocompany=" + company_id;
 
             	response.done(function(data, textStatus, jqXHR){                    
 	                if(jqXHR.status==200) {
@@ -566,6 +593,28 @@
 
 	                }
 	            });
+
+
+
+	            // data = {};
+            	// data.company_id = $(this).data('company-id'); 
+            	// data.user_id = "<?php echo get_current_user_id(); ?>"; 
+
+            	// var $this = $(this);
+
+            	// var companywpuser_id = $this.data("companywpuser-id");
+
+            	// var redirect_to_url = $(this).attr("href");
+
+            	// var response = makeRequest(data, "<?php echo SITEURL; ?>/b/api/removeusercompanies/"+companywpuser_id, "DELETE");
+
+            	// response.done(function(data, textStatus, jqXHR){
+	            //     if(jqXHR.status==200) {
+	                     
+	            //         window.location.href = redirect_to_url;                                		
+
+	            //     }
+	            // });
             });
         }
 

@@ -97,7 +97,7 @@ class BP_Registration_Theme_Compat {
 	public function dummy_post() {
 		// Registration page.
 		if ( bp_is_register_page() ) {
-			$title = __( 'Create an Account', 'buddypress' );
+			$title = __( 'Sign up', 'buddypress' );
 
 			if ( 'completed-confirmation' == bp_get_current_signup_step() ) {
 				$title = __( 'Check Your Email To Activate Your Account!', 'buddypress' );

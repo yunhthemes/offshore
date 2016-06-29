@@ -590,10 +590,23 @@ body.home{
         }
       }
 
+      .mkdf-item-text-holder-2 {
+        // padding-top: 91px!important;
+        // padding-bottom: 91px!important;
+        &:before {
+          background: @dark-blue!important;
+        }
+      }
+
       &:hover{
         .mkdf-item-text-holder{
           &:before{
             .opacity(1);
+          }
+        }
+        .mkdf-item-text-holder-2{
+          .mkdf-excerpt{
+            .opacity(0);
           }
         }
         .mkdf-excerpt{

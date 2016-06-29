@@ -123,10 +123,31 @@ do_action( 'bp_before_member_messages_loop' ); ?>
 							?>
 							<span class="activity">
 							<?php
+								$ch = curl_init();
+
+								// Set query data here with the URL
+								curl_setopt($ch, CURLOPT_URL, 'http://ipinfo.io'); 
+
+								curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+								curl_setopt($ch, CURLOPT_TIMEOUT, '3');
+								$content = trim(curl_exec($ch));
+								curl_close($ch);
+
+								$ip = json_decode($content);								
+
 								$users_country = bp_profile_field_data_r('field=Nationality');
-								$code = get_country_code($users_country); // user country code			
-								$timezone = get_time_zone($code, '');
-								$date->setTimezone(new DateTimeZone($timezone));
+
+								if(!empty($ip)) {
+									$new_code = $ip->country;
+								} else {
+									$new_code = get_country_code($users_country); // user country code
+								}
+
+								if($new_code) {
+									$timezone = get_time_zone($new_code, '');
+									$date->setTimezone(new DateTimeZone($timezone));
+								}		
+
 								echo $date->format('F d, Y g:i a');
 							?></span>
 						</td>						

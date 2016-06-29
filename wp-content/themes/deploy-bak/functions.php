@@ -300,6 +300,12 @@ if(!function_exists('deploy_mikado_header_meta')) {
 		<meta charset="<?php bloginfo('charset'); ?>"/>
 		<link rel="profile" href="http://gmpg.org/xfn/11"/>
 		<link rel="pingback" href="<?php bloginfo('pingback_url'); ?>"/>
+
+		<meta http-equiv="cache-control" content="max-age=0" />
+		<meta http-equiv="cache-control" content="no-cache" />
+		<meta http-equiv="expires" content="0" />
+		<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+		<meta http-equiv="pragma" content="no-cache" />
 	<?php }
 
 	add_action('deploy_mikado_header_meta', 'deploy_mikado_header_meta');

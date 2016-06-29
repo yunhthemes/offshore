@@ -22,7 +22,7 @@ function custom_menu_item_shortcode() {
 			    	    <a href="#" class="" id="custom-right-header-livechat"><span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon null fa"></i></span><span class="item_text">24/7 Support, Chat Now</span></span><span class="plus"></span></span></a>
 			    	</li>
 			    	<li class="menu-item menu-item-type-post_type menu-item-object-page narrow">
-			    	    <a href="'.wp_logout_url(home_url()).'"><span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon null fa"></i></span><span class="item_text">Sign Out</span></span><span class="plus"></span></span></a>
+			    	    <a href="'.wp_logout_url().'"><span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon null fa"></i></span><span class="item_text">Sign Out</span></span><span class="plus"></span></span></a>
 			    	</li>
 			    </ul>
 			</nav>

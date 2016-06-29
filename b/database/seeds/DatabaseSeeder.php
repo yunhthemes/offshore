@@ -16,11 +16,11 @@ class DatabaseSeeder extends Seeder
 
         $this->call(UserTableSeeder::class);                
         $this->call(CountrySeeder::class);
-        $this->call(CompanyTypeTableSeeder::class);
-        $this->call(KeypersonnelSeeder::class);
-        $this->call(ServiceSeeder::class);
-        $this->call(infoServiceSeeder::class);
-        $this->call(CompanyTableSeeder::class);
+        // $this->call(CompanyTypeTableSeeder::class);
+        // $this->call(KeypersonnelSeeder::class);
+        // $this->call(ServiceSeeder::class);
+        // $this->call(infoServiceSeeder::class);
+        // $this->call(CompanyTableSeeder::class);
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
     }

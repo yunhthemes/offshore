@@ -123,12 +123,13 @@ $page = get_page_by_title( 'Sign up' );
 	                                            required: true,
 	                                            email: true
 	                                        },
-	                                        field_7: "required",
+	                                        field_7: "required",	                                        
 	                                        signup_username: "required",
 	                                        signup_password: "required",
 	                                        signup_password_confirm: {
 	                                            equalTo: "#signup_password"
-	                                        }
+	                                        },
+	                                        "field_51[]": "required",
 	                                    },
 						                messages: {
 						                    "field_2": "Title required",
@@ -142,8 +143,11 @@ $page = get_page_by_title( 'Sign up' );
 						                    "signup_username": "Username required",
 						                    "signup_password": "Password required"
 						                },
-						                errorPlacement: function(error, element) {                            
-						                    element.attr("placeholder", error.text());
+						                errorPlacement: function(error, element) {        
+						                	$('.tnc_error').remove();
+						                	if($(element).attr("id")=="field_53_0") {						
+						                		$(element).parent().parent().append("<span class='tnc_error error'>"+error.text()+"</span>");
+						                	}else element.attr("placeholder", error.text());
 						                }
 	                                });
 
@@ -246,6 +250,53 @@ $page = get_page_by_title( 'Sign up' );
 
 										<?php while ( bp_profile_fields() ) : bp_the_profile_field(); ?>
 											
+											<?php if( bp_get_the_profile_field_name() == "Terms and conditions" ): ?>
+												<div class="field-container">
+					                            	<?php
+													/**
+													 * Fires and displays any member registration email errors.
+													 *
+													 * @since 1.1.0
+													 */
+													do_action( 'bp_signup_email_errors' ); ?>
+					                                <label for="email">Email*</label>
+					                                <input type="email" name="signup_email" id="signup_email" class="custom-input-class" value="<?php bp_signup_email_value(); ?>" <?php bp_form_field_attributes( 'email' ); ?>/>                                
+					                            </div>
+					                            <div class="field-container">
+					                            	<?php
+													/**
+													 * Fires and displays any member registration username errors.
+													 *
+													 * @since 1.1.0
+													 */
+													do_action( 'bp_signup_username_errors' ); ?>
+					                                <label for="signup_username">Username*</label>
+													<input type="text" name="signup_username" id="signup_username" class="custom-input-class" value="<?php bp_signup_username_value(); ?>" <?php bp_form_field_attributes( 'username' ); ?>/>
+					                            </div>
+					                            <div class="field-container">
+					                            	<?php
+													/**
+													 * Fires and displays any member registration password errors.
+													 *
+													 * @since 1.1.0
+													 */
+													do_action( 'bp_signup_password_errors' ); ?>								
+					                                <label for="password">Password*</label>
+					                                <input type="password" name="signup_password" id="signup_password" value="" class="custom-input-class password-entry" <?php bp_form_field_attributes( 'password' ); ?>/>
+					                                <div id="pass-strength-result"></div>
+					                            </div>
+					                            <div class="field-container">
+					                            	<?php
+													/**
+													 * Fires and displays any member registration password confirmation errors.
+													 *
+													 * @since 1.1.0
+													 */
+													do_action( 'bp_signup_password_confirm_errors' ); ?>
+					                                <label for="retype_password">Retype password*</label>
+					                                <input type="password" name="signup_password_confirm" id="signup_password_confirm" value="" class="custom-input-class password-entry-confirm" <?php bp_form_field_attributes( 'password' ); ?>/>
+					                            </div>
+											<?php endif; ?>
 											<div<?php bp_field_css_class( 'editfield field-container' ); ?>>
 
 												<?php
@@ -306,7 +357,7 @@ $page = get_page_by_title( 'Sign up' );
 
 										<?php endwhile; ?>
 
-										<input type="hidden" name="signup_profile_field_ids" id="signup_profile_field_ids" value="<?php bp_the_profile_field_ids(); ?>" />
+										<input type="hidden" name="signup_profile_field_ids" id="signup_profile_field_ids" value="<?php bp_the_profile_field_ids(); ?>" />										
 
 									<?php endwhile; endif; endif; ?>
 
@@ -327,53 +378,7 @@ $page = get_page_by_title( 'Sign up' );
 									 */
 									do_action( 'bp_after_signup_profile_fields' ); ?>
 
-	                            <?php endif; ?>
-
-	                            <div class="field-container">
-	                            	<?php
-									/**
-									 * Fires and displays any member registration email errors.
-									 *
-									 * @since 1.1.0
-									 */
-									do_action( 'bp_signup_email_errors' ); ?>
-	                                <label for="email">Email*</label>
-	                                <input type="email" name="signup_email" id="signup_email" class="custom-input-class" value="<?php bp_signup_email_value(); ?>" <?php bp_form_field_attributes( 'email' ); ?>/>                                
-	                            </div>
-	                            <div class="field-container">
-	                            	<?php
-									/**
-									 * Fires and displays any member registration username errors.
-									 *
-									 * @since 1.1.0
-									 */
-									do_action( 'bp_signup_username_errors' ); ?>
-	                                <label for="signup_username">Username*</label>
-									<input type="text" name="signup_username" id="signup_username" class="custom-input-class" value="<?php bp_signup_username_value(); ?>" <?php bp_form_field_attributes( 'username' ); ?>/>
-	                            </div>
-	                            <div class="field-container">
-	                            	<?php
-									/**
-									 * Fires and displays any member registration password errors.
-									 *
-									 * @since 1.1.0
-									 */
-									do_action( 'bp_signup_password_errors' ); ?>								
-	                                <label for="password">Password*</label>
-	                                <input type="password" name="signup_password" id="signup_password" value="" class="custom-input-class password-entry" <?php bp_form_field_attributes( 'password' ); ?>/>
-	                                <div id="pass-strength-result"></div>
-	                            </div>
-	                            <div class="field-container">
-	                            	<?php
-									/**
-									 * Fires and displays any member registration password confirmation errors.
-									 *
-									 * @since 1.1.0
-									 */
-									do_action( 'bp_signup_password_confirm_errors' ); ?>
-	                                <label for="retype_password">Retype password*</label>
-	                                <input type="password" name="signup_password_confirm" id="signup_password_confirm" value="" class="custom-input-class password-entry-confirm" <?php bp_form_field_attributes( 'password' ); ?>/>
-	                            </div>
+	                            <?php endif; ?>	                            
 
 	                            <?php
 								/**

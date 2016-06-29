@@ -284,6 +284,7 @@ buddypress/bp-messages/bp-messages-star.php
 buddypress/bp-members/bp-members-function.php
 buddypress/bp-groups/classes/class-bp-groups-component.php
 buddypress/bp-core/bp-core-catch-uri.php
+buddypress/bp-members/classes/class-bp-registration-theme-compat.php
 
 /wp-content/themes/deploy/framework/modules/header/templates/parts/sticky-navigation.php
 /wp-content/themes/deploy/framework/modules/shortcodes/blog-list/templates/boxes.php

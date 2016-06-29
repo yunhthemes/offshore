@@ -85,7 +85,15 @@ function registration_form() {
     echo '
     <script>
     (function($) {
-        $(document).ready(function(){     
+        $(document).ready(function(){    
+
+            // window.onpopstate = function (e) { window.history.forward(1); }
+
+            $(window).bind("beforeunload", function(){
+
+                return "";
+
+            });
 
             ///////////
             //// GET CURRENT USER\'S COUNTRY
@@ -135,6 +143,15 @@ function registration_form() {
                 }
             });
 
+            function inArray(needle, haystack) {
+                var length = haystack.length;
+                for(var i = 0; i < length; i++) {
+                    // console.log(haystack[i].indexOf(needle));
+                    if(needle.indexOf(haystack[i]) > -1) return true;
+                }
+                return false;
+            }
+
             function validateForm($selector, formID) {
 
                 $.validator.addMethod("telephone", function (value, element) 
@@ -145,12 +162,55 @@ function registration_form() {
                 $.validator.addMethod("companynames", function (value, element) 
                 {
                     var check;
-                    var val = value.toLowerCase();                    
-                    if(val.indexOf("ltd") > -1 || val.indexOf("limited") > -1) check = true;
+                    var val = value.toLowerCase();
+                    var name_rules = [];
+
+                    var selected_company_type = $(".type_of_company option:selected").text();
+
+                    if(selected_company_type == "Cyprus limited liability company") {
+                        name_rules = [ "ltd", "limited" ];
+                    }
+                    else if(selected_company_type == "Belize international business company") {
+                        name_rules = [ "ltd", "limited", "corporation", "corp", "incorporated", "inc", "société anonyme", "sociedad anónima", "sa", "aktiengesellschaft", "ag" ];
+                    }
+                    else if(selected_company_type == "BVI business company") {
+                        name_rules = [ "ltd", "limited", "corporation", "corp", "incorporated", "inc", "société anonyme", "sociedad anónima", "sa" ];
+                    }
+                    else if(selected_company_type == "Nevis international business company") {
+                        name_rules = [ "ltd", "limited", "corporation", "corp", "co", "incorporated", "inc", "société anonyme", "sociedad anónima", "sa", "gmbh" ];
+                    }
+                    else if(selected_company_type == "Seychelles international business company") {
+                        name_rules = [ "ltd", "limited", "corporation", "corp", "incorporated", "inc", "société anonyme", "sociedad anónima", "sa" ];
+                    }
+                    else if(selected_company_type == "Ras Al Khaimah offshore company") {
+                        name_rules = [ "limited" ];    
+                    }
+                    else if(selected_company_type == "Hong Kong limited liability company") {
+                        name_rules = [ "limited", "plc" ];
+                    }
+                    else if(selected_company_type == "Irish limited liability company") {
+                        name_rules = [ "limited", "ltd", "teoranta", "teo" ];
+                    }
+                    else if(selected_company_type == "Malta limited liability company") {
+                        name_rules = [ "limited", "ltd", "company limited", "co limited", "co ltd" ];
+                    }
+                    else if(selected_company_type == "Singapore limited liability company") {
+                        name_rules = [ "limited", "ltd", "sendirian", "sdn", "private", "pte", "berhad", "bhd" ];
+                    }  
+                    else {
+                        name_rules = [ "ltd", "limited" ];
+                    }           
+
+                    // console.log(name_rules);
+
+                    if(inArray(val, name_rules)) check = true;
                     else check = false;
 
+                    // if(val.indexOf("ltd") > -1 || val.indexOf("limited") > -1) check = true;
+                    // else check = false;
+
                     return this.optional(element) || check;
-                }, "Invalid phone no");
+                }, "Company name must be a valid name.");
 
                 $.validator.addMethod("notEqualTo",
                     function(value, element, param) {
@@ -164,7 +224,8 @@ function registration_form() {
                     "Please enter a diferent value."
                 );
 
-                if(formID==1) {
+                if(formID==1) {                    
+
                     $selector.validate({
                         focusInvalid: false,
                         invalidHandler: function(form, validator) {
@@ -180,17 +241,38 @@ function registration_form() {
 
                         },
                         rules : {
-                            "company_name[]": {
+                            "company_name_1": {
                                 required : {
                                     depends : function(elem) {
                                         return $("#new-incorporation").is(":checked");
                                     }
                                 },
-                                companynames : true
+                                companynames : true,
+                                notEqualTo: ["#company_name_2","#company_name_3"]
+                            },
+                            "company_name_2": {
+                                required : {
+                                    depends : function(elem) {
+                                        return $("#new-incorporation").is(":checked");
+                                    }
+                                },
+                                companynames : true,
+                                notEqualTo: ["#company_name_1","#company_name_3"]
+                            },
+                            "company_name_3": {
+                                required : {
+                                    depends : function(elem) {
+                                        return $("#new-incorporation").is(":checked");
+                                    }
+                                },
+                                companynames : true,
+                                notEqualTo: ["#company_name_1","#company_name_2"]
                             }
                         },
                         messages: {
-                            "company_name[]" : "Please provide three company names"
+                            "company_name_1" : "Please provide three company names",
+                            "company_name_2" : "Please provide three company names",
+                            "company_name_3" : "Please provide three company names"
                         },
                         errorPlacement: function(error, element) {                            
                             element.attr("placeholder", error.text());
@@ -198,6 +280,7 @@ function registration_form() {
                     });
                 }else if(formID==2) {
 
+                    var selected_company_type = $(".type_of_company option:selected").text();
                     var shareholderCount = $(".shareholder").find(".field-container").length;
                     var errMessageArr = {};
 
@@ -292,47 +375,6 @@ function registration_form() {
                                         else return false;
                                     }
                                 }
-                            },                            
-                            "secretary_1_name" : {
-                                required: {
-                                    depends : function(elem) {
-                                        if($("#nominee_secretary").is(":checked")==false) return true;
-                                        else return false;
-                                    }
-                                }
-                                // ,notEqualTo: ["#shareholder_1_name", "#shareholder_2_name", "#shareholder_3_name", "#shareholder_4_name", "#shareholder_5_name", "#director_1_name", "#director_2_name", "#director_3_name", "#director_4_name", "#director_5_name"]
-                            },
-                            "secretary_1_address" : {
-                                required: {
-                                    depends : function(elem) {
-                                        if($("#nominee_secretary").is(":checked")==false) return true;
-                                        else return false;
-                                    }
-                                }
-                            },
-                            "secretary_1_address_2" : {
-                                required: {
-                                    depends : function(elem) {
-                                        if($("#nominee_secretary").is(":checked")==false) return true;
-                                        else return false;
-                                    }
-                                }
-                            },                            
-                            "secretary_1_address_4" : {
-                                required: {
-                                    depends : function(elem) {
-                                        if($("#nominee_secretary").is(":checked")==false) return true;
-                                        else return false;
-                                    }
-                                }
-                            },
-                            "secretary_1_telephone" : {
-                                required: {
-                                    depends : function(elem) {
-                                        if($("#nominee_secretary").is(":checked")==false) return true;
-                                        else return false;
-                                    }
-                                }
                             }
                         },
                         errorPlacement: function(error, element) {                            
@@ -340,6 +382,59 @@ function registration_form() {
                         },
                         messages: errMessageJson
                     });
+
+                    var secretary_optional_company_types_arr = ["Belize international business company", "BVI business company", "Nevis international business company", "Seychelles international business company"];
+
+                    if($.inArray( selected_company_type, secretary_optional_company_types_arr ) === -1) {
+
+                        $("#secretary_1_name").rules("add", {
+                            required: {
+                                depends : function(elem) {
+                                    if($("#nominee_secretary").is(":checked")==false) return true;
+                                    else return false;
+                                }
+                            }                       
+                        });
+                        $("#secretary_1_address").rules("add", {
+                            required: {
+                                depends : function(elem) {
+                                    if($("#nominee_secretary").is(":checked")==false) return true;
+                                    else return false;
+                                }
+                            }                       
+                        });
+                        $("#secretary_1_address_2").rules("add", {
+                            required: {
+                                depends : function(elem) {
+                                    if($("#nominee_secretary").is(":checked")==false) return true;
+                                    else return false;
+                                }
+                            }                       
+                        });
+                        $("#secretary_1_address_4").rules("add", {
+                            required: {
+                                depends : function(elem) {
+                                    if($("#nominee_secretary").is(":checked")==false) return true;
+                                    else return false;
+                                }
+                            }                       
+                        });
+                        $("#secretary_1_telephone").rules("add", {
+                            required: {
+                                depends : function(elem) {
+                                    if($("#nominee_secretary").is(":checked")==false) return true;
+                                    else return false;
+                                }
+                            }
+                        });
+                    }else {
+                        $( "#secretary_1_name" ).rules( "remove", "required" );
+                        $( "#secretary_1_address" ).rules( "remove", "required" );
+                        $( "#secretary_1_address_2" ).rules( "remove", "required" );
+                        $( "#secretary_1_address_4" ).rules( "remove", "required" );
+                        $( "#secretary_1_telephone" ).rules( "remove", "required" );
+                    }
+
                 }else if(formID==4) {
 
                     var rulesArr = {};
@@ -356,10 +451,15 @@ function registration_form() {
 
                     rulesArr["nominee_director_annual_fee"] = "required";
                     rulesArr["nominee_secretary_annual_fee"] = "required";
-                    rulesArr["company_name_choices[]"] = "required";
-                    rulesArr["tnc"] = "required";
+                    rulesArr["company_name_choices[]"] = {
+                        required : true,
+                        companynames : true
+                    };
+                    // rulesArr["tnc"] = "required";
 
                     var rulesJson = $.parseJSON(JSON.stringify(rulesArr));
+
+                    // console.log(rulesJson);
 
                     $selector.validate({
                         rules: rulesJson,
@@ -414,33 +514,73 @@ function registration_form() {
 
                 var $shareholderFieldcontainer = $form2.find(".shareholder").find(".pasteclone").find(".field-container");
                 var $directorFieldcontainer = $form2.find(".director").find(".pasteclone").find(".field-container");                
-                var $secretaryFieldcontainer = $form2.find(".secretary").find(".field-container");                
+                var $secretaryFieldcontainer = $form2.find(".secretary").find(".field-container");
 
-                if(nomineeShareholder.checked===false && nomineeDirector.checked===false && nomineeSecretary.checked===false) {
+                var selected_company_type = $(".type_of_company option:selected").text();                
+
+                if(nomineeDirector.checked===false && nomineeSecretary.checked===false) {
                     
-                    var persons = [];
+                    var persons = [],
+                        custom_err_msg = "";
 
-                    $shareholderFieldcontainer.each(function(k, obj){
-                            persons.push($(obj).find(".shareholder-name").val());
-                    });
+                    if(selected_company_type == "Hong Kong limited liability company" || selected_company_type == "Irish limited liability company" || selected_company_type == "Singapore limited liability company") {
 
-                    $directorFieldcontainer.each(function(k, obj){
-                        persons.push($(obj).find(".director-name").val());
-                    });              
+                        if($directorFieldcontainer.length == 1) {
+                            $directorFieldcontainer.each(function(k, obj){
+                                persons.push($(obj).find(".director-name").val());
+                            });                  
+                        }else {
+                            persons.push(""); // no validation required if more than one director appointed
+                        }
 
-                    persons.push($secretaryFieldcontainer.find("#secretary_1_name").val());
-                       
-                    // check if empty then let other validation do the work
-                    var empty_field = false;
-                    $.each(persons, function(k, person){
-                        if(person==="") empty_field = true;
-                    });
+                        persons.push($secretaryFieldcontainer.find("#secretary_1_name").val());
 
-                    if(empty_field===false && persons.allValuesSame()===true) {
-                        alert("It needs to be at least two persons in the company.");
+                        // console.log(persons);
+                        // console.log($directorFieldcontainer.length);
 
-                        return false;
-                    }                 
+                        custom_err_msg = "The same person may not act as sole director and secretary.  You may either appoint one more director or request Offshore Company Solutions to provide a professional director or company secretary.";
+
+                        // check if empty then let other validation do the work
+                        var empty_field = false;
+                        $.each(persons, function(k, person){
+                            if(person==="") empty_field = true;
+                        });
+
+                        if(selected_company_type != "Malta limited liability company" && selected_company_type != "Ras Al Khaimah offshore company" && empty_field===false && persons.allValuesSame()===true) {
+                            alert(custom_err_msg);
+
+                            return false;
+                        }
+
+                    }else {
+
+                        if(nomineeShareholder.checked===false) {
+                            $shareholderFieldcontainer.each(function(k, obj){
+                                persons.push($(obj).find(".shareholder-name").val());
+                            });
+
+                            $directorFieldcontainer.each(function(k, obj){
+                                persons.push($(obj).find(".director-name").val());
+                            });              
+
+                            persons.push($secretaryFieldcontainer.find("#secretary_1_name").val());
+
+                            custom_err_msg = "The same person may not act as sole shareholder, director and secretary.  You may either appoint one more shareholder or director or request Offshore Company Solutions to provide a nominee shareholder, professional director or company secretary.";
+
+                            // check if empty then let other validation do the work
+                            var empty_field = false;
+                            $.each(persons, function(k, person){
+                                if(person==="") empty_field = true;
+                            });
+
+                            if(selected_company_type != "Malta limited liability company" && selected_company_type != "Ras Al Khaimah offshore company" && empty_field===false && persons.allValuesSame()===true) {
+                                alert(custom_err_msg);
+
+                                return false;
+                            }
+                        }                        
+
+                    }
                 }
 
                 return true;
@@ -530,6 +670,8 @@ function registration_form() {
                 var otherFieldsIdsExceptCurrent = $.grep(allFieldIds, function(id, index) {
                    return id != currentFieldName
                 });
+
+                var selected_company_type = $(".type_of_company option:selected").text();                
 
                 $fieldContainer.find("label.name").html(lblName+" "+fieldID);
                 $fieldContainer.find("label.address").html(lblName+" "+fieldID+" address").data("person-id", fieldID);                
@@ -663,7 +805,19 @@ function registration_form() {
 
                 initInputTel($fieldContainer.find("."+selector+"-telephone"));
                 initPlugin($fieldContainer.find(".person-type-1-switch"));
-                initPlugin($fieldContainer.find(".person-type-2-switch"));     
+                initPlugin($fieldContainer.find(".person-type-2-switch"));  
+
+                if(selected_company_type=="Singapore limited liability company"){
+                    $(".director").find(".switch-container").hide();
+                    $(".secretary").find(".switch-container").hide();
+                }else if(selected_company_type=="Irish limited liability company"){
+                    $(".director").find(".switch-container").hide();
+                }else if(selected_company_type=="Malta limited liability company"){
+                    $(".secretary").find(".switch-container").hide();
+                }else {
+                    $(".director").find(".switch-container").show();
+                    $(".secretary").find(".switch-container").show();
+                }
             }
 
             function updateExistingFieldsAfterDelete(selector) {
@@ -813,11 +967,15 @@ function registration_form() {
                     else
                         appendToHtml("US$"+prices["jurisdiction"], "#summaryjurisdiction-price");       
 
-                    update_input_val("", "#shelf_company_id"); // summary forms
+                    if(currency=="Euro (€)") appendToHtml("€0.00", "#summarycompany-price");
+                    else appendToHtml("US$0.00", "#summarycompany-price");
+
+                    update_input_val("", "#shelf_company_id"); // summary forms                    
 
                 }else {                    
                     $("#route-2-summary").show();                    
-                    $("#route-1-summary").hide();                    
+                    $("#route-1-summary").hide();
+
                     if(currency=="Euro (€)") appendToHtml("€0.00", "#summaryjurisdiction-price");
                     else appendToHtml("US$0.00", "#summaryjurisdiction-price");
                 }
@@ -838,6 +996,7 @@ function registration_form() {
                 return false;
             }
 
+            var director_switches = []; // to use for disabling director switch later on
             function initPlugin(selector) {
                 
                 if(selector.jquery) {
@@ -846,16 +1005,55 @@ function registration_form() {
                 }else {
                     // init plugin
                     var elems = Array.prototype.slice.call(document.querySelectorAll(selector));
-                }
+                }                
 
                 elems.forEach(function(html) {
                     var init = new Switchery(html, { color: "#008b9b" });
+                    var selected_company_type = $(".type_of_company option:selected").text();
+                    var nomineeShareholder = document.querySelector("#nominee_shareholder");                    
+
+                    if(selector.jquery) {
+                        if($(html).data("selector")=="director" && selected_company_type == "Malta limited liability company") {
+
+                            director_switches.push(init);
+
+                            if(nomineeShareholder.checked===false || $(".shareholder").find(".pasteclone").find(".field-container").length == 1) {
+                                init.disable();
+                            }
+
+                        }
+                    }                 
 
                     if($(html).hasClass("js-switch")) {
                         html.onchange = function() {
+
+                            if($(html).attr("id")=="nominee_shareholder" && selected_company_type == "Malta limited liability company") {
+                                // if shareholder count is greater than one or ocs shareholder is selected
+                                if(html.checked) {
+                                    $.each(director_switches, function(k, obj){
+                                        // console.log(obj.element.disabled);
+                                        if($(obj.element).is(":disabled"))
+                                            obj.enable();
+                                    });
+                                }else {
+
+                                    // disable only if there is one shareholder
+                                    if($(".shareholder").find(".pasteclone").find(".field-container").length == 1) {
+                                        //reset back to individual only if company was chosen
+                                        if(director_switches[0].element.checked===false)
+                                            $(director_switches[0].element).trigger("click"); 
+
+                                        $.each(director_switches, function(k, obj){ 
+                                            obj.disable();
+                                        });    
+                                    }
+                                    
+                                }
+                            }
+
                             if(html.checked) {
                                 $(html).parent().parent().find(".key-person-info").hide();
-                                $(html).parent().parent().find(".key-person-info").children(".field-container").children(".person-input").val("");
+                                $(html).parent().parent().find(".key-person-info").find(".field-container").find(".person-input").val("");
                                 $(html).parent().parent().find(".add-remove-btn-container-director").hide();
                                 $(html).parent().parent().find(".nominee-container").show();
                                 
@@ -945,11 +1143,12 @@ function registration_form() {
 
                     if(currency=="Euro (€)") cur_symbol = "€";
 
-                    // console.log(eachPrice);
+                    console.log($(obj));
+                    console.log(eachPrice);
 
                     var priceArr = eachPrice.split(cur_symbol);
 
-                    // console.log(priceArr);
+                    console.log(priceArr);
 
                     summaryTotal += parseFloat(priceArr[1]);
                 });
@@ -1194,8 +1393,8 @@ function registration_form() {
 
             function fillForm2WithSavedData() {
                 if($.isEmptyObject(query)===false) {                    
-                    var data = setToRetrieveSavedData(query);
-                    var response = getSavedData(data);
+                    var data_query = setToRetrieveSavedData(query);
+                    var response = getSavedData(data_query);
 
                     response.done(function(data, textStatus, jqXHR){                    
                         if(jqXHR.status==200) {
@@ -1251,76 +1450,77 @@ function registration_form() {
                                 
                             });
 
-                            $("#step-2").find(".next-btn").trigger("click");
+                            if(data_query.referral===false) {
+                                $("#step-2").find(".next-btn").trigger("click");                            
 
-                            ///////
+                                ///////
 
-                            // console.log(data.saved_data.servicescountries)
+                                // console.log(data.saved_data.servicescountries)
 
-                            $.each(data.saved_data.servicescountries, function(i, service){
-                                var country_id = service.country_id;
-                                var service_id = service.service_id;
-                                var credit_card_count = service.pivot.credit_card_count;
-                                if(service_id==2) { // bank account service                                   
-                                    $("#step-3").find(".service-"+service_id+"-country-"+country_id).trigger("click");
-                                }else if(service_id==3) { // credit card service
-                                    $("#step-3").find(".service-"+service_id+"-country-"+country_id+"-card-count").val(credit_card_count).trigger("keyup");
+                                $.each(data.saved_data.servicescountries, function(i, service){
+                                    var country_id = service.country_id;
+                                    var service_id = service.service_id;
+                                    var credit_card_count = service.pivot.credit_card_count;
+                                    if(service_id==2) { // bank account service                                   
+                                        $("#step-3").find(".service-"+service_id+"-country-"+country_id).trigger("click");
+                                    }else if(service_id==3) { // credit card service
+                                        $("#step-3").find(".service-"+service_id+"-country-"+country_id+"-card-count").val(credit_card_count).trigger("keyup");
+                                    }
+                                });
+
+                                $.each(data.saved_data.informationservices, function(i, infoservice){
+                                    $("input[value="+infoservice.id+"].info-service-id").trigger("click");
+                                });                            
+
+                                $("#step-3").find(".next-btn").trigger("click");
+
+                                update_input_val(savedData.id, "#saved_company_id"); // previously saved company id 
+
+                                if(data.saved_data.companywpuser_shareholders.length>0) {                                        
+                                    // fill summary page uploaded files if any
+                                    $.each(data.saved_data.companywpuser_shareholders, function(i, shareholder){
+                                        var id = parseInt(i+1);
+                                        if(shareholder.passport) {
+                                            $("#step-4").find("input[name=shareholder_"+id+"_passport]").val(shareholder.passport);    
+                                            $("#step-4").find("div#shareholder_"+id+"_passport_files").text(shareholder.passport);
+                                        }
+                                        if(shareholder.bill) {
+                                            $("#step-4").find("input[name=shareholder_"+id+"_bill]").val(shareholder.bill);                                    
+                                            $("#step-4").find("div#shareholder_"+id+"_bill_files").text(shareholder.bill);
+                                        }
+                                    });
                                 }
-                            });
 
-                            $.each(data.saved_data.informationservices, function(i, infoservice){
-                                $("input[value="+infoservice.id+"].info-service-id").trigger("click");
-                            });
+                                if(data.saved_data.companywpuser_directors.length>0) {                                
+                                    // fill summary page uploaded files if any
+                                    $.each(data.saved_data.companywpuser_directors, function(i, director){
+                                        var id = parseInt(i+1);
+                                        if(director.passport) {
+                                            $("#step-4").find("input[name=director_"+id+"_passport]").val(director.passport);                                    
+                                            $("#step-4").find("div#director_"+id+"_passport_files").text(director.passport);    
+                                        }
+                                        if(director.bill) {
+                                            $("#step-4").find("input[name=director_"+id+"_bill]").val(director.bill);
+                                            $("#step-4").find("div#director_"+id+"_bill_files").text(director.bill);
+                                        }
+                                    });
+                                }
 
-                            $("#step-3").find(".next-btn").trigger("click");
-
-                            update_input_val(savedData.id, "#saved_company_id"); // previously saved company id 
-
-                            if(data.saved_data.companywpuser_shareholders.length>0) {                                        
-                                // fill summary page uploaded files if any
-                                $.each(data.saved_data.companywpuser_shareholders, function(i, shareholder){
-                                    var id = parseInt(i+1);
-                                    if(shareholder.passport) {
-                                        $("#step-4").find("input[name=shareholder_"+id+"_passport]").val(shareholder.passport);    
-                                        $("#step-4").find("div#shareholder_"+id+"_passport_files").text(shareholder.passport);
-                                    }
-                                    if(shareholder.bill) {
-                                        $("#step-4").find("input[name=shareholder_"+id+"_bill]").val(shareholder.bill);                                    
-                                        $("#step-4").find("div#shareholder_"+id+"_bill_files").text(shareholder.bill);
-                                    }
-                                });
+                                if(data.saved_data.companywpuser_secretaries.length>0) {                                
+                                    // fill summary page uploaded files if any
+                                    $.each(data.saved_data.companywpuser_secretaries, function(i, secretary){
+                                        var id = parseInt(i+1);
+                                        if(secretary.passport) {
+                                            $("#step-4").find("input[name=secretary_"+id+"_passport]").val(secretary.passport);
+                                            $("#step-4").find("div#secretary_"+id+"_passport_files").text(secretary.passport);
+                                        }
+                                        if(secretary.bill) {
+                                            $("#step-4").find("input[name=secretary_"+id+"_bill]").val(secretary.bill);    
+                                            $("#step-4").find("div#secretary_"+id+"_bill_files").text(secretary.bill);                                    
+                                        }
+                                    });
+                                }
                             }
-
-                            if(data.saved_data.companywpuser_directors.length>0) {                                
-                                // fill summary page uploaded files if any
-                                $.each(data.saved_data.companywpuser_directors, function(i, director){
-                                    var id = parseInt(i+1);
-                                    if(director.passport) {
-                                        $("#step-4").find("input[name=director_"+id+"_passport]").val(director.passport);                                    
-                                        $("#step-4").find("div#director_"+id+"_passport_files").text(director.passport);    
-                                    }
-                                    if(director.bill) {
-                                        $("#step-4").find("input[name=director_"+id+"_bill]").val(director.bill);
-                                        $("#step-4").find("div#director_"+id+"_bill_files").text(director.bill);
-                                    }
-                                });
-                            }
-
-                            if(data.saved_data.companywpuser_secretaries.length>0) {                                
-                                // fill summary page uploaded files if any
-                                $.each(data.saved_data.companywpuser_secretaries, function(i, secretary){
-                                    var id = parseInt(i+1);
-                                    if(secretary.passport) {
-                                        $("#step-4").find("input[name=secretary_"+id+"_passport]").val(secretary.passport);
-                                        $("#step-4").find("div#secretary_"+id+"_passport_files").text(secretary.passport);
-                                    }
-                                    if(secretary.bill) {
-                                        $("#step-4").find("input[name=secretary_"+id+"_bill]").val(secretary.bill);    
-                                        $("#step-4").find("div#secretary_"+id+"_bill_files").text(secretary.bill);                                    
-                                    }
-                                });
-                            }
-
                         }
                     });
                 }
@@ -1330,6 +1530,13 @@ function registration_form() {
             ////////////
             //// EVENTS
             ////////////
+
+            // Bind an event to window.onhashchange that, when the hash changes, gets the
+            // hash and adds the class "selected" to any matching nav link.
+            $(window).hashchange( function(){
+                var hash = location.hash.substring(1);                
+                changePrevStep(hash, hash);         
+            })
 
             $(".next-btn").on("click", function(e){
                 e.preventDefault();   
@@ -1372,12 +1579,29 @@ function registration_form() {
                 e.preventDefault();                
                 
                 var selector = $(this).data("selector");
+                var selected_company_type = $(".type_of_company option:selected").text();
 
                 $("."+selector).find(".remove-this").show();
+
+                // if there is two shareholder allow director to be a company 
+                if(selector=="shareholder" && selected_company_type=="Malta limited liability company") {
+                    // console.log($(".shareholder").find(".pasteclone").find(".field-container").length);
+                    if($(".shareholder").find(".pasteclone").find(".field-container").length >= 1) {
+
+                        // enable only if its diabled caz enabling twice have some issue
+                        // console.log(director_switches[0].element);
+                        if(director_switches[0].element.disabled===true) {
+                            $.each(director_switches, function(k, obj){
+                                obj.enable();
+                            });    
+                        }
+                        
+                    }
+                }
                 
                 if($("."+selector).find(".pasteclone").children(".field-container").length < 5) {
                     cloneForm($(this).parent().parent().find(".cloneable"));
-                    updateClonedFields($(this).parent().parent().find(".pasteclone"), $(this).data("selector"));                    
+                    updateClonedFields($(this).parent().parent().find(".pasteclone"), $(this).data("selector"));
 
                 }else {
                     alert("Can\'t add more than is 5");
@@ -1389,16 +1613,37 @@ function registration_form() {
                 e.preventDefault();
 
                 var selector = $(this).data("selector");
-                if (confirm("Are you sure you want to remove?")) {
+                var selected_company_type = $(".type_of_company option:selected").text();
+
+                if (confirm("Are you sure you want to remove?")) {                    
 
                     if($("."+selector).find(".pasteclone").find(".field-container").length > 1) {
+
                         $(this).parent().parent(".field-container").remove();    
                         updateExistingFieldsAfterDelete(selector);
 
-                        if($("."+selector).find(".pasteclone").find(".field-container").length == 1)
+                        if(selector=="shareholder") {
+                            $("."+selector).find(".pasteclone").find(".field-container").find(".person-input").trigger("change");    
+                        }
+                    
+                        if($("."+selector).find(".pasteclone").find(".field-container").length == 1) 
                             $("."+selector).find(".remove-this").hide();
+
                     }else {
                         alert("Company must have at least one " + selector);
+                    }
+
+                    // if there is two shareholder allow director to be a company 
+                    if(selector=="shareholder" && selected_company_type=="Malta limited liability company") {
+                        // console.log($(".shareholder").find(".pasteclone").find(".field-container").length);
+
+                        // console.log(document.querySelector("#nominee_shareholder").checked);
+                        // if shareholder is only 1 and nominee is not selected
+                        if($(".shareholder").find(".pasteclone").find(".field-container").length === 1 && document.querySelector("#nominee_shareholder").checked=== false) {
+                            $.each(director_switches, function(k, obj){
+                                obj.disable();
+                            });
+                        }
                     }
                     
                 }
@@ -1557,6 +1802,9 @@ function registration_form() {
 
             function initTheForms(data, selectedCompanyTypeId, selectedCompanyTypeName, selectedCompanyTypePrice) {
 
+                newdata["rules"] = data.rules;
+                createTemplateAndAppendHtml("#company-name-rules-template", newdata, "#company-name-rules");
+
                 data.companies.currency = "'.$currency.'";
                 newdata["companies"] = data.companies;
                 createTemplateAndAppendHtml("#shelf-companies-template", newdata, "#shelf-companies");
@@ -1570,6 +1818,9 @@ function registration_form() {
                 prices["shareholders"] = data.shareholders[0].price;
                 prices_eu["shareholders"] = data.shareholders[0].price_eu;
 
+                var selected_company_type = $(".type_of_company option:selected").text();
+
+                data.directors.selected_company_type = selected_company_type;
                 data.directors.currency = "'.$currency.'";
                 newdata["directors"] = data.directors;
                 createTemplateAndAppendHtml("#director-template", newdata, "#director");
@@ -1590,6 +1841,8 @@ function registration_form() {
 
                 newdata["informationservices"] = data.informationservices;
                 createTemplateAndAppendHtml("#informationservices-template", newdata, "#informationservices");
+
+                director_switches = []; // empty director switch everytime form create
 
                 // init plugin
                 initPlugin(".js-switch");
@@ -1644,27 +1897,30 @@ function registration_form() {
                                 if(jqXHR.status==200) {
                                         
                                     initTheForms(getcompanyinclsavedResponse, selectedCompanyTypeId, selectedCompanyTypeName, selectedCompanyTypePrice);
-
-                                    var found = false;
-                                    $(".buy-now").each(function(i, obj){
-                                        var company_id = $(obj).data("company-id");
-                                        
-                                        var selectedCompanyId = savedData.id;
-                                        if(company_id == selectedCompanyId) {
-                                            $(obj).trigger("click");
-                                            found = true;
-                                        }                                        
-                                    });
-
-                                    if(found === false) {
-                                        $(".new-incorporation").trigger("click");
-                                        var companyNameArr = savedData.name.split(",");
-
-                                        $(".company-name-choice").each(function(i, obj){
-                                            $(obj).val(companyNameArr[i].trim()).trigger("keyup");
+                                    
+                                    // if saved company is not for just refernce
+                                    if(data.referral===false) {
+                                        var found = false;
+                                        $(".buy-now").each(function(i, obj){
+                                            var company_id = $(obj).data("company-id");
+                                            
+                                            var selectedCompanyId = savedData.id;
+                                            if(company_id == selectedCompanyId) {
+                                                $(obj).trigger("click");
+                                                found = true;
+                                            }                                        
                                         });
 
-                                        $("#step-1").find(".next-btn").trigger("click");
+                                        if(found === false) {
+                                            $(".new-incorporation").trigger("click");
+                                            var companyNameArr = savedData.name.split(",");
+
+                                            $(".company-name-choice").each(function(i, obj){
+                                                $(obj).val(companyNameArr[i].trim()).trigger("keyup");
+                                            });
+
+                                            $("#step-1").find(".next-btn").trigger("click");
+                                        }
                                     }
 
                                 }
@@ -1706,7 +1962,9 @@ function registration_form() {
 
                 $("#new-incorporation").prop( "checked", true ); // check checkbox for validation purpose
 
-                $("#new-incorporation-container").slideDown().show();                
+                $("#new-incorporation-container").slideDown().show();   
+
+                $(".cancel-btn-1").hide();
 
                 update_input_val(1, "#chosen_route");
                 on_route_change(1);
@@ -1753,6 +2011,14 @@ function registration_form() {
                 var id = $(this).data("choice-id");
                 var data = $(this).val();
                 update_input_val(data, "#company_name_choice_"+id);
+            });
+
+            $(".company-name-choice").on("keypress", function(e){
+                // e.preventDefault();
+                if(e.keyCode === 13){
+                    $(this).parent().parent().find(".next-btn").trigger("click");
+                    return false;
+                }
             });
 
             ///////
@@ -1835,6 +2101,8 @@ function registration_form() {
                                 wpuser_ids.push(each_data.wpuser_id);
                             });
 
+                            $(window).unbind("beforeunload");
+
                             if(wpuser_ids.length>0) {
 
                                 //// send in mail func
@@ -1910,7 +2178,9 @@ function registration_form() {
 
                         console.log(data);
 
-                        alert("Your order has been saved.  You may return to your order to finalise it at any time by logging into your account. Please note that if you have selected a shelf company, it will only be available when you return to your order if it has not been bought by another client in the meantime.");
+                        alert("Your order has been saved. You may return to your order to finalise it at any time by logging into your account. Please note that if you have selected a shelf company, it will only be available when you return to your order if it has not been bought by another client in the meantime.");
+
+                        $(window).unbind("beforeunload");
 
                         setTimeout(function(){ 
                             window.location.href = "'.SITEURL.'/client-dashboard";
@@ -1920,6 +2190,14 @@ function registration_form() {
                 });
 
                 failedRequest(response);
+
+            });
+
+            $(".cancel-btn").on("click", function(e){
+                e.preventDefault();
+
+                var href = $(this).parent().attr("href");
+                window.location.href = href;
 
             });
 
@@ -1972,7 +2250,7 @@ function registration_form() {
                 });
             }
 
-            function getAllCompanyTypes(savedData) {
+            function getAllCompanyTypes(savedData, referral) {
 
                 if (typeof(savedData)==="undefined") savedData = null;
 
@@ -1987,7 +2265,7 @@ function registration_form() {
 
                         appendToSelect(data, "type_of_company");
 
-                        if(savedData!==null)
+                        if(savedData!==null && referral==false)
                             $("#step-1").find(".type_of_company").val(savedData.company_type_id).trigger("change");
 
                     }
@@ -2005,7 +2283,13 @@ function registration_form() {
                 var user_id = "'.$user_id.'";
                 var data = {};
 
-                data.company_id = query.savedcompany;
+                data.referral = false;
+                if(query.savedcompany) data.company_id = query.savedcompany;
+                else {
+                    data.company_id = query.refertocompany;  
+                    data.referral = true;
+                } 
+
                 data.user_id = user_id;
 
                 return data;
@@ -2025,10 +2309,10 @@ function registration_form() {
                     var data = setToRetrieveSavedData(query);
                     var response = getSavedData(data);
 
-                    response.done(function(data, textStatus, jqXHR){                    
+                    response.done(function(r_data, textStatus, jqXHR){                    
                         if(jqXHR.status==200) {                           
-                            savedData = data.saved_data.companies[0];                      
-                            getAllCompanyTypes(savedData);
+                            savedData = r_data.saved_data.companies[0];                      
+                            getAllCompanyTypes(savedData, data.referral);
                         }
                     });
 
@@ -2105,6 +2389,9 @@ function registration_form() {
         <div class="clear"></div>
         <!-- <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>             -->
         
+    </script>
+    <script id="company-name-rules-template" type="text/x-handlebars-template">
+        <p class="white-space-pre">{{rules}}</p>          
     </script>
     <script id="shareholder-template" type="text/x-handlebars-template">
         {{#if shareholders.length}}
@@ -2318,10 +2605,47 @@ function registration_form() {
                             
                             <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>           
 
-                            <div class="custom-input-class-select-container">                           
-                                <select disabled="disabled" name="director_0_address_4" id="director_0_address_4" placeholder="Country" data-selector="director" data-director-field="address_4" data-director-id="0" class="director-address-4 person-input custom-input-class">
-                                    <option value="">Country</option><option value="Afghanistan">Afghanistan</option> <option value="Albania">Albania</option> <option value="Algeria">Algeria</option> <option value="American Samoa">American Samoa</option> <option value="Andorra">Andorra</option> <option value="Angola">Angola</option> <option value="Anguilla">Anguilla</option> <option value="Antigua &amp; Barbuda">Antigua &amp; Barbuda</option> <option value="Argentina">Argentina</option> <option value="Armenia">Armenia</option> <option value="Aruba">Aruba</option> <option value="Australia">Australia</option> <option value="Austria">Austria</option> <option value="Azerbaijan">Azerbaijan</option> <option value="Bahamas">Bahamas</option> <option value="Bahrain">Bahrain</option> <option value="Bangladesh">Bangladesh</option> <option value="Barbados">Barbados</option> <option value="Belarus">Belarus</option> <option value="Belgium">Belgium</option> <option value="Belize">Belize</option> <option value="Benin">Benin</option> <option value="Bermuda">Bermuda</option> <option value="Bhutan">Bhutan</option> <option value="Bolivia">Bolivia</option> <option value="Bonaire">Bonaire</option> <option value="Bosnia &amp; Herzegovina">Bosnia &amp; Herzegovina</option> <option value="Botswana">Botswana</option> <option value="Brazil">Brazil</option> <option value="British Indian Ocean Ter">British Indian Ocean Ter</option> <option value="Brunei">Brunei</option> <option value="Bulgaria">Bulgaria</option> <option value="Burkina Faso">Burkina Faso</option> <option value="Burundi">Burundi</option> <option value="Cambodia">Cambodia</option> <option value="Cameroon">Cameroon</option> <option value="Canada">Canada</option> <option value="Canary Islands">Canary Islands</option> <option value="Cape Verde">Cape Verde</option> <option value="Cayman Islands">Cayman Islands</option> <option value="Central African Republic">Central African Republic</option> <option value="Chad">Chad</option> <option value="Channel Islands">Channel Islands</option> <option value="Chile">Chile</option> <option value="China">China</option> <option value="Christmas Island">Christmas Island</option> <option value="Cocos Island">Cocos Island</option> <option value="Colombia">Colombia</option> <option value="Comoros">Comoros</option> <option value="Congo">Congo</option> <option value="Cook Islands">Cook Islands</option> <option value="Costa Rica">Costa Rica</option> <option value="Cote D`Ivoire">Cote D`Ivoire</option> <option value="Croatia">Croatia</option> <option value="Cuba">Cuba</option> <option value="Curacao">Curacao</option> <option value="Cyprus">Cyprus</option> <option value="Czech Republic">Czech Republic</option> <option value="Denmark">Denmark</option> <option value="Djibouti">Djibouti</option> <option value="Dominica">Dominica</option> <option value="Dominican Republic">Dominican Republic</option> <option value="East Timor">East Timor</option> <option value="Ecuador">Ecuador</option> <option value="Egypt">Egypt</option> <option value="El Salvador">El Salvador</option> <option value="Equatorial Guinea">Equatorial Guinea</option> <option value="Eritrea">Eritrea</option> <option value="Estonia">Estonia</option> <option value="Ethiopia">Ethiopia</option> <option value="Falkland Islands">Falkland Islands</option> <option value="Faroe Islands">Faroe Islands</option> <option value="Fiji">Fiji</option> <option value="Finland">Finland</option> <option value="France">France</option> <option value="French Guiana">French Guiana</option> <option value="French Polynesia">French Polynesia</option> <option value="French Southern Ter">French Southern Ter</option> <option value="Gabon">Gabon</option> <option value="Gambia">Gambia</option> <option value="Georgia">Georgia</option> <option value="Germany">Germany</option> <option value="Ghana">Ghana</option> <option value="Gibraltar">Gibraltar</option> <option value="Great Britain">Great Britain</option> <option value="Greece">Greece</option> <option value="Greenland">Greenland</option> <option value="Grenada">Grenada</option> <option value="Guadeloupe">Guadeloupe</option> <option value="Guam">Guam</option> <option value="Guatemala">Guatemala</option> <option value="Guinea">Guinea</option> <option value="Guyana">Guyana</option> <option value="Haiti">Haiti</option> <option value="Hawaii">Hawaii</option> <option value="Honduras">Honduras</option> <option value="Hong Kong">Hong Kong</option> <option value="Hungary">Hungary</option> <option value="Iceland">Iceland</option> <option value="India">India</option> <option value="Indonesia">Indonesia</option> <option value="Iran">Iran</option> <option value="Iraq">Iraq</option> <option value="Ireland">Ireland</option> <option value="Isle of Man">Isle of Man</option> <option value="Israel">Israel</option> <option value="Italy">Italy</option> <option value="Jamaica">Jamaica</option> <option value="Japan">Japan</option> <option value="Jordan">Jordan</option> <option value="Kazakhstan">Kazakhstan</option> <option value="Kenya">Kenya</option> <option value="Kiribati">Kiribati</option> <option value="Korea North">Korea North</option> <option value="Korea South">Korea South</option> <option value="Kuwait">Kuwait</option> <option value="Kyrgyzstan">Kyrgyzstan</option> <option value="Laos">Laos</option> <option value="Latvia">Latvia</option> <option value="Lebanon">Lebanon</option> <option value="Lesotho">Lesotho</option> <option value="Liberia">Liberia</option> <option value="Libya">Libya</option> <option value="Liechtenstein">Liechtenstein</option> <option value="Lithuania">Lithuania</option> <option value="Luxembourg">Luxembourg</option> <option value="Macau">Macau</option> <option value="Macedonia">Macedonia</option> <option value="Madagascar">Madagascar</option> <option value="Malaysia">Malaysia</option> <option value="Malawi">Malawi</option> <option value="Maldives">Maldives</option> <option value="Mali">Mali</option> <option value="Malta">Malta</option> <option value="Marshall Islands">Marshall Islands</option> <option value="Martinique">Martinique</option> <option value="Mauritania">Mauritania</option> <option value="Mauritius">Mauritius</option> <option value="Mayotte">Mayotte</option> <option value="Mexico">Mexico</option> <option value="Midway Islands">Midway Islands</option> <option value="Moldova">Moldova</option> <option value="Monaco">Monaco</option> <option value="Mongolia">Mongolia</option> <option value="Montserrat">Montserrat</option> <option value="Morocco">Morocco</option> <option value="Mozambique">Mozambique</option> <option value="Myanmar">Myanmar</option> <option value="Nambia">Nambia</option> <option value="Nauru">Nauru</option> <option value="Nepal">Nepal</option> <option value="Netherland Antilles">Netherland Antilles</option> <option value="Netherlands">Netherlands</option> <option value="Nevis">Nevis</option> <option value="New Caledonia">New Caledonia</option> <option value="New Zealand">New Zealand</option> <option value="Nicaragua">Nicaragua</option> <option value="Niger">Niger</option> <option value="Nigeria">Nigeria</option> <option value="Niue">Niue</option> <option value="Norfolk Island">Norfolk Island</option> <option value="Norway">Norway</option> <option value="Oman">Oman</option> <option value="Pakistan">Pakistan</option> <option value="Palau Island">Palau Island</option> <option value="Palestine">Palestine</option> <option value="Panama">Panama</option> <option value="Papua New Guinea">Papua New Guinea</option> <option value="Paraguay">Paraguay</option> <option value="Peru">Peru</option> <option value="Phillipines">Philippines</option> <option value="Pitcairn Island">Pitcairn Island</option> <option value="Poland">Poland</option> <option value="Portugal">Portugal</option> <option value="Puerto Rico">Puerto Rico</option> <option value="Qatar">Qatar</option> <option value="Republic of Montenegro">Republic of Montenegro</option> <option value="Republic of Serbia">Republic of Serbia</option> <option value="Reunion">Reunion</option> <option value="Romania">Romania</option> <option value="Russia">Russia</option> <option value="Rwanda">Rwanda</option> <option value="St Barthelemy">St Barthelemy</option> <option value="St Eustatius">St Eustatius</option> <option value="St Helena">St Helena</option> <option value="St Kitts-Nevis">St Kitts-Nevis</option> <option value="St Lucia">St Lucia</option> <option value="St Maarten">St Maarten</option> <option value="St Pierre &amp; Miquelon">St Pierre &amp; Miquelon</option> <option value="St Vincent &amp; Grenadines">St Vincent &amp; Grenadines</option> <option value="Saipan">Saipan</option> <option value="Samoa">Samoa</option> <option value="Samoa American">Samoa American</option> <option value="San Marino">San Marino</option> <option value="Sao Tome &amp; Principe">Sao Tome &amp; Principe</option> <option value="Saudi Arabia">Saudi Arabia</option> <option value="Senegal">Senegal</option> <option value="Serbia">Serbia</option> <option value="Seychelles">Seychelles</option> <option value="Sierra Leone">Sierra Leone</option> <option value="Singapore">Singapore</option> <option value="Slovakia">Slovakia</option> <option value="Slovenia">Slovenia</option> <option value="Solomon Islands">Solomon Islands</option> <option value="Somalia">Somalia</option> <option value="South Africa">South Africa</option> <option value="Spain">Spain</option> <option value="Sri Lanka">Sri Lanka</option> <option value="Sudan">Sudan</option> <option value="Suriname">Suriname</option> <option value="Swaziland">Swaziland</option> <option value="Sweden">Sweden</option> <option value="Switzerland">Switzerland</option> <option value="Syria">Syria</option> <option value="Tahiti">Tahiti</option> <option value="Taiwan">Taiwan</option> <option value="Tajikistan">Tajikistan</option> <option value="Tanzania">Tanzania</option> <option value="Thailand">Thailand</option> <option value="Togo">Togo</option> <option value="Tokelau">Tokelau</option> <option value="Tonga">Tonga</option> <option value="Trinidad &amp; Tobago">Trinidad &amp; Tobago</option> <option value="Tunisia">Tunisia</option> <option value="Turkey">Turkey</option> <option value="Turkmenistan">Turkmenistan</option> <option value="Turks &amp; Caicos Is">Turks &amp; Caicos Is</option> <option value="Tuvalu">Tuvalu</option> <option value="Uganda">Uganda</option> <option value="Ukraine">Ukraine</option> <option value="United Arab Emirates">United Arab Emirates</option> <option value="United Kingdom">United Kingdom</option> <option value="United States of America">United States of America</option> <option value="Uruguay">Uruguay</option> <option value="Uzbekistan">Uzbekistan</option> <option value="Vanuatu">Vanuatu</option> <option value="Vatican City State">Vatican City State</option> <option value="Venezuela">Venezuela</option> <option value="Vietnam">Vietnam</option> <option value="Virgin Islands (Brit)">Virgin Islands (Brit)</option> <option value="Virgin Islands (USA)">Virgin Islands (USA)</option> <option value="Wake Island">Wake Island</option> <option value="Wallis &amp; Futana Is">Wallis &amp; Futana Is</option> <option value="Yemen">Yemen</option> <option value="Zaire">Zaire</option> <option value="Zambia">Zambia</option> <option value="Zimbabwe">Zimbabwe</option>
-                                </select>     
+                            <div class="custom-input-class-select-container">
+                                {{#ifCond directors.selected_company_type "==" "Irish limited liability company" }}
+                                    <select disabled="disabled" name="director_0_address_4" id="director_0_address_4" placeholder="Country" data-selector="director" data-director-field="address_4" data-director-id="0" class="director-address-4 person-input custom-input-class">
+                                        <option value="">Country</option>
+                                        <option value="Austria">Austria</option>
+                                        <option value="Belgium">Belgium</option>
+                                        <option value="Bulgaria">Bulgaria</option>
+                                        <option value="Croatia">Croatia</option>
+                                        <option value="Cyprus">Cyprus</option>
+                                        <option value="Czech Republic">Czech Republic</option>
+                                        <option value="Denmark">Denmark</option>
+                                        <option value="Estonia">Estonia</option>
+                                        <option value="Finland">Finland</option>
+                                        <option value="France">France</option>
+                                        <option value="Germany">Germany</option>
+                                        <option value="Greece">Greece</option>
+                                        <option value="Hungary">Hungary</option>
+                                        <option value="Iceland">Iceland</option>
+                                        <option value="Ireland">Ireland</option>
+                                        <option value="Italy">Italy</option>
+                                        <option value="Latvia">Latvia</option>
+                                        <option value="Liechtenstein">Liechtenstein</option>
+                                        <option value="Lithuania">Lithuania</option>
+                                        <option value="Luxembourg">Luxembourg</option>
+                                        <option value="Malta">Malta</option>
+                                        <option value="Netherlands">Netherlands</option>
+                                        <option value="Norway">Norway</option>
+                                        <option value="Poland">Poland</option>
+                                        <option value="Portugal">Portugal</option>
+                                        <option value="Romania">Romania</option>
+                                        <option value="Slovakia">Slovakia</option>
+                                        <option value="Slovenia">Slovenia</option>
+                                        <option value="Spain">Spain</option>
+                                        <option value="Sweden">Sweden</option>
+                                        <option value="United Kingdom">United Kingdom</option>
+                                    </select>
+                                {{else}}
+                                    <select disabled="disabled" name="director_0_address_4" id="director_0_address_4" placeholder="Country" data-selector="director" data-director-field="address_4" data-director-id="0" class="director-address-4 person-input custom-input-class">
+                                        <option value="">Country</option><option value="Afghanistan">Afghanistan</option> <option value="Albania">Albania</option> <option value="Algeria">Algeria</option> <option value="American Samoa">American Samoa</option> <option value="Andorra">Andorra</option> <option value="Angola">Angola</option> <option value="Anguilla">Anguilla</option> <option value="Antigua &amp; Barbuda">Antigua &amp; Barbuda</option> <option value="Argentina">Argentina</option> <option value="Armenia">Armenia</option> <option value="Aruba">Aruba</option> <option value="Australia">Australia</option> <option value="Austria">Austria</option> <option value="Azerbaijan">Azerbaijan</option> <option value="Bahamas">Bahamas</option> <option value="Bahrain">Bahrain</option> <option value="Bangladesh">Bangladesh</option> <option value="Barbados">Barbados</option> <option value="Belarus">Belarus</option> <option value="Belgium">Belgium</option> <option value="Belize">Belize</option> <option value="Benin">Benin</option> <option value="Bermuda">Bermuda</option> <option value="Bhutan">Bhutan</option> <option value="Bolivia">Bolivia</option> <option value="Bonaire">Bonaire</option> <option value="Bosnia &amp; Herzegovina">Bosnia &amp; Herzegovina</option> <option value="Botswana">Botswana</option> <option value="Brazil">Brazil</option> <option value="British Indian Ocean Ter">British Indian Ocean Ter</option> <option value="Brunei">Brunei</option> <option value="Bulgaria">Bulgaria</option> <option value="Burkina Faso">Burkina Faso</option> <option value="Burundi">Burundi</option> <option value="Cambodia">Cambodia</option> <option value="Cameroon">Cameroon</option> <option value="Canada">Canada</option> <option value="Canary Islands">Canary Islands</option> <option value="Cape Verde">Cape Verde</option> <option value="Cayman Islands">Cayman Islands</option> <option value="Central African Republic">Central African Republic</option> <option value="Chad">Chad</option> <option value="Channel Islands">Channel Islands</option> <option value="Chile">Chile</option> <option value="China">China</option> <option value="Christmas Island">Christmas Island</option> <option value="Cocos Island">Cocos Island</option> <option value="Colombia">Colombia</option> <option value="Comoros">Comoros</option> <option value="Congo">Congo</option> <option value="Cook Islands">Cook Islands</option> <option value="Costa Rica">Costa Rica</option> <option value="Cote D`Ivoire">Cote D`Ivoire</option> <option value="Croatia">Croatia</option> <option value="Cuba">Cuba</option> <option value="Curacao">Curacao</option> <option value="Cyprus">Cyprus</option> <option value="Czech Republic">Czech Republic</option> <option value="Denmark">Denmark</option> <option value="Djibouti">Djibouti</option> <option value="Dominica">Dominica</option> <option value="Dominican Republic">Dominican Republic</option> <option value="East Timor">East Timor</option> <option value="Ecuador">Ecuador</option> <option value="Egypt">Egypt</option> <option value="El Salvador">El Salvador</option> <option value="Equatorial Guinea">Equatorial Guinea</option> <option value="Eritrea">Eritrea</option> <option value="Estonia">Estonia</option> <option value="Ethiopia">Ethiopia</option> <option value="Falkland Islands">Falkland Islands</option> <option value="Faroe Islands">Faroe Islands</option> <option value="Fiji">Fiji</option> <option value="Finland">Finland</option> <option value="France">France</option> <option value="French Guiana">French Guiana</option> <option value="French Polynesia">French Polynesia</option> <option value="French Southern Ter">French Southern Ter</option> <option value="Gabon">Gabon</option> <option value="Gambia">Gambia</option> <option value="Georgia">Georgia</option> <option value="Germany">Germany</option> <option value="Ghana">Ghana</option> <option value="Gibraltar">Gibraltar</option> <option value="Great Britain">Great Britain</option> <option value="Greece">Greece</option> <option value="Greenland">Greenland</option> <option value="Grenada">Grenada</option> <option value="Guadeloupe">Guadeloupe</option> <option value="Guam">Guam</option> <option value="Guatemala">Guatemala</option> <option value="Guinea">Guinea</option> <option value="Guyana">Guyana</option> <option value="Haiti">Haiti</option> <option value="Hawaii">Hawaii</option> <option value="Honduras">Honduras</option> <option value="Hong Kong">Hong Kong</option> <option value="Hungary">Hungary</option> <option value="Iceland">Iceland</option> <option value="India">India</option> <option value="Indonesia">Indonesia</option> <option value="Iran">Iran</option> <option value="Iraq">Iraq</option> <option value="Ireland">Ireland</option> <option value="Isle of Man">Isle of Man</option> <option value="Israel">Israel</option> <option value="Italy">Italy</option> <option value="Jamaica">Jamaica</option> <option value="Japan">Japan</option> <option value="Jordan">Jordan</option> <option value="Kazakhstan">Kazakhstan</option> <option value="Kenya">Kenya</option> <option value="Kiribati">Kiribati</option> <option value="Korea North">Korea North</option> <option value="Korea South">Korea South</option> <option value="Kuwait">Kuwait</option> <option value="Kyrgyzstan">Kyrgyzstan</option> <option value="Laos">Laos</option> <option value="Latvia">Latvia</option> <option value="Lebanon">Lebanon</option> <option value="Lesotho">Lesotho</option> <option value="Liberia">Liberia</option> <option value="Libya">Libya</option> <option value="Liechtenstein">Liechtenstein</option> <option value="Lithuania">Lithuania</option> <option value="Luxembourg">Luxembourg</option> <option value="Macau">Macau</option> <option value="Macedonia">Macedonia</option> <option value="Madagascar">Madagascar</option> <option value="Malaysia">Malaysia</option> <option value="Malawi">Malawi</option> <option value="Maldives">Maldives</option> <option value="Mali">Mali</option> <option value="Malta">Malta</option> <option value="Marshall Islands">Marshall Islands</option> <option value="Martinique">Martinique</option> <option value="Mauritania">Mauritania</option> <option value="Mauritius">Mauritius</option> <option value="Mayotte">Mayotte</option> <option value="Mexico">Mexico</option> <option value="Midway Islands">Midway Islands</option> <option value="Moldova">Moldova</option> <option value="Monaco">Monaco</option> <option value="Mongolia">Mongolia</option> <option value="Montserrat">Montserrat</option> <option value="Morocco">Morocco</option> <option value="Mozambique">Mozambique</option> <option value="Myanmar">Myanmar</option> <option value="Nambia">Nambia</option> <option value="Nauru">Nauru</option> <option value="Nepal">Nepal</option> <option value="Netherland Antilles">Netherland Antilles</option> <option value="Netherlands">Netherlands</option> <option value="Nevis">Nevis</option> <option value="New Caledonia">New Caledonia</option> <option value="New Zealand">New Zealand</option> <option value="Nicaragua">Nicaragua</option> <option value="Niger">Niger</option> <option value="Nigeria">Nigeria</option> <option value="Niue">Niue</option> <option value="Norfolk Island">Norfolk Island</option> <option value="Norway">Norway</option> <option value="Oman">Oman</option> <option value="Pakistan">Pakistan</option> <option value="Palau Island">Palau Island</option> <option value="Palestine">Palestine</option> <option value="Panama">Panama</option> <option value="Papua New Guinea">Papua New Guinea</option> <option value="Paraguay">Paraguay</option> <option value="Peru">Peru</option> <option value="Phillipines">Philippines</option> <option value="Pitcairn Island">Pitcairn Island</option> <option value="Poland">Poland</option> <option value="Portugal">Portugal</option> <option value="Puerto Rico">Puerto Rico</option> <option value="Qatar">Qatar</option> <option value="Republic of Montenegro">Republic of Montenegro</option> <option value="Republic of Serbia">Republic of Serbia</option> <option value="Reunion">Reunion</option> <option value="Romania">Romania</option> <option value="Russia">Russia</option> <option value="Rwanda">Rwanda</option> <option value="St Barthelemy">St Barthelemy</option> <option value="St Eustatius">St Eustatius</option> <option value="St Helena">St Helena</option> <option value="St Kitts-Nevis">St Kitts-Nevis</option> <option value="St Lucia">St Lucia</option> <option value="St Maarten">St Maarten</option> <option value="St Pierre &amp; Miquelon">St Pierre &amp; Miquelon</option> <option value="St Vincent &amp; Grenadines">St Vincent &amp; Grenadines</option> <option value="Saipan">Saipan</option> <option value="Samoa">Samoa</option> <option value="Samoa American">Samoa American</option> <option value="San Marino">San Marino</option> <option value="Sao Tome &amp; Principe">Sao Tome &amp; Principe</option> <option value="Saudi Arabia">Saudi Arabia</option> <option value="Senegal">Senegal</option> <option value="Serbia">Serbia</option> <option value="Seychelles">Seychelles</option> <option value="Sierra Leone">Sierra Leone</option> <option value="Singapore">Singapore</option> <option value="Slovakia">Slovakia</option> <option value="Slovenia">Slovenia</option> <option value="Solomon Islands">Solomon Islands</option> <option value="Somalia">Somalia</option> <option value="South Africa">South Africa</option> <option value="Spain">Spain</option> <option value="Sri Lanka">Sri Lanka</option> <option value="Sudan">Sudan</option> <option value="Suriname">Suriname</option> <option value="Swaziland">Swaziland</option> <option value="Sweden">Sweden</option> <option value="Switzerland">Switzerland</option> <option value="Syria">Syria</option> <option value="Tahiti">Tahiti</option> <option value="Taiwan">Taiwan</option> <option value="Tajikistan">Tajikistan</option> <option value="Tanzania">Tanzania</option> <option value="Thailand">Thailand</option> <option value="Togo">Togo</option> <option value="Tokelau">Tokelau</option> <option value="Tonga">Tonga</option> <option value="Trinidad &amp; Tobago">Trinidad &amp; Tobago</option> <option value="Tunisia">Tunisia</option> <option value="Turkey">Turkey</option> <option value="Turkmenistan">Turkmenistan</option> <option value="Turks &amp; Caicos Is">Turks &amp; Caicos Is</option> <option value="Tuvalu">Tuvalu</option> <option value="Uganda">Uganda</option> <option value="Ukraine">Ukraine</option> <option value="United Arab Emirates">United Arab Emirates</option> <option value="United Kingdom">United Kingdom</option> <option value="United States of America">United States of America</option> <option value="Uruguay">Uruguay</option> <option value="Uzbekistan">Uzbekistan</option> <option value="Vanuatu">Vanuatu</option> <option value="Vatican City State">Vatican City State</option> <option value="Venezuela">Venezuela</option> <option value="Vietnam">Vietnam</option> <option value="Virgin Islands (Brit)">Virgin Islands (Brit)</option> <option value="Virgin Islands (USA)">Virgin Islands (USA)</option> <option value="Wake Island">Wake Island</option> <option value="Wallis &amp; Futana Is">Wallis &amp; Futana Is</option> <option value="Yemen">Yemen</option> <option value="Zaire">Zaire</option> <option value="Zambia">Zambia</option> <option value="Zimbabwe">Zimbabwe</option>
+                                    </select>                                    
+                                {{/ifCond}}    
                             </div>                
                             <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                             <input disabled="disabled" type="text" name="director_0_telephone" id="director_0_telephone" placeholder="Telephone" data-selector="director" data-director-field="telephone" data-director-id="0" class="director-telephone person-input custom-input-class">
@@ -2583,19 +2907,19 @@ function registration_form() {
                             <input type="hidden" name="shareholder_{{counter @index}}_telephone" id="shareholder_{{counter @index}}_telephone" value="{{telephone_value}}">
                         </div>
                         <div class="edit-form">
-                            <input type="text" name="edit_shareholder_{{counter @index}}_name" id="summary_{{name}}" value="{{value}}" class="name-edit-input required custom-input-class one-row">
+                            <input type="text" placeholder="Name" name="edit_shareholder_{{counter @index}}_name" id="summary_{{name}}" value="{{value}}" class="name-edit-input required custom-input-class one-row">
                             <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                            <input type="text" name="edit_shareholder_{{counter @index}}_address" id="summary_{{address_name}}" value="{{address_value}}" class="address-edit-input required custom-input-class one-row">
+                            <input type="text" placeholder="Street" name="edit_shareholder_{{counter @index}}_address" id="summary_{{address_name}}" value="{{address_value}}" class="address-edit-input required custom-input-class one-row">
                             <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                            <input type="text" name="edit_shareholder_{{counter @index}}_address_2" id="summary_{{address_2_name}}" value="{{address_2_value}}" class="address-2-edit-input custom-input-class required one-row">
+                            <input type="text" placeholder="City" name="edit_shareholder_{{counter @index}}_address_2" id="summary_{{address_2_name}}" value="{{address_2_value}}" class="address-2-edit-input custom-input-class required one-row">
                             <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                            <input type="text" name="edit_shareholder_{{counter @index}}_address_3" id="summary_{{address_3_name}}" value="{{address_3_value}}" class="address-3-edit-input custom-input-class one-row">
+                            <input type="text" placeholder="State" name="edit_shareholder_{{counter @index}}_address_3" id="summary_{{address_3_name}}" value="{{address_3_value}}" class="address-3-edit-input custom-input-class one-row">
                             <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                             <div class="custom-input-class-select-container">            
                                 <select name="edit_shareholder_{{counter @index}}_address_4" id="summary_{{address_4_name}}" value="{{address_4_value}}" class="address-4-edit-input custom-input-class required one-row"><option value="Afghanistan">Afghanistan</option> <option value="Albania">Albania</option> <option value="Algeria">Algeria</option> <option value="American Samoa">American Samoa</option> <option value="Andorra">Andorra</option> <option value="Angola">Angola</option> <option value="Anguilla">Anguilla</option> <option value="Antigua &amp; Barbuda">Antigua &amp; Barbuda</option> <option value="Argentina">Argentina</option> <option value="Armenia">Armenia</option> <option value="Aruba">Aruba</option> <option value="Australia">Australia</option> <option value="Austria">Austria</option> <option value="Azerbaijan">Azerbaijan</option> <option value="Bahamas">Bahamas</option> <option value="Bahrain">Bahrain</option> <option value="Bangladesh">Bangladesh</option> <option value="Barbados">Barbados</option> <option value="Belarus">Belarus</option> <option value="Belgium">Belgium</option> <option value="Belize">Belize</option> <option value="Benin">Benin</option> <option value="Bermuda">Bermuda</option> <option value="Bhutan">Bhutan</option> <option value="Bolivia">Bolivia</option> <option value="Bonaire">Bonaire</option> <option value="Bosnia &amp; Herzegovina">Bosnia &amp; Herzegovina</option> <option value="Botswana">Botswana</option> <option value="Brazil">Brazil</option> <option value="British Indian Ocean Ter">British Indian Ocean Ter</option> <option value="Brunei">Brunei</option> <option value="Bulgaria">Bulgaria</option> <option value="Burkina Faso">Burkina Faso</option> <option value="Burundi">Burundi</option> <option value="Cambodia">Cambodia</option> <option value="Cameroon">Cameroon</option> <option value="Canada">Canada</option> <option value="Canary Islands">Canary Islands</option> <option value="Cape Verde">Cape Verde</option> <option value="Cayman Islands">Cayman Islands</option> <option value="Central African Republic">Central African Republic</option> <option value="Chad">Chad</option> <option value="Channel Islands">Channel Islands</option> <option value="Chile">Chile</option> <option value="China">China</option> <option value="Christmas Island">Christmas Island</option> <option value="Cocos Island">Cocos Island</option> <option value="Colombia">Colombia</option> <option value="Comoros">Comoros</option> <option value="Congo">Congo</option> <option value="Cook Islands">Cook Islands</option> <option value="Costa Rica">Costa Rica</option> <option value="Cote D`Ivoire">Cote D`Ivoire</option> <option value="Croatia">Croatia</option> <option value="Cuba">Cuba</option> <option value="Curacao">Curacao</option> <option value="Cyprus">Cyprus</option> <option value="Czech Republic">Czech Republic</option> <option value="Denmark">Denmark</option> <option value="Djibouti">Djibouti</option> <option value="Dominica">Dominica</option> <option value="Dominican Republic">Dominican Republic</option> <option value="East Timor">East Timor</option> <option value="Ecuador">Ecuador</option> <option value="Egypt">Egypt</option> <option value="El Salvador">El Salvador</option> <option value="Equatorial Guinea">Equatorial Guinea</option> <option value="Eritrea">Eritrea</option> <option value="Estonia">Estonia</option> <option value="Ethiopia">Ethiopia</option> <option value="Falkland Islands">Falkland Islands</option> <option value="Faroe Islands">Faroe Islands</option> <option value="Fiji">Fiji</option> <option value="Finland">Finland</option> <option value="France">France</option> <option value="French Guiana">French Guiana</option> <option value="French Polynesia">French Polynesia</option> <option value="French Southern Ter">French Southern Ter</option> <option value="Gabon">Gabon</option> <option value="Gambia">Gambia</option> <option value="Georgia">Georgia</option> <option value="Germany">Germany</option> <option value="Ghana">Ghana</option> <option value="Gibraltar">Gibraltar</option> <option value="Great Britain">Great Britain</option> <option value="Greece">Greece</option> <option value="Greenland">Greenland</option> <option value="Grenada">Grenada</option> <option value="Guadeloupe">Guadeloupe</option> <option value="Guam">Guam</option> <option value="Guatemala">Guatemala</option> <option value="Guinea">Guinea</option> <option value="Guyana">Guyana</option> <option value="Haiti">Haiti</option> <option value="Hawaii">Hawaii</option> <option value="Honduras">Honduras</option> <option value="Hong Kong">Hong Kong</option> <option value="Hungary">Hungary</option> <option value="Iceland">Iceland</option> <option value="India">India</option> <option value="Indonesia">Indonesia</option> <option value="Iran">Iran</option> <option value="Iraq">Iraq</option> <option value="Ireland">Ireland</option> <option value="Isle of Man">Isle of Man</option> <option value="Israel">Israel</option> <option value="Italy">Italy</option> <option value="Jamaica">Jamaica</option> <option value="Japan">Japan</option> <option value="Jordan">Jordan</option> <option value="Kazakhstan">Kazakhstan</option> <option value="Kenya">Kenya</option> <option value="Kiribati">Kiribati</option> <option value="Korea North">Korea North</option> <option value="Korea South">Korea South</option> <option value="Kuwait">Kuwait</option> <option value="Kyrgyzstan">Kyrgyzstan</option> <option value="Laos">Laos</option> <option value="Latvia">Latvia</option> <option value="Lebanon">Lebanon</option> <option value="Lesotho">Lesotho</option> <option value="Liberia">Liberia</option> <option value="Libya">Libya</option> <option value="Liechtenstein">Liechtenstein</option> <option value="Lithuania">Lithuania</option> <option value="Luxembourg">Luxembourg</option> <option value="Macau">Macau</option> <option value="Macedonia">Macedonia</option> <option value="Madagascar">Madagascar</option> <option value="Malaysia">Malaysia</option> <option value="Malawi">Malawi</option> <option value="Maldives">Maldives</option> <option value="Mali">Mali</option> <option value="Malta">Malta</option> <option value="Marshall Islands">Marshall Islands</option> <option value="Martinique">Martinique</option> <option value="Mauritania">Mauritania</option> <option value="Mauritius">Mauritius</option> <option value="Mayotte">Mayotte</option> <option value="Mexico">Mexico</option> <option value="Midway Islands">Midway Islands</option> <option value="Moldova">Moldova</option> <option value="Monaco">Monaco</option> <option value="Mongolia">Mongolia</option> <option value="Montserrat">Montserrat</option> <option value="Morocco">Morocco</option> <option value="Mozambique">Mozambique</option> <option value="Myanmar">Myanmar</option> <option value="Nambia">Nambia</option> <option value="Nauru">Nauru</option> <option value="Nepal">Nepal</option> <option value="Netherland Antilles">Netherland Antilles</option> <option value="Netherlands">Netherlands</option> <option value="Nevis">Nevis</option> <option value="New Caledonia">New Caledonia</option> <option value="New Zealand">New Zealand</option> <option value="Nicaragua">Nicaragua</option> <option value="Niger">Niger</option> <option value="Nigeria">Nigeria</option> <option value="Niue">Niue</option> <option value="Norfolk Island">Norfolk Island</option> <option value="Norway">Norway</option> <option value="Oman">Oman</option> <option value="Pakistan">Pakistan</option> <option value="Palau Island">Palau Island</option> <option value="Palestine">Palestine</option> <option value="Panama">Panama</option> <option value="Papua New Guinea">Papua New Guinea</option> <option value="Paraguay">Paraguay</option> <option value="Peru">Peru</option> <option value="Phillipines">Philippines</option> <option value="Pitcairn Island">Pitcairn Island</option> <option value="Poland">Poland</option> <option value="Portugal">Portugal</option> <option value="Puerto Rico">Puerto Rico</option> <option value="Qatar">Qatar</option> <option value="Republic of Montenegro">Republic of Montenegro</option> <option value="Republic of Serbia">Republic of Serbia</option> <option value="Reunion">Reunion</option> <option value="Romania">Romania</option> <option value="Russia">Russia</option> <option value="Rwanda">Rwanda</option> <option value="St Barthelemy">St Barthelemy</option> <option value="St Eustatius">St Eustatius</option> <option value="St Helena">St Helena</option> <option value="St Kitts-Nevis">St Kitts-Nevis</option> <option value="St Lucia">St Lucia</option> <option value="St Maarten">St Maarten</option> <option value="St Pierre &amp; Miquelon">St Pierre &amp; Miquelon</option> <option value="St Vincent &amp; Grenadines">St Vincent &amp; Grenadines</option> <option value="Saipan">Saipan</option> <option value="Samoa">Samoa</option> <option value="Samoa American">Samoa American</option> <option value="San Marino">San Marino</option> <option value="Sao Tome &amp; Principe">Sao Tome &amp; Principe</option> <option value="Saudi Arabia">Saudi Arabia</option> <option value="Senegal">Senegal</option> <option value="Serbia">Serbia</option> <option value="Seychelles">Seychelles</option> <option value="Sierra Leone">Sierra Leone</option> <option value="Singapore">Singapore</option> <option value="Slovakia">Slovakia</option> <option value="Slovenia">Slovenia</option> <option value="Solomon Islands">Solomon Islands</option> <option value="Somalia">Somalia</option> <option value="South Africa">South Africa</option> <option value="Spain">Spain</option> <option value="Sri Lanka">Sri Lanka</option> <option value="Sudan">Sudan</option> <option value="Suriname">Suriname</option> <option value="Swaziland">Swaziland</option> <option value="Sweden">Sweden</option> <option value="Switzerland">Switzerland</option> <option value="Syria">Syria</option> <option value="Tahiti">Tahiti</option> <option value="Taiwan">Taiwan</option> <option value="Tajikistan">Tajikistan</option> <option value="Tanzania">Tanzania</option> <option value="Thailand">Thailand</option> <option value="Togo">Togo</option> <option value="Tokelau">Tokelau</option> <option value="Tonga">Tonga</option> <option value="Trinidad &amp; Tobago">Trinidad &amp; Tobago</option> <option value="Tunisia">Tunisia</option> <option value="Turkey">Turkey</option> <option value="Turkmenistan">Turkmenistan</option> <option value="Turks &amp; Caicos Is">Turks &amp; Caicos Is</option> <option value="Tuvalu">Tuvalu</option> <option value="Uganda">Uganda</option> <option value="Ukraine">Ukraine</option> <option value="United Arab Emirates">United Arab Emirates</option> <option value="United Kingdom">United Kingdom</option> <option value="United States of America">United States of America</option> <option value="Uruguay">Uruguay</option> <option value="Uzbekistan">Uzbekistan</option> <option value="Vanuatu">Vanuatu</option> <option value="Vatican City State">Vatican City State</option> <option value="Venezuela">Venezuela</option> <option value="Vietnam">Vietnam</option> <option value="Virgin Islands (Brit)">Virgin Islands (Brit)</option> <option value="Virgin Islands (USA)">Virgin Islands (USA)</option> <option value="Wake Island">Wake Island</option> <option value="Wallis &amp; Futana Is">Wallis &amp; Futana Is</option> <option value="Yemen">Yemen</option> <option value="Zaire">Zaire</option> <option value="Zambia">Zambia</option> <option value="Zimbabwe">Zimbabwe</option></select>     
                             </div>    
                             <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                            <input type="text" name="edit_shareholder_{{counter @index}}_telephone" id="summary_{{telephone_name}}" value="{{telephone_value}}" class="telephone-edit-input custom-input-class required one-row">                        
+                            <input type="text" placeholder="Telephone" name="edit_shareholder_{{counter @index}}_telephone" id="summary_{{telephone_name}}" value="{{telephone_value}}" class="telephone-edit-input custom-input-class required one-row">                        
                             <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                             <button class="save-summary-btn custom-submit-class custom-submit-class-2">Save</button>                     
                         </div>                      
@@ -2689,19 +3013,19 @@ function registration_form() {
                                 <input type="hidden" name="director_{{counter @index}}_telephone" id="director_{{counter @index}}_telephone" value="{{telephone_value}}">
                             </div>
                             <div class="edit-form">
-                                <input type="text" name="edit_director_{{counter @index}}_name" id="summary_{{name}}" value="{{value}}" class="name-edit-input required custom-input-class one-row">
+                                <input type="text" placeholder="Name" name="edit_director_{{counter @index}}_name" id="summary_{{name}}" value="{{value}}" class="name-edit-input required custom-input-class one-row">
                                 <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                                <input type="text" name="edit_director_{{counter @index}}_address" id="summary_{{address_name}}" value="{{address_value}}" class="address-edit-input custom-input-class required one-row">
+                                <input type="text" placeholder="Street" name="edit_director_{{counter @index}}_address" id="summary_{{address_name}}" value="{{address_value}}" class="address-edit-input custom-input-class required one-row">
                                 <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                                <input type="text" name="edit_director_{{counter @index}}_address_2" id="summary_{{address_2_name}}" value="{{address_2_value}}" class="address-2-edit-input custom-input-class required one-row">
+                                <input type="text" placeholder="City" name="edit_director_{{counter @index}}_address_2" id="summary_{{address_2_name}}" value="{{address_2_value}}" class="address-2-edit-input custom-input-class required one-row">
                                 <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                                <input type="text" name="edit_director_{{counter @index}}_address_3" id="summary_{{address_3_name}}" value="{{address_3_value}}" class="address-3-edit-input custom-input-class one-row">
+                                <input type="text" placeholder="State" name="edit_director_{{counter @index}}_address_3" id="summary_{{address_3_name}}" value="{{address_3_value}}" class="address-3-edit-input custom-input-class one-row">
                                 <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                                 <div class="custom-input-class-select-container">            
                                     <select name="edit_director_{{counter @index}}_address_4" id="summary_{{address_4_name}}" value="{{address_4_value}}" class="address-4-edit-input custom-input-class required one-row"><option value="Afghanistan">Afghanistan</option> <option value="Albania">Albania</option> <option value="Algeria">Algeria</option> <option value="American Samoa">American Samoa</option> <option value="Andorra">Andorra</option> <option value="Angola">Angola</option> <option value="Anguilla">Anguilla</option> <option value="Antigua &amp; Barbuda">Antigua &amp; Barbuda</option> <option value="Argentina">Argentina</option> <option value="Armenia">Armenia</option> <option value="Aruba">Aruba</option> <option value="Australia">Australia</option> <option value="Austria">Austria</option> <option value="Azerbaijan">Azerbaijan</option> <option value="Bahamas">Bahamas</option> <option value="Bahrain">Bahrain</option> <option value="Bangladesh">Bangladesh</option> <option value="Barbados">Barbados</option> <option value="Belarus">Belarus</option> <option value="Belgium">Belgium</option> <option value="Belize">Belize</option> <option value="Benin">Benin</option> <option value="Bermuda">Bermuda</option> <option value="Bhutan">Bhutan</option> <option value="Bolivia">Bolivia</option> <option value="Bonaire">Bonaire</option> <option value="Bosnia &amp; Herzegovina">Bosnia &amp; Herzegovina</option> <option value="Botswana">Botswana</option> <option value="Brazil">Brazil</option> <option value="British Indian Ocean Ter">British Indian Ocean Ter</option> <option value="Brunei">Brunei</option> <option value="Bulgaria">Bulgaria</option> <option value="Burkina Faso">Burkina Faso</option> <option value="Burundi">Burundi</option> <option value="Cambodia">Cambodia</option> <option value="Cameroon">Cameroon</option> <option value="Canada">Canada</option> <option value="Canary Islands">Canary Islands</option> <option value="Cape Verde">Cape Verde</option> <option value="Cayman Islands">Cayman Islands</option> <option value="Central African Republic">Central African Republic</option> <option value="Chad">Chad</option> <option value="Channel Islands">Channel Islands</option> <option value="Chile">Chile</option> <option value="China">China</option> <option value="Christmas Island">Christmas Island</option> <option value="Cocos Island">Cocos Island</option> <option value="Colombia">Colombia</option> <option value="Comoros">Comoros</option> <option value="Congo">Congo</option> <option value="Cook Islands">Cook Islands</option> <option value="Costa Rica">Costa Rica</option> <option value="Cote D`Ivoire">Cote D`Ivoire</option> <option value="Croatia">Croatia</option> <option value="Cuba">Cuba</option> <option value="Curacao">Curacao</option> <option value="Cyprus">Cyprus</option> <option value="Czech Republic">Czech Republic</option> <option value="Denmark">Denmark</option> <option value="Djibouti">Djibouti</option> <option value="Dominica">Dominica</option> <option value="Dominican Republic">Dominican Republic</option> <option value="East Timor">East Timor</option> <option value="Ecuador">Ecuador</option> <option value="Egypt">Egypt</option> <option value="El Salvador">El Salvador</option> <option value="Equatorial Guinea">Equatorial Guinea</option> <option value="Eritrea">Eritrea</option> <option value="Estonia">Estonia</option> <option value="Ethiopia">Ethiopia</option> <option value="Falkland Islands">Falkland Islands</option> <option value="Faroe Islands">Faroe Islands</option> <option value="Fiji">Fiji</option> <option value="Finland">Finland</option> <option value="France">France</option> <option value="French Guiana">French Guiana</option> <option value="French Polynesia">French Polynesia</option> <option value="French Southern Ter">French Southern Ter</option> <option value="Gabon">Gabon</option> <option value="Gambia">Gambia</option> <option value="Georgia">Georgia</option> <option value="Germany">Germany</option> <option value="Ghana">Ghana</option> <option value="Gibraltar">Gibraltar</option> <option value="Great Britain">Great Britain</option> <option value="Greece">Greece</option> <option value="Greenland">Greenland</option> <option value="Grenada">Grenada</option> <option value="Guadeloupe">Guadeloupe</option> <option value="Guam">Guam</option> <option value="Guatemala">Guatemala</option> <option value="Guinea">Guinea</option> <option value="Guyana">Guyana</option> <option value="Haiti">Haiti</option> <option value="Hawaii">Hawaii</option> <option value="Honduras">Honduras</option> <option value="Hong Kong">Hong Kong</option> <option value="Hungary">Hungary</option> <option value="Iceland">Iceland</option> <option value="India">India</option> <option value="Indonesia">Indonesia</option> <option value="Iran">Iran</option> <option value="Iraq">Iraq</option> <option value="Ireland">Ireland</option> <option value="Isle of Man">Isle of Man</option> <option value="Israel">Israel</option> <option value="Italy">Italy</option> <option value="Jamaica">Jamaica</option> <option value="Japan">Japan</option> <option value="Jordan">Jordan</option> <option value="Kazakhstan">Kazakhstan</option> <option value="Kenya">Kenya</option> <option value="Kiribati">Kiribati</option> <option value="Korea North">Korea North</option> <option value="Korea South">Korea South</option> <option value="Kuwait">Kuwait</option> <option value="Kyrgyzstan">Kyrgyzstan</option> <option value="Laos">Laos</option> <option value="Latvia">Latvia</option> <option value="Lebanon">Lebanon</option> <option value="Lesotho">Lesotho</option> <option value="Liberia">Liberia</option> <option value="Libya">Libya</option> <option value="Liechtenstein">Liechtenstein</option> <option value="Lithuania">Lithuania</option> <option value="Luxembourg">Luxembourg</option> <option value="Macau">Macau</option> <option value="Macedonia">Macedonia</option> <option value="Madagascar">Madagascar</option> <option value="Malaysia">Malaysia</option> <option value="Malawi">Malawi</option> <option value="Maldives">Maldives</option> <option value="Mali">Mali</option> <option value="Malta">Malta</option> <option value="Marshall Islands">Marshall Islands</option> <option value="Martinique">Martinique</option> <option value="Mauritania">Mauritania</option> <option value="Mauritius">Mauritius</option> <option value="Mayotte">Mayotte</option> <option value="Mexico">Mexico</option> <option value="Midway Islands">Midway Islands</option> <option value="Moldova">Moldova</option> <option value="Monaco">Monaco</option> <option value="Mongolia">Mongolia</option> <option value="Montserrat">Montserrat</option> <option value="Morocco">Morocco</option> <option value="Mozambique">Mozambique</option> <option value="Myanmar">Myanmar</option> <option value="Nambia">Nambia</option> <option value="Nauru">Nauru</option> <option value="Nepal">Nepal</option> <option value="Netherland Antilles">Netherland Antilles</option> <option value="Netherlands">Netherlands</option> <option value="Nevis">Nevis</option> <option value="New Caledonia">New Caledonia</option> <option value="New Zealand">New Zealand</option> <option value="Nicaragua">Nicaragua</option> <option value="Niger">Niger</option> <option value="Nigeria">Nigeria</option> <option value="Niue">Niue</option> <option value="Norfolk Island">Norfolk Island</option> <option value="Norway">Norway</option> <option value="Oman">Oman</option> <option value="Pakistan">Pakistan</option> <option value="Palau Island">Palau Island</option> <option value="Palestine">Palestine</option> <option value="Panama">Panama</option> <option value="Papua New Guinea">Papua New Guinea</option> <option value="Paraguay">Paraguay</option> <option value="Peru">Peru</option> <option value="Phillipines">Philippines</option> <option value="Pitcairn Island">Pitcairn Island</option> <option value="Poland">Poland</option> <option value="Portugal">Portugal</option> <option value="Puerto Rico">Puerto Rico</option> <option value="Qatar">Qatar</option> <option value="Republic of Montenegro">Republic of Montenegro</option> <option value="Republic of Serbia">Republic of Serbia</option> <option value="Reunion">Reunion</option> <option value="Romania">Romania</option> <option value="Russia">Russia</option> <option value="Rwanda">Rwanda</option> <option value="St Barthelemy">St Barthelemy</option> <option value="St Eustatius">St Eustatius</option> <option value="St Helena">St Helena</option> <option value="St Kitts-Nevis">St Kitts-Nevis</option> <option value="St Lucia">St Lucia</option> <option value="St Maarten">St Maarten</option> <option value="St Pierre &amp; Miquelon">St Pierre &amp; Miquelon</option> <option value="St Vincent &amp; Grenadines">St Vincent &amp; Grenadines</option> <option value="Saipan">Saipan</option> <option value="Samoa">Samoa</option> <option value="Samoa American">Samoa American</option> <option value="San Marino">San Marino</option> <option value="Sao Tome &amp; Principe">Sao Tome &amp; Principe</option> <option value="Saudi Arabia">Saudi Arabia</option> <option value="Senegal">Senegal</option> <option value="Serbia">Serbia</option> <option value="Seychelles">Seychelles</option> <option value="Sierra Leone">Sierra Leone</option> <option value="Singapore">Singapore</option> <option value="Slovakia">Slovakia</option> <option value="Slovenia">Slovenia</option> <option value="Solomon Islands">Solomon Islands</option> <option value="Somalia">Somalia</option> <option value="South Africa">South Africa</option> <option value="Spain">Spain</option> <option value="Sri Lanka">Sri Lanka</option> <option value="Sudan">Sudan</option> <option value="Suriname">Suriname</option> <option value="Swaziland">Swaziland</option> <option value="Sweden">Sweden</option> <option value="Switzerland">Switzerland</option> <option value="Syria">Syria</option> <option value="Tahiti">Tahiti</option> <option value="Taiwan">Taiwan</option> <option value="Tajikistan">Tajikistan</option> <option value="Tanzania">Tanzania</option> <option value="Thailand">Thailand</option> <option value="Togo">Togo</option> <option value="Tokelau">Tokelau</option> <option value="Tonga">Tonga</option> <option value="Trinidad &amp; Tobago">Trinidad &amp; Tobago</option> <option value="Tunisia">Tunisia</option> <option value="Turkey">Turkey</option> <option value="Turkmenistan">Turkmenistan</option> <option value="Turks &amp; Caicos Is">Turks &amp; Caicos Is</option> <option value="Tuvalu">Tuvalu</option> <option value="Uganda">Uganda</option> <option value="Ukraine">Ukraine</option> <option value="United Arab Emirates">United Arab Emirates</option> <option value="United Kingdom">United Kingdom</option> <option value="United States of America">United States of America</option> <option value="Uruguay">Uruguay</option> <option value="Uzbekistan">Uzbekistan</option> <option value="Vanuatu">Vanuatu</option> <option value="Vatican City State">Vatican City State</option> <option value="Venezuela">Venezuela</option> <option value="Vietnam">Vietnam</option> <option value="Virgin Islands (Brit)">Virgin Islands (Brit)</option> <option value="Virgin Islands (USA)">Virgin Islands (USA)</option> <option value="Wake Island">Wake Island</option> <option value="Wallis &amp; Futana Is">Wallis &amp; Futana Is</option> <option value="Yemen">Yemen</option> <option value="Zaire">Zaire</option> <option value="Zambia">Zambia</option> <option value="Zimbabwe">Zimbabwe</option></select>     
                                 </div>
                                 <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                                <input type="text" name="edit_director_{{counter @index}}_telephone" id="summary_{{telephone_name}}" value="{{telephone_value}}" class="telephone-edit-input custom-input-class required one-row">
+                                <input type="text" placeholder="Telephone" name="edit_director_{{counter @index}}_telephone" id="summary_{{telephone_name}}" value="{{telephone_value}}" class="telephone-edit-input custom-input-class required one-row">
 
                                 <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                                 <button class="save-summary-btn custom-submit-class custom-submit-class-2">Save</button>                     
@@ -2719,7 +3043,7 @@ function registration_form() {
                             <div class="upload-btn-container">
                                 <input type="text" name="director_{{counter @index}}_passport" />
                                 <span class="btn btn-success fileinput-button">                            
-                                    <button class="upload-passport-btn custom-submit-class custom-submit-class-2">Upload passport</button>
+                                    <button class="upload-passport-btn custom-submit-class custom-submit-class-2" data-btn-text="Passport uploaded">Upload passport</button>
                                     <!-- The file input field used as target for the file upload widget -->
                                     <input class="passport_upload" type="file" name="files" data-fieldname="director_{{counter @index}}_passport" data-selector="director_{{counter @index}}" />
                                 </span>
@@ -2730,7 +3054,7 @@ function registration_form() {
                             <div class="upload-btn-container">
                                 <input type="text" name="director_{{counter @index}}_bill" />
                                 <span class="btn btn-success fileinput-button">                            
-                                    <button class="upload-bill-btn custom-submit-class custom-submit-class-2">Upload utility bill</button>
+                                    <button class="upload-bill-btn custom-submit-class custom-submit-class-2" data-btn-text="Utility bill uploaded">Upload utility bill</button>
                                     <!-- The file input field used as target for the file upload widget -->                            
                                     <input class="bill_upload" type="file" name="files" data-fieldname="director_{{counter @index}}_bill" data-selector="director_{{counter @index}}" />
                                 </span>                
@@ -2788,19 +3112,19 @@ function registration_form() {
                                 <input type="hidden" name="secretary_{{counter @index}}_telephone" id="secretary_{{counter @index}}_telephone" value="{{telephone_value}}">
                             </div>
                             <div class="edit-form">
-                                <input type="text" name="edit_secretary_{{counter @index}}_name" id="summary_{{name}}" value="{{value}}" class="name-edit-input custom-input-class required one-row">
+                                <input type="text" name="edit_secretary_{{counter @index}}_name" id="summary_{{name}}" placeholder="Name" value="{{value}}" class="name-edit-input custom-input-class required one-row">
                                 <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                                <input type="text" name="edit_secretary_{{counter @index}}_address" id="summary_{{address_name}}" value="{{address_value}}" class="address-edit-input custom-input-class required one-row">
+                                <input type="text" placeholder="Street" name="edit_secretary_{{counter @index}}_address" id="summary_{{address_name}}" value="{{address_value}}" class="address-edit-input custom-input-class required one-row">
                                 <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                                <input type="text" name="edit_secretary_{{counter @index}}_address_2" id="summary_{{address_2_name}}" value="{{address_2_value}}" class="address-2-edit-input custom-input-class required one-row">
+                                <input type="text" placeholder="City" name="edit_secretary_{{counter @index}}_address_2" id="summary_{{address_2_name}}" value="{{address_2_value}}" class="address-2-edit-input custom-input-class required one-row">
                                 <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                                <input type="text" name="edit_secretary_{{counter @index}}_address_3" id="summary_{{address_3_name}}" value="{{address_3_value}}" class="address-3-edit-input custom-input-class one-row">
+                                <input type="text" placeholder="State" name="edit_secretary_{{counter @index}}_address_3" id="summary_{{address_3_name}}" value="{{address_3_value}}" class="address-3-edit-input custom-input-class one-row">
                                 <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
                                 <div class="custom-input-class-select-container">            
                                     <select name="edit_secretary_{{counter @index}}_address_4" id="summary_{{address_4_name}}" value="{{address_4_value}}" class="address-4-edit-input custom-input-class required one-row"><option value="Afghanistan">Afghanistan</option> <option value="Albania">Albania</option> <option value="Algeria">Algeria</option> <option value="American Samoa">American Samoa</option> <option value="Andorra">Andorra</option> <option value="Angola">Angola</option> <option value="Anguilla">Anguilla</option> <option value="Antigua &amp; Barbuda">Antigua &amp; Barbuda</option> <option value="Argentina">Argentina</option> <option value="Armenia">Armenia</option> <option value="Aruba">Aruba</option> <option value="Australia">Australia</option> <option value="Austria">Austria</option> <option value="Azerbaijan">Azerbaijan</option> <option value="Bahamas">Bahamas</option> <option value="Bahrain">Bahrain</option> <option value="Bangladesh">Bangladesh</option> <option value="Barbados">Barbados</option> <option value="Belarus">Belarus</option> <option value="Belgium">Belgium</option> <option value="Belize">Belize</option> <option value="Benin">Benin</option> <option value="Bermuda">Bermuda</option> <option value="Bhutan">Bhutan</option> <option value="Bolivia">Bolivia</option> <option value="Bonaire">Bonaire</option> <option value="Bosnia &amp; Herzegovina">Bosnia &amp; Herzegovina</option> <option value="Botswana">Botswana</option> <option value="Brazil">Brazil</option> <option value="British Indian Ocean Ter">British Indian Ocean Ter</option> <option value="Brunei">Brunei</option> <option value="Bulgaria">Bulgaria</option> <option value="Burkina Faso">Burkina Faso</option> <option value="Burundi">Burundi</option> <option value="Cambodia">Cambodia</option> <option value="Cameroon">Cameroon</option> <option value="Canada">Canada</option> <option value="Canary Islands">Canary Islands</option> <option value="Cape Verde">Cape Verde</option> <option value="Cayman Islands">Cayman Islands</option> <option value="Central African Republic">Central African Republic</option> <option value="Chad">Chad</option> <option value="Channel Islands">Channel Islands</option> <option value="Chile">Chile</option> <option value="China">China</option> <option value="Christmas Island">Christmas Island</option> <option value="Cocos Island">Cocos Island</option> <option value="Colombia">Colombia</option> <option value="Comoros">Comoros</option> <option value="Congo">Congo</option> <option value="Cook Islands">Cook Islands</option> <option value="Costa Rica">Costa Rica</option> <option value="Cote D`Ivoire">Cote D`Ivoire</option> <option value="Croatia">Croatia</option> <option value="Cuba">Cuba</option> <option value="Curacao">Curacao</option> <option value="Cyprus">Cyprus</option> <option value="Czech Republic">Czech Republic</option> <option value="Denmark">Denmark</option> <option value="Djibouti">Djibouti</option> <option value="Dominica">Dominica</option> <option value="Dominican Republic">Dominican Republic</option> <option value="East Timor">East Timor</option> <option value="Ecuador">Ecuador</option> <option value="Egypt">Egypt</option> <option value="El Salvador">El Salvador</option> <option value="Equatorial Guinea">Equatorial Guinea</option> <option value="Eritrea">Eritrea</option> <option value="Estonia">Estonia</option> <option value="Ethiopia">Ethiopia</option> <option value="Falkland Islands">Falkland Islands</option> <option value="Faroe Islands">Faroe Islands</option> <option value="Fiji">Fiji</option> <option value="Finland">Finland</option> <option value="France">France</option> <option value="French Guiana">French Guiana</option> <option value="French Polynesia">French Polynesia</option> <option value="French Southern Ter">French Southern Ter</option> <option value="Gabon">Gabon</option> <option value="Gambia">Gambia</option> <option value="Georgia">Georgia</option> <option value="Germany">Germany</option> <option value="Ghana">Ghana</option> <option value="Gibraltar">Gibraltar</option> <option value="Great Britain">Great Britain</option> <option value="Greece">Greece</option> <option value="Greenland">Greenland</option> <option value="Grenada">Grenada</option> <option value="Guadeloupe">Guadeloupe</option> <option value="Guam">Guam</option> <option value="Guatemala">Guatemala</option> <option value="Guinea">Guinea</option> <option value="Guyana">Guyana</option> <option value="Haiti">Haiti</option> <option value="Hawaii">Hawaii</option> <option value="Honduras">Honduras</option> <option value="Hong Kong">Hong Kong</option> <option value="Hungary">Hungary</option> <option value="Iceland">Iceland</option> <option value="India">India</option> <option value="Indonesia">Indonesia</option> <option value="Iran">Iran</option> <option value="Iraq">Iraq</option> <option value="Ireland">Ireland</option> <option value="Isle of Man">Isle of Man</option> <option value="Israel">Israel</option> <option value="Italy">Italy</option> <option value="Jamaica">Jamaica</option> <option value="Japan">Japan</option> <option value="Jordan">Jordan</option> <option value="Kazakhstan">Kazakhstan</option> <option value="Kenya">Kenya</option> <option value="Kiribati">Kiribati</option> <option value="Korea North">Korea North</option> <option value="Korea South">Korea South</option> <option value="Kuwait">Kuwait</option> <option value="Kyrgyzstan">Kyrgyzstan</option> <option value="Laos">Laos</option> <option value="Latvia">Latvia</option> <option value="Lebanon">Lebanon</option> <option value="Lesotho">Lesotho</option> <option value="Liberia">Liberia</option> <option value="Libya">Libya</option> <option value="Liechtenstein">Liechtenstein</option> <option value="Lithuania">Lithuania</option> <option value="Luxembourg">Luxembourg</option> <option value="Macau">Macau</option> <option value="Macedonia">Macedonia</option> <option value="Madagascar">Madagascar</option> <option value="Malaysia">Malaysia</option> <option value="Malawi">Malawi</option> <option value="Maldives">Maldives</option> <option value="Mali">Mali</option> <option value="Malta">Malta</option> <option value="Marshall Islands">Marshall Islands</option> <option value="Martinique">Martinique</option> <option value="Mauritania">Mauritania</option> <option value="Mauritius">Mauritius</option> <option value="Mayotte">Mayotte</option> <option value="Mexico">Mexico</option> <option value="Midway Islands">Midway Islands</option> <option value="Moldova">Moldova</option> <option value="Monaco">Monaco</option> <option value="Mongolia">Mongolia</option> <option value="Montserrat">Montserrat</option> <option value="Morocco">Morocco</option> <option value="Mozambique">Mozambique</option> <option value="Myanmar">Myanmar</option> <option value="Nambia">Nambia</option> <option value="Nauru">Nauru</option> <option value="Nepal">Nepal</option> <option value="Netherland Antilles">Netherland Antilles</option> <option value="Netherlands">Netherlands</option> <option value="Nevis">Nevis</option> <option value="New Caledonia">New Caledonia</option> <option value="New Zealand">New Zealand</option> <option value="Nicaragua">Nicaragua</option> <option value="Niger">Niger</option> <option value="Nigeria">Nigeria</option> <option value="Niue">Niue</option> <option value="Norfolk Island">Norfolk Island</option> <option value="Norway">Norway</option> <option value="Oman">Oman</option> <option value="Pakistan">Pakistan</option> <option value="Palau Island">Palau Island</option> <option value="Palestine">Palestine</option> <option value="Panama">Panama</option> <option value="Papua New Guinea">Papua New Guinea</option> <option value="Paraguay">Paraguay</option> <option value="Peru">Peru</option> <option value="Phillipines">Philippines</option> <option value="Pitcairn Island">Pitcairn Island</option> <option value="Poland">Poland</option> <option value="Portugal">Portugal</option> <option value="Puerto Rico">Puerto Rico</option> <option value="Qatar">Qatar</option> <option value="Republic of Montenegro">Republic of Montenegro</option> <option value="Republic of Serbia">Republic of Serbia</option> <option value="Reunion">Reunion</option> <option value="Romania">Romania</option> <option value="Russia">Russia</option> <option value="Rwanda">Rwanda</option> <option value="St Barthelemy">St Barthelemy</option> <option value="St Eustatius">St Eustatius</option> <option value="St Helena">St Helena</option> <option value="St Kitts-Nevis">St Kitts-Nevis</option> <option value="St Lucia">St Lucia</option> <option value="St Maarten">St Maarten</option> <option value="St Pierre &amp; Miquelon">St Pierre &amp; Miquelon</option> <option value="St Vincent &amp; Grenadines">St Vincent &amp; Grenadines</option> <option value="Saipan">Saipan</option> <option value="Samoa">Samoa</option> <option value="Samoa American">Samoa American</option> <option value="San Marino">San Marino</option> <option value="Sao Tome &amp; Principe">Sao Tome &amp; Principe</option> <option value="Saudi Arabia">Saudi Arabia</option> <option value="Senegal">Senegal</option> <option value="Serbia">Serbia</option> <option value="Seychelles">Seychelles</option> <option value="Sierra Leone">Sierra Leone</option> <option value="Singapore">Singapore</option> <option value="Slovakia">Slovakia</option> <option value="Slovenia">Slovenia</option> <option value="Solomon Islands">Solomon Islands</option> <option value="Somalia">Somalia</option> <option value="South Africa">South Africa</option> <option value="Spain">Spain</option> <option value="Sri Lanka">Sri Lanka</option> <option value="Sudan">Sudan</option> <option value="Suriname">Suriname</option> <option value="Swaziland">Swaziland</option> <option value="Sweden">Sweden</option> <option value="Switzerland">Switzerland</option> <option value="Syria">Syria</option> <option value="Tahiti">Tahiti</option> <option value="Taiwan">Taiwan</option> <option value="Tajikistan">Tajikistan</option> <option value="Tanzania">Tanzania</option> <option value="Thailand">Thailand</option> <option value="Togo">Togo</option> <option value="Tokelau">Tokelau</option> <option value="Tonga">Tonga</option> <option value="Trinidad &amp; Tobago">Trinidad &amp; Tobago</option> <option value="Tunisia">Tunisia</option> <option value="Turkey">Turkey</option> <option value="Turkmenistan">Turkmenistan</option> <option value="Turks &amp; Caicos Is">Turks &amp; Caicos Is</option> <option value="Tuvalu">Tuvalu</option> <option value="Uganda">Uganda</option> <option value="Ukraine">Ukraine</option> <option value="United Arab Emirates">United Arab Emirates</option> <option value="United Kingdom">United Kingdom</option> <option value="United States of America">United States of America</option> <option value="Uruguay">Uruguay</option> <option value="Uzbekistan">Uzbekistan</option> <option value="Vanuatu">Vanuatu</option> <option value="Vatican City State">Vatican City State</option> <option value="Venezuela">Venezuela</option> <option value="Vietnam">Vietnam</option> <option value="Virgin Islands (Brit)">Virgin Islands (Brit)</option> <option value="Virgin Islands (USA)">Virgin Islands (USA)</option> <option value="Wake Island">Wake Island</option> <option value="Wallis &amp; Futana Is">Wallis &amp; Futana Is</option> <option value="Yemen">Yemen</option> <option value="Zaire">Zaire</option> <option value="Zambia">Zambia</option> <option value="Zimbabwe">Zimbabwe</option></select>     
                                 </div>
                                 <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
-                                <input type="text" name="edit_secretary_{{counter @index}}_telephone" id="summary_{{telephone_name}}" value="{{telephone_value}}" class="address-3-edit-input custom-input-class required one-row">
+                                <input type="text" placeholder="Telephone" name="edit_secretary_{{counter @index}}_telephone" id="summary_{{telephone_name}}" value="{{telephone_value}}" class="address-3-edit-input custom-input-class required one-row">
                                 <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>                                        
                                 <button class="save-summary-btn custom-submit-class custom-submit-class-2">Save</button>                     
                             </div>
@@ -2817,7 +3141,7 @@ function registration_form() {
                             <div class="upload-btn-container">
                                 <input type="text" name="secretary_{{counter @index}}_passport" />
                                 <span class="btn btn-success fileinput-button">                            
-                                    <button class="upload-btn upload-passport-btn custom-submit-class custom-submit-class-2">Upload passport</button>
+                                    <button class="upload-btn upload-passport-btn custom-submit-class custom-submit-class-2" data-btn-text="Passport uploaded">Upload passport</button>
                                     <!-- The file input field used as target for the file upload widget -->
                                     <input class="passport_upload" type="file" name="files" data-fieldname="secretary_{{counter @index}}_passport" data-selector="secretary_{{counter @index}}" />
                                 </span>
@@ -2828,7 +3152,7 @@ function registration_form() {
                             <div class="upload-btn-container">
                                 <input type="text" name="secretary_{{counter @index}}_bill" />
                                 <span class="btn btn-success fileinput-button">                            
-                                    <button class="upload-btn upload-bill-btn custom-submit-class custom-submit-class-2">Upload utility bill</button>
+                                    <button class="upload-btn upload-bill-btn custom-submit-class custom-submit-class-2" data-btn-text="Utility bill uploaded">Upload utility bill</button>
                                     <!-- The file input field used as target for the file upload widget -->                            
                                     <input class="bill_upload" type="file" name="files" data-fieldname="secretary_{{counter @index}}_bill" data-selector="secretary_{{counter @index}}" />
                                 </span>                
@@ -2917,9 +3241,7 @@ function registration_form() {
         {{/infoservices}}        
     </script>
 
-    <!-- <p class="ip_address">IP Address detected: <span class="user_ip">'.$ip.'</span></p> -->
-
-    <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
+    <!-- <p class="ip_address">IP Address detected: <span class="user_ip">'.$ip.'</span></p> -->    
     
     <div class="stepwizard">
         <div class="stepwizard-row">
@@ -2945,10 +3267,11 @@ function registration_form() {
             </div>            
         </div>
     </div>
-
+            
+    <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
     <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
     <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>    
-    <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>    
+    <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>        
 
     <div id="step-1" class="step-1 reg-step active">
         <form id="registration-page-form-1-1">
@@ -2976,47 +3299,56 @@ function registration_form() {
 
             <input type="checkbox" name="new-incorporation" id="new-incorporation" value="true" />
 
+            <a href="'.get_permalink( get_page_by_path('client-dashboard') ).'"><button class="custom-submit-class cancel-btn-1">Cancel</button></a>
+
             <div id="new-incorporation-container" style="display: none;">                
 
-                <p>Please provide three suggestions for your company’s name in order of preference.  The company will be registered under the first name available.</p>
+                <!-- <p>Please provide three suggestions for your company’s name in order of preference.  The company will be registered under the first name available.</p> -->
+                <p>Please provide three suggestions for your company’s name in order of preference, noting the naming rules listed below. The company will be registered under the first name available.</p>
 
                 <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
-
-                <p>The name may be in any language, provided it is expressed in Roman characters. It must end in the word "Limited" or its abbreviation "Ltd" to denote its limited liability status.</p>
+                
+                <div id="company-name-rules">
+                    <!-- JS CONTENT GOES HERE -->
+                </div>                
 
                 <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
             
                 <div class="field-container">
                     <label for="name">1st choice</label>
-                    <input type="text" name="company_name[]" data-choice-id="1" class="company-name-choice custom-input-class" value="">
+                    <input type="text" name="company_name_1" id="company_name_1" data-choice-id="1" class="company-name-choice custom-input-class" value="">
                 </div>
                 <div class="field-container">
                     <label for="name">2nd choice</label>
-                    <input type="text" name="company_name[]" data-choice-id="2" class="company-name-choice custom-input-class" value="">
+                    <input type="text" name="company_name_2" id="company_name_2" data-choice-id="2" class="company-name-choice custom-input-class" value="">
                 </div>
                 <div class="field-container">
                     <label for="name">3rd choice</label>
-                    <input type="text" name="company_name[]" data-choice-id="3" class="company-name-choice custom-input-class" value="">
+                    <input type="text" name="company_name_3" id="company_name_3" data-choice-id="3" class="company-name-choice custom-input-class" value="">
                 </div>
 
                 <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
 
                 <!-- <a href="#" id="next"><button data-id="0" data-hash="#" class="custom-submit-class back-btn">Back</button></a> -->
-                <a href="#" id="next"><button data-id="2" data-hash="2" class="custom-submit-class next-btn">Next</button></a>
+                <a href="'.get_permalink( get_page_by_path('client-dashboard') ).'"><button class="custom-submit-class cancel-btn-2">Cancel</button></a>
+                <a href="#" id="next"><button data-id="2" data-hash="2" class="custom-submit-class next-btn">Next</button></a>                
 
             </div>            
             
           </div>             
         </form>
+
         <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
         <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
     </div>
 
     <div id="step-2" class="reg-step">
         <form id="registration-page-form-2">
-            <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
-            <p>The same person cannot act as sole shareholder, director and secretary. One more person must be appointed to any of these positions or a nominee shareholder, professional director or company secretary provided by Offshore Company Solutions.</p>
-            <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
+            <!-- <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
+            <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div> -->
+
+            <!-- <p>The same person cannot act as sole shareholder, director and secretary. One more person must be appointed to any of these positions or a nominee shareholder, professional director or company secretary provided by Offshore Company Solutions.</p> -->
+            
             <div id="shareholder" class="personnel">
                 <!-- JS CONTENT GOES HERE -->                
             </div>
@@ -3029,10 +3361,12 @@ function registration_form() {
                 <!-- JS CONTENT GOES HERE -->       
             </div>
                 
+            <a href="'.get_permalink( get_page_by_path('client-dashboard') ).'"><button class="custom-submit-class cancel-btn">Cancel</button></a>
             <a href="#" id="next"><button data-id="1" data-hash="1" class="custom-submit-class back-btn">Back</button></a>
-            <a href="#" id="next"><button data-id="3" data-hash="3" class="custom-submit-class next-btn">Next</button></a>
+            <a href="#" id="next"><button data-id="3" data-hash="3" class="custom-submit-class next-btn">Next</button></a>            
              
-        </form>
+        </form>        
+
         <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
         <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
     </div>
@@ -3054,8 +3388,9 @@ function registration_form() {
                 <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
             </div>            
             
+            <a href="'.get_permalink( get_page_by_path('client-dashboard') ).'"><button class="custom-submit-class cancel-btn">Cancel</button></a>
             <a href="#" id="next"><button data-id="2" data-hash="2" class="custom-submit-class back-btn">Back</button></a>
-            <a href="#" id="next"><button data-id="4" data-hash="4" class="custom-submit-class next-btn">Next</button></a>
+            <a href="#" id="next"><button data-id="4" data-hash="4" class="custom-submit-class next-btn">Next</button></a>            
              
         </form>
     </div>
@@ -3168,15 +3503,16 @@ function registration_form() {
                 <div class="clear"></div> 
             </div>
             <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>        
-            <div class="field-container">
+            <!-- <div class="field-container">
                 <input type="checkbox" name="tnc" value="yes"> <label for="tnc">I have read and agree with the Terms and conditions</label>
-            </div>
+            </div> -->
             <input type="hidden" name="action" id="action" value="">
 
-            <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>        
+            <!-- <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>         -->
+            <a href="'.get_permalink( get_page_by_path('client-dashboard') ).'"><button class="custom-submit-class cancel-btn">Cancel</button></a>
             <a href="#" id="next"><button data-id="3" data-hash="3" class="custom-submit-class back-btn">Back</button></a>
             <a href="#"><button class="custom-submit-class payment-gateway-btn">Submit order</button></a>
-            <a href="#"><button class="custom-submit-class save-now">Save incomplete order</button></a>
+            <a href="#"><button class="custom-submit-class save-now">Save incomplete order</button></a>            
             
         </form>        
     </div>';

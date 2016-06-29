@@ -94,6 +94,10 @@ function company_price($attrs) {
                 Handlebars.registerHelper("counter", function (index){
                     return index + 1;
                 });
+
+                Handlebars.registerHelper("formatCurrency", function(value) {
+                    return value.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+                });
             }
 
             function failedRequest(response){
@@ -149,7 +153,8 @@ function company_price($attrs) {
                         
 
                         if(currency=="") currency = "US dollars (US$)";
-                        data.currency = currency;    
+                        data.currency = currency;   
+                        data.page_title = "'.$current_post_title.'";
                         newdata["companylists"] = data;                        
                         createTemplateAndAppendHtml("#companylist-template", newdata, "#companylist");                                      
                     }
@@ -172,13 +177,18 @@ function company_price($attrs) {
         {{#companylists}}  
             {{#ifCond name "==" ../companylists.current_company_name }}
                 {{#ifCond ../companylists.currency "==" "Euro (€)" }}                      
-                    <span class="price">Company formation price: €{{price_eu}}</span>
+                    <span class="price">The cost of incorporating a {{../companylists.page_title}} is: €{{formatCurrency price_eu}}</span>
                 {{else}}
-                    <span class="price">Company formation price: US${{price}}</span>                
+                    <span class="price">The cost of incorporating a {{../companylists.page_title}} is: US${{formatCurrency price}}</span>                
                 {{/ifCond}}
             {{/ifCond}}    
         {{/companylists}}
     </script>
+    <div class="wpb_text_column wpb_content_element ">
+        <div class="wpb_wrapper">
+            <h2>Incorporation cost</h2>
+        </div>
+    </div>
     <div id="companylist">
         <!-- JS CONTENT GOES HERE -->
 

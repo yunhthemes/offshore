@@ -163,6 +163,8 @@ jQuery(document).ready(function($) {
 
         history.pushState({page: 'new'}, "new url", newUrl);
     }
+
+    window.alert = function() { return true; }
   }  
 
   $(window).on('load', function(){

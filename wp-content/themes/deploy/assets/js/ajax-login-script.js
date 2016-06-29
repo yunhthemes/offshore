@@ -17,7 +17,14 @@ jQuery(document).ready(function($) {
                     'password': $('form#login #password').val(), 
                     'security': $('form#login #security').val() },
                 success: function(data){
-                    $('form#login p.status').text(data.message);
+                    if(data.message=='Wrong username or password.') {
+                        $('form#login #username').addClass("ajax-error");
+                        $('form#login #password').addClass("ajax-error");   
+                    }else {
+                        $('form#login #username').removeClass("ajax-error");
+                        $('form#login #password').removeClass("ajax-error");    
+                    }
+                    $('form#login p.status').text(data.message);                    
                     if (data.loggedin == true){
                         document.location.href = ajax_login_object.redirecturl;
                     }

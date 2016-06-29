@@ -12,6 +12,9 @@
 
   <?php wp_head(); ?>
 
+  <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+  <META HTTP-EQUIV="Expires" CONTENT="-1">
+
   <script type="text/javascript">
   var siteurl = '<?= get_site_url(); ?>';
   </script>

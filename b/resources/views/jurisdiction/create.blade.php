@@ -11,7 +11,7 @@
 			<div class="space50"></div>
 			
 			<div class="form-container">
-				{!! Form::open(array('route' => 'admin.jurisdiction.store')) !!}
+				{!! Form::open(array('route' => 'admin.jurisdiction.store', 'id'=>'add_company_type')) !!}
 					<div class="field-container">
 						{{ Form::label('company_type_name', 'Company type')}}
 						{{ Form::text('company_type_name', null, ['class'=>'custom-input-class']) }}
@@ -35,11 +35,11 @@
 
 					<div class="field-container">
 						{{ Form::label('company_type_price_eu', 'Incorporation charge €')}}
-						{{ Form::text('company_type_price_eu', null, ['class'=>'custom-input-class service_prices_eu']) }}
+						{{ Form::text('company_type_price_eu', null, ['class'=>'custom-input-class']) }}
 					</div>					
 					<div class="field-container">
 						{{ Form::label('company_type_price', 'Incorporation charge $')}}
-						{{ Form::text('company_type_price', null, ['class'=>'custom-input-class service_prices']) }}
+						{{ Form::text('company_type_price', null, ['class'=>'custom-input-class']) }}
 					</div>	
 
 					{{ Form::hidden('service_3_name', 'Registered office annual fee (compulsory)') }}
@@ -256,7 +256,7 @@
 	function updateClonedFields(serviceName, $this) {
 		var id = parseInt($this.parent().find('.field-group').length);
 
-		console.log(id);
+		// console.log(id);
 
 		var $lastElAdded = $this.parent().find('.field-group').last();
 
@@ -279,6 +279,55 @@
 		updateClonedFields(serviceName, $(this));
 		updateHiddenField(serviceName, $(this));
 
+	});
+
+	$('#add_company_type').validate({
+		rules : {
+			'company_type_name': 'required',
+			'company_name_rules': 'required',
+			'shareholder_name_rules': 'required',
+			'director_name_rules': 'required',
+			'secretary_name_rules': 'required',
+			'company_type_price_eu': 'required',
+			'company_type_price': 'required',
+			'service_3_price_eu_1': 'required',
+			'service_3_price_1': 'required',
+			'shareholder_price_eu': 'required',
+			'shareholder_price': 'required',
+			'director_price_eu': 'required',
+			'director_price': 'required',
+			'secretary_price_eu': 'required',
+			'secretary_price': 'required',
+			'service_1_country_1': 'required',
+			'service_1_price_eu_1': 'required',
+			'service_1_price_1': 'required',
+			'service_2_country_1': 'required',
+			'service_2_price_eu_1': 'required',
+			'service_2_price_1': 'required'
+		},
+		messages: {
+			'company_type_name': 'Please provide company type',
+			'company_name_rules': 'Please provide company name rules',
+			'shareholder_name_rules': 'Please provide shareholder rules',
+			'director_name_rules': 'Please provide director rules',
+			'secretary_name_rules': 'Please provide secretary rules',
+			'company_type_price_eu': 'Please provide incorporation charge in €',
+			'company_type_price': 'Please provide incorporation charge in US$',
+			'service_3_price_eu_1': 'Please provide registered office fee in €',
+			'service_3_price_1': 'Please provide registered office fee in US$',
+			'shareholder_price_eu': 'Please provide shareholder fee in €',
+			'shareholder_price': 'Please provide shareholder fee in US$',
+			'director_price_eu': 'Please provide director fee in €',
+			'director_price': 'Please provide director fee in US$',
+			'secretary_price_eu': 'Please provide secretary fee in €',
+			'secretary_price': 'Please provide secretary fee in US$',
+			'service_1_country_1': 'Please provide bank location',
+			'service_1_price_eu_1': 'Please provide bank account fee in €',
+			'service_1_price_1': 'Please provide bank account fee in US$',
+			'service_2_country_1': 'Please provide bank location for credit card',
+			'service_2_price_eu_1': 'Please provide credit card fee in €',
+			'service_2_price_1': 'Please provide credit card fee in US$'
+		}
 	});
 </script>
 @endsection
