@@ -1194,11 +1194,11 @@ jq(document).ready( function() {
 			shouldconfirm = false;
 		});
 
-		window.onbeforeunload = function(e) {
-			if ( shouldconfirm ) {
-				return BP_DTheme.unsaved_changes;
-			}
-		};
+		// window.onbeforeunload = function(e) {
+		// 	if ( shouldconfirm ) {
+		// 		return BP_DTheme.unsaved_changes;
+		// 	}
+		// };
 	});
 
 	/** Friendship Requests **************************************/

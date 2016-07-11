@@ -199,7 +199,7 @@ class BP_Messages_Box_Template {
 			if ( defined( 'DOING_AJAX' ) && true === (bool) DOING_AJAX ) {
 				$base = remove_query_arg( 's', wp_get_referer() );
 			} else {
-				$base = '';
+				$base = get_the_permalink(); //''; // change by zaw bcaz of url has been tweek by js
 			}
 
 			$add_args = array();

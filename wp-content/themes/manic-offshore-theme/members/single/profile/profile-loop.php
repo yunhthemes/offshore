@@ -44,13 +44,19 @@ do_action( 'bp_before_profile_loop_content' ); ?>
 								<?php endif; ?>
 							<?php endif; ?>
 
-							<tr<?php bp_field_css_class(); ?>>
+							<?php if(strpos(bp_the_profile_field_name(), 'conditions')): ?>
 
-								<td class="label <?php echo $index; ?>"><h6><?php echo bp_the_profile_field_name(); ?></h6></td>
+							<?php else: ?>
 
-								<td class="data"><?php bp_the_profile_field_value(); ?></td>
+								<tr<?php bp_field_css_class(); ?>>
 
-							</tr>							
+									<td class="label <?php echo $index; ?>"><h6><?php echo bp_the_profile_field_name(); ?></h6></td>
+
+									<td class="data"><?php bp_the_profile_field_value(); ?></td>
+
+								</tr>		
+
+							<?php endif; ?>					
 
 						<?php endif; ?>
 
@@ -71,7 +77,13 @@ do_action( 'bp_before_profile_loop_content' ); ?>
 					?>
 					<tr class="optional-field visibility-public alt field_type_textbox">
 						<td class="label 5"><h6>Account registered</h6></td>
-						<td class="data"><p><?php if($author_registered) echo date("d M Y", strtotime($author_registered)) . ' at ' . date("H:i", strtotime($author_registered)); ?></p></td>
+						<td class="data">
+							<?php 
+							if($author_registered) {						
+								echo get_date_from_gmt( date( 'Y-m-d H:i:s', strtotime($author_registered) ), 'd M Y \a\t H:i' );
+							}
+							?>
+						</td>
 					</tr>
 
 				</table>

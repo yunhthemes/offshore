@@ -204,7 +204,7 @@ function ajax_login(){
     $info = array();
     $info['user_login'] = $_POST['username'];
     $info['user_password'] = $_POST['password'];
-    $info['remember'] = true;
+    $info['remember'] = false;
 
     $user_signon = wp_signon( $info, false );
     if ( is_wp_error($user_signon) ){

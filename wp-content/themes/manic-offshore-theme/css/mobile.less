@@ -1,4 +1,20 @@
-@media all and (max-width: 425px) {
+@media all and (max-width: 1200px) {
+	@import "responsive-general.less";
+}
+
+@media only screen and (max-width: 1024px) {
+	@import "tablet-landscape-general.less";
+}
+
+@media only screen and (max-width: 991px) {
+	@import "mobile-general.less";
+}
+
+@media only screen and (max-width: 768px) {
+	@import "tablet-portrait-general.less";
+}
+
+@media all and (max-width: 480px) {
 	@import "xs-header.less";
 	@import "xs-home.less";
 	@import "xs-general.less";

@@ -502,13 +502,19 @@ class BP_Messages_Thread {
 		$sql = array();
 		$sql['select'] = 'SELECT m.thread_id, MAX(m.date_sent) AS date_sent';
 		$sql['from']   = "FROM {$bp->messages->table_name_recipients} r INNER JOIN {$bp->messages->table_name_messages} m ON m.thread_id = r.thread_id {$meta_query_sql['join']}";
-		$sql['where']  = "WHERE {$deleted_sql} {$user_id_sql} {$sender_sql} {$type_sql} {$search_sql} {$meta_query_sql['where']}";
+		$sql['where']  = "WHERE {$deleted_sql} {$user_id_sql} {$sender_sql} {$type_sql} {$search_sql} {$meta_query_sql['where']}";		
+
 		$sql['misc']   = "GROUP BY m.thread_id ORDER BY date_sent DESC {$pag_sql}";
+
+		// echo implode(' ', $sql) . '<br>';
 
 		// zaw edit // to retrieve only unstarred message
 		if($r['box']=='inbox') {
-			$sql['where'] .= "AND NOT EXISTS (SELECT * FROM wp_bp_messages_meta mt WHERE mt.message_id = m.id)";
+			// $sql['where'] .= "AND NOT EXISTS (SELECT * FROM wp_bp_messages_meta mt WHERE mt.message_id = m.id)";
+			$sql['where'] .= "AND m.thread_id NOT IN (SELECT thread_id FROM wp_bp_messages_meta mt INNER JOIN wp_bp_messages_messages m ON m.id = mt.message_id WHERE meta_key = 'starred_by_user' AND meta_value = {$r['user_id']})";
 		}
+
+		// echo implode(' ', $sql);
 
 		// Get thread IDs.
 		$thread_ids = $wpdb->get_results( implode( ' ', $sql ) );
@@ -714,7 +720,7 @@ class BP_Messages_Thread {
 		if ( false === $unread_count ) {
 			$bp = buddypress();
 
-			$unread_count = (int) $wpdb->get_var( $wpdb->prepare( "SELECT SUM(unread_count) FROM {$bp->messages->table_name_recipients} WHERE user_id = %d AND is_deleted = 0 AND sender_only = 0", $user_id ) );
+			$unread_count = (int) $wpdb->get_var( $wpdb->prepare( "SELECT SUM(unread_count) FROM {$bp->messages->table_name_recipients} r INNER JOIN wp_bp_messages_messages m ON m.thread_id = r.thread_id WHERE user_id = %d AND is_deleted = 0 AND sender_only = 0 AND m.id NOT IN (SELECT message_id FROM wp_bp_messages_meta mt)", $user_id ) );
 
 			wp_cache_set( $user_id, $unread_count, 'bp_messages_unread_count' );
 		}

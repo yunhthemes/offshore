@@ -26,7 +26,34 @@ function custom_menu_item_shortcode() {
 			    	</li>
 			    </ul>
 			</nav>
-		</div>';
+		</div>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
+		<script type="text/javascript">
+		jQuery(document).ready(function($) {
+		    $("#custom-right-header-livechat").click(function(event) {
+		        event.preventDefault();		        
+		        $zopim.livechat.say(" ");
+		        $("body").addClass("custom-zopim-visible");
+		    });
+
+		    $("#custom-right-header-signin").mouseover(function(event) {
+		        TweenMax.to($("#custom-right-header-signin-box"), 0.5, {
+		            autoAlpha: 1
+		        });
+		    });
+		    $(".custom-right-header-signin").click(function(event) {
+		        TweenMax.to($("#custom-right-header-signin-box"), 0.5, {
+		            autoAlpha: 1
+		        });
+		    });
+		    $("#custom-right-header-signin-box").mouseleave(function(event) {
+		        TweenMax.to($("#custom-right-header-signin-box"), 0.5, {
+		            autoAlpha: 0
+		        });
+		    });
+
+		});
+		</script>';
 	else:
 		$args = array(
 		    'echo' => false,         // To echo the form on the page
@@ -91,6 +118,11 @@ function custom_menu_item_shortcode() {
 		    });
 
 		    $("#custom-right-header-signin").mouseover(function(event) {
+		        TweenMax.to($("#custom-right-header-signin-box"), 0.5, {
+		            autoAlpha: 1
+		        });
+		    });
+		    $(".custom-right-header-signin").click(function(event) {
 		        TweenMax.to($("#custom-right-header-signin-box"), 0.5, {
 		            autoAlpha: 1
 		        });

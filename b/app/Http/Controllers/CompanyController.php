@@ -334,8 +334,8 @@ class CompanyController extends Controller
                 $company->name = $request->company_name;
                 $company_incorporation_date = date_create_from_format('d/m/y', $request->company_incorporation_date);
                 $company->incorporation_date = date_format($company_incorporation_date, 'Y-m-d');
-                $company->price = (double) preg_replace("/[^0-9,.]/", "", $request->company_price);
-                $company->price_eu = (double) preg_replace("/[^0-9,.]/", "", $request->company_price_eu);
+                $company->price = (double) preg_replace("/[.,]/", "", $request->company_price);
+                $company->price_eu = (double) preg_replace("/[.,]/", "", $request->company_price_eu);
                 $company->shelf = 1;
                 $company->company_type_id = $request->company_type;
                 $company->save();
@@ -413,8 +413,8 @@ class CompanyController extends Controller
         $company->name = $request->company_name;    
         $company_incorporation_date = date_create_from_format('d/m/y', $request->company_incorporation_date);
         $company->incorporation_date = date_format($company_incorporation_date, 'Y-m-d');
-        $company->price_eu = $request->company_price_eu;
-        $company->price = $request->company_price;
+        $company->price_eu = (double) preg_replace("/[.,]/", "", $request->company_price_eu);
+        $company->price = (double) preg_replace("/[.,]/", "", $request->company_price);
         $company->company_type_id = $request->company_type;
         $company->save();
 

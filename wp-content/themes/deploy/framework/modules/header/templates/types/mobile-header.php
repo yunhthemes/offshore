@@ -9,9 +9,9 @@
                     <?php if($show_navigation_opener) : ?>
                         <div class="mkdf-mobile-menu-opener">
                             <a href="javascript:void(0)">
-                    <span class="mkdf-mobile-opener-icon-holder">
-                        <?php print $menu_opener_icon; ?>
-                    </span>
+                                <span class="mkdf-mobile-opener-icon-holder">
+                                    <?php print $menu_opener_icon; ?>
+                                </span>
                             </a>
                         </div>
                     <?php endif; ?>

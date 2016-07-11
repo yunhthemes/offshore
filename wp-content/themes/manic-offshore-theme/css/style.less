@@ -1,5 +1,4 @@
 @import "lib/mixins.less";
-@import "mobile.less";
 
 @dark-blue: #008b9b;
 @light-blue: #b1cfd4;
@@ -141,15 +140,6 @@ body.custom-zopim-visible{
   }  
 }
 
-@media only screen and (max-width: 991px) {
-  .zopim{
-    display: none !important;
-  }
-}
-
-
-
-
 // BACK TO TOP BUTTON
 
 #mkdf-back-to-top{
@@ -161,6 +151,10 @@ select::-ms-expand {
     display: none;
 }  
 
+#pass-strength-result {
+  display: none!important;
+}
+
 @import "header.less";
 @import "footer.less";
 @import "forms.less";
@@ -169,3 +163,5 @@ select::-ms-expand {
 
 
 
+@import "lg-desktop.less";
+@import "mobile.less";

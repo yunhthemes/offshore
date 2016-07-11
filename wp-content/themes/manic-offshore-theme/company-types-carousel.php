@@ -26,11 +26,11 @@ function company_types_carousel_func($atts) {
         $output .= '<li class="mkdf-blog-list-item clearfix">
             <div class="mkdf-blog-list-item-inner">
                 <div class="mkdf-item-image">
-                    <a href="'.get_post_meta(get_the_ID(), 'link_to_page', true).'">'.get_the_post_thumbnail(get_the_ID(), "deploy-portfolio-square").'</a>
+                    <a href="'.get_permalink(get_the_ID()).'">'.get_the_post_thumbnail(get_the_ID(), "deploy-portfolio-square").'</a>
                 </div>
                 <div class="mkdf-item-text-holder mkdf-item-text-holder-2">
                     <h4 class="mkdf-item-title">
-                        <a href="'.get_post_meta(get_the_ID(), 'link_to_page', true).'" >
+                        <a href="'.get_permalink(get_the_ID()).'" >
                             '.esc_attr(get_the_title()).'
                         </a>
                     </h4>

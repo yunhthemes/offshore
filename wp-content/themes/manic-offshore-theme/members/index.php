@@ -155,6 +155,7 @@
 		                	{{#ifCond status "==" "0"}}
 		                		<span class="action" style="display:none;">1</span>
 								<a href="<?php echo get_permalink( get_page_by_path( 'Company formation order' ) ); ?>?savedcompany={{id}}" data-company-id="{{id}}"><button class="custom-submit-class">Continue registration</button></a>
+								<a href="#" data-company-id="{{id}}" data-companywpuser-id="{{ wpusers.0.pivot.id }}" class="delete-saved-company"><i class="fa fa-times" aria-hidden="true"></i></a>
 							{{else}}
 								{{#ifCond owner "==" "1"}}
 									<span class="action" style="display:none;">3</span>
@@ -170,6 +171,7 @@
 									{{/ifCond}}
 									<span class="action" style="display:none;">2</span>
 									<button class="custom-submit-class expire-btn" data-company-id="{{id}}" data-companywpuser-id="{{ wpusers.0.pivot.id }}">Continue registration</button>
+									<a href="#" data-company-id="{{id}}" data-companywpuser-id="{{ wpusers.0.pivot.id }}" class="delete-saved-company"><i class="fa fa-times" aria-hidden="true"></i></a>
 								{{/ifCond}}
 		                    {{/ifCond}}		                    
 		                </div>                   
@@ -527,7 +529,7 @@
             $("body").on("click", ".delete-saved-company", function(e){
             	e.preventDefault();
 
-            	if (!confirm("Do you want to delete")){
+            	if (!confirm("Are you sure you want to delete?")){
 			      return false;
 			    }
 

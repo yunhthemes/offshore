@@ -20,11 +20,13 @@ $page = get_page_by_title( 'Sign up' );
 	            <div class="wpb_column vc_column_container vc_col-sm-6">
 	                <div class="vc_column-inner ">
 	                    <div class="wpb_wrapper">
+	                    	<?php if ( 'completed-confirmation' !== bp_get_current_signup_step() ) : ?>
 	                        <div class="wpb_raw_code wpb_content_element wpb_raw_html">
 	                            <div class="wpb_wrapper">
 	                                <div id="custom-breadcrumb"></div>
 	                            </div>
 	                        </div>
+	                        <?php endif; ?>
 	                        <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
 	                        <div class="wpb_raw_code wpb_content_element wpb_raw_html">
 	                            <div class="wpb_wrapper">
@@ -52,6 +54,7 @@ $page = get_page_by_title( 'Sign up' );
 								<?php else : ?>
 									<p><?php _e( 'You have successfully created your account! Please log in using the username and password you have just created.', 'buddypress' ); ?></p>
 								<?php endif; ?>
+
 								<div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
 								<div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
 								<div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
@@ -145,7 +148,7 @@ $page = get_page_by_title( 'Sign up' );
 						                },
 						                errorPlacement: function(error, element) {        
 						                	$('.tnc_error').remove();
-						                	if($(element).attr("id")=="field_53_0") {						
+						                	if($(element).attr("id")=="field_54_0") {						
 						                		$(element).parent().parent().append("<span class='tnc_error error'>"+error.text()+"</span>");
 						                	}else element.attr("placeholder", error.text());
 						                }
@@ -191,6 +194,9 @@ $page = get_page_by_title( 'Sign up' );
 		                                $("#field_7").intlTelInput("setCountry", country);
 
 	                                }); 
+
+
+	                                $(".field_terms-and-conditions").find("span").html("I have read and agree with the <a href=\"<?php echo get_permalink (get_page_by_title('Terms and Conditions')); ?>\" target=\"_blank\">terms and conditions</a>")
 
 	                                // $("#field_10").intlTelInput({
 	                                // 	utilsScript: "<?php echo JS; ?>/plugins/utils.js"

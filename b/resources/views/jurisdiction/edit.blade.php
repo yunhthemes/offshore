@@ -57,6 +57,11 @@
 					</div>
 
 					<div class="field-container">
+						{{ Form::label('price_label', 'Incorporation charge label (use in individual corporation page)')}}
+						{{ Form::text('price_label', $company_type->price_label, ['class'=>'custom-input-class']) }}
+					</div>
+
+					<div class="field-container">
 						{{ Form::label('company_type_price_eu', 'Incorporation charge €')}}
 						{{ Form::text('company_type_price_eu', $company_type->price_eu, ['class'=>'custom-input-class']) }}
 					</div>					

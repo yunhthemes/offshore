@@ -177,9 +177,9 @@ function company_price($attrs) {
         {{#companylists}}  
             {{#ifCond name "==" ../companylists.current_company_name }}
                 {{#ifCond ../companylists.currency "==" "Euro (€)" }}                      
-                    <span class="price">The cost of incorporating a {{../companylists.page_title}} is: €{{formatCurrency price_eu}}</span>
+                    <span class="price">{{price_label}}: €{{formatCurrency price_eu}}</span>
                 {{else}}
-                    <span class="price">The cost of incorporating a {{../companylists.page_title}} is: US${{formatCurrency price}}</span>                
+                    <span class="price">{{price_label}}: US${{formatCurrency price}}</span>                
                 {{/ifCond}}
             {{/ifCond}}    
         {{/companylists}}

@@ -146,7 +146,6 @@ function registration_form() {
             function inArray(needle, haystack) {
                 var length = haystack.length;
                 for(var i = 0; i < length; i++) {
-                    // console.log(haystack[i].indexOf(needle));
                     if(needle.indexOf(haystack[i]) > -1) return true;
                 }
                 return false;
@@ -201,12 +200,13 @@ function registration_form() {
                         name_rules = [ "ltd", "limited" ];
                     }           
 
-                    // console.log(name_rules);
+                    var cur_name_val = val.trim();
+                        cur_name_val = cur_name_val.split(" ");
 
-                    if(inArray(val, name_rules)) check = true;
+                    if($.inArray(cur_name_val[cur_name_val.length-1], name_rules) > -1) check = true;
                     else check = false;
 
-                    // if(val.indexOf("ltd") > -1 || val.indexOf("limited") > -1) check = true;
+                    // if(inArray(val, name_rules)) check = true;
                     // else check = false;
 
                     return this.optional(element) || check;
@@ -674,9 +674,11 @@ function registration_form() {
                 var selected_company_type = $(".type_of_company option:selected").text();                
 
                 $fieldContainer.find("label.name").html(lblName+" "+fieldID);
-                $fieldContainer.find("label.address").html(lblName+" "+fieldID+" address").data("person-id", fieldID);                
+                $fieldContainer.find("label.address").html(lblName+" "+fieldID+" address").data("person-id", fieldID);        
 
-                $fieldContainer.find("."+selector+"-type").attr("name", selector+"_"+fieldID+"_type").attr("id", selector+"_"+fieldID+"_type").attr("data-"+selector+"-id", fieldID).next(".switchery").remove();
+                $fieldContainer.find("select."+selector+"-type").attr("name", selector+"_"+fieldID+"_type").attr("id", selector+"_"+fieldID+"_type").attr("data-"+selector+"-id", fieldID);        
+
+                $fieldContainer.find("input."+selector+"-type").attr("name", selector+"_"+fieldID+"_type_switch[]").attr("id", selector+"_"+fieldID+"_type").attr("data-"+selector+"-id", fieldID).next(".switchery").remove();
 
                 $fieldContainer.find("input, select").removeClass("error").attr("disabled", false);
 
@@ -1053,7 +1055,8 @@ function registration_form() {
 
                             if(html.checked) {
                                 $(html).parent().parent().find(".key-person-info").hide();
-                                $(html).parent().parent().find(".key-person-info").find(".field-container").find(".person-input").val("");
+                                $(html).parent().parent().find(".key-person-info").find(".field-container").find("input[type=\"text\"].person-input").val("");
+                                // $(html).parent().parent().find(".key-person-info").find(".field-container").find("select.person-input").prop("selectedIndex", 0);
                                 $(html).parent().parent().find(".add-remove-btn-container-director").hide();
                                 $(html).parent().parent().find(".nominee-container").show();
                                 
@@ -1143,12 +1146,12 @@ function registration_form() {
 
                     if(currency=="Euro (€)") cur_symbol = "€";
 
-                    console.log($(obj));
-                    console.log(eachPrice);
+                    // console.log($(obj));
+                    // console.log(eachPrice);
 
                     var priceArr = eachPrice.split(cur_symbol);
 
-                    console.log(priceArr);
+                    // console.log(priceArr);
 
                     summaryTotal += parseFloat(priceArr[1]);
                 });
@@ -1162,11 +1165,14 @@ function registration_form() {
 
                 var directors = $("input.director-name").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
                 var director_type = $("select.director-type").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
+                var input_director_type = $("input.director-type").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
                 var director_address = $("input.director-address").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
                 var director_address_2 = $("input.director-address-2").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
                 var director_address_3 = $("input.director-address-3").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
                 var director_address_4 = $("select.director-address-4").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
                 var director_telephone = $("input.director-telephone").serializeArray().filter(function(k) { return $.trim(k.value) != "" && $.trim(k.value) != 0; });
+
+                // console.log(input_director_type);
 
                 var secretaries = $("input.secretary-name").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
                 var secretary_type = $("select.secretary-type").serializeArray().filter(function(k) { return $.trim(k.value) != ""; });
@@ -1236,7 +1242,7 @@ function registration_form() {
                 // amend directors
                 for(index = 0; index < directors.length; index++) {                    
                     if(director_type[index] && director_type[index].name) directors[index].type_name = director_type[index].name;
-                    if(director_type[index] && director_type[index].value) directors[index].type_value = director_type[index].value;
+                    if(director_type[index] && director_type[index].value) directors[index].type_value = director_type[index].value; else directors[index].type_value = 1;
 
                     if(director_address[index] && director_address[index].name) directors[index].address_name = director_address[index].name;
                     if(director_address[index] && director_address[index].value) directors[index].address_value = director_address[index].value;
@@ -1405,7 +1411,7 @@ function registration_form() {
                             if(data.saved_data.nominee_secretary==1) $("#step-2").find("#nominee_secretary").trigger("click");                            
 
                             $.each(data.saved_data.companywpuser_shareholders, function(i, shareholder){
-                                console.log(shareholder)
+                                // console.log(shareholder)
                                 var id = parseInt(i+1);
                                 if(id>1) $(".add-more-shareholder").trigger("click");
 
@@ -1450,77 +1456,83 @@ function registration_form() {
                                 
                             });
 
+                            // console.log(data_query.referral);
+
                             if(data_query.referral===false) {
-                                $("#step-2").find(".next-btn").trigger("click");                            
+                                $("#step-2").find(".next-btn").trigger("click");    
+                            }                        
 
-                                ///////
+                            ///////
 
-                                // console.log(data.saved_data.servicescountries)
+                            // console.log(data.saved_data.servicescountries)
 
-                                $.each(data.saved_data.servicescountries, function(i, service){
-                                    var country_id = service.country_id;
-                                    var service_id = service.service_id;
-                                    var credit_card_count = service.pivot.credit_card_count;
-                                    if(service_id==2) { // bank account service                                   
-                                        $("#step-3").find(".service-"+service_id+"-country-"+country_id).trigger("click");
-                                    }else if(service_id==3) { // credit card service
-                                        $("#step-3").find(".service-"+service_id+"-country-"+country_id+"-card-count").val(credit_card_count).trigger("keyup");
+                            $.each(data.saved_data.servicescountries, function(i, service){
+                                var country_id = service.country_id;
+                                var service_id = service.service_id;
+                                var credit_card_count = service.pivot.credit_card_count;
+                                // if(service_id==2) { // bank account service           
+                                    // console.log("doing things!");                        
+                                    $("#step-3").find(".service-"+service_id+"-country-"+country_id).trigger("click");
+                                // }else if(service_id==3) { // credit card service
+                                    $("#step-3").find(".service-"+service_id+"-country-"+country_id+"-card-count").val(credit_card_count).trigger("keyup");
+                                // }
+                            });
+
+                            $.each(data.saved_data.informationservices, function(i, infoservice){
+                                $("input[value="+infoservice.id+"].info-service-id").trigger("click");
+                            });                            
+
+                            if(data_query.referral===false) {
+                                $("#step-3").find(".next-btn").trigger("click");
+                            }
+
+                            update_input_val(savedData.id, "#saved_company_id"); // previously saved company id 
+
+                            if(data.saved_data.companywpuser_shareholders.length>0) {                                        
+                                // fill summary page uploaded files if any
+                                $.each(data.saved_data.companywpuser_shareholders, function(i, shareholder){
+                                    var id = parseInt(i+1);
+                                    if(shareholder.passport) {
+                                        $("#step-4").find("input[name=shareholder_"+id+"_passport]").val(shareholder.passport);    
+                                        $("#step-4").find("div#shareholder_"+id+"_passport_files").text(shareholder.passport);
+                                    }
+                                    if(shareholder.bill) {
+                                        $("#step-4").find("input[name=shareholder_"+id+"_bill]").val(shareholder.bill);                                    
+                                        $("#step-4").find("div#shareholder_"+id+"_bill_files").text(shareholder.bill);
                                     }
                                 });
-
-                                $.each(data.saved_data.informationservices, function(i, infoservice){
-                                    $("input[value="+infoservice.id+"].info-service-id").trigger("click");
-                                });                            
-
-                                $("#step-3").find(".next-btn").trigger("click");
-
-                                update_input_val(savedData.id, "#saved_company_id"); // previously saved company id 
-
-                                if(data.saved_data.companywpuser_shareholders.length>0) {                                        
-                                    // fill summary page uploaded files if any
-                                    $.each(data.saved_data.companywpuser_shareholders, function(i, shareholder){
-                                        var id = parseInt(i+1);
-                                        if(shareholder.passport) {
-                                            $("#step-4").find("input[name=shareholder_"+id+"_passport]").val(shareholder.passport);    
-                                            $("#step-4").find("div#shareholder_"+id+"_passport_files").text(shareholder.passport);
-                                        }
-                                        if(shareholder.bill) {
-                                            $("#step-4").find("input[name=shareholder_"+id+"_bill]").val(shareholder.bill);                                    
-                                            $("#step-4").find("div#shareholder_"+id+"_bill_files").text(shareholder.bill);
-                                        }
-                                    });
-                                }
-
-                                if(data.saved_data.companywpuser_directors.length>0) {                                
-                                    // fill summary page uploaded files if any
-                                    $.each(data.saved_data.companywpuser_directors, function(i, director){
-                                        var id = parseInt(i+1);
-                                        if(director.passport) {
-                                            $("#step-4").find("input[name=director_"+id+"_passport]").val(director.passport);                                    
-                                            $("#step-4").find("div#director_"+id+"_passport_files").text(director.passport);    
-                                        }
-                                        if(director.bill) {
-                                            $("#step-4").find("input[name=director_"+id+"_bill]").val(director.bill);
-                                            $("#step-4").find("div#director_"+id+"_bill_files").text(director.bill);
-                                        }
-                                    });
-                                }
-
-                                if(data.saved_data.companywpuser_secretaries.length>0) {                                
-                                    // fill summary page uploaded files if any
-                                    $.each(data.saved_data.companywpuser_secretaries, function(i, secretary){
-                                        var id = parseInt(i+1);
-                                        if(secretary.passport) {
-                                            $("#step-4").find("input[name=secretary_"+id+"_passport]").val(secretary.passport);
-                                            $("#step-4").find("div#secretary_"+id+"_passport_files").text(secretary.passport);
-                                        }
-                                        if(secretary.bill) {
-                                            $("#step-4").find("input[name=secretary_"+id+"_bill]").val(secretary.bill);    
-                                            $("#step-4").find("div#secretary_"+id+"_bill_files").text(secretary.bill);                                    
-                                        }
-                                    });
-                                }
                             }
+
+                            if(data.saved_data.companywpuser_directors.length>0) {                                
+                                // fill summary page uploaded files if any
+                                $.each(data.saved_data.companywpuser_directors, function(i, director){
+                                    var id = parseInt(i+1);
+                                    if(director.passport) {
+                                        $("#step-4").find("input[name=director_"+id+"_passport]").val(director.passport);                                    
+                                        $("#step-4").find("div#director_"+id+"_passport_files").text(director.passport);    
+                                    }
+                                    if(director.bill) {
+                                        $("#step-4").find("input[name=director_"+id+"_bill]").val(director.bill);
+                                        $("#step-4").find("div#director_"+id+"_bill_files").text(director.bill);
+                                    }
+                                });
+                            }
+
+                            if(data.saved_data.companywpuser_secretaries.length>0) {                                
+                                // fill summary page uploaded files if any
+                                $.each(data.saved_data.companywpuser_secretaries, function(i, secretary){
+                                    var id = parseInt(i+1);
+                                    if(secretary.passport) {
+                                        $("#step-4").find("input[name=secretary_"+id+"_passport]").val(secretary.passport);
+                                        $("#step-4").find("div#secretary_"+id+"_passport_files").text(secretary.passport);
+                                    }
+                                    if(secretary.bill) {
+                                        $("#step-4").find("input[name=secretary_"+id+"_bill]").val(secretary.bill);    
+                                        $("#step-4").find("div#secretary_"+id+"_bill_files").text(secretary.bill);                                    
+                                    }
+                                });
+                            }
+                            
                         }
                     });
                 }
@@ -1640,6 +1652,11 @@ function registration_form() {
                         // console.log(document.querySelector("#nominee_shareholder").checked);
                         // if shareholder is only 1 and nominee is not selected
                         if($(".shareholder").find(".pasteclone").find(".field-container").length === 1 && document.querySelector("#nominee_shareholder").checked=== false) {
+
+                            //reset back to individual only if company was chosen
+                            if(director_switches[0].element.checked===false)
+                                $(director_switches[0].element).trigger("click");
+
                             $.each(director_switches, function(k, obj){
                                 obj.disable();
                             });
@@ -2032,10 +2049,10 @@ function registration_form() {
                 
                 if(selector=="shareholder" && field=="amount"){                                    
                     $(".shareholder-amount").each(function(i, obj){
-                        totalShareAmount = addAmount(totalShareAmount, $(obj).val());
+                        totalShareAmount = addAmount(totalShareAmount, $(obj).val().replace(/,/g, ""));
                     });       
 
-                    update_input_val(totalShareAmount, "#total_share");
+                    update_input_val(Number(totalShareAmount).toFixed(2), "#total_share");
                 }
                 
                 // update_input_val(data, "#summary_"+selector+"_"+id+"_"+field); 
@@ -2176,7 +2193,7 @@ function registration_form() {
                 response.done(function(data, textStatus, jqXHR){                    
                     if(jqXHR.status==200) {
 
-                        console.log(data);
+                        // console.log(data);
 
                         alert("Your order has been saved. You may return to your order to finalise it at any time by logging into your account. Please note that if you have selected a shelf company, it will only be available when you return to your order if it has not been bought by another client in the meantime.");
 
@@ -2527,7 +2544,7 @@ function registration_form() {
 
             <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>            
 
-            <p>Professional directors may be provided by Offshore Company Solutions if confidentiality is required or if double tax treaty benefits will be claimed.  An annual professional director fee will be charged for this service.</p>
+            <p>Professional directors may be provided by Offshore Company Solutions if confidentiality is required.  An annual professional director fee will be charged for this service.</p>
             <div class="vc_empty_space" style="height: 10px"><span class="vc_empty_space_inner"></span></div>            
             
             <div class="pull-left">

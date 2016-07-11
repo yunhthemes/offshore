@@ -3492,11 +3492,11 @@ function mkdfInitVideoBackground(){
                     items: 3,
                     itemsCustom: [
                         [1200, 4],
-                        [1000, 3],
-                        [768, 2],
-                        [600, 1],
-                        [480, 1],
-                        [320, 1]
+                        [1000, 4],
+                        [768, 3],
+                        [600, 3],
+                        [480, 2],
+                        [320, 2]
                     ],
                     pagination: true,
                     navigation: false,

@@ -16,7 +16,7 @@
 				<div id="demo" class="box jplist">
 					<!-- data -->
 	                <div class="box text-shadow">
-						<table class="table table-striped demo-tbl"> 
+						<table class="table table-striped demo-tbl custom-table"> 
 							<thead class="jplist-panel">
 
 								<tr data-control-type="sort-buttons-group"

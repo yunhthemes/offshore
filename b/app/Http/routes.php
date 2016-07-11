@@ -39,9 +39,18 @@ Route::get('api/gettimezonelist/{country}/{city}', ['uses' => 'ApiController@get
 
 Route::post('api/retrievesavedcompany', ['uses' => 'ApiController@retrievesavedcompany']);
 Route::post('api/uploadfiles', ['uses' => 'ApiController@uploadfiles']);
-Route::get('admin', ['uses' => 'AdminController@index']);
 Route::post('admin/jurisdiction/getcompanyinclsaved', ['uses' => 'JurisdictionController@getcompanyinclsaved']);
-Route::group(['middleware' => 'web'], function() {	
+
+Route::group(['middleware' => 'auth.basic'], function() {		
+	Route::get('admin', ['uses' => 'AdminController@index']);
+});
+
+Route::get('admin/logout', function() {
+    Auth::logout();
+    return Redirect::to('admin');
+});
+
+Route::group(['middleware' => 'web'], function() {		
 	Route::resource('admin/jurisdiction', 'JurisdictionController');
 });
 Route::resource('admin/company', 'CompanyController');

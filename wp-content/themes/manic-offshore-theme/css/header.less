@@ -52,22 +52,37 @@
           position: static!important;
         }
       }
-      .second{
-        top: calc(100%);
-        width: 100%!important;
-        left: 0px!important;
-        .inner {
-          > ul {
-            width: 100%!important;
-            text-align: center!important;
-            li.menu-item-has-children {
-              display: inline-block!important;
-              width: 16%!important;
-              float: none!important;            
+      .wide {
+        .second{
+          top: calc(100%);
+          width: 100%!important;
+          left: 0px!important;
+          .inner {
+            > ul {
+              width: 100%!important;
+              text-align: center!important;
+              li {
+                &.menu-item-has-children {
+                  display: inline-block!important;
+                  width: 16%!important;
+                  float: none!important;            
+                }
+              }
+              > li {
+                a {
+                  font-family: "Open Sans", serif;
+                  font-size: 13px;
+                  line-height: 1.7em;
+                  font-weight: 400;
+                  text-transform: none;
+                  color: #bbb;
+                }
+              }
             }
           }
         }
       }
+      
     }
   }
   
@@ -323,25 +338,6 @@
   float: right !important; 
 }
 
-
-@media only screen and (max-width:1400px){
-  .mkdf-page-header .mkdf-sticky-header .mkdf-sticky-nav{
-    .item_inner{
-      padding: 0 30px 0 0;
-    }
-  }
-}
-
-@media only screen and (max-width:1200px){
-  .mkdf-page-header .mkdf-sticky-header .mkdf-sticky-nav{
-    .item_inner{
-      padding: 0 20px 0 0;
-    }
-    
-  }
-}
-
-
 #sitewide-notice {
   #message {
     p {
@@ -387,4 +383,16 @@
 .mkdf-mobile-header .mkdf-mobile-logo-wrapper img{
   width: auto;
   height: auto;
+}
+
+.mkdf-mobile-header .mkdf-mobile-nav {
+  padding-bottom: 30px;
+}
+
+.mkdf-mobile-header .mkdf-mobile-nav > .mkdf-grid > ul > li:last-child > a {
+  border-bottom: 1px solid #eaeaea;
+}
+
+.mkdf-mobile-header .mkdf-mobile-nav > .mkdf-grid > ul.menu-header-menu-1 > li:last-child > a {
+  border-bottom: 0px;
 }

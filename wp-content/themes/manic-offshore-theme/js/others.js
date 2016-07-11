@@ -216,4 +216,11 @@ jQuery(document).ready(function($) {
     // $('body.inbox').find(".message-action-unstar").parent().parent().remove();
   }
 
+  // $('.stepwizard-row').slick({
+  //   slidesToShow: 2,
+  //   slidesToScroll: 1,
+  //   arrows: false,
+  //   fade: true
+  // });
+
 });

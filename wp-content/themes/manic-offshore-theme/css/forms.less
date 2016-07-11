@@ -228,6 +228,8 @@
     option{
       color: #767676;
     }
+
+    
   }
 
   .bp-required-field-label {
@@ -235,6 +237,17 @@
   }
   .field_work-telephone, .field_home-telephone, .field_home-address, .field_home-address-2, .field_home-address-3, .field_home-address-4, .field_home-address-5, .field_home-address-6, .field_postal-address, .field_postal-address-2, .field_postal-address-3, .field_postal-address-4, .field_postal-address-5, .field_postal-address-6, .field_nationality, .field_date-of-birth {
     display: none;
+  }
+
+  .field_terms-and-conditions {
+    input[type="checkbox"] {
+      display: inline-block!important;
+    } 
+    span {
+      a {
+        color: @dark-blue;
+      }
+    }  
   }
 }
 
@@ -386,11 +399,13 @@
 
     .stepwizard-step {    
         // display: table-cell;
-        width: 14.5%;
-        margin-right: 100px;
+        // margin-right: 100px;
+        width: 17%;
+        margin-right: 10%;
         display: inline-block;
         text-align: left;
         position: relative;
+        color: grey;
         &:nth-of-type(1), &:nth-of-type(3) {
           p {
             left: 0px;
@@ -430,7 +445,7 @@
           width: 40px;
           height: 40px;
         }
-        color: grey;
+
         &.active-step {
           color: @dark-blue;
         }
@@ -558,7 +573,7 @@ input.error, textarea.error {
   .each-header, .each-content {
     display: inline-block;
     vertical-align: middle;
-    width: 24%;       
+    width: 23%;       
   }
   .each-header {
     margin-bottom: 5px;

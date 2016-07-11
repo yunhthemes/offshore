@@ -107,205 +107,6 @@
   font-size: 98px;
   line-height: 98px;
 }
-@media all and (max-width: 425px) {
-  .mkdf-mobile-header .mkdf-mobile-logo-wrapper a {
-    height: 22px!important;
-  }
-  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner {
-    padding-top: 10px;
-  }
-  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-icons-row .mkdf-carousel-navigation .owl-pagination {
-    margin-top: 40px;
-  }
-  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-icons-row .mkdf-carousel-navigation .owl-pagination .owl-page.active {
-    display: inline-block !important;
-  }
-  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-icons-row .mkdf-carousel-navigation .owl-pagination .owl-page.active span {
-    -webkit-transform: scale(1);
-    -moz-transform: scale(1);
-    -o-transform: scale(1);
-    -ms-transform: scale(1);
-    transform: scale(1);
-  }
-  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-icons-row .wpb_wrapper .Deploy-button {
-    width: 100%;
-    text-align: center;
-  }
-  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-icons-row .mkdf-info-card-slider {
-    padding-top: 25px;
-  }
-  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner .homepage-corporate-solutions-column {
-    padding-top: 25px;
-  }
-  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-why-version-03 {
-    height: auto;
-    padding-bottom: 25px!important;
-  }
-  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-why-version-03 .homepage-why-column-version-04 {
-    margin-bottom: 25px;
-  }
-  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-why-version-03 .homepage-why-column-version-04 ul {
-    padding: 0 20px;
-  }
-  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-why-version-03 .homepage-why-column-version-04 ul li {
-    list-style-position: outside;
-  }
-  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner .vc_custom_1455183542356 {
-    background: none!important;
-  }
-  html h1,
-  body h1 {
-    font-size: 35px;
-    line-height: 1.2em;
-  }
-  html h3,
-  body h3 {
-    font-size: 17px;
-  }
-  html body,
-  body body {
-    font-size: 13px;
-  }
-  html .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner,
-  body .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner {
-    padding-top: 30px;
-  }
-  html .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner .mkdf-section-inner,
-  body .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner .mkdf-section-inner {
-    width: 100%;
-  }
-  html .hidden-xs,
-  body .hidden-xs,
-  html .hidden-sm,
-  body .hidden-sm {
-    display: none;
-  }
-  .offshore-banking .core-services-first-copy-column {
-    padding-right: 0px;
-  }
-  .offshore-banking .first-img {
-    margin-top: 40px;
-  }
-  .offshore-banking .first-img .vc_figure {
-    width: 100%;
-  }
-  .offshore-banking .first-img .vc_figure .vc_single_image-wrapper {
-    width: 100%;
-  }
-  .offshore-banking .first-img .vc_figure .vc_single_image-wrapper img {
-    width: 100%;
-  }
-  .international-trading-company .circle-container .arrow {
-    -webkit-transform: rotate(90deg) !important;
-    -moz-transform: rotate(90deg) !important;
-    -o-transform: rotate(90deg) !important;
-    -ms-transform: rotate(90deg) !important;
-    transform: rotate(90deg) !important;
-    display: block;
-  }
-  .international-trading-company .circle-container .circle-2 {
-    top: 5px!important;
-  }
-  .investment-holding-company .company-chart,
-  .group-holding-company .company-chart {
-    width: 100%;
-    margin: 0 auto;
-  }
-  .investment-holding-company .company-chart ul a,
-  .group-holding-company .company-chart ul a {
-    font-size: 12px;
-    line-height: 14px;
-  }
-  .dashboard ul.tabs li {
-    width: 30%;
-  }
-  .dashboard ul.tabs li a {
-    min-width: auto!important;
-    width: 100%!important;
-  }
-  .dashboard .custom-submit-class {
-    padding: 0!important;
-  }
-  .dashboard .each-content {
-    display: block!important;
-    width: 100%!important;
-  }
-  .dashboard .content-row.tbl-item {
-    border-bottom: 1px solid #646464;
-    padding-bottom: 10px;
-    padding-top: 10px;
-  }
-  .dashboard .content-row.tbl-item:nth-of-type(1) {
-    padding-top: 0px;
-  }
-  #buddypress div.item-list-tabs#subnav ul li {
-    width: 20%;
-  }
-  #buddypress div.item-list-tabs#subnav ul li a {
-    padding: 0!important;
-    text-align: center;
-  }
-  #buddypress div.message-search {
-    float: left;
-    margin: 0px;
-  }
-  .stepwizard .stepwizard-step {
-    width: 18%!important;
-    margin-right: 22px!important;
-  }
-  .stepwizard .stepwizard-step:before {
-    right: -20px !important;
-    top: 35%!important;
-    width: 20px!important;
-    height: 20px!important;
-  }
-  .stepwizard .stepwizard-step button {
-    width: 100%!important;
-    background-size: contain!important;
-  }
-  .stepwizard .stepwizard-step p {
-    top: 55px;
-    width: 80px;
-    left: 5px!important;
-    font-size: 10px;
-    line-height: 15px;
-  }
-  #registration-page-form-1-1 .each-header,
-  #registration-page-form-1-1 .each-content {
-    vertical-align: top!important;
-  }
-  #registration-page-form-1-1 .each-header:nth-of-type(1),
-  #registration-page-form-1-1 .each-content:nth-of-type(1) {
-    width: 25%;
-  }
-  #registration-page-form-1-1 .each-header:nth-of-type(2),
-  #registration-page-form-1-1 .each-content:nth-of-type(2) {
-    width: 35%;
-  }
-  #registration-page-form-1-1 .each-header:nth-of-type(3),
-  #registration-page-form-1-1 .each-content:nth-of-type(3) {
-    width: 13%;
-  }
-  #registration-page-form-1-1 .each-header:nth-of-type(4),
-  #registration-page-form-1-1 .each-content:nth-of-type(4) {
-    width: 20%!important;
-  }
-  #registration-page-form-1-1 .each-header:nth-of-type(4) button,
-  #registration-page-form-1-1 .each-content:nth-of-type(4) button {
-    font-size: 12px!important;
-    line-height: 1.3em!important;
-  }
-  #registration-page-form-2 .custom-input-container-left {
-    width: 100%;
-  }
-  #registration-page-form-2 .custom-input-container-right {
-    width: 35%;
-    margin-top: 30px;
-  }
-  #registration-page-form-2 .total-share-container {
-    width: 50%;
-  }
-}
 body {
   font-size: 15px;
 }
@@ -405,16 +206,14 @@ body.custom-zopim-visible .zopim:nth-of-type(2) {
   left: 0px!important;
   top: 30%!important;
 }
-@media only screen and (max-width: 991px) {
-  .zopim {
-    display: none !important;
-  }
-}
 #mkdf-back-to-top {
   display: none !important;
 }
 select::-ms-expand {
   display: none;
+}
+#pass-strength-result {
+  display: none!important;
 }
 header.mkdf-page-header .mkdf-menu-area {
   height: 65px;
@@ -450,19 +249,27 @@ header.mkdf-page-header .mkdf-menu-area .mkdf-vertical-align-containers > .mkdf-
 .mkdf-header-standard-menu-holder .mkdf-drop-down ul li {
   position: static!important;
 }
-.mkdf-header-standard-menu-holder .mkdf-drop-down .second {
+.mkdf-header-standard-menu-holder .mkdf-drop-down .wide .second {
   top: calc(100%);
   width: 100%!important;
   left: 0px!important;
 }
-.mkdf-header-standard-menu-holder .mkdf-drop-down .second .inner > ul {
+.mkdf-header-standard-menu-holder .mkdf-drop-down .wide .second .inner > ul {
   width: 100%!important;
   text-align: center!important;
 }
-.mkdf-header-standard-menu-holder .mkdf-drop-down .second .inner > ul li.menu-item-has-children {
+.mkdf-header-standard-menu-holder .mkdf-drop-down .wide .second .inner > ul li.menu-item-has-children {
   display: inline-block !important;
   width: 16%!important;
   float: none!important;
+}
+.mkdf-header-standard-menu-holder .mkdf-drop-down .wide .second .inner > ul > li a {
+  font-family: "Open Sans", serif;
+  font-size: 13px;
+  line-height: 1.7em;
+  font-weight: 400;
+  text-transform: none;
+  color: #bbb;
 }
 .mkdf-main-menu > ul > li > a {
   color: #ffffff !important;
@@ -682,16 +489,6 @@ header.mkdf-page-header .mkdf-menu-area .mkdf-vertical-align-containers > .mkdf-
 .mkdf-page-header .mkdf-sticky-header .mkdf-sticky-nav {
   float: right !important;
 }
-@media only screen and (max-width: 1400px) {
-  .mkdf-page-header .mkdf-sticky-header .mkdf-sticky-nav .item_inner {
-    padding: 0 30px 0 0;
-  }
-}
-@media only screen and (max-width: 1200px) {
-  .mkdf-page-header .mkdf-sticky-header .mkdf-sticky-nav .item_inner {
-    padding: 0 20px 0 0;
-  }
-}
 #sitewide-notice #message p {
   background-color: #008B9B;
   border: 1px solid #FFF;
@@ -723,6 +520,15 @@ header.mkdf-page-header .mkdf-menu-area .mkdf-vertical-align-containers > .mkdf-
 .mkdf-mobile-header .mkdf-mobile-logo-wrapper img {
   width: auto;
   height: auto;
+}
+.mkdf-mobile-header .mkdf-mobile-nav {
+  padding-bottom: 30px;
+}
+.mkdf-mobile-header .mkdf-mobile-nav > .mkdf-grid > ul > li:last-child > a {
+  border-bottom: 1px solid #eaeaea;
+}
+.mkdf-mobile-header .mkdf-mobile-nav > .mkdf-grid > ul.menu-header-menu-1 > li:last-child > a {
+  border-bottom: 0px;
 }
 footer .mkdf-footer-top-holder {
   padding-top: 10px;
@@ -792,52 +598,6 @@ footer .widget .mkdf-icon-list-item:hover p {
 }
 #custom-footer-additional-links ul li a:hover {
   color: #b1cfd4;
-}
-@media only screen and (max-width: 991px) {
-  footer .mkdf-footer-top-holder {
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 30px;
-    padding-bottom: 23px;
-    font-size: 15px !important;
-  }
-  footer .widget .mkdf-icon-list-item {
-    margin-bottom: 20px!important;
-  }
-  footer .mkdf-footer-column-1 {
-    margin-bottom: 0px !important;
-    text-align: center;
-  }
-  footer .mkdf-footer-top .mkdf-two-columns-50-50 .mkdf-column {
-    padding-left: 0;
-    padding-right: 0;
-  }
-  /*
-  footer .mkdf-footer-top .mkdf-four-columns .mkdf-column, 
-  footer .mkdf-footer-top .mkdf-three-columns .mkdf-column, 
-  footer .mkdf-footer-top .mkdf-two-columns-50-50 .mkdf-column{
-    border: none;
-  }
-  */
-  .copyright-span {
-    font-size: 11px !important;
-    margin-bottom: -17px;
-    display: block;
-  }
-  #custom-footer-additional-links {
-    margin-left: -10px;
-    margin-right: -10px;
-  }
-  #custom-footer-additional-links ul {
-    text-align: center;
-  }
-  #custom-footer-additional-links ul li {
-    margin-right: 0;
-    padding: 0 6px;
-  }
-  #custom-footer-additional-links ul li a {
-    font-size: 11px !important;
-  }
 }
 .custom-form-message {
   width: 100%;
@@ -1056,6 +816,12 @@ footer .widget .mkdf-icon-list-item:hover p {
 #signup_form .field_date-of-birth {
   display: none;
 }
+#signup_form .field_terms-and-conditions input[type="checkbox"] {
+  display: inline-block !important;
+}
+#signup_form .field_terms-and-conditions span a {
+  color: #008b9b;
+}
 .error-container {
   margin-bottom: 20px;
   color: red;
@@ -1196,8 +962,8 @@ footer .widget .mkdf-icon-list-item:hover p {
   z-order: 0;
 }
 .stepwizard .stepwizard-step {
-  width: 14.5%;
-  margin-right: 100px;
+  width: 17%;
+  margin-right: 10%;
   display: inline-block;
   text-align: left;
   position: relative;
@@ -1350,7 +1116,7 @@ textarea.error:-ms-input-placeholder {
 #registration-page-form-1-2 .each-content {
   display: inline-block;
   vertical-align: middle;
-  width: 24%;
+  width: 23%;
 }
 #registration-page-form-1-1 .each-header,
 #registration-page-form-1-2 .each-header {
@@ -1711,13 +1477,17 @@ body.home #homepage-core-services-01 .mkdf-blog-box-whole-content .mkdf-boxes-it
   position: absolute;
   margin-left: -10px;
   margin-top: -20px;
-  right: -22px;
+  right: -24px;
   top: 50%;
   width: 40px;
   height: 40px;
 }
 #homepage-icons-row .owl-item:last-child:before {
   display: none;
+}
+#homepage-icons-row .owl-item:nth-of-type(2) .mkdf-info-card-slider-item .mkdf-info-card-front-side .mkdf-info-card-front-side-content p {
+  width: 205px;
+  margin-left: -15px;
 }
 #homepage-icons-row .mkdf-info-card-slider .mkdf-info-card-front-side {
   padding-left: 0px;
@@ -1770,15 +1540,6 @@ body.home #homepage-core-services-01 .mkdf-blog-box-whole-content .mkdf-boxes-it
   color: #008b9b !important;
   background: #ffffff !important;
 }
-@media only screen and (max-width: 991px) {
-  #homepage-icons-row .mkdf-info-card-slider {
-    width: auto !important;
-    padding: 0 25px;
-  }
-  #homepage-icons-row .owl-item:before {
-    right: 10px;
-  }
-}
 #homepage-core-services-01 .vc_col-sm-2 {
   width: 20%;
 }
@@ -1799,32 +1560,6 @@ body.home #homepage-core-services-01 .mkdf-blog-box-whole-content .mkdf-boxes-it
 #homepage-core-services-01 .mkdf-blog-boxes-content-holder h4 {
   font-size: 16px;
   line-height: 21px;
-}
-@media only screen and (max-width: 1400px) {
-  #homepage-core-services-01 h4.mkdf-boxes-item-title a,
-  #homepage-core-services-02 h4.mkdf-boxes-item-title a {
-    font-size: 15px;
-  }
-}
-@media only screen and (max-width: 1200px) {
-  #homepage-core-services-01 h4.mkdf-boxes-item-title a,
-  #homepage-core-services-02 h4.mkdf-boxes-item-title a {
-    font-size: 12px;
-  }
-}
-@media only screen and (max-width: 1024px) {
-  #homepage-core-services-01 .mkdf-btn-small,
-  #homepage-core-services-02 .mkdf-btn-small {
-    display: none;
-  }
-}
-@media only screen and (max-width: 991px) {
-  #homepage-core-services-01 .vc_col-sm-2 {
-    width: auto;
-  }
-  #homepage-core-services-01 .mkdf-blog-box-whole-content {
-    margin-bottom: 30px;
-  }
 }
 #homepage-why-version-03 {
   /*
@@ -1848,11 +1583,14 @@ body.home #homepage-core-services-01 .mkdf-blog-box-whole-content .mkdf-boxes-it
   margin-left: 0px;
   margin-right: 0px;
   overflow: hidden;
-  height: 300px;
 }
 #homepage-why-version-03 .homepage-why-column-version-04 {
   padding-left: 30px;
   padding-right: 30px;
+}
+#homepage-why-version-03 .homepage-why-column-version-04 ul {
+  list-style: initial;
+  padding-left: 20px;
 }
 #homepage-why-version-03 .homepage-why-column-version-05 .wpb_wrapper {
   z-index: 3;
@@ -1875,7 +1613,7 @@ body.home #homepage-core-services-01 .mkdf-blog-box-whole-content .mkdf-boxes-it
   width: 391px;
   margin: 0 auto;
   background: #b1cfd4;
-  height: 370px;
+  height: 600px;
   z-index: 1;
 }
 #homepage-why-version-03 .mkdf-btn-solid {
@@ -1887,22 +1625,6 @@ body.home #homepage-core-services-01 .mkdf-blog-box-whole-content .mkdf-boxes-it
   background: transparent !important;
   border-color: #ffffff !important;
   color: #ffffff !important;
-}
-@media only screen and (max-width: 991px) {
-  #homepage-why-version-03 .homepage-why-column-version-04 {
-    padding-left: 0px;
-    padding-right: 0px;
-    margin-bottom: 90px;
-  }
-  #homepage-why-version-03 .homepage-why-column-version-05 .wpb_wrapper {
-    z-index: 3;
-    position: relative;
-    margin-right: 0px;
-  }
-  #homepage-why-version-03 .homepage-why-column-seperator {
-    left: 0px;
-    width: 100%;
-  }
 }
 #homepage-what-can .mkdf-unordered-list ul > li {
   margin-bottom: 0px;
@@ -1938,14 +1660,6 @@ body.home #homepage-core-services-01 .mkdf-blog-box-whole-content .mkdf-boxes-it
 #homepage-copy-row .homepage-copy-column-02 {
   padding-left: 20px;
 }
-@media only screen and (max-width: 991px) {
-  #homepage-copy-row .homepage-copy-column-01 {
-    padding-right: 0px;
-  }
-  #homepage-copy-row .homepage-copy-column-02 {
-    padding-left: 0px;
-  }
-}
 .home-page .homepage-corporate-solutions-column {
   padding-left: 40px;
 }
@@ -1967,7 +1681,7 @@ body.home #homepage-core-services-01 .mkdf-blog-box-whole-content .mkdf-boxes-it
 .homepage-corporate-solutions-column .mkdf-blog-list .mkdf-blog-list-item {
   height: 200px;
   position: relative;
-  margin-bottom: 20px!important;
+  margin-bottom: 21px!important;
   overflow: hidden;
 }
 .homepage-corporate-solutions-column .mkdf-blog-list .mkdf-blog-list-item .mkdf-item-image {
@@ -2075,10 +1789,8 @@ body.home #homepage-core-services-01 .mkdf-blog-box-whole-content .mkdf-boxes-it
   -ms-filter: progid:DXImageTransform.Microsoft.Alpha(opacity=100);
   filter: alpha(opacity=100);
 }
-@media only screen and (max-width: 991px) {
-  .homepage-corporate-solutions-column {
-    padding-left: 0;
-  }
+.homepage-corporate-solutions-column h3 {
+  width: 105%;
 }
 .offshore .mkdf-title .mkdf-title-holder {
   display: none;
@@ -3027,4 +2739,512 @@ form.wpcf7-form .wpcf7-response-output {
 #signup-page-wrapper .vc_custom_1454399108366 {
   margin-left: 0px!important;
   margin-right: 0px!important;
+}
+@media only screen and (max-width: 1400px) {
+  #homepage-core-services-01 h4.mkdf-boxes-item-title a,
+  #homepage-core-services-02 h4.mkdf-boxes-item-title a {
+    font-size: 15px;
+  }
+  .mkdf-page-header .mkdf-sticky-header .mkdf-sticky-nav .item_inner {
+    padding: 0 30px 0 0;
+  }
+}
+@media all and (max-width: 1200px) {
+  .mkdf-mobile-header .mkdf-mobile-header-inner {
+    height: 45px;
+  }
+  .mkdf-mobile-header .mkdf-mobile-header-inner .mkdf-vertical-align-containers {
+    display: table;
+  }
+  .mkdf-mobile-header .mkdf-mobile-header-inner .mkdf-vertical-align-containers .mkdf-mobile-menu-opener {
+    display: table-cell;
+    vertical-align: middle;
+    float: none;
+  }
+  .mkdf-mobile-header .mkdf-mobile-header-inner .mkdf-vertical-align-containers .mkdf-position-center {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: right;
+    position: static;
+    width: auto;
+  }
+  .mkdf-mobile-header .mkdf-mobile-header-inner .mkdf-vertical-align-containers .mkdf-position-center .mkdf-mobile-logo-wrapper a {
+    height: 22px!important;
+  }
+  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-icons-row .mkdf-carousel-navigation .owl-pagination {
+    margin-top: 40px;
+  }
+  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-icons-row .mkdf-carousel-navigation .owl-pagination .owl-page.active {
+    display: inline-block !important;
+  }
+  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-icons-row .mkdf-carousel-navigation .owl-pagination .owl-page.active span {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -o-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+  }
+  .home-page #homepage-core-services-01 .mkdf-blog-box-whole-content .mkdf-boxes-item-title {
+    min-width: auto!important;
+  }
+  .homepage-corporate-solutions-column .mkdf-blog-list .mkdf-blog-list-item {
+    height: 170px;
+  }
+  #homepage-core-services-01 h4.mkdf-boxes-item-title a,
+  #homepage-core-services-02 h4.mkdf-boxes-item-title a {
+    font-size: 12px;
+  }
+  .mkdf-page-header .mkdf-sticky-header .mkdf-sticky-nav .item_inner {
+    padding: 0 20px 0 0;
+  }
+}
+@media only screen and (max-width: 1024px) {
+  #homepage-core-services-01 .mkdf-btn-small,
+  #homepage-core-services-02 .mkdf-btn-small {
+    display: none;
+  }
+  .homepage-corporate-solutions-column .mkdf-blog-list .mkdf-blog-list-item {
+    height: 120px;
+  }
+  .offshore-finance-company {
+    -webkit-transform: scale(0.7);
+    -moz-transform: scale(0.7);
+    -o-transform: scale(0.7);
+    -ms-transform: scale(0.7);
+    transform: scale(0.7);
+    position: relative;
+    left: -50%;
+    margin: 0px;
+    width: 200%;
+    height: 450px;
+    top: -50px;
+  }
+}
+@media only screen and (max-width: 991px) {
+  .zopim {
+    display: none !important;
+  }
+  #homepage-icons-row .mkdf-info-card-slider {
+    width: auto !important;
+    padding: 0 25px;
+  }
+  #homepage-icons-row .owl-item:before {
+    right: 10px;
+  }
+  #homepage-why-version-03 .homepage-why-column-version-04 {
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-bottom: 90px;
+  }
+  #homepage-why-version-03 .homepage-why-column-version-05 .wpb_wrapper {
+    z-index: 3;
+    position: relative;
+    margin-right: 0px;
+  }
+  #homepage-copy-row .homepage-copy-column-01 {
+    padding-right: 0px;
+  }
+  #homepage-copy-row .homepage-copy-column-02 {
+    padding-left: 0px;
+  }
+  .homepage-corporate-solutions-column {
+    padding-left: 0;
+  }
+  .homepage-corporate-solutions-column .mkdf-blog-list .mkdf-blog-list-item {
+    height: 100px;
+  }
+  footer .mkdf-footer-top-holder {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 30px;
+    padding-bottom: 23px;
+    font-size: 15px !important;
+  }
+  footer .widget .mkdf-icon-list-item {
+    margin-bottom: 20px!important;
+  }
+  footer .mkdf-footer-column-1 {
+    margin-bottom: 0px !important;
+    text-align: center;
+  }
+  footer .mkdf-footer-top .mkdf-two-columns-50-50 .mkdf-column {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  /*
+  footer .mkdf-footer-top .mkdf-four-columns .mkdf-column, 
+  footer .mkdf-footer-top .mkdf-three-columns .mkdf-column, 
+  footer .mkdf-footer-top .mkdf-two-columns-50-50 .mkdf-column{
+    border: none;
+  }
+  */
+  .copyright-span {
+    font-size: 11px !important;
+    margin-bottom: -17px;
+    display: block;
+  }
+  #custom-footer-additional-links {
+    margin-left: -10px;
+    margin-right: -10px;
+  }
+  #custom-footer-additional-links ul {
+    text-align: center;
+  }
+  #custom-footer-additional-links ul li {
+    margin-right: 0;
+    padding: 0 6px;
+  }
+  #custom-footer-additional-links ul li a {
+    font-size: 11px !important;
+  }
+  #registration-page-form-1-1 .new-incorporation {
+    margin-top: 20px;
+  }
+  .offshore-finance-company {
+    -webkit-transform: scale(0.7);
+    -moz-transform: scale(0.7);
+    -o-transform: scale(0.7);
+    -ms-transform: scale(0.7);
+    transform: scale(0.7);
+    position: relative;
+    left: -63%;
+    margin: 0px;
+    width: 230%;
+    height: 450px;
+    top: -50px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  #registration-page-form-1-2 .new-incorporation {
+    margin-top: 30px;
+  }
+  #homepage-core-services-01 .vc_col-sm-2 {
+    width: auto;
+  }
+  #homepage-core-services-01 .mkdf-blog-box-whole-content {
+    margin-bottom: 30px;
+  }
+  #homepage-why-version-03 {
+    height: auto;
+    padding-bottom: 25px!important;
+  }
+  #homepage-why-version-03 .homepage-why-column-version-04 {
+    width: 100%;
+    margin-bottom: 25px;
+  }
+  #homepage-why-version-03 .homepage-why-column-version-04 ul {
+    padding: 0 20px;
+  }
+  #homepage-why-version-03 .homepage-why-column-version-04 ul li {
+    list-style-position: outside;
+  }
+  #homepage-why-version-03 .homepage-why-column-seperator {
+    left: 0px!important;
+    width: 600px;
+  }
+  #homepage-why-version-03 .homepage-why-column-version-05 {
+    width: 100%;
+  }
+  .vc_custom_1455183542356 {
+    background: none!important;
+  }
+  .home-page .homepage-corporate-solutions-column {
+    padding-left: 0px;
+    padding-top: 40px;
+    width: 100%;
+  }
+  .home-page #homepage-icons-row .mkdf-btn.mkdf-btn-solid.custon-deploy-button.full-width {
+    margin: -60px auto 20px auto;
+  }
+  .home-page #homepage-icons-row .vc_column_container:nth-of-type(1),
+  .home-page #homepage-icons-row .vc_column_container:nth-of-type(2) {
+    width: 100%;
+  }
+  .home-page #homepage-content-row .vc_column_container:nth-of-type(1),
+  .home-page #homepage-content-row .vc_column_container:nth-of-type(2) {
+    width: 100%;
+  }
+  #homepage-icons-row .mkdf-btn.mkdf-btn-solid.custon-deploy-button.full-width {
+    display: block;
+  }
+  #homepage-icons-row .wpb_wrapper .Deploy-button {
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 30px;
+  }
+  #homepage-icons-row .owl-item:before {
+    right: -11px;
+    top: 50px;
+  }
+  #homepage-icons-row .owl-item:nth-of-type(2) .mkdf-info-card-slider-item .mkdf-info-card-front-side .mkdf-info-card-front-side-content p {
+    width: auto;
+  }
+  .offshore-banking .core-services-first-copy-column {
+    padding-right: 0px;
+  }
+  .offshore-banking .first-img {
+    margin-top: 40px;
+  }
+  .offshore-banking .first-img .vc_figure {
+    width: 100%;
+  }
+  .offshore-banking .first-img .vc_figure .vc_single_image-wrapper {
+    width: 100%;
+  }
+  .offshore-banking .first-img .vc_figure .vc_single_image-wrapper img {
+    width: 100%;
+  }
+  .stepwizard .stepwizard-step:nth-of-type(2) p {
+    left: 0px;
+  }
+  .stepwizard .stepwizard-step p {
+    width: 130px;
+  }
+  #registration-page-form-1-1 .custom-submit-class.new-incorporation {
+    margin-top: 30px;
+  }
+  .home-page .homepage-corporate-solutions-column {
+    padding-left: 0px;
+    margin-top: 40px;
+  }
+  .home-page .homepage-corporate-solutions-column .mkdf-blog-list .mkdf-blog-list-item {
+    height: 400px;
+  }
+  .home-page .homepage-corporate-solutions-column .mkdf-blog-list .mkdf-blog-list-item .mkdf-item-text-holder .mkdf-excerpt {
+    height: 400px;
+  }
+}
+@media all and (max-width: 480px) {
+  .mkdf-mobile-header .mkdf-mobile-logo-wrapper a {
+    height: 22px!important;
+  }
+  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner {
+    padding-top: 10px;
+  }
+  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-icons-row .mkdf-carousel-navigation .owl-pagination {
+    margin-top: 40px;
+  }
+  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-icons-row .mkdf-carousel-navigation .owl-pagination .owl-page.active {
+    display: inline-block !important;
+  }
+  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-icons-row .mkdf-carousel-navigation .owl-pagination .owl-page.active span {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -o-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+  }
+  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-icons-row .wpb_wrapper .Deploy-button {
+    width: 100%;
+    text-align: center;
+  }
+  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-icons-row .mkdf-info-card-slider {
+    padding-top: 25px;
+  }
+  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-icons-row .mkdf-btn.mkdf-btn-solid.custon-deploy-button.full-width {
+    display: block;
+    margin: 0px auto 20px auto;
+  }
+  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner .homepage-corporate-solutions-column {
+    padding-top: 25px;
+  }
+  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-why-version-03 {
+    height: auto;
+    padding-bottom: 25px!important;
+  }
+  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-why-version-03 .homepage-why-column-version-04 {
+    margin-bottom: 25px;
+  }
+  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-why-version-03 .homepage-why-column-version-04 ul {
+    padding: 0 20px;
+  }
+  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-why-version-03 .homepage-why-column-version-04 ul li {
+    list-style-position: outside;
+  }
+  .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner .vc_custom_1455183542356 {
+    background: none!important;
+  }
+  html h1,
+  body h1 {
+    font-size: 35px;
+    line-height: 1.2em;
+  }
+  html h3,
+  body h3 {
+    font-size: 17px;
+  }
+  html body,
+  body body {
+    font-size: 13px;
+  }
+  html .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner,
+  body .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner {
+    padding-top: 30px;
+  }
+  html .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner .mkdf-section-inner,
+  body .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner .mkdf-section-inner {
+    width: 100%;
+  }
+  html .hidden-xs,
+  body .hidden-xs,
+  html .hidden-sm,
+  body .hidden-sm {
+    display: none;
+  }
+  html .homepage-corporate-solutions-column,
+  body .homepage-corporate-solutions-column {
+    padding-left: 0px;
+    margin-top: 40px;
+  }
+  html .homepage-corporate-solutions-column .mkdf-blog-list .mkdf-blog-list-item,
+  body .homepage-corporate-solutions-column .mkdf-blog-list .mkdf-blog-list-item {
+    height: 300px;
+  }
+  html .homepage-corporate-solutions-column .mkdf-blog-list .mkdf-blog-list-item .mkdf-item-text-holder .mkdf-excerpt,
+  body .homepage-corporate-solutions-column .mkdf-blog-list .mkdf-blog-list-item .mkdf-item-text-holder .mkdf-excerpt {
+    height: 300px;
+  }
+  html .fit-text,
+  body .fit-text {
+    margin: 0px;
+  }
+  html .offshore-finance-company,
+  body .offshore-finance-company {
+    -webkit-transform: scale(0.6);
+    -moz-transform: scale(0.6);
+    -o-transform: scale(0.6);
+    -ms-transform: scale(0.6);
+    transform: scale(0.6);
+    position: relative;
+    left: -56%;
+    margin: 0px;
+    width: 220%;
+    height: 450px;
+    top: -50px;
+  }
+  .offshore-banking .core-services-first-copy-column {
+    padding-right: 0px;
+  }
+  .offshore-banking .first-img {
+    margin-top: 40px;
+  }
+  .offshore-banking .first-img .vc_figure {
+    width: 100%;
+  }
+  .offshore-banking .first-img .vc_figure .vc_single_image-wrapper {
+    width: 100%;
+  }
+  .offshore-banking .first-img .vc_figure .vc_single_image-wrapper img {
+    width: 100%;
+  }
+  .international-trading-company .circle-container .arrow {
+    -webkit-transform: rotate(90deg) !important;
+    -moz-transform: rotate(90deg) !important;
+    -o-transform: rotate(90deg) !important;
+    -ms-transform: rotate(90deg) !important;
+    transform: rotate(90deg) !important;
+    display: block;
+  }
+  .international-trading-company .circle-container .circle-2 {
+    top: 5px!important;
+  }
+  .investment-holding-company .company-chart,
+  .group-holding-company .company-chart {
+    width: 100%;
+    margin: 0 auto;
+  }
+  .investment-holding-company .company-chart ul a,
+  .group-holding-company .company-chart ul a {
+    font-size: 12px;
+    line-height: 14px;
+  }
+  .dashboard ul.tabs li {
+    width: 30%;
+  }
+  .dashboard ul.tabs li a {
+    min-width: auto!important;
+    width: 100%!important;
+  }
+  .dashboard .custom-submit-class {
+    padding: 0!important;
+  }
+  .dashboard .each-content {
+    display: block!important;
+    width: 100%!important;
+  }
+  .dashboard .content-row.tbl-item {
+    border-bottom: 1px solid #646464;
+    padding-bottom: 10px;
+    padding-top: 10px;
+  }
+  .dashboard .content-row.tbl-item:nth-of-type(1) {
+    padding-top: 0px;
+  }
+  #buddypress div.item-list-tabs#subnav ul li {
+    width: 20%;
+  }
+  #buddypress div.item-list-tabs#subnav ul li a {
+    padding: 0!important;
+    text-align: center;
+  }
+  #buddypress div.message-search {
+    float: left;
+    margin: 0px;
+  }
+  .stepwizard .stepwizard-step {
+    width: 15%!important;
+    margin-right: 30px!important;
+  }
+  .stepwizard .stepwizard-step:before {
+    right: -20px !important;
+    top: 35%!important;
+    width: 20px!important;
+    height: 20px!important;
+  }
+  .stepwizard .stepwizard-step button {
+    width: 100%!important;
+    background-size: contain!important;
+  }
+  .stepwizard .stepwizard-step p {
+    top: 55px;
+    width: 75px;
+    left: 5px!important;
+    font-size: 10px;
+    line-height: 15px;
+  }
+  #registration-page-form-1-1 .each-header,
+  #registration-page-form-1-1 .each-content {
+    vertical-align: top!important;
+  }
+  #registration-page-form-1-1 .each-header:nth-of-type(1),
+  #registration-page-form-1-1 .each-content:nth-of-type(1) {
+    width: 25%;
+  }
+  #registration-page-form-1-1 .each-header:nth-of-type(2),
+  #registration-page-form-1-1 .each-content:nth-of-type(2) {
+    width: 35%;
+  }
+  #registration-page-form-1-1 .each-header:nth-of-type(3),
+  #registration-page-form-1-1 .each-content:nth-of-type(3) {
+    width: 13%;
+  }
+  #registration-page-form-1-1 .each-header:nth-of-type(4),
+  #registration-page-form-1-1 .each-content:nth-of-type(4) {
+    width: 20%!important;
+  }
+  #registration-page-form-1-1 .each-header:nth-of-type(4) button,
+  #registration-page-form-1-1 .each-content:nth-of-type(4) button {
+    font-size: 12px!important;
+    line-height: 1.3em!important;
+  }
+  #registration-page-form-2 .custom-input-container-left {
+    width: 100%;
+  }
+  #registration-page-form-2 .custom-input-container-right {
+    width: 35%;
+    margin-top: 30px;
+  }
+  #registration-page-form-2 .total-share-container {
+    width: 50%;
+  }
 }

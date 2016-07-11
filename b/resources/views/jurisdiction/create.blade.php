@@ -32,7 +32,10 @@
 						{{ Form::label('secretary_name_rules', 'Secretary rules')}}
 						{{ Form::textarea('secretary_name_rules', null, ['class'=>'custom-input-class']) }}
 					</div>
-
+					<div class="field-container">
+						{{ Form::label('price_label', 'Incorporation charge label (use in individual corporation page)')}}
+						{{ Form::text('price_label', null, ['class'=>'custom-input-class']) }}
+					</div>
 					<div class="field-container">
 						{{ Form::label('company_type_price_eu', 'Incorporation charge €')}}
 						{{ Form::text('company_type_price_eu', null, ['class'=>'custom-input-class']) }}

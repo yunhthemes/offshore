@@ -11,7 +11,7 @@
 				<a href="{{ url('/admin') }}"><button class="custom-submit-class">Return to dashboard</button></a>				
 				<div class="space50"></div>
 
-				<div id="demo" class="box jplist">
+				<div id="demo" class="box jplist ">
 					<!-- data -->
 	                <div class="box text-shadow">								
 						<table class="table table-striped demo-tbl">

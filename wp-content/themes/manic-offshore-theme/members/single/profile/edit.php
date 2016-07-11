@@ -45,62 +45,68 @@ if ( bp_has_profile( 'profile_group_id=' . bp_get_current_profile_group_id() ) )
 				</div>
 			<?php endif; ?>
 
-			<div<?php bp_field_css_class( 'editfield' ); ?>>
+			<?php if(strpos(bp_the_profile_field_name(), 'conditions')): ?>
 
-				<?php
-				$field_type = bp_xprofile_create_field_type( bp_get_the_profile_field_type() );
-				$field_type->edit_field_html();
+			<?php else: ?>
 
-				/**
-				 * Fires before the display of visibility options for the field.
-				 *
-				 * @since 1.7.0
-				 */
-				do_action( 'bp_custom_profile_edit_fields_pre_visibility' );
-				?>
+				<div<?php bp_field_css_class( 'editfield' ); ?>>
 
-				<?php if ( bp_current_user_can( 'bp_xprofile_change_field_visibility' ) ) : ?>
-					<p class="field-visibility-settings-toggle" id="field-visibility-settings-toggle-<?php bp_the_profile_field_id() ?>">
-						<?php
-						printf(
-							__( 'This field can be seen by: %s', 'buddypress' ),
-							'<span class="current-visibility-level">' . bp_get_the_profile_field_visibility_level_label() . '</span>'
-						);
-						?>
-						<a href="#" class="visibility-toggle-link"><?php _e( 'Change', 'buddypress' ); ?></a>
-					</p>
+					<?php
+					$field_type = bp_xprofile_create_field_type( bp_get_the_profile_field_type() );
+					$field_type->edit_field_html();
 
-					<div class="field-visibility-settings" id="field-visibility-settings-<?php bp_the_profile_field_id() ?>">
-						<fieldset>
-							<legend><?php _e( 'Who can see this field?', 'buddypress' ) ?></legend>
+					/**
+					 * Fires before the display of visibility options for the field.
+					 *
+					 * @since 1.7.0
+					 */
+					do_action( 'bp_custom_profile_edit_fields_pre_visibility' );
+					?>
 
-							<?php bp_profile_visibility_radio_buttons() ?>
+					<?php if ( bp_current_user_can( 'bp_xprofile_change_field_visibility' ) ) : ?>
+						<p class="field-visibility-settings-toggle" id="field-visibility-settings-toggle-<?php bp_the_profile_field_id() ?>">
+							<?php
+							printf(
+								__( 'This field can be seen by: %s', 'buddypress' ),
+								'<span class="current-visibility-level">' . bp_get_the_profile_field_visibility_level_label() . '</span>'
+							);
+							?>
+							<a href="#" class="visibility-toggle-link"><?php _e( 'Change', 'buddypress' ); ?></a>
+						</p>
 
-						</fieldset>
-						<a class="field-visibility-settings-close" href="#"><?php _e( 'Close', 'buddypress' ) ?></a>
-					</div>
-				<?php else : ?>
-					<div class="field-visibility-settings-notoggle" id="field-visibility-settings-toggle-<?php bp_the_profile_field_id() ?>">
-						<?php
-						printf(
-							__( 'This field can be seen by: %s', 'buddypress' ),
-							'<span class="current-visibility-level">' . bp_get_the_profile_field_visibility_level_label() . '</span>'
-						);
-						?>
-					</div>
-				<?php endif ?>
+						<div class="field-visibility-settings" id="field-visibility-settings-<?php bp_the_profile_field_id() ?>">
+							<fieldset>
+								<legend><?php _e( 'Who can see this field?', 'buddypress' ) ?></legend>
 
-				<?php
+								<?php bp_profile_visibility_radio_buttons() ?>
 
-				/**
-				 * Fires after the visibility options for a field.
-				 *
-				 * @since 1.1.0
-				 */
-				do_action( 'bp_custom_profile_edit_fields' ); ?>
+							</fieldset>
+							<a class="field-visibility-settings-close" href="#"><?php _e( 'Close', 'buddypress' ) ?></a>
+						</div>
+					<?php else : ?>
+						<div class="field-visibility-settings-notoggle" id="field-visibility-settings-toggle-<?php bp_the_profile_field_id() ?>">
+							<?php
+							printf(
+								__( 'This field can be seen by: %s', 'buddypress' ),
+								'<span class="current-visibility-level">' . bp_get_the_profile_field_visibility_level_label() . '</span>'
+							);
+							?>
+						</div>
+					<?php endif ?>
 
-				<p class="description"><?php bp_the_profile_field_description(); ?></p>
-			</div>
+					<?php
+
+					/**
+					 * Fires after the visibility options for a field.
+					 *
+					 * @since 1.1.0
+					 */
+					do_action( 'bp_custom_profile_edit_fields' ); ?>
+
+					<p class="description"><?php bp_the_profile_field_description(); ?></p>
+				</div>
+
+			<?php endif; ?>
 
 			<?php $index++; ?>
 
@@ -111,8 +117,8 @@ if ( bp_has_profile( 'profile_group_id=' . bp_get_current_profile_group_id() ) )
 		$author_registered = $author_meta->user_registered;		
 		?>
 		<div class="editfield field_1 field_first-name required-field visibility-public alt field_type_textbox">				
-			<label for="email">Account registered</label>		
-			<input id="email" type="text" value="<?php if($author_registered) echo date("d M Y", strtotime($author_registered)) . ' at ' . date("H:i", strtotime($author_registered)); ?>" aria-required="true" disabled="">					
+			<label for="reg_date">Account registered</label>		
+			<input id="reg_date" type="text" value="<?php if($author_registered) echo get_date_from_gmt( date( 'Y-m-d H:i:s', strtotime($author_registered) ), 'd M Y \a\t H:i' ); ?>" aria-required="true" disabled="">					
 		</div>		
 	<?php
 
@@ -300,7 +306,7 @@ if ( bp_has_profile( 'profile_group_id=' . bp_get_current_profile_group_id() ) )
 			if($form.valid()) {
 				$(".field_first-name").find("input").prop("disabled", false);				
 				$(".field_surname").find("input").prop("disabled", false);
-				$(".field_nationality").find("input").prop("disabled", false);
+				$(".field_nationality").find("select").prop("disabled", false);
 				// $(".field_date-of-birth").find("input").prop("disabled", false);
 
 				$form.submit();

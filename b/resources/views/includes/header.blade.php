@@ -7,13 +7,11 @@
           <a href="{{ URL::to('/admin') }}" class="logo middle"><img class="mkdf-normal-logo" src="http://clients.manic.com.sg/offshore/wp-content/uploads/2016/01/company-logo-03.png" alt="logo"></a>        
         </div>
 
-        <div class="pull-right">
+        <!--<div class="pull-right test">
           <ul>
-            
-              <li><a href="javascript:void(0);" class="logout-btn">Log out</a></li>
-            
+            <li><a href="{{ URL::to('/admin/logout')}}" class="logout-btn">Log out</a></li>
           </ul>        
-        </div>
+        </div>-->
       @else
         <div class="pull-left">
           <a href="{{ URL::to('/admin') }}" class="logo middle"><img class="mkdf-normal-logo" src="http://clients.manic.com.sg/offshore/wp-content/uploads/2016/01/company-logo-03.png" alt="logo"></a>
