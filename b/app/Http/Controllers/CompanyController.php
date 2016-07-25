@@ -8,9 +8,10 @@ use App\Keypersonnel;
 use App\Service;
 use App\Company;
 use App\CompanyType;
-// use App\CompanyDirector;
-// use App\CompanySecretary;
-// use App\CompanyShareholder;
+use App\Director;
+use App\Secretary;
+use App\Shareholder;
+use App\ServiceCountry;
 use App\CompanyWpuserShareholder;
 use App\CompanyWpuserDirector;
 use App\CompanyWpuserSecretary;
@@ -272,6 +273,9 @@ class CompanyController extends Controller
                 // $servicescountries = $company->servicescountries()->get(); // to remove
                 // if($servicescountries) $company->servicescountries()->detach(); // to remove
 
+                $currency = $request->input('currency');
+
+                $service_price = 0;
                 for($i=1;$i<=$request->service_count;$i++) {
                     $service_country_count = $request->input('service_'.$i.'_country_count');
 
@@ -280,6 +284,16 @@ class CompanyController extends Controller
                         $credit_card_count = ($request->input('service_'.$i.'_country_'.$j.'_no_of_card')) ? $request->input('service_'.$i.'_country_'.$j.'_no_of_card') : "";
 
                         // $company->servicescountries()->attach($service_country_id, ['credit_card_count'=>$credit_card_count]); // to remove
+
+                        if($currency=="USD")
+                            $each_service_price = ServiceCountry::find($service_country_id)->price;
+                        else
+                            $each_service_price = ServiceCountry::find($service_country_id)->price_eu;
+
+                        if($credit_card_count) {
+                            $service_price += $each_service_price * $credit_card_count;
+                        }
+                        else $service_price += $each_service_price;
 
                         $company_wpuser->servicescountries()->attach($service_country_id, ['credit_card_count'=>$credit_card_count]);
                     }
@@ -299,6 +313,44 @@ class CompanyController extends Controller
                         $company_wpuser->informationservices()->attach($value);
                     }
                 }
+
+                // get all price from db 
+                $nominee_director_prices = Director::select('price', 'price_eu')->where('company_type_id', $request->jurisdiction_id)->first();
+                $nominee_secretary_prices = Secretary::select('price', 'price_eu')->where('company_type_id', $request->jurisdiction_id)->first();
+                $nominee_shareholder_prices = Shareholder::select('price', 'price_eu')->where('company_type_id', $request->jurisdiction_id)->first();                                
+                
+                $total_price = 0;  
+
+                if($currency == "USD") {
+                    $nominee_director_price = $nominee_director_prices->price;
+                    $nominee_secretary_price = $nominee_secretary_prices->price;
+                    $nominee_shareholder_price = $nominee_shareholder_prices->price;
+                }else {
+                    $nominee_director_price = $nominee_director_prices->price_eu;
+                    $nominee_secretary_price = $nominee_secretary_prices->price_eu;
+                    $nominee_shareholder_price = $nominee_shareholder_prices->price_eu;
+                }
+
+                $total_price += ($nominee_director) ? $nominee_director_price : 0;
+                $total_price += ($nominee_secretary) ? $nominee_secretary_price : 0;
+                $total_price += ($nominee_shareholder) ? $nominee_shareholder_price : 0;
+
+                if(!empty($request->shelf_company_id)) {
+                    if($currency=="USD")
+                        $total_price += ($company->price);
+                    else
+                        $total_price += ($company->price_eu);
+                }else {
+                    if($currency=="USD")
+                        $total_price += CompanyType::find($request->jurisdiction_id)->price;
+                    else
+                        $total_price += CompanyType::find($request->jurisdiction_id)->price_eu;
+                }
+
+                if($service_price) {
+                    $total_price += $service_price;
+                }
+
 
                 if($request->action=='checkout'){
 

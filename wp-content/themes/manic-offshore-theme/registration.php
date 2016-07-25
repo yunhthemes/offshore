@@ -2138,11 +2138,12 @@ function registration_form() {
                                 //         }, 500);
                                 //     }
                                 // }); 
-
+                                window.canExit = true;
                                 window.location.href = "'.SITEURL.'/client-dashboard";
 
                             }else {
                                 setTimeout(function(){ 
+                                    window.canExit = true;
                                     window.location.href = "'.SITEURL.'/client-dashboard";
                                 }, 500);
                             }                                                    
@@ -2200,6 +2201,7 @@ function registration_form() {
                         $(window).unbind("beforeunload");
 
                         setTimeout(function(){ 
+                            window.canExit = true;
                             window.location.href = "'.SITEURL.'/client-dashboard";
                         }, 1000);
                         
@@ -2214,6 +2216,7 @@ function registration_form() {
                 e.preventDefault();
 
                 var href = $(this).parent().attr("href");
+                window.canExit = true;
                 window.location.href = href;
 
             });
@@ -2390,10 +2393,10 @@ function registration_form() {
             </div>    
         {{else}}   
             <p>Unfortunately no shelf companies are presently available.  You may order a new incorporation below.</p>
-            <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>            
+            <div class="vc_empty_space hide-from-mobile" style="height: 29px"><span class="vc_empty_space_inner"></span></div>            
         {{/if}}
 
-        <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>                         
+        <div class="vc_empty_space hide-from-mobile" style="height: 29px"><span class="vc_empty_space_inner"></span></div>                         
         
         <h6>New incorporation</h6>
         <div class="pull-left">
@@ -3204,9 +3207,17 @@ function registration_form() {
     <script id="summaryservice-template" type="text/x-handlebars-template">
         <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>            
         <h4>Other services</h4>
-        <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>        
-        {{#services}}
-            {{#if @first}}<input type="hidden" name="service_count" value="{{../services.length}}">{{/if}}                   
+        <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
+
+        {{#services}}            
+            {{#if @first}}
+                <input type="hidden" name="service_count" value="{{../services.length}}">
+                {{#ifCond ../../services.currency "==" "Euro (€)" }}
+                    <input type="hidden" name="currency" value="EURO">
+                {{else}}
+                    <input type="hidden" name="currency" value="USD">
+                {{/ifCond}}
+            {{/if}}                   
             {{#countries}}
                 {{#if @first}}<input type="hidden" name="service_{{counter @../index}}_country_count" value="{{../countries.length}}">{{/if}}                   
                 <input type="hidden" name="service_{{counter @../index}}_country_{{counter @index}}_id" value="{{service_country_id_value}}">
@@ -3226,11 +3237,13 @@ function registration_form() {
                         </div>
                         <div class="col-2 pull-left"></div>
                         <div class="pull-right col-3 service-cta-col">
-                            <div class="service-cta-container">
+                            
                             {{#if services_credit_card_counts_value}}
+                            <div class="service-cta-container service-cta-with-input">
                                 <input type="text" name="service_{{counter @../index}}_country_{{counter @index}}_no_of_card" value="{{services_credit_card_counts_value}}" class="edit-no-of-card custom-input-class small-input-2" data-price="{{service_price_value}}" data-noofcard="{{services_credit_card_counts_value}}">                            
                                 <button data-selector="{{services_credit_card_counts_name}}" class="remove-btn custom-submit-class custom-submit-class-2">Remove</button>
                             {{else}}
+                            <div class="service-cta-container">
                                 {{#ifCond ../value "==" "Registered office annual fee (compulsory)"}}
                                 {{else}}
                                     <button data-selector="service_{{counter @../index}}_country_{{counter @index}}_id" class="remove-btn custom-submit-class custom-submit-class-2">Remove</button>
@@ -3285,10 +3298,10 @@ function registration_form() {
         </div>
     </div>
             
-    <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
-    <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
-    <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>    
-    <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>        
+    <div class="vc_empty_space" style="height: 29px;"><span class="vc_empty_space_inner"></span></div>
+    <div class="vc_empty_space" style="height: 29px;"><span class="vc_empty_space_inner"></span></div>
+    <div class="vc_empty_space" style="height: 29px;"><span class="vc_empty_space_inner"></span></div>    
+    <div class="vc_empty_space hidden-xs" style="height: 29px;"><span class="vc_empty_space_inner"></span></div>        
 
     <div id="step-1" class="step-1 reg-step active">
         <form id="registration-page-form-1-1">
@@ -3306,13 +3319,13 @@ function registration_form() {
                 </select>
             </div>
 
-            <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
+            <div class="vc_empty_space hide-from-mobile" style="height: 29px"><span class="vc_empty_space_inner"></span></div>
 
             <div id="shelf-companies">
             <!-- JS CONTENT GOES HERE -->
             </div>            
 
-            <div class="vc_empty_space" style="height: 29px"><span class="vc_empty_space_inner"></span></div>                                
+            <div class="vc_empty_space hide-from-mobile" style="height: 29px"><span class="vc_empty_space_inner"></span></div>                                
 
             <input type="checkbox" name="new-incorporation" id="new-incorporation" value="true" />
 

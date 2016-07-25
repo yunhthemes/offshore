@@ -6126,12 +6126,14 @@ body:not(.mkdf-full-width-wide-menu) .mkdf-drop-down .wide .second > .inner > ul
 ========================================================================== */
 .mkdf-sticky-up-mobile-header .mkdf-animate-mobile-header .mkdf-mobile-header-inner {
   width: 100%;
-  -webkit-transition: transform 0.4s ease-in-out, left 0.2s ease, right 0.2s ease;
-  -moz-transition: transform 0.4s ease-in-out, left 0.2s ease, right 0.2s ease;
-  -o-transition: transform 0.4s ease-in-out, left 0.2s ease, right 0.2s ease;
-  transition: transform 0.4s ease-in-out, left 0.2s ease, right 0.2s ease;
-  -webkit-transform: translateY(-100%);
-  transform: translateY(-100%);
+  // -webkit-transition: transform 0.4s ease-in-out, left 0.2s ease, right 0.2s ease;
+  // -moz-transition: transform 0.4s ease-in-out, left 0.2s ease, right 0.2s ease;
+  // -o-transition: transform 0.4s ease-in-out, left 0.2s ease, right 0.2s ease;
+  // transition: transform 0.4s ease-in-out, left 0.2s ease, right 0.2s ease;
+  // -webkit-transform: translateY(-100%);
+  // transform: translateY(-100%);
+  position: fixed;
+  top: 0px;
 }
 
 .mkdf-sticky-up-mobile-header .mobile-header-appear .mkdf-mobile-header-inner {

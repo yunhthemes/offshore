@@ -135,19 +135,19 @@
 	            <div class="content">
 	            	<div class="content-row tbl-item">
 		                <div class="each-content">
-		                    <p class="company">{{ name }}</p>
+		                    <p class="company"><span class="visible-from-portrait">Company:</span> {{ name }}</p>
 		                </div>
 		                <div class="each-content">
-		                    <p class="jurisdiction">{{ companytypes.name }}</p>
+		                    <p class="jurisdiction"><span class="visible-from-portrait">Jurisdiction:</span> {{ companytypes.name }}</p>
 		                </div>
 		                <div class="each-content">
 		                	{{#ifCond status "==" "0"}}
-								<p class="datetime">Registration incomplete</p>    
+								<p class="datetime"><span class="visible-from-portrait">Renewal date:</span> Registration incomplete</p>    
 		                	{{else}}
 		                		{{#ifCond owner "==" "1"}}
-									<p class="datetime">{{ wpusers.0.pivot.renewal_date }}</p> 
+									<p class="datetime"><span class="visible-from-portrait">Renewal date:</span> {{ wpusers.0.pivot.renewal_date }}</p> 
 		                		{{else}}
-		                			<p class="datetime">Registration incomplete</p>    		
+		                			<p class="datetime"><span class="visible-from-portrait">Renewal date:</span> Registration incomplete</p>    		
 		                    	{{/ifCond}}   
 		                    {{/ifCond}}
 		                </div>		                         
@@ -579,6 +579,8 @@
             $("body").on("click", "#redirect-now", function(e){
             	e.preventDefault();
 
+            	window.canExit = true;
+
             	data = {}; 
 
             	var companywpuser_id = $(this).data("companywpuser-id");
@@ -589,10 +591,8 @@
             	var redirect_to_url = $(this).attr("href") + "?refertocompany=" + company_id;
 
             	response.done(function(data, textStatus, jqXHR){                    
-	                if(jqXHR.status==200) {
-	                    
+	                if(jqXHR.status==200) {	                    
 	                    window.location.href = redirect_to_url;
-
 	                }
 	            });
 

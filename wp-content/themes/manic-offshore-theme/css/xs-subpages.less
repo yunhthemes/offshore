@@ -17,25 +17,30 @@
 }
 
 .international-trading-company {	
-	.circle-container {
-		.arrow {
-			.rotation(90deg)!important;	
-			display: block;
-		}
-		.circle-2 {
-			top: 5px!important;
-		}
-	}
+	// .circle-container {
+	// 	.arrow {
+	// 		.rotation(90deg)!important;	
+	// 		display: block;
+	// 	}
+	// 	.circle-2 {
+	// 		top: 5px!important;
+	// 	}
+	// }
 }
 
 .investment-holding-company, .group-holding-company {
 	.company-chart {
-		width: 100%;
-		margin: 0 auto;
-		ul {
-			a {
-				font-size: 12px;
-				line-height: 14px;
+		// width: 100%;
+		// margin: 0 auto;
+		// ul {
+		// 	a {
+		// 		font-size: 12px;
+		// 		line-height: 14px;
+		// 	}
+		// }
+		ul.compaines {
+			&:after {
+				width: 53.2%;
 			}
 		}
 	}
@@ -44,9 +49,11 @@
 .dashboard {
 	ul.tabs {
 		li {
-		    width: 30%;
+		    width: auto;
+		    margin-right: 10px;
 		    a {
-		    	min-width: auto!important;
+		    	padding: 5px;
+		    	min-width: 100%!important;
 		    	width: 100%!important;
 		    }
 		}
@@ -66,15 +73,20 @@
     		padding-top: 0px;
     	}
 	}
+	.standard-form {
+		textarea {
+			width: 95.7%!important;
+		}
+	}
 }
 
 #buddypress {
 	div.item-list-tabs#subnav {
 		ul {
 			li {
-				width: 20%;				
+				width: auto;				
 				a {
-					padding: 0!important;
+					padding: 0px 6px!important;
 					text-align: center;
 				}
 			}
@@ -87,9 +99,15 @@
 }
 
 .stepwizard {
+	margin-top: 20px;
 	.stepwizard-step {
-		width: 15%!important;
-    	margin-right: 30px!important;
+		width: 48%!important;
+    	// margin-right: 30px!important;
+    	margin: 0 auto;
+    	display: none;
+    	&.active-step {
+    		display: block;
+    	}
 		&:before {
 	        right: -20px !important;
 			top: 35%!important;
@@ -99,35 +117,75 @@
 		button {
 			width: 100%!important;
 			background-size: contain!important;
+			background-position: center center!important;
 		}
 		p {
-		    top: 55px;
-		    width: 75px;
-		    left: 5px!important;
+		    top: 85px;
+		    width: 100%;
 		    font-size: 10px;
 		    line-height: 15px;
+		    text-align: center;
+		    br {
+		    	display: none;
+		    }
 		}
 	}	
 }
 #registration-page-form-1-1 {
-	.each-header,.each-content {
+	.each-header {
 		vertical-align: top!important;
+	}
+	.each-content {
+		vertical-align: middle!important;
+	}
+	.each-header,.each-content {		
 		&:nth-of-type(1) {
-			width: 25%;
+			width: 30%;
 		}		
 		&:nth-of-type(2) {
-			width: 35%;
+			// width: 35%;
+			display: none;
 		}		
 		&:nth-of-type(3) {
-			width: 13%;
+			width: 30%;
 		}
 		&:nth-of-type(4) {
-			width: 20%!important;
+			width: 30%!important;
 			button {
 			    font-size: 12px!important;
 				line-height: 1.3em!important;
 			}
 		}
+	}
+	#shelf-companies {
+		p {
+			margin-top: 30px;
+		}
+		h6 {
+			margin-top: 15px;
+		}
+		.pull-right {
+			width: 100%;
+			.new-incorporation {
+		      	margin-top: 30px;
+		      	width: 100%;
+		  	}	
+		}
+	}
+
+	#new-incorporation-container {
+		margin-top: 20px;
+	}
+
+	.cancel-btn-1 {
+		margin-top: 30px;		
+	}
+	.next-btn {
+		margin-top: 30px;
+	}
+	
+	.cancel-btn-1, .cancel-btn-2, .next-btn {
+		width: 49%;
 	}
 }
 #registration-page-form-2 {	
@@ -135,10 +193,112 @@
 		width: 100%;
 	}
 	.custom-input-container-right {
-		width: 35%;
-		margin-top: 30px;
+		width: 100%;
+		// margin-top: 30px;
 	}
 	.total-share-container {
 		width: 50%;
+	}
+	.cancel-btn {
+		width: 100%;
+	}
+	.back-btn, .next-btn {
+		width: 49%;
+	}
+}
+
+#registration-page-form-3 {	
+	.cancel-btn {
+		width: 100%;
+	}
+	.back-btn, .next-btn {
+		width: 49%;
+	}
+}
+
+#registration-page-form-4 {
+	.col-1 {
+		width: 65%;
+	}
+	.route-specific-summary {
+		.pull-left {
+			width: 65%;
+		}
+	}
+	.field-container {
+		.price {
+			padding-top: 1px;
+		}
+	}
+	#summaryshareholder, #summarydirector, #summarysecretary, #summaryservice {
+		.half-field-container-2 {
+			width: 100%;
+		}
+	}
+	.upload-col-container {
+	    float: none;
+	    display: block;
+	    clear: both;
+        padding-top: 20px;
+        width: 100%!important;	
+	    span.fileinput-button {
+	    	width: 100%;
+	    	button {
+	    		width: 83%;
+	    	}
+	    }
+	}
+
+	.cancel-btn,.back-btn {
+		width: 49%;
+	}
+	.payment-gateway-btn, .save-now {
+		width: 100%;
+	}
+
+	.half-field-container-2 {
+		position: relative;
+	}
+
+	.summary-shareholder-price-container, .summary-director-price-container, .summary-secretary-price-container {
+		position: relative;
+		#summary-shareholder-price, #summary-director-price, #summary-secretary-price {
+			position: absolute;
+			top: 0px;
+			right: 0px
+		}
+	}
+
+	.nominee-cta-container, .service-cta-container {
+		text-align: left;
+	}
+
+	.service-cta-col {
+		float: none;		
+		input[type=text] {
+			width: 83%;
+		}
+		button.remove-btn {
+			width: 83%;
+			margin-left: 0px;
+		}
+	}
+
+	#summaryservice {
+		.summary-price {
+			position: absolute;
+			top: 0px;
+			right: 0px;
+		}
+	}
+
+	.remove-col-container {
+		float: none;
+		clear: both;
+		width: 100%;
+		display: block;
+		button.remove-btn {
+			width: 83%;
+		}
 	}
 }

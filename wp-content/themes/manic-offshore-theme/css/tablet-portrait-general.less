@@ -9,7 +9,7 @@
       width: auto;
     }
     .mkdf-blog-box-whole-content{
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
   }
 
@@ -62,6 +62,12 @@
         }
       }
     }
+    .mkdf-carousel-holder .mkdf-carousel-item-holder .mkdf-carousel-first-image-holder {
+      img {
+        display: block;
+        margin: 0 auto;
+      }
+    }
   }
   
   #homepage-icons-row {
@@ -99,7 +105,7 @@
       padding-right: 0px;
     }
     .first-img {
-      margin-top: 40px;   
+      margin-top: 10px;   
       .vc_figure {
         width: 100%;
         .vc_single_image-wrapper {
@@ -122,15 +128,31 @@
       p {
         width: 130px;
       }
+      &:before {
+        display: none;
+      }
     }
   }
 
 #registration-page-form-1-1 {
 	.custom-submit-class {
 	  &.new-incorporation {
-		margin-top: 30px;
+      margin-top: 30px;
 	  }	  
-	}
+	}  
+}
+
+#registration-page-form-4 {
+  #summaryshareholder {
+    .upload-col-container {
+      width: 20%;
+    }
+  }
+  .field-container {
+    .price {
+      padding-top: 2px;
+    }
+  }
 }
 
 .home-page {
@@ -145,4 +167,71 @@
       }
     }
   }
+}
+
+.international-trading-company-figure-container {
+  height: 200px;
+  .international-trading-company-figure {
+    .scale(0.6);
+    position: relative;
+    left: -40%;
+    margin: 0px;
+    width: 200%;
+    height: 250px;
+  }  
+}
+
+.dashboard {
+  .jplist-panel {
+    display: none;
+  }
+  ul.tabs {
+    li {
+        width: 33%;
+        a {
+          min-width: 100%!important;
+          width: 100%!important;
+        }
+    }
+  }
+  .custom-submit-class {
+    padding: 0!important;
+  } 
+  .each-header {
+    width: 22%;
+  }
+  .each-content {
+    width: 22%;
+    display: block!important;
+    width: 100%!important;
+  }
+  .content-row.tbl-item {
+    border-bottom: 1px solid @grey;
+      padding-bottom: 10px;
+      padding-top: 10px;
+      &:nth-of-type(1) {
+        padding-top: 0px;
+      }
+  }
+  table#message-threads {
+    th.thread-options, td.thread-options {
+      display: none;
+    }
+  }
+}
+
+.paragraph-with-image {
+  .wpb_text_column {
+    p {
+      &:last-child {
+        width: 160%;
+      }
+    }
+  }
+}
+
+.service-cta-with-input {
+  position: absolute;
+  left: 160px;
+  top: 0;
 }

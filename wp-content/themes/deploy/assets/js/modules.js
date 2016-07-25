@@ -1043,6 +1043,33 @@ function mkdfInitVideoBackground(){
                     navigationHolder.slideDown(animationSpeed);
                 }
             });
+
+            $(document).on('tap click', function(e){
+                console.log("clicking body");
+                e.stopPropagation();
+                if(navigationHolder.is(':visible')) navigationHolder.slideUp(animationSpeed); 
+                $('body').css('height', 'auto'); // to enable scroll when menu close
+            });
+
+            $(".mkdf-mobile-nav").on('tap click', function(e){
+                e.stopPropagation();                
+                if($("#custom-right-header-signin-box-mobile").hasClass("open") == true) {
+                    TweenMax.to($("#custom-right-header-signin-box-mobile"), 0.5, {
+                        autoAlpha: 0, 
+                        position: "absolute",
+                        top: -10,
+                        left: 0
+                    });
+                }
+            });
+
+            $("#mobilelogin").on('tap click', function(e){
+                e.stopPropagation();
+            });
+
+            // fix for iphone/ipad
+            // http://stackoverflow.com/questions/3705937/document-click-not-working-correctly-on-iphone-jquery
+            /iP/i.test(navigator.userAgent) && $('*').css('cursor', 'pointer');
         }
 
         //dropdown opening / closing
@@ -1054,6 +1081,19 @@ function mkdfInitVideoBackground(){
                     if(dropdownToOpen.length) {
                         e.preventDefault();
                         e.stopPropagation();
+
+                        if($("#custom-right-header-signin-box-mobile").hasClass("open") == true) {
+                            TweenMax.to($("#custom-right-header-signin-box-mobile"), 0.5, {
+                                autoAlpha: 0, 
+                                position: "absolute",
+                                top: -10,
+                                left: 0
+                            });                            
+                        }
+
+                        var $otherMenusWithChild = $(this).parent().siblings('.menu-item-has-children');
+                        $otherMenusWithChild.find('.sub_menu').slideUp(animationSpeed);
+                        $otherMenusWithChild.removeClass('mkdf-opened');
 
                         var openerParent = $(this).parent('li');
                         if(dropdownToOpen.is(':visible')) {
@@ -1069,6 +1109,7 @@ function mkdfInitVideoBackground(){
         }
 
         $('.mkdf-mobile-nav a, .mkdf-mobile-logo-wrapper a').on('click tap', function(e) {
+            e.stopPropagation();
             if($(this).attr('href') !== 'http://#' && $(this).attr('href') !== '#') {
                 navigationHolder.slideUp(animationSpeed);
             }
@@ -3489,10 +3530,10 @@ function mkdfInitVideoBackground(){
         if(infoCardSliders.length) {
             infoCardSliders.each(function() {
                 $(this).owlCarousel({
-                    items: 3,
+                    items: 4,
                     itemsCustom: [
                         [1200, 4],
-                        [1000, 4],
+                        [1000, 3],
                         [768, 3],
                         [600, 3],
                         [480, 2],

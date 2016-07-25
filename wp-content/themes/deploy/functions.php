@@ -141,11 +141,11 @@ if(!function_exists('deploy_mikado_scripts')) {
 		wp_enqueue_script('jquery-ui-accordion');
 		wp_enqueue_script('wp-mediaelement');
 
-		wp_enqueue_script('deploy_mikado_third_party', MIKADO_ASSETS_ROOT.'/js/third-party.js', array('jquery'), false, true);
+		wp_enqueue_script('deploy_mikado_third_party', MIKADO_ASSETS_ROOT.'/js/third-party.min.js', array('jquery'), false, true);
 		wp_enqueue_script('isotope', MIKADO_ASSETS_ROOT.'/js/jquery.isotope.min.js', array('jquery'), false, true);
 
 		//include google map api script
-		wp_enqueue_script('deploy_mikado_google_map_api', '//maps.googleapis.com/maps/api/js', array(), false, true);
+		wp_enqueue_script('deploy_mikado_google_map_api', '//maps.googleapis.com/maps/api/js?key=AIzaSyBRQUNj9brC5UEImGrU8nhHk4P_1DznUZM', array(), false, true);
 
 		wp_enqueue_script('deploy_mikado_modules', MIKADO_ASSETS_ROOT.'/js/modules.js', array('jquery'), false, true);
 

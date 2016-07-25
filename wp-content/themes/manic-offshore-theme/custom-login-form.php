@@ -26,10 +26,13 @@ function custom_menu_item_shortcode() {
 			    	</li>
 			    </ul>
 			</nav>
+			<form id="logout" action="logout" method="post" style="display:none;">
+            	<input class="submit_button" type="submit" value="Logout" name="submit">
+            	'.wp_nonce_field( "ajax-logout-nonce", "logoutsecurity" ).'
+            </form>
 		</div>
-		<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
-		<script type="text/javascript">
-		jQuery(document).ready(function($) {
+		<script type="text/javascript">		
+		jQuery(document).ready(function($) {			
 		    $("#custom-right-header-livechat").click(function(event) {
 		        event.preventDefault();		        
 		        $zopim.livechat.say(" ");
@@ -50,8 +53,7 @@ function custom_menu_item_shortcode() {
 		        TweenMax.to($("#custom-right-header-signin-box"), 0.5, {
 		            autoAlpha: 0
 		        });
-		    });
-
+		    });		    
 		});
 		</script>';
 	else:
@@ -107,8 +109,7 @@ function custom_menu_item_shortcode() {
 			    	</li>
 			    </ul>
 		    </nav>
-		</div>
-		<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
+		</div>		
 		<script type="text/javascript">
 		jQuery(document).ready(function($) {
 		    $("#custom-right-header-livechat").click(function(event) {
@@ -131,6 +132,28 @@ function custom_menu_item_shortcode() {
 		        TweenMax.to($("#custom-right-header-signin-box"), 0.5, {
 		            autoAlpha: 0
 		        });
+		    });
+		    $("#custom-right-header-signin-mobile").click(function(event) {
+		    	if($("#custom-right-header-signin-box-mobile").hasClass("open") == false) {		    		
+			        TweenMax.to($("#custom-right-header-signin-box-mobile"), 0.5, {
+			            autoAlpha: 1, 
+			            position: "relative",
+			            top: 0,
+			            left: 0
+			        });
+
+			        $(".sub_menu").slideUp(200);
+			        $(".sub_menu").parent().removeClass("mkdf-opened");
+		    	}
+		    	else {
+		    		TweenMax.to($("#custom-right-header-signin-box-mobile"), 0.5, {
+			            autoAlpha: 0, 
+			            position: "absolute",
+			            top: -10,
+			            left: 0
+			        });
+		    	}    	
+		    	$("#custom-right-header-signin-box-mobile").toggleClass("open");
 		    });
 
 		});

@@ -121,6 +121,9 @@ body {
   -ms-filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
   filter: alpha(opacity=0);
 }
+.visible-from-portrait {
+  display: none;
+}
 .mkdf-breadcrumbs-inner a {
   color: #008b9b;
 }
@@ -214,6 +217,18 @@ select::-ms-expand {
 }
 #pass-strength-result {
   display: none!important;
+}
+#buddypress div#message-thread img.avatar {
+  display: none;
+}
+#buddypress div#message-thread div.message-box {
+  padding: 15px 0px;
+}
+#buddypress div#message-thread div.message-metadata {
+  margin-bottom: 5px;
+}
+#buddypress div#message-thread div.message-content {
+  margin-left: 0px;
 }
 header.mkdf-page-header .mkdf-menu-area {
   height: 65px;
@@ -312,7 +327,8 @@ header.mkdf-page-header .mkdf-menu-area .mkdf-vertical-align-containers > .mkdf-
 #custom-right-header-signin {
   position: relative;
 }
-#custom-right-header-signin-box {
+#custom-right-header-signin-box,
+#custom-right-header-signin-box-mobile {
   -moz-opacity: 0;
   -khtml-opacity: 0;
   -webkit-opacity: 0;
@@ -338,12 +354,14 @@ header.mkdf-page-header .mkdf-menu-area .mkdf-vertical-align-containers > .mkdf-
   background: #6d6e70;
   text-align: center;
 }
-#custom-right-header-signin-box * {
+#custom-right-header-signin-box *,
+#custom-right-header-signin-box-mobile * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-#custom-right-header-signin-box:before {
+#custom-right-header-signin-box:before,
+#custom-right-header-signin-box-mobile:before {
   content: "";
   display: block;
   width: 0;
@@ -357,22 +375,28 @@ header.mkdf-page-header .mkdf-menu-area .mkdf-vertical-align-containers > .mkdf-
   top: -6px;
   right: 105px;
 }
-#custom-right-header-signin-box form {
+#custom-right-header-signin-box form,
+#custom-right-header-signin-box-mobile form {
   display: block;
 }
-#custom-right-header-signin-box .ajax-error {
+#custom-right-header-signin-box .ajax-error,
+#custom-right-header-signin-box-mobile .ajax-error {
   color: red!important;
 }
-#custom-right-header-signin-box a#forgot-password-link {
+#custom-right-header-signin-box a#forgot-password-link,
+#custom-right-header-signin-box-mobile a#forgot-password-link {
   display: block;
   margin-top: 19px;
   color: #ffffff !important;
 }
-#custom-right-header-signin-box a#forgot-password-link:hover {
+#custom-right-header-signin-box a#forgot-password-link:hover,
+#custom-right-header-signin-box-mobile a#forgot-password-link:hover {
   color: #b1cfd4 !important;
 }
 #custom-right-header-signin-box .signin-input,
-#custom-right-header-signin-box .input {
+#custom-right-header-signin-box-mobile .signin-input,
+#custom-right-header-signin-box .input,
+#custom-right-header-signin-box-mobile .input {
   font-family: "Open Sans", serif;
   font-size: 13px;
   line-height: 18px;
@@ -389,8 +413,11 @@ header.mkdf-page-header .mkdf-menu-area .mkdf-vertical-align-containers > .mkdf-
   display: block;
 }
 #custom-right-header-signin-box .tp-caption.Deploy-button,
+#custom-right-header-signin-box-mobile .tp-caption.Deploy-button,
 #custom-right-header-signin-box .Deploy-button,
-#custom-right-header-signin-box #wp-submit {
+#custom-right-header-signin-box-mobile .Deploy-button,
+#custom-right-header-signin-box #wp-submit,
+#custom-right-header-signin-box-mobile #wp-submit {
   background: #008b9b !important;
   border: 2px solid #008b9b !important;
   display: block;
@@ -410,8 +437,11 @@ header.mkdf-page-header .mkdf-menu-area .mkdf-vertical-align-containers > .mkdf-
   text-decoration: none !important;
 }
 #custom-right-header-signin-box .tp-caption.Deploy-button:hover,
+#custom-right-header-signin-box-mobile .tp-caption.Deploy-button:hover,
 #custom-right-header-signin-box .Deploy-button:hover,
-#custom-right-header-signin-box #wp-submit:hover {
+#custom-right-header-signin-box-mobile .Deploy-button:hover,
+#custom-right-header-signin-box #wp-submit:hover,
+#custom-right-header-signin-box-mobile #wp-submit:hover {
   /*
     color: @dark-blue !important;
     border: 2px solid @dark-blue !important;
@@ -420,6 +450,16 @@ header.mkdf-page-header .mkdf-menu-area .mkdf-vertical-align-containers > .mkdf-
   color: #008b9b !important;
   border: 2px solid #ffffff !important;
   background: #ffffff !important;
+}
+#custom-right-header-signin-box-mobile {
+  z-index: 1;
+  left: 0px;
+  right: auto;
+  top: 40px;
+}
+#custom-right-header-signin-box-mobile:before {
+  left: 15px;
+  right: auto;
 }
 .mkdf-header-standard-menu-holder {
   float: right !important;
@@ -518,16 +558,23 @@ header.mkdf-page-header .mkdf-menu-area .mkdf-vertical-align-containers > .mkdf-
   top: 2px!important;
 }
 .mkdf-mobile-header .mkdf-mobile-logo-wrapper img {
-  width: auto;
+  width: 230px;
   height: auto;
 }
 .mkdf-mobile-header .mkdf-mobile-nav {
   padding-bottom: 30px;
 }
-.mkdf-mobile-header .mkdf-mobile-nav > .mkdf-grid > ul > li:last-child > a {
+.mkdf-mobile-header .mkdf-mobile-nav > .mkdf-grid > ul.menu-header-menu-1 > li:last-child > a {
+  border-bottom: 0px;
+}
+.mkdf-mobile-header .mkdf-mobile-nav a,
+.mkdf-mobile-header .mkdf-mobile-nav h4 {
+  border-bottom: 0px;
+}
+.mkdf-mobile-header .mkdf-mobile-nav li {
   border-bottom: 1px solid #eaeaea;
 }
-.mkdf-mobile-header .mkdf-mobile-nav > .mkdf-grid > ul.menu-header-menu-1 > li:last-child > a {
+.mkdf-mobile-header .sub_menu li:last-child {
   border-bottom: 0px;
 }
 footer .mkdf-footer-top-holder {
@@ -1792,6 +1839,44 @@ body.home #homepage-core-services-01 .mkdf-blog-box-whole-content .mkdf-boxes-it
 .homepage-corporate-solutions-column h3 {
   width: 105%;
 }
+.home-page .mkdf-carousel-holder .owl-controls {
+  z-index: 1px;
+}
+.home-page .mkdf-carousel-holder .owl-controls .owl-pagination {
+  margin-top: 0px;
+}
+.home-page .mkdf-carousel-holder .owl-controls .owl-pagination .owl-page {
+  display: inline-block;
+  margin-right: 2px;
+  width: 21px;
+  height: 21px;
+  position: relative;
+}
+.home-page .mkdf-carousel-holder .owl-controls .owl-pagination .owl-page span {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  background-color: #555;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -6px;
+  margin-left: -6px;
+  -webkit-transition: all 0.25s ease-in-out;
+  transition: all 0.25s ease-in-out;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+}
+.home-page .mkdf-carousel-holder .owl-controls .owl-pagination .owl-page.active {
+  display: inline-block !important;
+}
+.home-page .mkdf-carousel-holder .owl-controls .owl-pagination .owl-page.active span {
+  background-color: #0088cc;
+}
 .offshore .mkdf-title .mkdf-title-holder {
   display: none;
 }
@@ -1865,7 +1950,7 @@ body.home #homepage-core-services-01 .mkdf-blog-box-whole-content .mkdf-boxes-it
 }
 .dashboard .delete-saved-company {
   color: #8D9394;
-  margin-left: 10px;
+  margin-left: 5px;
   vertical-align: middle;
 }
 .dashboard .delete-saved-company i {
@@ -2783,9 +2868,10 @@ form.wpcf7-form .wpcf7-response-output {
     -o-transform: scale(1);
     -ms-transform: scale(1);
     transform: scale(1);
+    transform-origin: top center;
   }
   .home-page #homepage-core-services-01 .mkdf-blog-box-whole-content .mkdf-boxes-item-title {
-    min-width: auto!important;
+    min-width: 100%!important;
   }
   .homepage-corporate-solutions-column .mkdf-blog-list .mkdf-blog-list-item {
     height: 170px;
@@ -2797,6 +2883,19 @@ form.wpcf7-form .wpcf7-response-output {
   .mkdf-page-header .mkdf-sticky-header .mkdf-sticky-nav .item_inner {
     padding: 0 20px 0 0;
   }
+  .international-trading-company-figure {
+    -webkit-transform: scale(0.85);
+    -moz-transform: scale(0.85);
+    -o-transform: scale(0.85);
+    -ms-transform: scale(0.85);
+    transform: scale(0.85);
+    transform-origin: top center;
+    position: relative;
+    left: -15%;
+    margin: 0px;
+    width: 200%;
+    height: 250px;
+  }
 }
 @media only screen and (max-width: 1024px) {
   #homepage-core-services-01 .mkdf-btn-small,
@@ -2806,18 +2905,147 @@ form.wpcf7-form .wpcf7-response-output {
   .homepage-corporate-solutions-column .mkdf-blog-list .mkdf-blog-list-item {
     height: 120px;
   }
+  .home-page .mkdf-info-card-slider {
+    margin-left: 40px;
+  }
+  #homepage-icons-row .owl-item:nth-of-type(2) .mkdf-info-card-slider-item .mkdf-info-card-front-side .mkdf-info-card-front-side-content p {
+    width: 116%;
+    margin-left: 0px;
+  }
   .offshore-finance-company {
     -webkit-transform: scale(0.7);
     -moz-transform: scale(0.7);
     -o-transform: scale(0.7);
     -ms-transform: scale(0.7);
     transform: scale(0.7);
+    transform-origin: top center;
     position: relative;
     left: -50%;
     margin: 0px;
     width: 200%;
     height: 450px;
-    top: -50px;
+  }
+  .international-trading-company-figure-container {
+    height: 220px;
+  }
+  .international-trading-company-figure-container .international-trading-company-figure {
+    -webkit-transform: scale(0.7);
+    -moz-transform: scale(0.7);
+    -o-transform: scale(0.7);
+    -ms-transform: scale(0.7);
+    transform: scale(0.7);
+    transform-origin: top center;
+    position: relative;
+    left: -30%;
+    margin: 0px;
+    width: 200%;
+    height: 250px;
+  }
+  .group-holding-company-figure {
+    -webkit-transform: scale(0.7);
+    -moz-transform: scale(0.7);
+    -o-transform: scale(0.7);
+    -ms-transform: scale(0.7);
+    transform: scale(0.7);
+    transform-origin: top center;
+    position: relative;
+    left: -50%;
+    margin: 0px;
+    width: 200%;
+    height: 250px;
+  }
+  .investment-holding-company-figure {
+    -webkit-transform: scale(0.6);
+    -moz-transform: scale(0.6);
+    -o-transform: scale(0.6);
+    -ms-transform: scale(0.6);
+    transform: scale(0.6);
+    transform-origin: top center;
+    position: relative;
+    left: -45%;
+    margin: 0px;
+    width: 200%;
+    height: 250px;
+  }
+  .investing-in-real-estate-figure {
+    -webkit-transform: scale(0.7);
+    -moz-transform: scale(0.7);
+    -o-transform: scale(0.7);
+    -ms-transform: scale(0.7);
+    transform: scale(0.7);
+    transform-origin: top center;
+    position: relative;
+    left: -48%;
+    margin: 0px;
+    width: 200%;
+    height: 420px;
+  }
+  .investing-in-real-estate-figure-2 {
+    -webkit-transform: scale(0.7);
+    -moz-transform: scale(0.7);
+    -o-transform: scale(0.7);
+    -ms-transform: scale(0.7);
+    transform: scale(0.7);
+    transform-origin: top center;
+    position: relative;
+    left: -48%;
+    margin: 0px;
+    width: 200%;
+    height: 580px;
+  }
+  .dashboard .each-header:nth-of-type(2) {
+    width: 22%;
+  }
+  .dashboard .each-header:nth-of-type(3) {
+    width: 22%;
+  }
+  .dashboard .each-header:nth-of-type(4) {
+    width: 28%;
+  }
+  .dashboard .each-content:nth-of-type(2) {
+    width: 22%;
+  }
+  .dashboard .each-content:nth-of-type(3) {
+    width: 20%;
+  }
+  .dashboard .each-content:nth-of-type(4) {
+    width: 31%;
+  }
+  #registration-page-form-1-1 .custom-submit-class.new-incorporation {
+    margin-top: 30px;
+  }
+  #registration-page-form-4 #summaryshareholder .upload-col-container {
+    width: 20%;
+  }
+  #registration-page-form-4 .field-container .price {
+    padding-top: 2px;
+  }
+  footer .mkdf-two-columns-50-50 .mkdf-column {
+    width: 50%!important;
+  }
+  .mkdf-carousel-holder .mkdf-carousel-item-holder .mkdf-carousel-first-image-holder {
+    display: none;
+  }
+  .mkdf-carousel-holder .mkdf-carousel-item-holder .mkdf-carousel-second-image-holder {
+    position: relative;
+    -moz-opacity: 1;
+    -khtml-opacity: 1;
+    -webkit-opacity: 1;
+    opacity: 1;
+    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(opacity=100);
+    filter: alpha(opacity=100);
+  }
+  .homepage-corporate-solutions-column {
+    display: none;
+  }
+  .homepage-why-column {
+    width: 100%;
+  }
+  body {
+    overflow: scroll;
+  }
+  body .mkdf-wrapper {
+    overflow: scroll;
   }
 }
 @media only screen and (max-width: 991px) {
@@ -2827,8 +3055,10 @@ form.wpcf7-form .wpcf7-response-output {
   #homepage-icons-row .mkdf-info-card-slider {
     width: auto !important;
     padding: 0 25px;
+    margin-left: 0px;
   }
   #homepage-icons-row .owl-item:before {
+    display: none;
     right: 10px;
   }
   #homepage-why-version-03 .homepage-why-column-version-04 {
@@ -2901,17 +3131,50 @@ form.wpcf7-form .wpcf7-response-output {
     margin-top: 20px;
   }
   .offshore-finance-company {
+    -webkit-transform: scale(0.6);
+    -moz-transform: scale(0.6);
+    -o-transform: scale(0.6);
+    -ms-transform: scale(0.6);
+    transform: scale(0.6);
+    transform-origin: top center;
+    position: relative;
+    left: -63%;
+    margin: 0px;
+    width: 230%;
+    height: 350px;
+    top: 0px;
+  }
+  .group-holding-company-figure {
     -webkit-transform: scale(0.7);
     -moz-transform: scale(0.7);
     -o-transform: scale(0.7);
     -ms-transform: scale(0.7);
     transform: scale(0.7);
+    transform-origin: top center;
     position: relative;
-    left: -63%;
+    left: -50%;
     margin: 0px;
-    width: 230%;
-    height: 450px;
-    top: -50px;
+    width: 200%;
+    height: 250px;
+  }
+  .no-padding {
+    padding: 0px!important;
+  }
+  #homepage-core-services-01 .vc_column_container {
+    width: 100%;
+  }
+  .homepage-corporate-solutions-column {
+    display: block;
+  }
+  .visible-from-portrait {
+    display: inline-block;
+  }
+  .pasteclone .custom-input-container-left {
+    margin-bottom: 30px;
+  }
+  .custom-input-container-left,
+  .custom-input-container-right {
+    width: 100%;
   }
 }
 @media only screen and (max-width: 768px) {
@@ -2922,7 +3185,7 @@ form.wpcf7-form .wpcf7-response-output {
     width: auto;
   }
   #homepage-core-services-01 .mkdf-blog-box-whole-content {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
   }
   #homepage-why-version-03 {
     height: auto;
@@ -2964,6 +3227,10 @@ form.wpcf7-form .wpcf7-response-output {
   .home-page #homepage-content-row .vc_column_container:nth-of-type(2) {
     width: 100%;
   }
+  .home-page .mkdf-carousel-holder .mkdf-carousel-item-holder .mkdf-carousel-first-image-holder img {
+    display: block;
+    margin: 0 auto;
+  }
   #homepage-icons-row .mkdf-btn.mkdf-btn-solid.custon-deploy-button.full-width {
     display: block;
   }
@@ -2983,7 +3250,7 @@ form.wpcf7-form .wpcf7-response-output {
     padding-right: 0px;
   }
   .offshore-banking .first-img {
-    margin-top: 40px;
+    margin-top: 10px;
   }
   .offshore-banking .first-img .vc_figure {
     width: 100%;
@@ -3000,8 +3267,17 @@ form.wpcf7-form .wpcf7-response-output {
   .stepwizard .stepwizard-step p {
     width: 130px;
   }
+  .stepwizard .stepwizard-step:before {
+    display: none;
+  }
   #registration-page-form-1-1 .custom-submit-class.new-incorporation {
     margin-top: 30px;
+  }
+  #registration-page-form-4 #summaryshareholder .upload-col-container {
+    width: 20%;
+  }
+  #registration-page-form-4 .field-container .price {
+    padding-top: 2px;
   }
   .home-page .homepage-corporate-solutions-column {
     padding-left: 0px;
@@ -3013,6 +3289,63 @@ form.wpcf7-form .wpcf7-response-output {
   .home-page .homepage-corporate-solutions-column .mkdf-blog-list .mkdf-blog-list-item .mkdf-item-text-holder .mkdf-excerpt {
     height: 400px;
   }
+  .international-trading-company-figure-container {
+    height: 200px;
+  }
+  .international-trading-company-figure-container .international-trading-company-figure {
+    -webkit-transform: scale(0.6);
+    -moz-transform: scale(0.6);
+    -o-transform: scale(0.6);
+    -ms-transform: scale(0.6);
+    transform: scale(0.6);
+    transform-origin: top center;
+    position: relative;
+    left: -40%;
+    margin: 0px;
+    width: 200%;
+    height: 250px;
+  }
+  .dashboard .jplist-panel {
+    display: none;
+  }
+  .dashboard ul.tabs li {
+    width: 33%;
+  }
+  .dashboard ul.tabs li a {
+    min-width: 100%!important;
+    width: 100%!important;
+  }
+  .dashboard .custom-submit-class {
+    padding: 0!important;
+  }
+  .dashboard .each-header {
+    width: 22%;
+  }
+  .dashboard .each-content {
+    width: 22%;
+    display: block!important;
+    width: 100%!important;
+  }
+  .dashboard .content-row.tbl-item {
+    border-bottom: 1px solid #646464;
+    padding-bottom: 10px;
+    padding-top: 10px;
+  }
+  .dashboard .content-row.tbl-item:nth-of-type(1) {
+    padding-top: 0px;
+  }
+  .dashboard table#message-threads th.thread-options,
+  .dashboard table#message-threads td.thread-options {
+    display: none;
+  }
+  .paragraph-with-image .wpb_text_column p:last-child {
+    width: 160%;
+  }
+  .service-cta-with-input {
+    position: absolute;
+    left: 160px;
+    top: 0;
+  }
 }
 @media all and (max-width: 480px) {
   .mkdf-mobile-header .mkdf-mobile-logo-wrapper a {
@@ -3022,7 +3355,7 @@ form.wpcf7-form .wpcf7-response-output {
     padding-top: 10px;
   }
   .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-icons-row .mkdf-carousel-navigation .owl-pagination {
-    margin-top: 40px;
+    margin-top: 10px;
   }
   .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-icons-row .mkdf-carousel-navigation .owl-pagination .owl-page.active {
     display: inline-block !important;
@@ -3033,6 +3366,7 @@ form.wpcf7-form .wpcf7-response-output {
     -o-transform: scale(1);
     -ms-transform: scale(1);
     transform: scale(1);
+    transform-origin: top center;
   }
   .home-page .mkdf-content .mkdf-content-inner > .mkdf-container > .mkdf-container-inner #homepage-icons-row .wpb_wrapper .Deploy-button {
     width: 100%;
@@ -3098,11 +3432,11 @@ form.wpcf7-form .wpcf7-response-output {
   }
   html .homepage-corporate-solutions-column .mkdf-blog-list .mkdf-blog-list-item,
   body .homepage-corporate-solutions-column .mkdf-blog-list .mkdf-blog-list-item {
-    height: 300px;
+    height: 282px!important;
   }
   html .homepage-corporate-solutions-column .mkdf-blog-list .mkdf-blog-list-item .mkdf-item-text-holder .mkdf-excerpt,
   body .homepage-corporate-solutions-column .mkdf-blog-list .mkdf-blog-list-item .mkdf-item-text-holder .mkdf-excerpt {
-    height: 300px;
+    height: 282px!important;
   }
   html .fit-text,
   body .fit-text {
@@ -3115,12 +3449,120 @@ form.wpcf7-form .wpcf7-response-output {
     -o-transform: scale(0.6);
     -ms-transform: scale(0.6);
     transform: scale(0.6);
+    transform-origin: top center;
     position: relative;
     left: -56%;
     margin: 0px;
     width: 220%;
-    height: 450px;
-    top: -50px;
+    height: 350px;
+    top: 0px;
+  }
+  html .international-trading-company-figure-container,
+  body .international-trading-company-figure-container {
+    height: 120px;
+  }
+  html .international-trading-company-figure-container .international-trading-company-figure,
+  body .international-trading-company-figure-container .international-trading-company-figure {
+    -webkit-transform: scale(0.42);
+    -moz-transform: scale(0.42);
+    -o-transform: scale(0.42);
+    -ms-transform: scale(0.42);
+    transform: scale(0.42);
+    transform-origin: top center;
+    position: relative;
+    left: -75%;
+    margin: 0px;
+    width: 260%;
+    height: 250px;
+    top: 0px;
+  }
+  html .group-holding-company-figure,
+  body .group-holding-company-figure {
+    -webkit-transform: scale(0.6);
+    -moz-transform: scale(0.6);
+    -o-transform: scale(0.6);
+    -ms-transform: scale(0.6);
+    transform: scale(0.6);
+    transform-origin: top center;
+    position: relative;
+    left: -56%;
+    margin: 0px;
+    width: 220%;
+    height: 230px;
+    top: 0px;
+  }
+  html .investment-holding-company-figure,
+  body .investment-holding-company-figure {
+    -webkit-transform: scale(0.43);
+    -moz-transform: scale(0.43);
+    -o-transform: scale(0.43);
+    -ms-transform: scale(0.43);
+    transform: scale(0.43);
+    transform-origin: top center;
+    position: relative;
+    left: -78%;
+    margin: 0px;
+    width: 260%;
+    height: 160px;
+  }
+  html .investing-in-real-estate-figure,
+  body .investing-in-real-estate-figure {
+    -webkit-transform: scale(0.43);
+    -moz-transform: scale(0.43);
+    -o-transform: scale(0.43);
+    -ms-transform: scale(0.43);
+    transform: scale(0.43);
+    transform-origin: top center;
+    position: relative;
+    left: -75%;
+    margin: 0px;
+    width: 260%;
+    height: 260px;
+  }
+  html .investing-in-real-estate-figure-2,
+  body .investing-in-real-estate-figure-2 {
+    -webkit-transform: scale(0.43);
+    -moz-transform: scale(0.43);
+    -o-transform: scale(0.43);
+    -ms-transform: scale(0.43);
+    transform: scale(0.43);
+    transform-origin: top center;
+    position: relative;
+    left: -75%;
+    margin: 0px;
+    width: 260%;
+    height: 370px;
+  }
+  .mkdf-container-inner .vc_custom_1461910452208 {
+    padding-top: 0px!important;
+  }
+  .mkdf-container-inner .vc_custom_1461907761345,
+  .mkdf-container-inner .vc_custom_1461913655284,
+  .mkdf-container-inner .vc_custom_1461922022513,
+  .mkdf-container-inner .vc_custom_1461913885055 {
+    padding-top: 40px!important;
+    padding-bottom: 0px!important;
+  }
+  .paragraph-with-image .wpb_text_column p:last-child {
+    width: 100%;
+  }
+  .home-page .mkdf-info-card-slider {
+    margin-left: 0px;
+  }
+  .service-cta-with-input {
+    position: static;
+  }
+  .credit-card-count {
+    width: 100%!important;
+  }
+  footer .mkdf-footer-top .mkdf-two-columns-50-50 .mkdf-column {
+    width: 100%!important;
+  }
+  footer .mkdf-footer-top .mkdf-two-columns-50-50 .mkdf-column .mkdf-footer-column-1 {
+    padding-top: 0px;
+  }
+  .hide-from-mobile {
+    display: none;
   }
   .offshore-banking .core-services-first-copy-column {
     padding-right: 0px;
@@ -3137,32 +3579,17 @@ form.wpcf7-form .wpcf7-response-output {
   .offshore-banking .first-img .vc_figure .vc_single_image-wrapper img {
     width: 100%;
   }
-  .international-trading-company .circle-container .arrow {
-    -webkit-transform: rotate(90deg) !important;
-    -moz-transform: rotate(90deg) !important;
-    -o-transform: rotate(90deg) !important;
-    -ms-transform: rotate(90deg) !important;
-    transform: rotate(90deg) !important;
-    display: block;
-  }
-  .international-trading-company .circle-container .circle-2 {
-    top: 5px!important;
-  }
-  .investment-holding-company .company-chart,
-  .group-holding-company .company-chart {
-    width: 100%;
-    margin: 0 auto;
-  }
-  .investment-holding-company .company-chart ul a,
-  .group-holding-company .company-chart ul a {
-    font-size: 12px;
-    line-height: 14px;
+  .investment-holding-company .company-chart ul.compaines:after,
+  .group-holding-company .company-chart ul.compaines:after {
+    width: 53.2%;
   }
   .dashboard ul.tabs li {
-    width: 30%;
+    width: auto;
+    margin-right: 10px;
   }
   .dashboard ul.tabs li a {
-    min-width: auto!important;
+    padding: 5px;
+    min-width: 100%!important;
     width: 100%!important;
   }
   .dashboard .custom-submit-class {
@@ -3180,20 +3607,30 @@ form.wpcf7-form .wpcf7-response-output {
   .dashboard .content-row.tbl-item:nth-of-type(1) {
     padding-top: 0px;
   }
+  .dashboard .standard-form textarea {
+    width: 95.7%!important;
+  }
   #buddypress div.item-list-tabs#subnav ul li {
-    width: 20%;
+    width: auto;
   }
   #buddypress div.item-list-tabs#subnav ul li a {
-    padding: 0!important;
+    padding: 0px 6px!important;
     text-align: center;
   }
   #buddypress div.message-search {
     float: left;
     margin: 0px;
   }
+  .stepwizard {
+    margin-top: 20px;
+  }
   .stepwizard .stepwizard-step {
-    width: 15%!important;
-    margin-right: 30px!important;
+    width: 48%!important;
+    margin: 0 auto;
+    display: none;
+  }
+  .stepwizard .stepwizard-step.active-step {
+    display: block;
   }
   .stepwizard .stepwizard-step:before {
     right: -20px !important;
@@ -3204,47 +3641,178 @@ form.wpcf7-form .wpcf7-response-output {
   .stepwizard .stepwizard-step button {
     width: 100%!important;
     background-size: contain!important;
+    background-position: center center!important;
   }
   .stepwizard .stepwizard-step p {
-    top: 55px;
-    width: 75px;
-    left: 5px!important;
+    top: 85px;
+    width: 100%;
     font-size: 10px;
     line-height: 15px;
+    text-align: center;
   }
-  #registration-page-form-1-1 .each-header,
-  #registration-page-form-1-1 .each-content {
+  .stepwizard .stepwizard-step p br {
+    display: none;
+  }
+  #registration-page-form-1-1 .each-header {
     vertical-align: top!important;
+  }
+  #registration-page-form-1-1 .each-content {
+    vertical-align: middle!important;
   }
   #registration-page-form-1-1 .each-header:nth-of-type(1),
   #registration-page-form-1-1 .each-content:nth-of-type(1) {
-    width: 25%;
+    width: 30%;
   }
   #registration-page-form-1-1 .each-header:nth-of-type(2),
   #registration-page-form-1-1 .each-content:nth-of-type(2) {
-    width: 35%;
+    display: none;
   }
   #registration-page-form-1-1 .each-header:nth-of-type(3),
   #registration-page-form-1-1 .each-content:nth-of-type(3) {
-    width: 13%;
+    width: 30%;
   }
   #registration-page-form-1-1 .each-header:nth-of-type(4),
   #registration-page-form-1-1 .each-content:nth-of-type(4) {
-    width: 20%!important;
+    width: 30%!important;
   }
   #registration-page-form-1-1 .each-header:nth-of-type(4) button,
   #registration-page-form-1-1 .each-content:nth-of-type(4) button {
     font-size: 12px!important;
     line-height: 1.3em!important;
   }
+  #registration-page-form-1-1 #shelf-companies p {
+    margin-top: 30px;
+  }
+  #registration-page-form-1-1 #shelf-companies h6 {
+    margin-top: 15px;
+  }
+  #registration-page-form-1-1 #shelf-companies .pull-right {
+    width: 100%;
+  }
+  #registration-page-form-1-1 #shelf-companies .pull-right .new-incorporation {
+    margin-top: 30px;
+    width: 100%;
+  }
+  #registration-page-form-1-1 #new-incorporation-container {
+    margin-top: 20px;
+  }
+  #registration-page-form-1-1 .cancel-btn-1 {
+    margin-top: 30px;
+  }
+  #registration-page-form-1-1 .next-btn {
+    margin-top: 30px;
+  }
+  #registration-page-form-1-1 .cancel-btn-1,
+  #registration-page-form-1-1 .cancel-btn-2,
+  #registration-page-form-1-1 .next-btn {
+    width: 49%;
+  }
   #registration-page-form-2 .custom-input-container-left {
     width: 100%;
   }
   #registration-page-form-2 .custom-input-container-right {
-    width: 35%;
-    margin-top: 30px;
+    width: 100%;
   }
   #registration-page-form-2 .total-share-container {
     width: 50%;
+  }
+  #registration-page-form-2 .cancel-btn {
+    width: 100%;
+  }
+  #registration-page-form-2 .back-btn,
+  #registration-page-form-2 .next-btn {
+    width: 49%;
+  }
+  #registration-page-form-3 .cancel-btn {
+    width: 100%;
+  }
+  #registration-page-form-3 .back-btn,
+  #registration-page-form-3 .next-btn {
+    width: 49%;
+  }
+  #registration-page-form-4 .col-1 {
+    width: 65%;
+  }
+  #registration-page-form-4 .route-specific-summary .pull-left {
+    width: 65%;
+  }
+  #registration-page-form-4 .field-container .price {
+    padding-top: 1px;
+  }
+  #registration-page-form-4 #summaryshareholder .half-field-container-2,
+  #registration-page-form-4 #summarydirector .half-field-container-2,
+  #registration-page-form-4 #summarysecretary .half-field-container-2,
+  #registration-page-form-4 #summaryservice .half-field-container-2 {
+    width: 100%;
+  }
+  #registration-page-form-4 .upload-col-container {
+    float: none;
+    display: block;
+    clear: both;
+    padding-top: 20px;
+    width: 100%!important;
+  }
+  #registration-page-form-4 .upload-col-container span.fileinput-button {
+    width: 100%;
+  }
+  #registration-page-form-4 .upload-col-container span.fileinput-button button {
+    width: 83%;
+  }
+  #registration-page-form-4 .cancel-btn,
+  #registration-page-form-4 .back-btn {
+    width: 49%;
+  }
+  #registration-page-form-4 .payment-gateway-btn,
+  #registration-page-form-4 .save-now {
+    width: 100%;
+  }
+  #registration-page-form-4 .half-field-container-2 {
+    position: relative;
+  }
+  #registration-page-form-4 .summary-shareholder-price-container,
+  #registration-page-form-4 .summary-director-price-container,
+  #registration-page-form-4 .summary-secretary-price-container {
+    position: relative;
+  }
+  #registration-page-form-4 .summary-shareholder-price-container #summary-shareholder-price,
+  #registration-page-form-4 .summary-director-price-container #summary-shareholder-price,
+  #registration-page-form-4 .summary-secretary-price-container #summary-shareholder-price,
+  #registration-page-form-4 .summary-shareholder-price-container #summary-director-price,
+  #registration-page-form-4 .summary-director-price-container #summary-director-price,
+  #registration-page-form-4 .summary-secretary-price-container #summary-director-price,
+  #registration-page-form-4 .summary-shareholder-price-container #summary-secretary-price,
+  #registration-page-form-4 .summary-director-price-container #summary-secretary-price,
+  #registration-page-form-4 .summary-secretary-price-container #summary-secretary-price {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+  }
+  #registration-page-form-4 .nominee-cta-container,
+  #registration-page-form-4 .service-cta-container {
+    text-align: left;
+  }
+  #registration-page-form-4 .service-cta-col {
+    float: none;
+  }
+  #registration-page-form-4 .service-cta-col input[type=text] {
+    width: 83%;
+  }
+  #registration-page-form-4 .service-cta-col button.remove-btn {
+    width: 83%;
+    margin-left: 0px;
+  }
+  #registration-page-form-4 #summaryservice .summary-price {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+  }
+  #registration-page-form-4 .remove-col-container {
+    float: none;
+    clear: both;
+    width: 100%;
+    display: block;
+  }
+  #registration-page-form-4 .remove-col-container button.remove-btn {
+    width: 83%;
   }
 }

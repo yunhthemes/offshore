@@ -35,28 +35,23 @@ if(!function_exists('deploy_mikado_scripts_customized')) {
     
     global $wp;
     $current_url = add_query_arg( $wp->query_string, '', home_url( $wp->request ) );
-    if (strpos($wp->request, 'compose') === false) 
-      wp_enqueue_script('jquery-ui', '//code.jquery.com/ui/1.11.4/jquery-ui.js', array('jquery'), false, true);
+    // if (strpos($wp->request, 'compose') === false) 
+    //   wp_enqueue_script('jquery-ui', '//code.jquery.com/ui/1.11.4/jquery-ui.js', array('jquery'), false, true);
 
+    wp_enqueue_script('manic_thirdparty', get_stylesheet_directory_uri().'/js/manic-third-party.js', array('jquery'), false, true);          
     wp_enqueue_script('manic_others', get_stylesheet_directory_uri().'/js/others.js', array('jquery'), false, true);
-    wp_enqueue_script('validation', get_stylesheet_directory_uri().'/js/plugins/jquery.validate.min.js', array('jquery'), false, true);
-    wp_enqueue_script('handlebars', get_stylesheet_directory_uri().'/js/plugins/handlebars-v4.0.5.js', array('jquery'), false, true);
-    wp_enqueue_script('switchery', get_stylesheet_directory_uri().'/js/plugins/switchery/switchery.min.js', array('jquery'), false, true);
-    wp_enqueue_script('intltel', get_stylesheet_directory_uri().'/js/plugins/intlTelInput.js', array('jquery'), false, true);
-    wp_enqueue_script('ui-widget', get_stylesheet_directory_uri().'/js/plugins/vendor/jquery.ui.widget.js', array('jquery'), false, true);
-    wp_enqueue_script('iframe-transport', get_stylesheet_directory_uri().'/js/plugins/jquery.iframe-transport.js', array('jquery'), false, true);    
-    wp_enqueue_script('fileupload', get_stylesheet_directory_uri().'/js/plugins/jquery.fileupload.js', array('jquery'), false, true);
-    wp_enqueue_script('serializejson', get_stylesheet_directory_uri().'/js/plugins/jquery.serializejson.min.js', array('jquery'), false, true);
 
-
-    wp_enqueue_script('jplist', get_stylesheet_directory_uri().'/js/plugins/jplist.core.min.js', array('jquery'), false, true);
-    wp_enqueue_script('jplistcounter', get_stylesheet_directory_uri().'/js/plugins/jplist.counter-control.min.js', array('jquery'), false, true);
-    wp_enqueue_script('jplistsort', get_stylesheet_directory_uri().'/js/plugins/jplist.sort-buttons.min.js', array('jquery'), false, true);    
-    wp_enqueue_script('blockui', get_stylesheet_directory_uri().'/js/plugins/jquery.blockUI.js', array('jquery'), false, true);    
-    wp_enqueue_script('hashchange', get_stylesheet_directory_uri().'/js/plugins/jquery.ba-hashchange.min.js', array('jquery'), false, true);    
   }
   add_action('wp_enqueue_scripts', 'deploy_mikado_scripts_customized');
 }
+
+// Make JavaScript Asynchronous in Wordpress
+// add_filter( 'script_loader_tag', function ( $tag, $handle ) {    
+//     if( is_admin() ) {
+//         return $tag;
+//     }
+//     return str_replace( ' src', ' async src', $tag );
+// }, 10, 2 );
 
 // http://stackoverflow.com/questions/14177844/how-to-change-form-action-url-for-contact-form-7
 
@@ -218,9 +213,8 @@ function ajax_login(){
 
 function ajax_login_init(){
 
-    wp_register_script('ajax-login-script', get_template_directory_uri() . '/assets/js/ajax-login-script.js', array('jquery') ); 
-    wp_enqueue_script('ajax-login-script');
-
+    wp_register_script('ajax-login-script', get_stylesheet_directory_uri() . '/js/ajax-login-script.js', array('jquery') );
+    wp_enqueue_script('ajax-login-script', false, array(), false, true);
     wp_localize_script( 'ajax-login-script', 'ajax_login_object', array( 
         'ajaxurl' => admin_url( 'admin-ajax.php' ),
         'redirecturl' => get_permalink( get_page_by_title( 'Client services dashboard' ) ),
@@ -231,7 +225,24 @@ function ajax_login_init(){
     add_action( 'wp_ajax_nopriv_ajaxlogin', 'ajax_login' );
 }
 
+function ajax_logout(){
+    check_ajax_referer( 'ajax-logout-nonce', 'logoutsecurity' );
+    // kill session
+    wp_clear_auth_cookie();
+    wp_logout();
+
+    echo json_encode(array('loggedout'=>false, 'message'=>__('Logged out.')));
+    die();
+}
+
+function ajax_logout_init(){
+    add_action( 'wp_ajax_ajaxlogout', 'ajax_logout' );
+}
+
 // Execute the action only if the user isn't logged in
 if (!is_user_logged_in()) {
     add_action('init', 'ajax_login_init');
+}
+if (is_user_logged_in()) {
+    add_action('init', 'ajax_logout_init');
 }
