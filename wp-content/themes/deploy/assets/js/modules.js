@@ -1048,7 +1048,17 @@ function mkdfInitVideoBackground(){
                 console.log("clicking body");
                 e.stopPropagation();
                 if(navigationHolder.is(':visible')) navigationHolder.slideUp(animationSpeed); 
+                if($("#custom-right-header-signin-box-mobile").hasClass("open") == true) {
+                    TweenMax.to($("#custom-right-header-signin-box-mobile"), 0.5, {
+                        autoAlpha: 0, 
+                        position: "absolute",
+                        top: -10,
+                        left: 0
+                    });                            
+                }
+                
                 $('body').css('height', 'auto'); // to enable scroll when menu close
+
             });
 
             $(".mkdf-mobile-nav").on('tap click', function(e){
@@ -1138,14 +1148,14 @@ function mkdfInitVideoBackground(){
 
                 if((docYScroll2 > docYScroll1 && docYScroll2 > stickyAppearAmount) || (docYScroll2 < stickyAppearAmount)) {
                     mobileHeader.removeClass('mobile-header-appear');
-                    mobileHeader.css('margin-bottom', 0);
+                    // mobileHeader.css('margin-bottom', 0);
 
                     if(adminBar.length) {
                         mobileHeader.find('.mkdf-mobile-header-inner').css('top', 0);
                     }
                 } else {
                     mobileHeader.addClass('mobile-header-appear');
-                    mobileHeader.css('margin-bottom', stickyAppearAmount);
+                    // mobileHeader.css('margin-bottom', stickyAppearAmount);
 
                     //if(adminBar.length) {
                     //    mobileHeader.find('.mkdf-mobile-header-inner').css('top', adminBarHeight);

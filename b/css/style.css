@@ -967,6 +967,24 @@ footer p {
 #main-content .custom-table tr th:nth-of-type(7) {
   width: 6%;
 }
+#main-content .custom-table-2 tr th:nth-of-type(1) {
+  width: 7%;
+}
+#main-content .custom-table-2 tr th:nth-of-type(2) {
+  width: 14%;
+}
+#main-content .custom-table-2 tr th:nth-of-type(3) {
+  width: 18%;
+}
+#main-content .custom-table-2 tr th:nth-of-type(4) {
+  width: 6%;
+}
+#main-content .custom-table-2 tr th:nth-of-type(5) {
+  width: 8%;
+}
+#main-content .custom-table-2 tr th:nth-of-type(6) {
+  width: 6%;
+}
 .custom-form-message {
   width: 100%;
   margin-bottom: 30px;
@@ -1314,4 +1332,7 @@ input.custom-input-class::-moz-placeholder {
 }
 input.custom-input-class:-ms-input-placeholder {
   color: #a9a9a9;
+}
+#main-content .labels .row {
+  padding: 15px 0px;
 }

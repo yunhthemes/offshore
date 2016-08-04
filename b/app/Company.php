@@ -44,6 +44,7 @@ class Company extends Model
         return $this->belongsToMany('App\ServiceCountry', 'company_service_country')->withPivot('credit_card_count');
     }
 
+    // this should name companywpusers() but don't want to change it anymore 
     public function wpusers()
     {
         //return $this->belongsTo('App\Wpuser', 'wpuser_id');
@@ -55,5 +56,33 @@ class Company extends Model
         return $this->hasManyThrough(
           'App\CompanyWpuserShareholder', 'App\CompanyWpuser', 'company_id', 'companywpuser_id'
         );
+    }
+
+    public function companywpuser_directors()
+    {
+        return $this->hasManyThrough(
+          'App\CompanyWpuserDirector', 'App\CompanyWpuser', 'company_id', 'companywpuser_id'
+        );
+    }
+
+    public function companywpuser_secretaries()
+    {
+        return $this->hasManyThrough(
+          'App\CompanyWpuserSecretary', 'App\CompanyWpuser', 'company_id', 'companywpuser_id'
+        );
+    }
+
+    public function companywpuser_servicecountries()
+    {
+        return $this->hasManyThrough(
+          'App\CompanyWpuserServiceCountry', 'App\CompanyWpuser', 'company_id', 'companywpuser_id'
+        );   
+    }
+
+    public function companywpuser_informationservices()
+    {
+        return $this->hasManyThrough(
+          'App\CompanyWpuserInformationService', 'App\CompanyWpuser', 'company_id', 'companywpuser_id'
+        );   
     }
 }

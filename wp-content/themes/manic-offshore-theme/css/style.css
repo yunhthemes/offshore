@@ -2825,6 +2825,11 @@ form.wpcf7-form .wpcf7-response-output {
   margin-left: 0px!important;
   margin-right: 0px!important;
 }
+.float-img {
+  float: right;
+  padding-bottom: 10px;
+  padding-left: 30px;
+}
 @media only screen and (max-width: 1400px) {
   #homepage-core-services-01 h4.mkdf-boxes-item-title a,
   #homepage-core-services-02 h4.mkdf-boxes-item-title a {
@@ -2904,6 +2909,13 @@ form.wpcf7-form .wpcf7-response-output {
   }
   .homepage-corporate-solutions-column .mkdf-blog-list .mkdf-blog-list-item {
     height: 120px;
+    margin-right: 25px;
+    min-width: 125px;
+  }
+  .home-page .homepage-corporate-solutions-column {
+    padding-left: 0px!important;
+    padding-top: 40px;
+    width: 100%;
   }
   .home-page .mkdf-info-card-slider {
     margin-left: 40px;
@@ -3035,9 +3047,6 @@ form.wpcf7-form .wpcf7-response-output {
     -ms-filter: progid:DXImageTransform.Microsoft.Alpha(opacity=100);
     filter: alpha(opacity=100);
   }
-  .homepage-corporate-solutions-column {
-    display: none;
-  }
   .homepage-why-column {
     width: 100%;
   }
@@ -3046,6 +3055,12 @@ form.wpcf7-form .wpcf7-response-output {
   }
   body .mkdf-wrapper {
     overflow: scroll;
+  }
+  .mkdf-mobile-header .mkdf-mobile-nav .mobile_arrow {
+    line-height: 45px;
+  }
+  .mkdf-blog-carousel-boxes .mkdf-blog-boxes-item-holder-outer:hover {
+    transform: none;
   }
 }
 @media only screen and (max-width: 991px) {
@@ -3433,6 +3448,7 @@ form.wpcf7-form .wpcf7-response-output {
   html .homepage-corporate-solutions-column .mkdf-blog-list .mkdf-blog-list-item,
   body .homepage-corporate-solutions-column .mkdf-blog-list .mkdf-blog-list-item {
     height: 282px!important;
+    width: 100%!important;
   }
   html .homepage-corporate-solutions-column .mkdf-blog-list .mkdf-blog-list-item .mkdf-item-text-holder .mkdf-excerpt,
   body .homepage-corporate-solutions-column .mkdf-blog-list .mkdf-blog-list-item .mkdf-item-text-holder .mkdf-excerpt {

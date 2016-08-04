@@ -22,6 +22,6 @@ if (is_user_logged_in ()): ?>
 </script>
 <?php else: ?>
 <script>
-  document.getElementsByClassName("tnc_link")[0].style.display = "none";
+  document.getElementsByClassName("tnc_link")[0].style.display = "block";
 </script>
 <?php endif; ?>

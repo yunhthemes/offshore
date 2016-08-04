@@ -27,49 +27,47 @@
 		                    	<td>{{ $company_type->name }}</td>
 		                    	<td>
 		                    		<table class="table table-striped">
-		                    		@foreach($company_type->directors as $director)
-		                    			<tr><th>Rules</th><th>Price</th></tr>
-		                    			<tr><td>{{ mb_strimwidth($director->name_rules, 0, 100, "...") }}</td><td>{{ $director->price }}</td></tr>
-		                    		@endforeach
+			                    		@foreach($company_type->directors as $director)
+			                    			<tr><th>Rules</th><th>Price</th></tr>
+			                    			<tr><td>{{ mb_strimwidth($director->name_rules, 0, 100, "...") }}</td><td>{{ $director->price }}</td></tr>
+			                    		@endforeach
 		                    		</table>
 		                    	</td>
 		                    	<td>
 		                    		<table class="table table-striped">
-		                    		@foreach($company_type->shareholders as $shareholder)
-		                    			<tr><th>Rules</th><th>Price</th></tr>
-		                    			<tr><td>{{ mb_strimwidth($shareholder->name_rules, 0, 100, "...") }}</td><td>{{ $shareholder->price }}</td></tr>
-		                    		@endforeach
+			                    		@foreach($company_type->shareholders as $shareholder)
+			                    			<tr><th>Rules</th><th>Price</th></tr>
+			                    			<tr><td>{{ mb_strimwidth($shareholder->name_rules, 0, 100, "...") }}</td><td>{{ $shareholder->price }}</td></tr>
+			                    		@endforeach
 		                    		</table>
 		                    	</td>
 		                    	<td>
 		                    		<table class="table table-striped">
-		                    		@foreach($company_type->secretaries as $secretary)
-		                    			<tr><th>Rules</th><th>Price</th></tr>
-		                    			<tr><td>{{ mb_strimwidth($secretary->name_rules, 0, 100, "...") }}</td><td>{{ $secretary->price }}</td></tr>
-		                    		@endforeach
+			                    		@foreach($company_type->secretaries as $secretary)
+			                    			<tr><th>Rules</th><th>Price</th></tr>
+			                    			<tr><td>{{ mb_strimwidth($secretary->name_rules, 0, 100, "...") }}</td><td>{{ $secretary->price }}</td></tr>
+			                    		@endforeach
 		                    		</table>
 		                    	</td>
 		                    	<td>
 		                    		<table class="table table-striped">
-		                    		@foreach($company_type->services as $service)
-		                    			<tr><th>Name</th><th>Country</th><th>Price</th></tr>
-		                    			@foreach($service->countries as $country)
-		                    				<tr><td>{{ $service->name }}</td><td>{{ $country->name }}</td><td>{{ $country->pivot->price }}</td></tr>
-		                    			@endforeach
-		                    		@endforeach
+			                    		@foreach($company_type->services as $service)
+			                    			<tr><th>Name</th><th>Country</th><th>Price</th></tr>
+			                    			@foreach($service->countries as $country)
+			                    				<tr><td>{{ $service->name }}</td><td>{{ $country->name }}</td><td>{{ $country->pivot->price }}</td></tr>
+			                    			@endforeach
+			                    		@endforeach
 		                    		</table>
 		                    	</td>
 		                    	<td>
 		                    		<table class="table table-striped">
-		                    		@foreach($company_type->informationservices as $informationservice)
-		                    			<tr><th>Name</th></tr>
-		                    			<tr><td>{{ $informationservice->name }}</td></tr>
-		                    		@endforeach
+			                    		@foreach($company_type->informationservices as $informationservice)
+			                    			<tr><th>Name</th></tr>
+			                    			<tr><td>{{ $informationservice->name }}</td></tr>
+			                    		@endforeach
 		                    		</table>
 		                    	</td>
-		                    	
 		                    </tr> 
-				              		
 						</tbody> 
 					</table>
 				</div>				

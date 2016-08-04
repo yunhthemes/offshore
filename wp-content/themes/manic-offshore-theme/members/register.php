@@ -12,7 +12,7 @@ $page = get_page_by_title( 'Sign up' );
 	<div data-mkdf-parallax-speed="1" class="vc_row wpb_row vc_row-fluid mkdf-section vc_custom_1454399108366 mkdf-content-aligment-left mkdf-grid-section" style="">
 	    <div class="clearfix mkdf-section-inner">
 	        <div class="mkdf-section-inner-margin clearfix">
-	            <div class="wpb_column vc_column_container vc_col-lg-3">
+	            <div class="wpb_column vc_column_container vc_col-lg-3 vc_col-md-12">
 	                <div class="vc_column-inner ">
 	                    <div class="wpb_wrapper"></div>
 	                </div>
@@ -83,7 +83,7 @@ $page = get_page_by_title( 'Sign up' );
 	                    </div>
 	                </div>
 	            </div>
-	            <div class="wpb_column vc_column_container vc_col-lg-3">
+	            <div class="wpb_column vc_column_container vc_col-lg-3 vc_col-md-12">
 	                <div class="vc_column-inner ">
 	                    <div class="wpb_wrapper"></div>
 	                </div>
@@ -102,7 +102,7 @@ $page = get_page_by_title( 'Sign up' );
 	<div id="signuppage-signup-form-row" data-mkdf-parallax-speed="1" class="vc_row wpb_row vc_row-fluid mkdf-section vc_custom_1454399114965 mkdf-content-aligment-left mkdf-grid-section" style="">
 	    <div class="clearfix mkdf-section-inner">
 	        <div class="mkdf-section-inner-margin clearfix">
-	            <div class="wpb_column vc_column_container vc_col-lg-3">
+	            <div class="wpb_column vc_column_container vc_col-lg-3 vc_col-md-12">
 	                <div class="vc_column-inner ">
 	                    <div class="wpb_wrapper"></div>
 	                </div>
@@ -426,7 +426,7 @@ $page = get_page_by_title( 'Sign up' );
 	                    </div>
 	                </div>
 	            </div>
-	            <div class="wpb_column vc_column_container vc_col-lg-3">
+	            <div class="wpb_column vc_column_container vc_col-lg-3 vc_col-md-12">
 	                <div class="vc_column-inner ">
 	                    <div class="wpb_wrapper"></div>
 	                </div>

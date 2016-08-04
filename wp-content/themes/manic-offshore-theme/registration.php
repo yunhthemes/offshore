@@ -334,7 +334,10 @@ function registration_form() {
                                 "required" : true,
                                 "telephone" : true
                             },
-                            "shareamount_1_amount" : "required",                            
+                            "shareamount_1_amount" : {
+                                "required" : true,
+                                "number": true
+                            },                            
                             "director_1_name" : {
                                 required: {
                                     depends : function(elem) {
@@ -2052,7 +2055,7 @@ function registration_form() {
                         totalShareAmount = addAmount(totalShareAmount, $(obj).val().replace(/,/g, ""));
                     });       
 
-                    update_input_val(Number(totalShareAmount).toFixed(2), "#total_share");
+                    update_input_val(Number(totalShareAmount), "#total_share");
                 }
                 
                 // update_input_val(data, "#summary_"+selector+"_"+id+"_"+field); 

@@ -247,7 +247,7 @@ jQuery(document).ready(function($) {
   }
 
   // Attach the event click for all links in the page
-  $("body").on("click", "a", function(e) {
+  $("body").on("click tap", "a", function(e) {
     window.canExit = true;
   });
 
@@ -257,7 +257,7 @@ jQuery(document).ready(function($) {
   });
 
    // Attach the event click for all inputs in the page
-  $("input[type=submit]").on("click", function() {
+  $("input[type=submit]").on("click tap", function() {
     window.canExit = true;
   });
 

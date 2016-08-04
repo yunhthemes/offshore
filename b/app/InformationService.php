@@ -23,7 +23,6 @@ class InformationService extends Model
     public function companywpusers()
     {
         return $this->belongsToMany('App\Company', 'companywpuser_information_service');
-    }
-
+    }    
 
 }
