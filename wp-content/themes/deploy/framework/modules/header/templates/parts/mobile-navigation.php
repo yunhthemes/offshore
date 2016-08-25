@@ -17,14 +17,25 @@
                             <p class="login-password">
                                 <label for="user_pass"></label>
                                 <input type="password" name="password" class="password input" value="" size="20" placeholder="Password">
-                            </p>
-                            <!-- <a class="lost" href="'.wp_lostpassword_url().'">Lost your password?</a> -->
+                            </p>                                                        
                             <p class="login-submit">
                                 <input type="submit" id="wp-submit" class="button-primary" value="Sign in">
                                 <?php echo wp_nonce_field( 'ajax-login-nonce', 'security' ); ?>
                             </p>
-                            <p class="status"></p>                              
+                            <a class="lost-password" href="#">Forgot password?</a>                            
                         </form>
+                        <form name="lostpassword" id="mobilelostpassword" class="lostpassword" method="post">
+                            <p class="login-username">
+                                <label for="user_login"></label>
+                                <input type="text" name="username_email" id="username_email" class="username_email input" value="" size="20" placeholder="Username or email">
+                                <p class="login-submit">
+                                    <input type="submit" id="wp-submit" class="button-primary" value="Reset password">
+                                    <?php echo wp_nonce_field( 'ajax-lostpassword-nonce', 'lostpasswordsecurity' ); ?>
+                                    <a href="#" class="back-to-login">Cancel</a>
+                                </p>
+                            </p>
+                        </form>
+                        <p class="status"></p>                              
                     </div>
                 </li>
                 <li class="menu-item menu-item-type-post_type menu-item-object-page narrow">

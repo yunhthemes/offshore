@@ -116,8 +116,6 @@ jQuery(document).ready(function($) {
   if($("#copy-banner").length > 0) {
     
     var bannerHtml = $("#copy-banner").clone();
-    console.log($(bannerHtml).attr("id", "copied-banner"));
-
     $(".mkdf-content").find(".mkdf-content-inner").prepend(bannerHtml);
 
   }

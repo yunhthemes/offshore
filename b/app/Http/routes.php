@@ -84,6 +84,10 @@ Route::get('api/gettimezonelist/{country}/{city}', ['uses' => 'ApiController@get
 
 Route::post('api/retrievesavedcompany', ['uses' => 'ApiController@retrievesavedcompany']);
 Route::post('api/uploadfiles', ['uses' => 'ApiController@uploadfiles']);
+Route::post('api/addtopersondb', ['uses' => 'ApiController@addtopersondb']);
+Route::get('api/getperson', ['uses' => 'ApiController@getperson']);
+Route::get('api/log_transaction_status', ['uses' => 'ApiController@log_transaction_status']);
+Route::get('api/exportpersonlist', ['uses' => 'ApiController@exportPersonList']);
 Route::post('admin/jurisdiction/getcompanyinclsaved', ['uses' => 'JurisdictionController@getcompanyinclsaved']);
 
 Route::group(['middleware' => 'auth.basic'], function() {		
@@ -103,4 +107,7 @@ Route::group(['middleware' => 'web'], function() {
 	Route::resource('admin/jurisdiction', 'JurisdictionController');
 });
 Route::resource('admin/company', 'CompanyController');
-Route::resource('admin/registeredcompany', 'RegisteredcompanyController', ['only'=>['index', 'show']]);
+Route::resource('admin/registeredcompany', 'RegisteredcompanyController', ['only'=>['index', 'show', 'edit', 'update']]);
+Route::resource('admin/approvedcompany', 'ApprovedcompanyController', ['only'=>['index', 'show', 'edit', 'update']]);
+Route::resource('admin/client', 'ClientController');
+Route::resource('admin/person', 'PersonController');

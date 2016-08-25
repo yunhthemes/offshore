@@ -28,9 +28,18 @@
   type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
   </script>
   <!--End of Zopim Live Chat Script-->
+
+  <script language="JavaScript" src="https://seal.networksolutions.com/siteseal/javascript/siteseal.js" type="text/javascript"></script>
+
+  <link rel="icon" type="image/png" href="https://www.offshorecompanysolutions.com/favicon-lock.png">
 </head>
 
 <body <?php body_class(); ?>>
+  <!--SiteSeal Html Builder Code: 
+  Shows the logo at URL https://seal.networksolutions.com/images/netsolsiteseal.png
+  Logo type is  ("NETSP") 
+  //--> 
+  <script language="JavaScript" type="text/javascript"> SiteSeal("https://seal.networksolutions.com/images/netsolsiteseal.png", "NETSP", "none");</script>
 <?php deploy_mikado_get_side_area(); ?>
 
 <?php

@@ -17,6 +17,10 @@
 						{{ Form::text('company_type_name', $company_type->name, ['class'=>'custom-input-class']) }}
 					</div>
 					<div class="field-container">
+						{{ Form::label('jurisdiction', 'Jurisdiction')}}
+						{{ Form::text('jurisdiction', $company_type->jurisdiction, ['class'=>'custom-input-class']) }}
+					</div>
+					<div class="field-container">
 						{{ Form::label('company_name_rules', 'Company name rules')}}
 						{{ Form::textarea('company_name_rules', $company_type->rules, ['class'=>'custom-input-class']) }}
 					</div>

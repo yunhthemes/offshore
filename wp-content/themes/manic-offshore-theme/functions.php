@@ -203,7 +203,13 @@ function ajax_login(){
 
     $user_signon = wp_signon( $info, false );
     if ( is_wp_error($user_signon) ){
-        echo json_encode(array('loggedin'=>false, 'message'=>__('Wrong username or password.')));
+        $error_string = $user_signon->get_error_message();
+        if (strpos($error_string, 'locked') !== false) {
+          $error_msg = "Your account is banned.";
+        }else {
+          $error_msg = "Wrong username or password.";
+        }
+        echo json_encode(array('loggedin'=>false, 'message'=>__($error_msg)));
     } else {
         echo json_encode(array('loggedin'=>true, 'message'=>__('Login successful, redirecting...')));
     }
@@ -239,9 +245,45 @@ function ajax_logout_init(){
     add_action( 'wp_ajax_ajaxlogout', 'ajax_logout' );
 }
 
+function lost_password(){
+  check_ajax_referer( 'ajax-lostpassword-nonce', 'security' );
+  if(filter_var($_POST["username_email"], FILTER_VALIDATE_EMAIL)) {
+      $input_email = $_POST["username_email"];
+      $user_info = get_user_by( "email", $input_email );      
+  }
+  else {
+      $input_username = $_POST["username_email"];
+      $user_info = get_user_by( "login", $input_username );
+  }
+
+  if($user_info) {
+    $email = $user_info->user_email;  
+    $admin_email = get_option("admin_email");
+
+    $headers = array(
+      "Content-Type: text/html; charset=UTF-8",
+      "From: OCS Reception <no-reply@offshorecompanysolutions.com>"
+    );
+    
+    wp_mail($admin_email, "Forgotten password notification", "<p>User ".$user_info->display_name." [".$user_info->user_nicename."] has submitted a forgotten password notification.</p>", $headers);
+
+    echo json_encode(array('messagesent'=>true, 'message'=>__('Message has been sent.')));
+
+  }else {
+    echo json_encode(array('messagesent'=>false, 'message'=>__('Wrong username or email.')));
+  }
+  die();
+
+}
+
+function lost_password_init(){
+  add_action('wp_ajax_nopriv_lostpassword', 'lost_password');
+}
+
 // Execute the action only if the user isn't logged in
 if (!is_user_logged_in()) {
     add_action('init', 'ajax_login_init');
+    add_action('init', 'lost_password_init');
 }
 if (is_user_logged_in()) {
     add_action('init', 'ajax_logout_init');

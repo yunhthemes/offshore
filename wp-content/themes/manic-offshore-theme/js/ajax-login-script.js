@@ -7,7 +7,7 @@ jQuery(document).ready(function($) {
         e.stopPropagation();
 
         if($loginForm.valid()) {
-            $('form#login p.status').show().text(ajax_login_object.loadingmessage);
+            $('#custom-right-header-signin-box p.status').show().text(ajax_login_object.loadingmessage);
             $.ajax({
                 type: 'POST',
                 dataType: 'json',
@@ -25,7 +25,7 @@ jQuery(document).ready(function($) {
                         $('form#login #username').removeClass("ajax-error");
                         $('form#login #password').removeClass("ajax-error");    
                     }
-                    $('form#login p.status').text(data.message);                    
+                    $('#custom-right-header-signin-box p.status').text(data.message);                    
                     if (data.loggedin == true){
                         window.canExit = true;
                         document.location.href = ajax_login_object.redirecturl;

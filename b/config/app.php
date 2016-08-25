@@ -161,6 +161,7 @@ return [
         LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider::class,
 
         Ixudra\Curl\CurlServiceProvider::class,
+        'Maatwebsite\Excel\ExcelServiceProvider',
 
     ],
 
@@ -211,7 +212,7 @@ return [
         'Html'      => Collective\Html\HtmlFacade::class,
         'Authorizer'=> LucaDegasperi\OAuth2Server\Facades\Authorizer::class,
         'Curl'      => Ixudra\Curl\Facades\Curl::class,
-
+        'Excel'     => 'Maatwebsite\Excel\Facades\Excel',
     ],
 
 ];

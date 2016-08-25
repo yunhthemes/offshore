@@ -15,8 +15,10 @@
 <link rel="stylesheet" href="{{ URL::asset('css/libs/font-awesome.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/libs/bootstrap.min.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/libs/uploadifive.css') }}" />
+<link rel="stylesheet" href="{{ URL::asset('css/libs/jquery.fileupload.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/libs/intlTelInput.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/libs/jplist.core.min.css') }}" />
+<link rel="stylesheet" href="{{ URL::asset('css/libs/jplist.textbox-filter.min.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}" />
 
 <script type="text/javascript" src="{{ URL::asset('js/libs/jquery-2.2.1.min.js') }}"></script>
@@ -24,10 +26,12 @@
 <script type="text/javascript" src="{{ URL::asset('js/plugins/bootstrap.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/plugins/jquery.validate.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/plugins/jquery.uploadifive.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/plugins/jquery.fileupload.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/plugins/placeholders.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/plugins/intlTelInput.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/plugins/jplist.core.min.js') }}"></script>
 
+<script type="text/javascript" src="{{ URL::asset('js/plugins/jplist.textbox-filter.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/plugins/jplist.counter-control.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/plugins/jplist.sort-buttons.min.js') }}"></script>
 

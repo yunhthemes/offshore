@@ -65,6 +65,7 @@ class JurisdictionController extends Controller
 
         $company_type = new CompanyType;
         $company_type->name = $request->company_type_name;
+        $company_type->jurisdiction = $request->jurisdiction;
         $company_type->price_label = $request->price_label;
         $company_type->price = (double) preg_replace("/[.,]/", "", $request->company_type_price);
         $company_type->price_eu = (double) preg_replace("/[.,]/", "", $request->company_type_price_eu);
@@ -298,6 +299,7 @@ class JurisdictionController extends Controller
 
         $company_type = CompanyType::find($id);
         $company_type->name = $request->company_type_name;
+        $company_type->jurisdiction = $request->jurisdiction;
         $company_type->price_label = $request->price_label;
         $company_type->price = (double) preg_replace("/[.,]/", "", $request->company_type_price);
         $company_type->price_eu = (double) preg_replace("/[.,]/", "", $request->company_type_price_eu);

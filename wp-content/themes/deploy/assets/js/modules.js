@@ -62,6 +62,7 @@
 
 
 })(jQuery);
+
 (function($) {
 	"use strict";
 
@@ -73,7 +74,7 @@
     common.mkdfPrettyPhoto = mkdfPrettyPhoto;
     common.mkdfCheckHeaderStyleOnScroll = mkdfCheckHeaderStyleOnScroll;
     common.mkdfInitParallax = mkdfInitParallax;
-    common.mkdfSmoothScroll = mkdfSmoothScroll;
+    // common.mkdfSmoothScroll = mkdfSmoothScroll;
     common.mkdfEnableScroll = mkdfEnableScroll;
     common.mkdfDisableScroll = mkdfDisableScroll;
     common.mkdfWheel = mkdfWheel;
@@ -95,7 +96,7 @@
         mkdfInitVideoBackground();
         mkdfInitVideoBackgroundSize();
         mkdfSetContentBottomMargin();
-        mkdfSmoothScroll();
+        // mkdfSmoothScroll();
         mkdfOwlSlider();
         mkdfInitSelfHostedVideoPlayer();
 		mkdfSelfHostedVideoSize();
@@ -1075,6 +1076,12 @@ function mkdfInitVideoBackground(){
 
             $("#mobilelogin").on('tap click', function(e){
                 e.stopPropagation();
+                console.log("hello");
+            });
+
+            $("#mobilelostpassword").on('tap click', function(e){
+                e.stopPropagation();
+                console.log("hello");
             });
 
             // fix for iphone/ipad
@@ -1916,6 +1923,7 @@ function mkdfInitVideoBackground(){
     };
 
 })(jQuery);
+
 (function($) {
     "use strict";
 
@@ -4509,195 +4517,195 @@ function mkdfInitVideoBackground(){
 		}
 	}
 })(jQuery);
-(function($) {
-    'use strict';
+// (function($) {
+//     'use strict';
 
-    $(document).ready(function () {
-        mkdfInitQuantityButtons();
-        mkdfInitSelect2();
-        mkdfMiniCartButtons();
-        mkdfpriceSlideButton();
-    });
+//     $(document).ready(function () {
+//         mkdfInitQuantityButtons();
+//         mkdfInitSelect2();
+//         mkdfMiniCartButtons();
+//         mkdfpriceSlideButton();
+//     });
 
-    function mkdfInitQuantityButtons() {
+//     function mkdfInitQuantityButtons() {
 
-        $('.mkdf-quantity-minus, .mkdf-quantity-plus').click(function(e) {
-            e.stopPropagation();
+//         $('.mkdf-quantity-minus, .mkdf-quantity-plus').click(function(e) {
+//             e.stopPropagation();
 
-            var button = $(this),
-                inputField = button.siblings('.mkdf-quantity-input'),
-                step = parseFloat(inputField.attr('step')),
-                max = parseFloat(inputField.attr('max')),
-                minus = false,
-                inputValue = parseFloat(inputField.val()),
-                newInputValue;
+//             var button = $(this),
+//                 inputField = button.siblings('.mkdf-quantity-input'),
+//                 step = parseFloat(inputField.attr('step')),
+//                 max = parseFloat(inputField.attr('max')),
+//                 minus = false,
+//                 inputValue = parseFloat(inputField.val()),
+//                 newInputValue;
 
-            if (button.hasClass('mkdf-quantity-minus')) {
-                minus = true;
-            }
+//             if (button.hasClass('mkdf-quantity-minus')) {
+//                 minus = true;
+//             }
 
-            if (minus) {
-                newInputValue = inputValue - step;
-                if (newInputValue >= 1) {
-                    inputField.val(newInputValue);
-                } else {
-                    inputField.val(1);
-                }
-            } else {
-                newInputValue = inputValue + step;
-                if ( max === undefined ) {
-                    inputField.val(newInputValue);
-                } else {
-                    if ( newInputValue >= max ) {
-                        inputField.val(max);
-                    } else {
-                        inputField.val(newInputValue);
-                    }
-                }
-            }
+//             if (minus) {
+//                 newInputValue = inputValue - step;
+//                 if (newInputValue >= 1) {
+//                     inputField.val(newInputValue);
+//                 } else {
+//                     inputField.val(1);
+//                 }
+//             } else {
+//                 newInputValue = inputValue + step;
+//                 if ( max === undefined ) {
+//                     inputField.val(newInputValue);
+//                 } else {
+//                     if ( newInputValue >= max ) {
+//                         inputField.val(max);
+//                     } else {
+//                         inputField.val(newInputValue);
+//                     }
+//                 }
+//             }
 
-        });
+//         });
 
-    }
+//     }
 
-    function mkdfInitSelect2() {
+//     function mkdfInitSelect2() {
 
-        if ($('.woocommerce-ordering .orderby').length ||  $('#calc_shipping_country').length ) {
+//         if ($('.woocommerce-ordering .orderby').length ||  $('#calc_shipping_country').length ) {
 
-            $('.woocommerce-ordering .orderby').select2({
-                minimumResultsForSearch: Infinity
-            });
+//             $('.woocommerce-ordering .orderby').select2({
+//                 minimumResultsForSearch: Infinity
+//             });
 
-            $('#calc_shipping_country').select2();
+//             $('#calc_shipping_country').select2();
 
-        }
+//         }
 
-    }
+//     }
 
-    function mkdfMiniCartButtons() {
-        var buttons = $('.widget_shopping_cart .buttons a');
+//     function mkdfMiniCartButtons() {
+//         var buttons = $('.widget_shopping_cart .buttons a');
 
-        if(buttons.length) {
-            buttons.addClass('mkdf-btn mkdf-btn-small mkdf-btn-outline');
-        }
-    }
+//         if(buttons.length) {
+//             buttons.addClass('mkdf-btn mkdf-btn-small mkdf-btn-outline');
+//         }
+//     }
 
-    function mkdfpriceSlideButton() {
-        var button = $('.price_slider_amount .button');
+//     function mkdfpriceSlideButton() {
+//         var button = $('.price_slider_amount .button');
 
-        if(button.length) {
-            button.addClass('mkdf-btn mkdf-btn-medium mkdf-btn-solid');
-        }
-    }
+//         if(button.length) {
+//             button.addClass('mkdf-btn mkdf-btn-medium mkdf-btn-solid');
+//         }
+//     }
 
 
-})(jQuery);
-(function($) {
-    'use strict';
+// })(jQuery);
+// (function($) {
+//     'use strict';
 
-    mkdf.modules.portfolio = {};
+//     mkdf.modules.portfolio = {};
 
-	mkdf.modules.portfolio.portfolioGalleryDirectionHover = mkdfPortfolioGalleryDirectionHover;
+// 	mkdf.modules.portfolio.portfolioGalleryDirectionHover = mkdfPortfolioGalleryDirectionHover;
 
-    $(window).load(function() {
-        mkdfPortfolioSingleFollow().init();
-        mkdfPortfolioGalleryDirectionHover();
-    });
+//     $(window).load(function() {
+//         mkdfPortfolioSingleFollow().init();
+//         mkdfPortfolioGalleryDirectionHover();
+//     });
 
-    var mkdfPortfolioSingleFollow = function() {
+//     var mkdfPortfolioSingleFollow = function() {
 
-        var info = $('.mkdf-follow-portfolio-info .small-images.mkdf-portfolio-single-holder .mkdf-portfolio-info-holder, ' +
-            '.mkdf-follow-portfolio-info .small-slider.mkdf-portfolio-single-holder .mkdf-portfolio-info-holder');
+//         var info = $('.mkdf-follow-portfolio-info .small-images.mkdf-portfolio-single-holder .mkdf-portfolio-info-holder, ' +
+//             '.mkdf-follow-portfolio-info .small-slider.mkdf-portfolio-single-holder .mkdf-portfolio-info-holder');
 
-        if(info.length) {
-            var infoHolder = info.parent(),
-                infoHolderOffset = infoHolder.offset().top,
-                infoHolderHeight = infoHolder.height(),
-                mediaHolder = $('.mkdf-portfolio-media'),
-                mediaHolderHeight = mediaHolder.height(),
-                header = $('.header-appear, .mkdf-fixed-wrapper'),
-                headerHeight = (header.length) ? header.height() : 0;
-        }
+//         if(info.length) {
+//             var infoHolder = info.parent(),
+//                 infoHolderOffset = infoHolder.offset().top,
+//                 infoHolderHeight = infoHolder.height(),
+//                 mediaHolder = $('.mkdf-portfolio-media'),
+//                 mediaHolderHeight = mediaHolder.height(),
+//                 header = $('.header-appear, .mkdf-fixed-wrapper'),
+//                 headerHeight = (header.length) ? header.height() : 0;
+//         }
 
-        var infoHolderPosition = function() {
+//         var infoHolderPosition = function() {
 
-            if(info.length) {
+//             if(info.length) {
 
-                if(mediaHolderHeight > infoHolderHeight) {
-                    if(mkdf.scroll > infoHolderOffset) {
-                        info.animate({
-                            marginTop: (mkdf.scroll - (infoHolderOffset) + mkdfGlobalVars.vars.mkdfAddForAdminBar + headerHeight + 20) //20 px is for styling, spacing between header and info holder
-                        });
-                    }
-                }
+//                 if(mediaHolderHeight > infoHolderHeight) {
+//                     if(mkdf.scroll > infoHolderOffset) {
+//                         info.animate({
+//                             marginTop: (mkdf.scroll - (infoHolderOffset) + mkdfGlobalVars.vars.mkdfAddForAdminBar + headerHeight + 20) //20 px is for styling, spacing between header and info holder
+//                         });
+//                     }
+//                 }
 
-            }
-        };
+//             }
+//         };
 
-        var recalculateInfoHolderPosition = function() {
+//         var recalculateInfoHolderPosition = function() {
 
-            if(info.length) {
-                if(mediaHolderHeight > infoHolderHeight) {
-                    if(mkdf.scroll > infoHolderOffset) {
+//             if(info.length) {
+//                 if(mediaHolderHeight > infoHolderHeight) {
+//                     if(mkdf.scroll > infoHolderOffset) {
 
-                        if(mkdf.scroll + headerHeight + mkdfGlobalVars.vars.mkdfAddForAdminBar + infoHolderHeight + 20 < infoHolderOffset + mediaHolderHeight) {    //20 px is for styling, spacing between header and info holder
+//                         if(mkdf.scroll + headerHeight + mkdfGlobalVars.vars.mkdfAddForAdminBar + infoHolderHeight + 20 < infoHolderOffset + mediaHolderHeight) {    //20 px is for styling, spacing between header and info holder
 
-                            //Calculate header height if header appears
-                            if($('.header-appear, .mkdf-fixed-wrapper').length) {
-                                headerHeight = $('.header-appear, .mkdf-fixed-wrapper').height();
-                            }
-                            info.stop().animate({
-                                marginTop: (mkdf.scroll - (infoHolderOffset) + mkdfGlobalVars.vars.mkdfAddForAdminBar + headerHeight + 20) //20 px is for styling, spacing between header and info holder
-                            });
-                            //Reset header height
-                            headerHeight = 0;
-                        }
-                        else {
-                            info.stop().animate({
-                                marginTop: mediaHolderHeight - infoHolderHeight
-                            });
-                        }
-                    } else {
-                        info.stop().animate({
-                            marginTop: 0
-                        });
-                    }
-                }
-            }
-        };
+//                             //Calculate header height if header appears
+//                             if($('.header-appear, .mkdf-fixed-wrapper').length) {
+//                                 headerHeight = $('.header-appear, .mkdf-fixed-wrapper').height();
+//                             }
+//                             info.stop().animate({
+//                                 marginTop: (mkdf.scroll - (infoHolderOffset) + mkdfGlobalVars.vars.mkdfAddForAdminBar + headerHeight + 20) //20 px is for styling, spacing between header and info holder
+//                             });
+//                             //Reset header height
+//                             headerHeight = 0;
+//                         }
+//                         else {
+//                             info.stop().animate({
+//                                 marginTop: mediaHolderHeight - infoHolderHeight
+//                             });
+//                         }
+//                     } else {
+//                         info.stop().animate({
+//                             marginTop: 0
+//                         });
+//                     }
+//                 }
+//             }
+//         };
 
-        return {
+//         return {
 
-            init: function() {
+//             init: function() {
 
-                infoHolderPosition();
-                $(window).scroll(function() {
-                    recalculateInfoHolderPosition();
-                });
+//                 infoHolderPosition();
+//                 $(window).scroll(function() {
+//                     recalculateInfoHolderPosition();
+//                 });
 
-            }
+//             }
 
-        };
+//         };
 
-    };
+//     };
 
-    function mkdfPortfolioGalleryDirectionHover() {
-        var portfolioGalleries = $('.mkdf-portfolio-list-holder-outer.mkdf-ptf-gallery'),
-			portfolioItems;
+//     function mkdfPortfolioGalleryDirectionHover() {
+//         var portfolioGalleries = $('.mkdf-portfolio-list-holder-outer.mkdf-ptf-gallery'),
+// 			portfolioItems;
 
-		if(portfolioGalleries.length) {
-			portfolioGalleries.each(function() {
-				portfolioItems = $(this).find('.mkdf-portfolio-item');
+// 		if(portfolioGalleries.length) {
+// 			portfolioGalleries.each(function() {
+// 				portfolioItems = $(this).find('.mkdf-portfolio-item');
 
-				if(portfolioItems.length) {
-					portfolioItems.each(function() {
-						$(this).hoverdir({
-							element: '.mkdf-item-text-overlay'
-						});
-					});
-				}
-			});
-		}
-    }
+// 				if(portfolioItems.length) {
+// 					portfolioItems.each(function() {
+// 						$(this).hoverdir({
+// 							element: '.mkdf-item-text-overlay'
+// 						});
+// 					});
+// 				}
+// 			});
+// 		}
+//     }
 
-})(jQuery);
+// })(jQuery);

@@ -913,7 +913,7 @@
 
 #user-company-details {
 	.each-detail {
-		margin-bottom: 10px;
+		// margin-bottom: 10px;
 		padding: 10px;
 		&:nth-of-type(2n) {
 			background-color: #dddddd;						
@@ -1036,4 +1036,56 @@ form.wpcf7-form {
 	float: right;
     padding-bottom: 10px;
     padding-left: 30px;
+}
+
+body{
+    counter-reset: section children;  
+}
+
+.mkdf-ordered-list {
+	padding-left: 26px;
+	ol > {
+		li {
+			position: relative;
+			&:before {
+				font-size: 14px;
+				padding-right: 12px;			    
+			}
+			&:hover {
+				&:before {
+					color: #464646!important;
+				}
+			}	
+			ol {
+				padding-left: 0px;
+				padding-top: 10px;
+				li {
+					padding-left: 10px;
+				}
+			}	
+			&.parent {
+				padding-left: 15px;
+				strong {
+					padding-left: 10px;
+				}
+			}	
+		}
+		.parent::before {
+		  	counter-increment: section;  
+		  	content: counter(section);
+		  	position: absolute;
+			left: -29px!important;
+		}
+		.parent li:first-child{
+		    counter-reset:children;
+		}
+		.parent li::before{
+		    counter-increment: children;  
+		    content: counter(section) "." counter(children);
+	        position: absolute;
+		    top: 0px;
+		    left: -44px;
+ 		}
+
+	}
 }

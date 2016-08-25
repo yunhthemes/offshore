@@ -81,12 +81,12 @@ function custom_menu_item_shortcode() {
 			    	    <a href="#" class="" id="custom-right-header-livechat"><span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon null fa"></i></span><span class="item_text">24/7 Support, Chat Now</span></span><span class="plus"></span></span></a>
 			    	</li>
 			    	<li class="menu-item menu-item-type-post_type menu-item-object-page narrow">
-			    	    <a href="#" id="custom-right-header-signin">
+			    	    <a href="javscript:void(0);" id="custom-right-header-signin">
 			    	        <span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon null fa"></i></span><span class="item_text">Sign In</span></span><span class="plus"></span></span>
 			    	    </a>
 			    	    <div id="custom-right-header-signin-box">
 			                 <!-- '.wp_login_form( $args ).' -->
-			                 <form name="login" id="login" method="post">
+			                 <form name="login" id="login" class="login" method="post">
 								<p class="login-username">
 									<label for="user_login"></label>
 									<input type="text" name="username" id="username" class="input" value="" size="20" placeholder="Username">
@@ -94,14 +94,25 @@ function custom_menu_item_shortcode() {
 								<p class="login-password">
 									<label for="user_pass"></label>
 									<input type="password" name="password" id="password" class="input" value="" size="20" placeholder="Password">
-								</p>
-								<!-- <a class="lost" href="'.wp_lostpassword_url().'">Lost your password?</a> -->
+								</p>								
 								<p class="login-submit">
 									<input type="submit" id="wp-submit" class="button-primary" value="Sign in">
 									'.wp_nonce_field( 'ajax-login-nonce', 'security' ).'
-								</p>
-								<p class="status"></p>								
+								</p>								
+								<a class="lost-password" href="#">Forgot password?</a>
 							</form>
+							<form name="lostpassword" id="lostpassword" class="lostpassword" method="post">
+								<p class="login-username">
+									<label for="user_login"></label>
+									<input type="text" name="username_email" id="username_email" class="username_email input" value="" size="20" placeholder="Username or email">
+									<p class="login-submit">
+										<input type="submit" id="wp-submit" class="button-primary" value="Reset password">
+										'.wp_nonce_field( 'ajax-lostpassword-nonce', 'lostpasswordsecurity' ).'
+										<a href="#" class="back-to-login">Cancel</a>
+									</p>
+								</p>
+							</form>
+							<p class="status"></p>
 			    	    </div>
 			    	</li>
 			    	<li class="menu-item menu-item-type-post_type menu-item-object-page narrow">
@@ -110,6 +121,10 @@ function custom_menu_item_shortcode() {
 			    </ul>
 		    </nav>
 		</div>		
+		<div id="forgot-password-popup" style="display:none; cursor: default;">
+			<p>Your forgotten password request has been received.  Our staff will contact you shortly. <br>  Please click on OK to continue.</p>
+			<a href="#" id="ok" class="custom-submit-class" style="min-height: auto!important;margin-top:10px;">OK</a>
+		</div>
 		<script type="text/javascript">
 		jQuery(document).ready(function($) {
 		    $("#custom-right-header-livechat").click(function(event) {
@@ -156,6 +171,120 @@ function custom_menu_item_shortcode() {
 		    	$("#custom-right-header-signin-box-mobile").toggleClass("open");
 		    });
 
+		    $(".lostpassword").hide();
+
+		    $(".lost-password").on("click", function(e){
+		    	e.preventDefault();
+
+		    	$(".login").hide();
+		    	$(".lostpassword").show();
+		    	$("#custom-right-header-signin-box p.status").text("");
+		    });
+
+		    $(".back-to-login").on("click", function(e){
+		    	e.preventDefault();
+
+		    	$(".login").show();
+		    	$(".lostpassword").hide();
+		    	$("#custom-right-header-signin-box p.status").text("");
+		    });
+
+		    function validateAndSubmit($el) {
+		    	$el.validate({
+			    	rules: {
+			    		"username_email": "required"	
+			    	},
+	        		messages: {		    	
+	        			"username_email": "Please provide username or email"
+	        		},
+			        errorPlacement: function(error, element) {                            
+			            element.attr("placeholder", error.text());
+			        }
+			    });
+
+		    	$el.on("submit", function(e){
+			    	e.preventDefault();
+
+			    	if($el.valid()) {
+				    	$el.parent().find("p.status").show().text("Sending...");
+				    	$.ajax({
+				          	type: "POST",
+				          	url: siteurl+"/wp-admin/admin-ajax.php",
+				          	data: {
+				              	"action": "lostpassword", //calls wp_ajax_nopriv_ajaxlogout
+				              	"username_email": $el.find(".username_email").val(),
+				              	"security": $el.find("#lostpasswordsecurity").val() 
+				          	},
+				          	success: function(data) {		          		
+				          		var result = JSON.parse(data);		          		
+				              	$el.parent().find("p.status").text("");
+
+				              	$.blockUI({ 
+				            		message: $("#forgot-password-popup"),
+				            		css: {
+										padding: "30px",
+										margin: 0,
+										border: "0px",
+										backgroundColor: "#fff",						
+				            		},
+				            		onOverlayClick: $.unblockUI
+				            	});
+				            	$("#forgot-password-popup").on("click", "#ok", function(e){
+				            		e.preventDefault();
+				            		e.stopPropagation();
+							    	$.unblockUI();
+							    	$(".login").show();
+							    	$(".lostpassword").hide();
+							    	$el.parent().find("p.status").text("");
+							    });
+				          	}
+				      	});
+				    }
+			    });	
+		    }
+
+		    // var $lostpasswordForm = $("form.lostpassword");
+
+		    validateAndSubmit($("form#lostpassword"));
+		    validateAndSubmit($("form#mobilelostpassword"));
+
+		    // $lostpasswordForm.on("submit", function(e){
+		    // 	e.preventDefault();
+
+		    // 	if($lostpasswordForm.valid()) {
+			   //  	$("#custom-right-header-signin-box p.status").show().text("Sending...");
+			   //  	$.ajax({
+			   //        	type: "POST",
+			   //        	url: siteurl+"/wp-admin/admin-ajax.php",
+			   //        	data: {
+			   //            	"action": "lostpassword", //calls wp_ajax_nopriv_ajaxlogout
+			   //            	"username_email": $("form.lostpassword .username_email").val(),
+			   //            	"security": $("form.lostpassword #lostpasswordsecurity").val() 
+			   //        	},
+			   //        	success: function(data) {		          		
+			   //        		var result = JSON.parse(data);		          		
+			   //            	$("#custom-right-header-signin-box p.status").text("");
+
+			   //            	$.blockUI({ 
+			   //          		message: $("#forgot-password-popup"),
+			   //          		css: {
+						// 			padding: "30px",
+						// 			margin: 0,
+						// 			border: "0px",
+						// 			backgroundColor: "#fff",						
+			   //          		},
+			   //          		onOverlayClick: $.unblockUI
+			   //          	});
+			   //          	$("#forgot-password-popup").on("click", "#ok", function(){
+						//     	$.unblockUI();
+						//     	$("#login").show();
+						//     	$("#lostpassword").hide();
+						//     	$("#custom-right-header-signin-box p.status").text("");
+						//     });
+			   //        	}
+			   //    	});
+			   //  }
+		    // });		    
 		});
 		</script>';
 	endif;

@@ -188,7 +188,8 @@ $page = get_page_by_title( 'Sign up' );
 		                                	utilsScript: "<?php echo JS; ?>/plugins/utils.js",
 		                                	nationalMode: false,
 	                    					preferredCountries: [],
-	                    					autoPlaceholder: false
+	                    					autoPlaceholder: false,
+	                    					excludeCountries: ["mm", "ye", "sy", "sd", "so", "sa", "pk", "kp", "ng", "ly", "lr", "lv", "la", "iq", "ir", "gh", "er", "cu", "cg", "kh", "af"]
 		                                });
 
 		                                $("#field_7").intlTelInput("setCountry", country);

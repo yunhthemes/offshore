@@ -142,36 +142,42 @@
 		                </div>
 		                <div class="each-content">
 		                	{{#ifCond status "==" "0"}}
-								<p class="datetime"><span class="visible-from-portrait">Renewal date:</span> Registration incomplete</p>    
+		                		{{#ifCond wpusers.0.pivot.status "==" "0"}}
+									<p class="datetime"><span class="visible-from-portrait">Renewal date:</span> Registration incomplete</p>    
+								{{else}}
+									<p class="datetime"><span class="visible-from-portrait">Renewal date:</span> Rejected</p>    
+								{{/ifCond}}   
 		                	{{else}}
-		                		{{#ifCond owner "==" "1"}}
+		                		{{#ifCond wpusers.0.pivot.status "==" "2"}}
 									<p class="datetime"><span class="visible-from-portrait">Renewal date:</span> {{ wpusers.0.pivot.renewal_date }}</p> 
 		                		{{else}}
-		                			<p class="datetime"><span class="visible-from-portrait">Renewal date:</span> Registration incomplete</p>    		
+		                			<p class="datetime"><span class="visible-from-portrait">Renewal date:</span> Pending</p> 	
 		                    	{{/ifCond}}   
 		                    {{/ifCond}}
 		                </div>		                         
 		                <div class="each-content">
 		                	{{#ifCond status "==" "0"}}
-		                		<span class="action" style="display:none;">1</span>
-								<a href="<?php echo get_permalink( get_page_by_path( 'Company formation order' ) ); ?>?savedcompany={{id}}" data-company-id="{{id}}"><button class="custom-submit-class">Continue registration</button></a>
-								<a href="#" data-company-id="{{id}}" data-companywpuser-id="{{ wpusers.0.pivot.id }}" class="delete-saved-company"><i class="fa fa-times" aria-hidden="true"></i></a>
-							{{else}}
-								{{#ifCond owner "==" "1"}}
-									<span class="action" style="display:none;">3</span>
-									<a href="#" data-company-id="{{id}}" class="company-details"><button class="custom-submit-class">Company details</button></a>
-								{{else}}									
-									{{#ifCond return "==" "1"}}
-										<!-- <span class="action" style="display:none;">4</span>
-										<button class="custom-submit-class expire-btn disabled-btn" data-companywpuser-id="{{ wpusers.0.pivot.id }}">Not available</button>
-										<a href="#" data-company-id="{{id}}" data-companywpuser-id="{{ wpusers.0.pivot.id }}" class="delete-saved-company"><i class="fa fa-times" aria-hidden="true"></i></a> -->
-									{{else}}
-										<!-- <span class="action" style="display:none;">2</span>
-										<button class="custom-submit-class expire-btn" data-company-id="{{id}}" data-companywpuser-id="{{ wpusers.0.pivot.id }}">Continue registration</button> -->
-									{{/ifCond}}
-									<span class="action" style="display:none;">2</span>
-									<button class="custom-submit-class expire-btn" data-company-id="{{id}}" data-companywpuser-id="{{ wpusers.0.pivot.id }}">Continue registration</button>
+		                		{{#ifCond wpusers.0.pivot.status "==" "0"}} <!-- incomplete -->
+			                		<span class="action" style="display:none;">1</span>
+									<a href="<?php echo get_permalink( get_page_by_path( 'Company formation order' ) ); ?>?savedcompany={{id}}" data-company-id="{{id}}"><button class="custom-submit-class">Continue registration</button></a>
 									<a href="#" data-company-id="{{id}}" data-companywpuser-id="{{ wpusers.0.pivot.id }}" class="delete-saved-company"><i class="fa fa-times" aria-hidden="true"></i></a>
+								{{else}} <!-- rejected -->
+									<span class="action" style="display:none;">3</span>
+									<a href="#" data-company-id="{{id}}" data-user-login="{{ wpusers.0.user_login }}" class="company-details"><button class="custom-submit-class">Company details</button></a>
+								{{/ifCond}}
+							{{else}}
+								{{#ifCond wpusers.0.pivot.status "==" "2"}} <!-- approved -->
+									<span class="action" style="display:none;">3</span>
+									<a href="#" data-company-id="{{id}}" data-user-login="{{ wpusers.0.user_login }}" class="company-details"><button class="custom-submit-class">Company details</button></a>
+								{{else}}									
+									{{#ifCond wpusers.0.pivot.status "==" "1"}} <!-- pending/registered -->
+										<span class="action" style="display:none;">3</span>
+										<a href="#" data-company-id="{{id}}" data-user-login="{{ wpusers.0.user_login }}" class="company-details"><button class="custom-submit-class">Company details</button></a>										
+									{{else}} <!-- bought by another user -->
+										<span class="action" style="display:none;">2</span>
+										<button class="custom-submit-class expire-btn" data-company-id="{{id}}" data-companywpuser-id="{{ wpusers.0.pivot.id }}">Continue registration</button>
+										<a href="#" data-company-id="{{id}}" data-companywpuser-id="{{ wpusers.0.pivot.id }}" class="delete-saved-company"><i class="fa fa-times" aria-hidden="true"></i></a>
+									{{/ifCond}}									
 								{{/ifCond}}
 		                    {{/ifCond}}		                    
 		                </div>                   
@@ -322,6 +328,98 @@
 	    		<p class="value">N/A</p>
 	    	</div>
 		</div>
+		<div class="each-detail">
+	    	<div class="lbl-container">
+	    		<h5 class="label">Incorporation certificate</h5>
+	    	</div>
+	    	<div class="value-container">
+	    		<p class="value"><a target="_blank" href="{{ url }}{{ incorporation_certificate }}">{{ incorporation_certificate }}</a></p>
+	    	</div>
+		</div>
+		<div class="each-detail">
+	    	<div class="lbl-container">
+	    		<h5 class="label">Incumbency certificate</h5>
+	    	</div>
+	    	<div class="value-container">
+	    		<p class="value"><a target="_blank" href="{{ url }}{{ incumbency_certificate }}">{{ incumbency_certificate }}</a></p>
+	    	</div>
+		</div>
+		<div class="each-detail">
+	    	<div class="lbl-container">
+	    		<h5 class="label">Company extract</h5>
+	    	</div>
+	    	<div class="value-container">
+	    		<p class="value"><a target="_blank" href="{{ url }}{{ company_extract }}">{{ company_extract }}</a></p>
+	    	</div>
+		</div>
+		<div class="each-detail">
+	    	<div class="lbl-container">
+	    		<h5 class="label">Last financial statements</h5>
+	    	</div>
+	    	<div class="value-container">
+	    		<p class="value"><a target="_blank" href="{{ url }}{{ last_financial_statements }}">{{ last_financial_statements }}</a></p>
+	    	</div>
+		</div>
+		{{#if other_documents_1}}
+		<div class="each-detail">
+	    	<div class="lbl-container">
+	    		<h5 class="label">{{ other_documents_1_title }}</h5>
+	    	</div>
+	    	<div class="value-container">
+	    		<p class="value"><a target="_blank" href="{{ url }}{{ other_documents_1 }}">{{ other_documents_1 }}</a></p>
+	    	</div>
+		</div>		
+		{{/if}}
+		{{#if other_documents_2}}
+		<div class="each-detail">
+	    	<div class="lbl-container">
+	    		<h5 class="label">{{ other_documents_2_title }}</h5>
+	    	</div>
+	    	<div class="value-container">
+	    		<p class="value"><a target="_blank" href="{{ url }}{{ other_documents_2 }}">{{ other_documents_2 }}</a></p>
+	    	</div>
+		</div>
+		{{/if}}
+		{{#if other_documents_3}}
+		<div class="each-detail">
+	    	<div class="lbl-container">
+	    		<h5 class="label">{{ other_documents_3_title }}</h5>
+	    	</div>
+	    	<div class="value-container">
+	    		<p class="value"><a target="_blank" href="{{ url }}{{ other_documents_3 }}">{{ other_documents_3 }}</a></p>
+	    	</div>
+		</div>
+		{{/if}}
+		{{#if other_documents_4}}
+		<div class="each-detail">
+	    	<div class="lbl-container">
+	    		<h5 class="label">{{ other_documents_4_title }}</h5>
+	    	</div>
+	    	<div class="value-container">
+	    		<p class="value"><a target="_blank" href="{{ url }}{{ other_documents_4 }}">{{ other_documents_4 }}</a></p>
+	    	</div>
+		</div>
+		{{/if}}
+		{{#if other_documents_5}}
+		<div class="each-detail">
+	    	<div class="lbl-container">
+	    		<h5 class="label">{{ other_documents_5_title }}</h5>
+	    	</div>
+	    	<div class="value-container">
+	    		<p class="value"><a target="_blank" href="{{ url }}{{ other_documents_5 }}">{{ other_documents_5 }}</a></p>
+	    	</div>
+		</div>
+		{{/if}}
+		{{#if other_documents_6}}
+		<div class="each-detail">
+	    	<div class="lbl-container">
+	    		<h5 class="label">{{ other_documents_6_title }}</h5>
+	    	</div>
+	    	<div class="value-container">
+	    		<p class="value"><a target="_blank" href="{{ url }}{{ other_documents_6 }}">{{ other_documents_6 }}</a></p>
+	    	</div>
+		</div>
+		{{/if}}
 	{{/companydetails}} 
 </script>
 <script>
@@ -500,6 +598,7 @@
             $("#user-companies").on("click", ".company-details", function(e){
             	e.preventDefault();
             	var company_id = $(this).data('company-id');
+            	var user_login = $(this).data('user-login');
 
             	$("#user-companies-container").hide();
             	$("#user-company-details-container").show();
@@ -509,9 +608,11 @@
 	        	response.done(function(data, textStatus, jqXHR){                    
 	                if(jqXHR.status==200) {
 	                    
-	                    newdata["companydetails"] = data.companydetails;                        
-                		createTemplateAndAppendHtml("#user-company-details-template", newdata, "#user-company-details");                                    		
+	                    data.companydetails.url = "<?php echo SITEURL."/b/public/uploads/"; ?>"+user_login+"/";
+	                    newdata["companydetails"] = data.companydetails;
+	                    console.log(newdata);
 
+                		createTemplateAndAppendHtml("#user-company-details-template", newdata, "#user-company-details");                                    		
 	                }
 	            });
 

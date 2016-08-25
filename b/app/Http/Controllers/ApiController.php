@@ -15,6 +15,12 @@ use App\CompanyWpuserInformationService;
 use App\Wpuser;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Person;
+use App\WpuserLoginLog;
+use App\WpBpXprofileFields;
+use App\WpBpXprofileData;
+use App\TransactionLog;
+use Excel;
 
 class ApiController extends Controller
 {
@@ -73,8 +79,10 @@ class ApiController extends Controller
         // $wpuser_compaines = Company::with("companytypes")->where('wpuser_id', $id)->get();         
 
         $wpuser_companies = Wpuser::find($id)->companies()->with(["wpusers" => function($query) use($id) {
-            $query->select("user_nicename")->where('wpuser_id', $id);
+            $query->select("user_nicename", "user_login")->where('wpuser_id', $id);
         }, "companytypes"])->get();
+
+        // return $wpuser_companies;
 
         foreach ($wpuser_companies as $key => $wpuser_company) {
             $company_id = $wpuser_company->id;
@@ -83,7 +91,7 @@ class ApiController extends Controller
 
             if($wpuser_company->status==1) {
               // if company is bought, check whether its this user's company
-              $wpuser_companies_status = CompanyWpuser::where('company_id', $company_id)->where('wpuser_id', $id)->where('status', 1)->get();
+              $wpuser_companies_status = CompanyWpuser::where('company_id', $company_id)->where('wpuser_id', $id)->where('status', 2)->get();
               $wpuser_companies_return = CompanyWpuser::where('company_id', $company_id)->where('wpuser_id', $id)->where('return', 1)->get();
 
               if(count($wpuser_companies_status)>0) $owner = true;
@@ -113,7 +121,7 @@ class ApiController extends Controller
         $companies = Company::with(['companytypes'])->where('id', $id)->get();
         $wpusers = Wpuser::where('ID', $user_id)->first(['user_nicename']);
 
-        $wpuser_company_details = CompanyWpuser::with(['companywpuser_shareholders', 'companywpuser_directors', 'companywpuser_secretaries', 'servicescountries', 'informationservices'])->where('wpuser_id', $user_id)->where('company_id', $id)->where('status', 1)->first();
+        $wpuser_company_details = CompanyWpuser::with(['companywpuser_shareholders', 'companywpuser_directors', 'companywpuser_secretaries', 'servicescountries', 'informationservices'])->where('wpuser_id', $user_id)->where('company_id', $id)->first();
 
         if($wpuser_company_details) {
           $wpuser_company_details['companies'] = $companies;
@@ -470,6 +478,283 @@ class ApiController extends Controller
         $date= "Present time in ".$name.": ". date('D, d M Y H:i') . " hrs";
 
         return $date;
+    }
+
+    public function addusertopersondb(Request $request) {
+        
+        $wpuser_id = $request->wpuser_id;
+
+        $wpuserloginlog = WpuserLoginLog::where('uid', $wpuser_id)->orderBy('time', 'DESC')->first();
+
+        $wpuser = Wpuser::find($wpuser_id);
+
+        $fields = WpBpXprofileFields::select('id', 'name')->get();
+
+        foreach ($fields as $key => $field) {
+            if($field->name == "Person code") $person_code_field_id = $field->id;
+            if($field->name == "Person type") $person_type_field_id = $field->id;
+            if($field->name == "Title") $title_field_id = $field->id;
+            if($field->name == "First name") $first_name_field_id = $field->id;
+            if($field->name == "Surname") $surname_field_id = $field->id;            
+            if($field->name == "Nationality") $nationality_field_id = $field->id;
+            if($field->name == "Passport no") $passport_no_field_id = $field->id;
+            if($field->name == "Passport expiry") $passport_expiry_field_id = $field->id;
+            if($field->name == "Tax residence") $tax_residence_field_id = $field->id;
+            if($field->name == "Tax number") $tax_number_field_id = $field->id;
+            if($field->name == "Mobile telephone") $mobile_telephone_field_id = $field->id;
+            if($field->name == "Work telephone") $work_telephone_field_id = $field->id;
+            if($field->name == "Home telephone") $home_telephone_field_id = $field->id;
+            if($field->name == "Home address") $home_address_field_id = $field->id;
+            if($field->name == "Home address 2") $home_address_2_field_id = $field->id;
+            if($field->name == "Home address 3") $home_address_3_field_id = $field->id;
+            if($field->name == "Home address 6") $home_address_6_field_id = $field->id;
+            if($field->name == "Home address 5") $home_address_5_field_id = $field->id;
+            if($field->name == "Postal address") $postal_address_field_id = $field->id;
+            if($field->name == "Postal address 2") $postal_address_2_field_id = $field->id;
+            if($field->name == "Postal address 3") $postal_address_3_field_id = $field->id;
+            if($field->name == "Postal address 6") $postal_address_6_field_id = $field->id;
+            if($field->name == "Postal address 5") $postal_address_5_field_id = $field->id;            
+            if($field->name == "Preferred currency") $preferred_currency_field_id = $field->id;            
+            if($field->name == "Relationship commenced") $relationship_commenced_field_id = $field->id;
+            if($field->name == "Relationship ended") $relationship_ended_field_id = $field->id;
+            if($field->name == "Passport copy") $passport_copy_field_id = $field->id;
+            if($field->name == "Proof of address") $proof_of_address_field_id = $field->id;
+            if($field->name == "Bank reference") $bank_reference_field_id = $field->id;
+            if($field->name == "Professional reference") $professional_reference_field_id = $field->id;
+            if($field->name == "Notes") $notes_field_id = $field->id;
+        }
+
+        if(isset($person_code_field_id)) $person_code = WpBpXprofileData::where("field_id", $person_code_field_id)->where("user_id", $wpuser_id)->first();
+        if(isset($person_type_field_id)) $person_type = WpBpXprofileData::where("field_id", $person_type_field_id)->where("user_id", $wpuser_id)->first();
+        if(isset($title_field_id)) $title =  WpBpXprofileData::where("field_id", $title_field_id)->where("user_id", $wpuser_id)->first();
+        if(isset($first_name_field_id)) $first_name =  WpBpXprofileData::where("field_id", $first_name_field_id)->where("user_id", $wpuser_id)->first(); 
+        if(isset($surname_field_id)) $surname =  WpBpXprofileData::where("field_id", $surname_field_id)->where("user_id", $wpuser_id)->first();
+        if(isset($nationality_field_id)) $nationality =  WpBpXprofileData::where("field_id", $nationality_field_id)->where("user_id", $wpuser_id)->first();
+        if(isset($passport_no_field_id)) $passport_no =  WpBpXprofileData::where("field_id", $passport_no_field_id)->where("user_id", $wpuser_id)->first();
+        if(isset($passport_expiry_field_id)) $passport_expiry =  WpBpXprofileData::where("field_id", $passport_expiry_field_id)->where("user_id", $wpuser_id)->first();
+        if(isset($tax_residence_field_id)) $tax_residence =  WpBpXprofileData::where("field_id", $tax_residence_field_id)->where("user_id", $wpuser_id)->first();
+        if(isset($tax_number_field_id)) $tax_number =  WpBpXprofileData::where("field_id", $tax_number_field_id)->where("user_id", $wpuser_id)->first();        
+        if(isset($mobile_telephone_field_id)) $mobile_telephone =  WpBpXprofileData::where("field_id", $mobile_telephone_field_id)->where("user_id", $wpuser_id)->first();
+        if(isset($work_telephone_field_id)) $work_telephone =  WpBpXprofileData::where("field_id", $work_telephone_field_id)->where("user_id", $wpuser_id)->first();
+        if(isset($home_telephone_field_id)) $home_telephone =  WpBpXprofileData::where("field_id", $home_telephone_field_id)->where("user_id", $wpuser_id)->first();
+        if(isset($home_address_field_id)) $home_address =  WpBpXprofileData::where("field_id", $home_address_field_id)->where("user_id", $wpuser_id)->first();
+        if(isset($home_address_2_field_id)) $home_address_2 =  WpBpXprofileData::where("field_id", $home_address_2_field_id)->where("user_id", $wpuser_id)->first();
+        if(isset($home_address_3_field_id)) $home_address_3 =  WpBpXprofileData::where("field_id", $home_address_3_field_id)->where("user_id", $wpuser_id)->first();
+        if(isset($home_address_6_field_id)) $home_address_6 =  WpBpXprofileData::where("field_id", $home_address_6_field_id)->where("user_id", $wpuser_id)->first();
+        if(isset($home_address_5_field_id)) $home_address_5 =  WpBpXprofileData::where("field_id", $home_address_5_field_id)->where("user_id", $wpuser_id)->first();
+        if(isset($postal_address_field_id)) $postal_address =  WpBpXprofileData::where("field_id", $postal_address_field_id)->where("user_id", $wpuser_id)->first();
+        if(isset($postal_address_2_field_id)) $postal_address_2 =  WpBpXprofileData::where("field_id", $postal_address_2_field_id)->where("user_id", $wpuser_id)->first();
+        if(isset($postal_address_3_field_id)) $postal_address_3 =  WpBpXprofileData::where("field_id", $postal_address_3_field_id)->where("user_id", $wpuser_id)->first();
+        if(isset($postal_address_6_field_id)) $postal_address_6 =  WpBpXprofileData::where("field_id", $postal_address_6_field_id)->where("user_id", $wpuser_id)->first();
+        if(isset($postal_address_5_field_id)) $postal_address_5 =  WpBpXprofileData::where("field_id", $postal_address_5_field_id)->where("user_id", $wpuser_id)->first();
+        if(isset($preferred_currency_field_id)) $preferred_currency =  WpBpXprofileData::where("field_id", $preferred_currency_field_id)->where("user_id", $wpuser_id)->first();
+        if(isset($relationship_commenced_field_id)) $relationship_commenced =  WpBpXprofileData::where("field_id", $relationship_commenced_field_id)->where("user_id", $wpuser_id)->first();
+        if(isset($relationship_ended_field_id)) $relationship_ended =  WpBpXprofileData::where("field_id", $relationship_ended_field_id)->where("user_id", $wpuser_id)->first();
+        if(isset($passport_copy_field_id)) $passport_copy =  WpBpXprofileData::where("field_id", $passport_copy_field_id)->where("user_id", $wpuser_id)->first();
+        if(isset($proof_of_address_field_id)) $proof_of_address =  WpBpXprofileData::where("field_id", $proof_of_address_field_id)->where("user_id", $wpuser_id)->first();
+        if(isset($bank_reference_field_id)) $bank_reference =  WpBpXprofileData::where("field_id", $bank_reference_field_id)->where("user_id", $wpuser_id)->first();
+        if(isset($professional_reference_field_id)) $professional_reference =  WpBpXprofileData::where("field_id", $professional_reference_field_id)->where("user_id", $wpuser_id)->first();
+        if(isset($notes_field_id)) $notes =  WpBpXprofileData::where("field_id", $notes_field_id)->where("user_id", $wpuser_id)->first();
+
+        $person = Person::where('person_code', $request->user_person_code)->first();
+
+        if(empty($person)) {
+          $person = new Person;
+        }
+
+        $person->person_code = $request->user_person_code;
+        $person->person_type = (isset($person_type)) ?  $person_type->value : "";
+        $person->person_role = "owner";
+        $person->title = (isset($title)) ? $title->value : "";
+        $person->first_name = (isset($first_name)) ? $first_name->value : "";
+        $person->surname = (isset($surname)) ? $surname->value : "";        
+        $person->nationality = (isset($nationality)) ? $nationality->value : "";        
+        $person->passport_no = (isset($passport_no)) ? $passport_no->value : "";        
+        $person->passport_expiry = (isset($passport_expiry)) ? $passport_expiry->value : "";        
+        $person->tax_residence = (isset($tax_residence)) ? $tax_residence->value : "";        
+        $person->tax_number = (isset($tax_number)) ? $tax_number->value : "";        
+        $person->email = (isset($wpuser)) ? $wpuser->user_email : "";        
+        $person->mobile_telephone = (isset($mobile_telephone)) ? $mobile_telephone->value : "";
+        $person->work_telephone = (isset($work_telephone)) ? $work_telephone->value : "";
+        $person->home_telephone = (isset($home_telephone)) ? $home_telephone->value : "";
+        $person->home_address = (isset($home_address)) ? $home_address->value : "";
+        $person->home_address_2 = (isset($home_address_2)) ? $home_address_2->value : "";
+        $person->home_address_3 = (isset($home_address_3)) ?  $home_address_3->value : "";
+        $person->home_address_6 = (isset($home_address_6)) ? $home_address_6->value : "";
+        $person->home_address_5 = (isset($home_address_5)) ? $home_address_5->value : ""; 
+        $person->postal_address = (isset($postal_address)) ? $postal_address->value : ""; 
+        $person->postal_address_2 = (isset($postal_address_2)) ? $postal_address_2->value : ""; 
+        $person->postal_address_3 = (isset($postal_address_3)) ? $postal_address_3->value : ""; 
+        $person->postal_address_6 = (isset($postal_address_6)) ? $postal_address_6->value : ""; 
+        $person->postal_address_5 = (isset($postal_address_5)) ? $postal_address_5->value : ""; 
+        $person->preferred_currency = (isset($preferred_currency)) ? $preferred_currency->value : ""; 
+        $person->account_registered = (isset($wpuser)) ? $wpuser->user_registered : ""; 
+        $person->login_ip = (isset($wpuserloginlog)) ? $wpuserloginlog->ip : "";
+        $person->relationship_commenced = (isset($relationship_commenced)) ? $relationship_commenced->value : ""; 
+        $person->relationship_ended = (isset($relationship_ended)) ? $relationship_ended->value : ""; 
+        $person->passport_copy = (isset($passport_copy)) ? $passport_copy->value : ""; 
+        $person->proof_of_address = (isset($proof_of_address)) ? $proof_of_address->value : ""; 
+        $person->bank_reference = (isset($bank_reference)) ? $bank_reference->value : ""; 
+        $person->professional_reference = (isset($professional_reference)) ? $professional_reference->value : ""; 
+        $person->notes = (isset($notes)) ? $notes->value : "";
+        $saved = $person->save();
+
+        $person_id = $person->id;
+        if($person_id) {
+            $company_wpuser = CompanyWpuser::find($request->companywpuser_id);
+            $company_wpuser->owner_person_code = $request->user_person_code;
+            $company_wpuser->save();
+        }
+
+        if($saved)
+          return response()->json(['message' => 'Success'], 200);
+        else
+          return response()->json(['message' => 'Error saving data'], 400);
+
+    }
+
+    public function addtopersondb(Request $request) {
+        $prefix = $request->prefix;
+
+        $person_code = $request->input($prefix."_person_code");
+        $person_role = $request->input($prefix."_person_role");
+
+        $person = Person::where('person_code', $person_code)->first();
+
+        if(empty($person)) {
+          $person = new Person;
+        }
+
+        $companywpuser_shareholder_id = $request->input($prefix."_companywpuser_shareholder_id");
+        $companywpuser_director_id = $request->input($prefix."_companywpuser_director_id");
+        $companywpuser_secretary_id = $request->input($prefix."_companywpuser_secretary_id");
+
+        $person->person_code = $person_code;
+        $person->person_role = $person_role;
+        $person->person_type = $request->input($prefix."_type");
+        $person->first_name = $request->input($prefix."_name");
+        $person->home_address = $request->input($prefix."_address");
+        $person->home_address_3 = $request->input($prefix."_address_2") . " " . $request->input($prefix."_address_3");        
+        $person->home_address_6 = $request->input($prefix."_address_4");
+        $person->mobile_telephone = $request->input($prefix."_telephone");        
+        $person->save();
+
+        $person_id = $person->id;
+
+        if($person_role=="shareholder" && $person_id) {
+            $companywpuser_shareholder = CompanyWpuserShareholder::find($companywpuser_shareholder_id);  
+            $companywpuser_shareholder->person_id = $person_id;
+            $companywpuser_shareholder->person_code = $person_code;
+            $saved = $companywpuser_shareholder->save();
+        }        
+
+        if($person_role=="director" && $person_id) {
+            $companywpuser_director = CompanyWpuserDirector::find($companywpuser_director_id);  
+            $companywpuser_director->person_id = $person_id;
+            $companywpuser_director->person_code = $person_code;
+            $saved = $companywpuser_director->save();
+        }      
+
+        if($person_role=="secretary" && $person_id) {
+            $companywpuser_secretary = CompanyWpuserSecretary::find($companywpuser_secretary_id);
+            $companywpuser_secretary->person_id = $person_id;
+            $companywpuser_secretary->person_code = $person_code;
+            $saved = $companywpuser_secretary->save();
+        }        
+
+        if($saved)
+          return response()->json(['message' => 'Success'], 200);
+        else
+          return response()->json(['message' => 'Error saving data'], 400);
+
+    }
+
+    public function getperson(Request $request) {
+        $person = Person::select('person_code')->get();
+
+        return $person;
+    }
+
+    public function log_transaction_status(Request $request) {
+              
+        $transaction_log = new TransactionLog;
+        $transaction_log->Merchant_User_Id = $request->Merchant_User_Id;
+        $transaction_log->Merchant_ref_number = $request->Merchant_ref_number;
+        $transaction_log->Lpsid = $request->Lpsid;
+        $transaction_log->Lpspwd = $request->Lpspwd;
+        $transaction_log->Transactionid = $request->Transactionid;
+        $transaction_log->Requestid = $request->Requestid;
+        $transaction_log->bill_firstname = $request->bill_firstname;
+        $transaction_log->bill_lastname = $request->bill_lastname;
+        $transaction_log->Purchase_summary = $request->Purchase_summary;
+        $transaction_log->currencydesc = $request->currencydesc;
+        $transaction_log->amount = $request->amount;
+        $transaction_log->CardBin = $request->CardBin;
+        $transaction_log->CardLast4 = $request->CardLast4;
+        $transaction_log->CardType = $request->CardType;
+        $transaction_log->merchant_ipaddress = $request->merchant_ipaddress;
+        $transaction_log->CVN_Result = $request->CVN_Result;
+        $transaction_log->AVS_Result = $request->AVS_Result;
+        $transaction_log->Status = $request->Status;
+        $transaction_log->CardToken = $request->CardToken;
+        $saved = $transaction_log->save();
+
+        return response()->json(['message' => 'Success'], 200);
+
+    }
+
+    public function exportPersonList()
+    {
+        // work on the export
+        $persons = Person::select([
+          "id", 
+          "person_code as PersonCode", 
+          "person_type as PersonType", 
+          "third_party_company_name As CompanyName", 
+          "third_party_company_jurisdiction As Jurisdiction",
+          "third_party_company_reg_no As RegNo",
+          "title As Title",
+          "first_name As FirstName",
+          "surname As Surname",
+          "nationality As Nationality",
+          "passport_no As PassportNo",
+          "passport_expiry As PassportExpiry",
+          "tax_residence As TaxResidence",
+          "tax_number As TaxNumber",
+          "email As Email",
+          "mobile_telephone As MobileTelephone",
+          "work_telephone As WorkTelephone",
+          "home_telephone As HomeTelephone",
+          "home_address As HomeAddress(Street)",
+          "home_address_2 As HomeAddress(City)",
+          "home_address_3 As HomeAddress(State)",
+          "home_address_6 As HomeAddress(PostCode)",          
+          "home_address_5 As HomeAddress(Country)",
+          "postal_address As PostalAddress(Street)",
+          "postal_address_2 As PostalAddress(City)",
+          "postal_address_3 As PostalAddress(State)",
+          "postal_address_6 As PostalAddress(PostCode)",          
+          "postal_address_5 As PostalAddress(Country)",
+          "preferred_currency As PreferredCurrency",
+          "account_registered As AccountRegistered",
+          "login_ip As LoginIP",
+          "relationship_commenced As RelationshipCommenced",
+          "relationship_ended As RelationshipEnded",
+          "passport_copy As PassportCopy",
+          "proof_of_address As ProofOfAddress",
+          "bank_reference As BankReference",
+          "professional_reference As ProfessionalReference",
+          "notes As Notes",
+          "created_at As CreatedAt",
+          "updated_at As UpdatedAt"
+          ])->get();
+
+        Excel::create('test', function($excel) use($persons) {
+          $excel->sheet('Sheet 1', function($sheet) use($persons) {
+              $sheet->fromArray($persons);
+          });
+        })->export('xls');
+
     }
 
 }

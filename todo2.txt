@@ -1,0 +1,420 @@
+{{#ifCond return "==" "1"}}
+                                        <!-- <span class="action" style="display:none;">4</span>
+                                        <button class="custom-submit-class expire-btn disabled-btn" data-companywpuser-id="{{ wpusers.0.pivot.id }}">Not available</button>
+                                        <a href="#" data-company-id="{{id}}" data-companywpuser-id="{{ wpusers.0.pivot.id }}" class="delete-saved-company"><i class="fa fa-times" aria-hidden="true"></i></a> -->
+                                    {{else}}
+                                        <!-- <span class="action" style="display:none;">2</span>
+                                        <button class="custom-submit-class expire-btn" data-company-id="{{id}}" data-companywpuser-id="{{ wpusers.0.pivot.id }}">Continue registration</button> -->
+                                    {{/ifCond}}
+
+Username & Password: 
+IP address of server: 123.100.251.10
+Posting Domain & Page: 
+Authoration result URL : http://www.offshorecompanysolutions.com/response/
+Cancel URL : http://www.offshorecompanysolutions.com/cancel/
+Notify URL : http://www.offshorecompanysolutions.com/status/
+
+
+
+
+panel background color: #ffffff
+
+button styles (CSS): 
+
+e.g. 
+button {
+	background: #008b9b;
+    color: #ffffff;    
+    height: 42px;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.7em;
+    border-radius: 30px;
+    cursor: pointer;
+    padding: 6px 30px;
+    border: 2px solid #08c;
+    border-color: #008b9b;
+    outline: 0;    
+}
+
+
+text styles (CSS):
+
+p {
+	font-family: "Open Sans", serif;
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 1.78em;
+	color: #646464;
+}
+
+will beneficial always be account holder?
+
+- country selected value in person edit (done)
+- update on person also update linked individuals (done)
+- to add account holders to person (done)
+- to seperate company to pending and approve (done)
+- left out a few company fields to enter (done)
+- remove incorporation date from new inc (done)
+- preferred currency value for client edit/index (done)
+
+- remove extra fields from user frontend profile - update status to 2
+- date fields to save properly on person
+- validate person code on account holder (done)
+- remove validation on address_3 of shareholder/directors/secretary when add to person
+
+@if($wpusers->count() > 0)							
+  	@foreach($wpusers as $k => $wpuser)
+        <tr id="id-{{$wpuser->id}}" class="wpuser-id list-item box">
+        	<td class="code">
+        		@if($wpuser->code)
+        			{{ $wpuser->code }}
+        		@endif
+    		</td>
+        	<td class="name">
+				<?php 
+				$field = App\WpBpXprofileFields::where('name', 'First name')->first();
+				$firstname = App\WpBpXprofileData::where('user_id', $wpuser->ID)->where('field_id', $field->id)->first(); ?>
+				{{ (count($firstname) == 0) ? "" : $firstname->value }}
+				<?php 
+				$field = App\WpBpXprofileFields::where('name', 'Surname')->first();
+				$lastname = App\WpBpXprofileData::where('user_id', $wpuser->ID)->where('field_id', $field->id)->first(); ?>
+				{{ (count($lastname) == 0) ? "" : " ".$lastname->value }}
+        	</td>
+        	<td class="email">{{ $wpuser->user_email }}</td>
+        	<td class="country">
+        		<?php 
+				$field = App\WpBpXprofileFields::where('name', 'Nationality')->first();
+				$nationality = App\WpBpXprofileData::where('user_id', $wpuser->ID)->where('field_id', $field->id)->first(); ?>
+        		{{ (count($nationality) == 0) ? "" : " ".$nationality->value }}
+        	</td>
+        	<td><span class="date">{{ date('d M Y', strtotime($wpuser->user_registered)) }}</span></td>
+    	 	<td><a href="{{ route('admin.client.show', $wpuser->ID) }}"><button class="custom-submit-class">View</button></a><a href="{{ route('admin.client.edit', $wpuser->ID) }}"><button class="custom-submit-class">Edit</button></a></td>		                    						
+        </tr> 
+  	@endforeach			              						
+@endif
+
+
+
+					            /* edit of exisitng account owners */
+    	// $wpuser = Wpuser::find($id);
+    	// $wpuser->user_email = $request->email;
+    	// $wpuser->user_registered = $request->account_registered;
+    	// $wpuser->save();
+
+    	// $fields = WpBpXprofileFields::select('id', 'name')->get();
+
+    	// foreach ($fields as $key => $field) {
+    	// 	if($field->name == "Person code") $person_code_field_id = $field->id;
+    	// 	if($field->name == "Person type") $person_type_field_id = $field->id;
+    	// 	if($field->name == "Title") $title_field_id = $field->id;
+     //        if($field->name == "First name") $first_name_field_id = $field->id;
+    	// 	if($field->name == "Surname") $surname_field_id = $field->id;    		
+     //        if($field->name == "Nationality") $nationality_field_id = $field->id;
+     //        if($field->name == "Passport no") $passport_no_field_id = $field->id;
+     //        if($field->name == "Passport expiry") $passport_expiry_field_id = $field->id;
+     //        if($field->name == "Tax residence") $tax_residence_field_id = $field->id;
+     //        if($field->name == "Tax number") $tax_number_field_id = $field->id;
+    	// 	if($field->name == "Mobile telephone") $mobile_telephone_field_id = $field->id;
+    	// 	if($field->name == "Work telephone") $work_telephone_field_id = $field->id;
+    	// 	if($field->name == "Home telephone") $home_telephone_field_id = $field->id;
+    	// 	if($field->name == "Home address") $home_address_field_id = $field->id;
+    	// 	if($field->name == "Home address 2") $home_address_2_field_id = $field->id;
+    	// 	if($field->name == "Home address 3") $home_address_3_field_id = $field->id;
+     //        if($field->name == "Home address 6") $home_address_6_field_id = $field->id;
+    	// 	if($field->name == "Home address 5") $home_address_5_field_id = $field->id;
+    	// 	if($field->name == "Postal address") $postal_address_field_id = $field->id;
+    	// 	if($field->name == "Postal address 2") $postal_address_2_field_id = $field->id;
+    	// 	if($field->name == "Postal address 3") $postal_address_3_field_id = $field->id;
+     //        if($field->name == "Postal address 6") $postal_address_6_field_id = $field->id;
+    	// 	if($field->name == "Postal address 5") $postal_address_5_field_id = $field->id;    		
+    	// 	if($field->name == "Preferred currency") $perferred_currency_field_id = $field->id;    		
+    	// 	if($field->name == "Relationship commenced") $relationship_commenced_field_id = $field->id;
+    	// 	if($field->name == "Relationship ended") $relationship_ended_field_id = $field->id;
+    	// 	if($field->name == "Passport copy") $passport_copy_field_id = $field->id;
+    	// 	if($field->name == "Proof of address") $proof_of_address_field_id = $field->id;
+    	// 	if($field->name == "Bank reference") $bank_reference_field_id = $field->id;
+    	// 	if($field->name == "Professional reference") $professional_reference_field_id = $field->id;
+    	// 	if($field->name == "Notes") $notes_field_id = $field->id;
+    	// }
+
+    	// $person_code = WpBpXprofileData::where("field_id", $person_code_field_id)->where("user_id", $id)->first();
+    	// if(empty($person_code)){
+    	// 	$person_code = new WpBpXprofileData;
+    	// 	$person_code->field_id = $person_code_field_id;
+    	// 	$person_code->user_id = $id;
+    	// }
+    	// $person_code->value = $request->person_code;
+    	// $person_code->save();
+
+    	// $person_type = WpBpXprofileData::where("field_id", $person_type_field_id)->where("user_id", $id)->first();
+    	// if(empty($person_type)){
+    	// 	$person_type = new WpBpXprofileData;
+    	// 	$person_type->field_id = $person_type_field_id;
+    	// 	$person_type->user_id = $id;
+    	// }
+    	// $person_type->value = $request->person_type;
+    	// $person_type->save();
+
+     //    $title =  WpBpXprofileData::where("field_id", $title_field_id)->where("user_id", $id)->first();
+     //    if(empty($title)){
+     //        $title = new WpBpXprofileData;
+     //        $title->field_id = $title_field_id;
+     //        $title->user_id = $id;
+     //    }
+     //    $title->value = $request->title;
+     //    $title->save();
+
+    	// $first_name =  WpBpXprofileData::where("field_id", $first_name_field_id)->where("user_id", $id)->first();
+    	// if(empty($first_name)){
+    	// 	$first_name = new WpBpXprofileData;
+    	// 	$first_name->field_id = $first_name_field_id;
+    	// 	$first_name->user_id = $id;
+    	// }
+    	// $first_name->value = $request->first_name;
+    	// $first_name->save();
+
+     //    $surname =  WpBpXprofileData::where("field_id", $surname_field_id)->where("user_id", $id)->first();
+     //    if(empty($surname)){
+     //        $surname = new WpBpXprofileData;
+     //        $surname->field_id = $surname_field_id;
+     //        $surname->user_id = $id;
+     //    }
+     //    $surname->value = $request->surname;
+     //    $surname->save();
+
+     //    $nationality =  WpBpXprofileData::where("field_id", $nationality_field_id)->where("user_id", $id)->first();
+     //    if(empty($nationality)){
+     //        $nationality = new WpBpXprofileData;
+     //        $nationality->field_id = $nationality_field_id;
+     //        $nationality->user_id = $id;
+     //    }
+     //    $nationality->value = $request->nationality;
+     //    $nationality->save();
+
+     //    $passport_no =  WpBpXprofileData::where("field_id", $passport_no_field_id)->where("user_id", $id)->first();
+     //    if(empty($passport_no)){
+     //        $passport_no = new WpBpXprofileData;
+     //        $passport_no->field_id = $passport_no_field_id;
+     //        $passport_no->user_id = $id;
+     //    }
+     //    $passport_no->value = $request->passport_no;
+     //    $passport_no->save();
+
+     //    $passport_expiry =  WpBpXprofileData::where("field_id", $passport_expiry_field_id)->where("user_id", $id)->first();
+     //    if(empty($passport_expiry)){
+     //        $passport_expiry = new WpBpXprofileData;
+     //        $passport_expiry->field_id = $passport_expiry_field_id;
+     //        $passport_expiry->user_id = $id;
+     //    }
+     //    $passport_expiry->value = $request->passport_expiry;
+     //    $passport_expiry->save();
+
+     //    $tax_residence =  WpBpXprofileData::where("field_id", $tax_residence_field_id)->where("user_id", $id)->first();
+     //    if(empty($tax_residence)){
+     //        $tax_residence = new WpBpXprofileData;
+     //        $tax_residence->field_id = $tax_residence_field_id;
+     //        $tax_residence->user_id = $id;
+     //    }
+     //    $tax_residence->value = $request->tax_residence;
+     //    $tax_residence->save();
+
+     //    $tax_number =  WpBpXprofileData::where("field_id", $tax_number_field_id)->where("user_id", $id)->first();
+     //    if(empty($tax_number)){
+     //        $tax_number = new WpBpXprofileData;
+     //        $tax_number->field_id = $tax_number_field_id;
+     //        $tax_number->user_id = $id;
+     //    }
+     //    $tax_number->value = $request->tax_number;
+     //    $tax_number->save();
+
+     //    $mobile_telephone =  WpBpXprofileData::where("field_id", $mobile_telephone_field_id)->where("user_id", $id)->first();
+     //    if(empty($mobile_telephone)){
+     //        $mobile_telephone = new WpBpXprofileData;
+     //        $mobile_telephone->field_id = $mobile_telephone_field_id;
+     //        $mobile_telephone->user_id = $id;
+     //    }
+     //    $mobile_telephone->value = $request->mobile_telephone;
+     //    $mobile_telephone->save();
+
+     //    $work_telephone =  WpBpXprofileData::where("field_id", $work_telephone_field_id)->where("user_id", $id)->first();
+     //    if(empty($work_telephone)){
+     //        $work_telephone = new WpBpXprofileData;
+     //        $work_telephone->field_id = $work_telephone_field_id;
+     //        $work_telephone->user_id = $id;
+     //    }
+     //    $work_telephone->value = $request->work_telephone;
+     //    $work_telephone->save();
+
+     //    $home_telephone =  WpBpXprofileData::where("field_id", $home_telephone_field_id)->where("user_id", $id)->first();
+     //    if(empty($home_telephone)){
+     //        $home_telephone = new WpBpXprofileData;
+     //        $home_telephone->field_id = $home_telephone_field_id;
+     //        $home_telephone->user_id = $id;
+     //    }
+     //    $home_telephone->value = $request->home_telephone;
+     //    $home_telephone->save();
+
+     //    $home_address =  WpBpXprofileData::where("field_id", $home_address_field_id)->where("user_id", $id)->first();
+     //    if(empty($home_address)){
+     //        $home_address = new WpBpXprofileData;
+     //        $home_address->field_id = $home_address_field_id;
+     //        $home_address->user_id = $id;
+     //    }
+     //    $home_address->value = $request->home_address;
+     //    $home_address->save();
+
+     //    $home_address_2 =  WpBpXprofileData::where("field_id", $home_address_2_field_id)->where("user_id", $id)->first();
+     //    if(empty($home_address_2)){
+     //        $home_address_2 = new WpBpXprofileData;
+     //        $home_address_2->field_id = $home_address_2_field_id;
+     //        $home_address_2->user_id = $id;
+     //    }
+     //    $home_address_2->value = $request->home_address_2;
+     //    $home_address_2->save();
+
+     //    $home_address_3 =  WpBpXprofileData::where("field_id", $home_address_3_field_id)->where("user_id", $id)->first();
+     //    if(empty($home_address_3)){
+     //        $home_address_3 = new WpBpXprofileData;
+     //        $home_address_3->field_id = $home_address_3_field_id;
+     //        $home_address_3->user_id = $id;
+     //    }
+     //    $home_address_3->value = $request->home_address_3;
+     //    $home_address_3->save();
+
+     //    $home_address_5 =  WpBpXprofileData::where("field_id", $home_address_5_field_id)->where("user_id", $id)->first();
+     //    if(empty($home_address_5)){
+     //        $home_address_5 = new WpBpXprofileData;
+     //        $home_address_5->field_id = $home_address_5_field_id;
+     //        $home_address_5->user_id = $id;
+     //    }
+     //    $home_address_5->value = $request->home_address_5;
+     //    $home_address_5->save();
+
+     //    $home_address_6 =  WpBpXprofileData::where("field_id", $home_address_6_field_id)->where("user_id", $id)->first();
+     //    if(empty($home_address_6)){
+     //        $home_address_6 = new WpBpXprofileData;
+     //        $home_address_6->field_id = $home_address_6_field_id;
+     //        $home_address_6->user_id = $id;
+     //    }
+     //    $home_address_6->value = $request->home_address_6;
+     //    $home_address_6->save();
+
+     //    $postal_address =  WpBpXprofileData::where("field_id", $postal_address_field_id)->where("user_id", $id)->first();
+     //    if(empty($postal_address)){
+     //        $postal_address = new WpBpXprofileData;
+     //        $postal_address->field_id = $postal_address_field_id;
+     //        $postal_address->user_id = $id;
+     //    }
+     //    $postal_address->value = $request->postal_address;
+     //    $postal_address->save();
+
+     //    $postal_address_2 =  WpBpXprofileData::where("field_id", $postal_address_2_field_id)->where("user_id", $id)->first();
+     //    if(empty($postal_address_2)){
+     //        $postal_address_2 = new WpBpXprofileData;
+     //        $postal_address_2->field_id = $postal_address_2_field_id;
+     //        $postal_address_2->user_id = $id;
+     //    }
+     //    $postal_address_2->value = $request->postal_address_2;
+     //    $postal_address_2->save();
+
+     //    $postal_address_3 =  WpBpXprofileData::where("field_id", $postal_address_3_field_id)->where("user_id", $id)->first();
+     //    if(empty($postal_address_3)){
+     //        $postal_address_3 = new WpBpXprofileData;
+     //        $postal_address_3->field_id = $postal_address_3_field_id;
+     //        $postal_address_3->user_id = $id;
+     //    }
+     //    $postal_address_3->value = $request->postal_address_3;
+     //    $postal_address_3->save();        
+
+     //    $postal_address_5 =  WpBpXprofileData::where("field_id", $postal_address_5_field_id)->where("user_id", $id)->first();
+     //    if(empty($postal_address_5)){
+     //        $postal_address_5 = new WpBpXprofileData;
+     //        $postal_address_5->field_id = $postal_address_5_field_id;
+     //        $postal_address_5->user_id = $id;
+     //    }
+     //    $postal_address_5->value = $request->postal_address_5;
+     //    $postal_address_5->save();
+
+     //    $postal_address_6 =  WpBpXprofileData::where("field_id", $postal_address_6_field_id)->where("user_id", $id)->first();
+     //    if(empty($postal_address_6)){
+     //        $postal_address_6 = new WpBpXprofileData;
+     //        $postal_address_6->field_id = $postal_address_6_field_id;
+     //        $postal_address_6->user_id = $id;
+     //    }
+     //    $postal_address_6->value = $request->postal_address_6;
+     //    $postal_address_6->save();
+
+     //    $perferred_currency =  WpBpXprofileData::where("field_id", $perferred_currency_field_id)->where("user_id", $id)->first();
+     //    if(empty($perferred_currency)){
+     //        $perferred_currency = new WpBpXprofileData;
+     //        $perferred_currency->field_id = $perferred_currency_field_id;
+     //        $perferred_currency->user_id = $id;
+     //    }
+     //    $perferred_currency->value = $request->perferred_currency;
+     //    $perferred_currency->save();
+
+     //    $relationship_commenced =  WpBpXprofileData::where("field_id", $relationship_commenced_field_id)->where("user_id", $id)->first();
+     //    if(empty($relationship_commenced)){
+     //        $relationship_commenced = new WpBpXprofileData;
+     //        $relationship_commenced->field_id = $relationship_commenced_field_id;
+     //        $relationship_commenced->user_id = $id;
+     //    }
+     //    $relationship_commenced->value = $request->relationship_commenced;
+     //    $relationship_commenced->save();
+
+     //    $relationship_ended =  WpBpXprofileData::where("field_id", $relationship_ended_field_id)->where("user_id", $id)->first();
+     //    if(empty($relationship_ended)){
+     //        $relationship_ended = new WpBpXprofileData;
+     //        $relationship_ended->field_id = $relationship_ended_field_id;
+     //        $relationship_ended->user_id = $id;
+     //    }
+     //    $relationship_ended->value = $request->relationship_ended;
+     //    $relationship_ended->save();
+
+     //    $passport_copy =  WpBpXprofileData::where("field_id", $passport_copy_field_id)->where("user_id", $id)->first();
+     //    if(empty($passport_copy)){
+     //        $passport_copy = new WpBpXprofileData;
+     //        $passport_copy->field_id = $passport_copy_field_id;
+     //        $passport_copy->user_id = $id;
+     //    }
+     //    $passport_copy->value = $request->passport_copy;
+     //    $passport_copy->save();
+
+     //    $proof_of_address =  WpBpXprofileData::where("field_id", $proof_of_address_field_id)->where("user_id", $id)->first();
+     //    if(empty($proof_of_address)){
+     //        $proof_of_address = new WpBpXprofileData;
+     //        $proof_of_address->field_id = $proof_of_address_field_id;
+     //        $proof_of_address->user_id = $id;
+     //    }
+     //    $proof_of_address->value = $request->proof_of_address;
+     //    $proof_of_address->save();
+
+     //    $bank_reference =  WpBpXprofileData::where("field_id", $bank_reference_field_id)->where("user_id", $id)->first();
+     //    if(empty($bank_reference)){
+     //        $bank_reference = new WpBpXprofileData;
+     //        $bank_reference->field_id = $bank_reference_field_id;
+     //        $bank_reference->user_id = $id;
+     //    }
+     //    $bank_reference->value = $request->bank_reference;
+     //    $bank_reference->save();
+
+     //    $professional_reference =  WpBpXprofileData::where("field_id", $professional_reference_field_id)->where("user_id", $id)->first();
+     //    if(empty($professional_reference)){
+     //        $professional_reference = new WpBpXprofileData;
+     //        $professional_reference->field_id = $professional_reference_field_id;
+     //        $professional_reference->user_id = $id;
+     //    }
+     //    $professional_reference->value = $request->professional_reference;
+     //    $professional_reference->save();
+
+     //    $notes =  WpBpXprofileData::where("field_id", $notes_field_id)->where("user_id", $id)->first();
+     //    if(empty($notes)){
+     //        $notes = new WpBpXprofileData;
+     //        $notes->field_id = $notes_field_id;
+     //        $notes->user_id = $id;
+     //    }
+     //    $notes->value = $request->notes;
+     //    $notes->save();

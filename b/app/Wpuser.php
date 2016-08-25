@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Wpuser extends Model
 {
     //
+    public $timestamps = false;
     protected $primaryKey = 'ID';
     protected $table = 'wp_users';
 
@@ -23,5 +24,14 @@ class Wpuser extends Model
         );
     }
 
+    public function wpbpxprofiledata()
+    {
+        return $this->hasMany('App\WpBpXprofileData', 'user_id');
+    }
+
+    public function wpbpxprofilefields()
+    {
+        return $this->hasMany('App\WpBpXprofileFields', 'user_id');
+    }
     
 }

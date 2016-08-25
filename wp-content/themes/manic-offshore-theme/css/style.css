@@ -305,10 +305,10 @@ header.mkdf-page-header .mkdf-menu-area .mkdf-vertical-align-containers > .mkdf-
   padding: 0;
   padding-left: 49px;
 }
-#custom-right-header .menu-item a {
+#custom-right-header .menu-item > a {
   color: #008b9b !important;
 }
-#custom-right-header .menu-item a .item_text {
+#custom-right-header .menu-item > a .item_text {
   color: #008b9b !important;
 }
 #custom-right-header div.second .menu-item .item_inner {
@@ -393,6 +393,24 @@ header.mkdf-page-header .mkdf-menu-area .mkdf-vertical-align-containers > .mkdf-
 #custom-right-header-signin-box-mobile a#forgot-password-link:hover {
   color: #b1cfd4 !important;
 }
+#custom-right-header-signin-box .lost-password,
+#custom-right-header-signin-box-mobile .lost-password {
+  display: block;
+  margin-top: 5px;
+  color: #ffffff !important;
+}
+#custom-right-header-signin-box .lost-password:hover,
+#custom-right-header-signin-box-mobile .lost-password:hover {
+  color: #b1cfd4 !important;
+}
+#custom-right-header-signin-box .back-to-login,
+#custom-right-header-signin-box-mobile .back-to-login {
+  color: #ffffff !important;
+}
+#custom-right-header-signin-box .back-to-login:hover,
+#custom-right-header-signin-box-mobile .back-to-login:hover {
+  color: #b1cfd4 !important;
+}
 #custom-right-header-signin-box .signin-input,
 #custom-right-header-signin-box-mobile .signin-input,
 #custom-right-header-signin-box .input,
@@ -431,7 +449,7 @@ header.mkdf-page-header .mkdf-menu-area .mkdf-vertical-align-containers > .mkdf-
   font-weight: 700;
   font-style: normal;
   font-family: Montserrat;
-  padding: 13px 36px 13px 36px;
+  padding: 13px;
   outline: none !important;
   box-shadow: none !important;
   text-decoration: none !important;
@@ -577,6 +595,16 @@ header.mkdf-page-header .mkdf-menu-area .mkdf-vertical-align-containers > .mkdf-
 .mkdf-mobile-header .sub_menu li:last-child {
   border-bottom: 0px;
 }
+#forgot-password-popup #ok {
+  font-size: 14px !important;
+  line-height: 14px !important;
+  min-height: 100% !important;
+  padding: 16px 30px;
+  margin-top: 17px !important;
+}
+.mkdf-header-standard-full-width .mkdf-main-menu > ul > li:last-child > a span.item_inner {
+  padding-right: 0px;
+}
 footer .mkdf-footer-top-holder {
   padding-top: 10px;
   padding-bottom: 13px;
@@ -645,6 +673,13 @@ footer .widget .mkdf-icon-list-item:hover p {
 }
 #custom-footer-additional-links ul li a:hover {
   color: #b1cfd4;
+}
+#payment .owl-wrapper .owl-item {
+  width: 50%!important;
+  text-align: right!important;
+}
+#payment .owl-wrapper .owl-item .mkdf-carousel-second-image-holder {
+  right: 0px!important;
 }
 .custom-form-message {
   width: 100%;
@@ -894,6 +929,21 @@ footer .widget .mkdf-icon-list-item:hover p {
 .profile-fields .field_postal-address-6 td.label {
   visibility: hidden;
 }
+.profile-fields .field_person-code,
+.profile-fields .field_person-type,
+.profile-fields .field_passport-no,
+.profile-fields .field_passport-expiry,
+.profile-fields .field_tax-residence,
+.profile-fields .field_tax-number,
+.profile-fields .field_relationship-commenced,
+.profile-fields .field_relationship-ended,
+.profile-fields .field_passport-copy,
+.profile-fields .field_proof-of-address,
+.profile-fields .field_bank-reference,
+.profile-fields .field_professional-reference,
+.profile-fields .field_notes {
+  display: none;
+}
 #profile-edit-form .intl-tel-input {
   width: 100%;
 }
@@ -927,6 +977,21 @@ footer .widget .mkdf-icon-list-item:hover p {
 #profile-edit-form .field_nationality input,
 #profile-edit-form .field_postal-address-6 input,
 #profile-edit-form .field_home-address-6 input {
+  display: none;
+}
+#profile-edit-form .field_person-code,
+#profile-edit-form .field_person-type,
+#profile-edit-form .field_passport-no,
+#profile-edit-form .field_passport-expiry,
+#profile-edit-form .field_tax-residence,
+#profile-edit-form .field_tax-number,
+#profile-edit-form .field_relationship-commenced,
+#profile-edit-form .field_relationship-ended,
+#profile-edit-form .field_passport-copy,
+#profile-edit-form .field_proof-of-address,
+#profile-edit-form .field_bank-reference,
+#profile-edit-form .field_professional-reference,
+#profile-edit-form .field_notes {
   display: none;
 }
 /*
@@ -2730,7 +2795,6 @@ body.home #homepage-core-services-01 .mkdf-blog-box-whole-content .mkdf-boxes-it
   vertical-align: middle;
 }
 #user-company-details .each-detail {
-  margin-bottom: 10px;
   padding: 10px;
 }
 #user-company-details .each-detail:nth-of-type(2n) {
@@ -2829,6 +2893,51 @@ form.wpcf7-form .wpcf7-response-output {
   float: right;
   padding-bottom: 10px;
   padding-left: 30px;
+}
+body {
+  counter-reset: section children;
+}
+.mkdf-ordered-list {
+  padding-left: 26px;
+}
+.mkdf-ordered-list ol li {
+  position: relative;
+}
+.mkdf-ordered-list ol li:before {
+  font-size: 14px;
+  padding-right: 12px;
+}
+.mkdf-ordered-list ol li:hover:before {
+  color: #464646!important;
+}
+.mkdf-ordered-list ol li ol {
+  padding-left: 0px;
+  padding-top: 10px;
+}
+.mkdf-ordered-list ol li ol li {
+  padding-left: 10px;
+}
+.mkdf-ordered-list ol li.parent {
+  padding-left: 15px;
+}
+.mkdf-ordered-list ol li.parent strong {
+  padding-left: 10px;
+}
+.mkdf-ordered-list ol .parent::before {
+  counter-increment: section;
+  content: counter(section);
+  position: absolute;
+  left: -29px !important;
+}
+.mkdf-ordered-list ol .parent li:first-child {
+  counter-reset: children;
+}
+.mkdf-ordered-list ol .parent li::before {
+  counter-increment: children;
+  content: counter(section) "." counter(children);
+  position: absolute;
+  top: 0px;
+  left: -44px;
 }
 @media only screen and (max-width: 1400px) {
   #homepage-core-services-01 h4.mkdf-boxes-item-title a,
@@ -3062,6 +3171,12 @@ form.wpcf7-form .wpcf7-response-output {
   .mkdf-blog-carousel-boxes .mkdf-blog-boxes-item-holder-outer:hover {
     transform: none;
   }
+  .homepage-corporate-solutions-column .mkdf-blog-list .mkdf-blog-list-item:hover .mkdf-excerpt {
+    opacity: 0!important;
+  }
+  div.blockUI.blockMsg.blockPage {
+    top: 32%!important;
+  }
 }
 @media only screen and (max-width: 991px) {
   .zopim {
@@ -3190,6 +3305,11 @@ form.wpcf7-form .wpcf7-response-output {
   .custom-input-container-left,
   .custom-input-container-right {
     width: 100%;
+  }
+  div.blockUI.blockMsg.blockPage {
+    top: 25%!important;
+    width: 70%!important;
+    left: 5%!important;
   }
 }
 @media only screen and (max-width: 768px) {

@@ -39,7 +39,7 @@
 					</div>										
 
 					{{ Form::submit('Save', ['class'=>'custom-submit-class']) }}
-			{!! Form::close() !!}
+				{!! Form::close() !!}
 			</div>
 
 		</div>

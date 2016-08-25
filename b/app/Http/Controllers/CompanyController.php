@@ -54,7 +54,7 @@ class CompanyController extends Controller
     public function create()
     {
         //
-    	$company_types = CompanyType::lists('name', 'id');        
+    	$company_types = CompanyType::orderBy('name', 'ASC')->lists('name', 'id');        
 
         return view('company.create', ['company_types'=>$company_types]);
     }
@@ -73,6 +73,7 @@ class CompanyController extends Controller
         if($request->ajax() || $request->callback) {
 
             $user_id = $request->user_id;
+            $unique_id = $request->unique_id;
 
             if(empty($user_id) || $user_id==0) { // for unregistered user testing
                 $user_id = 1;
@@ -90,7 +91,7 @@ class CompanyController extends Controller
                     $company = new Company;                
                 }                          
                 $company->name = implode(", ", $request->company_name_choices);
-                $company->incorporation_date = date('Y-m-d H:i:s');
+                $company->incorporation_date = "";
                 $company->price = 0;
                 $company->price_eu = 0;
                 $company->shelf = 0;
@@ -354,20 +355,32 @@ class CompanyController extends Controller
 
                 if($request->action=='checkout'){
 
-                    $company = Company::find($company_id);
-                    $company->status = 1;
-                    // $company->renewal_date = date('Y-m-d H:i:s', strtotime(date("Y-m-d", time()) . " + 365 day"));
-                    $company->save();
+                    $company = Company::find($company_id);                    
 
-                    $company_wpuser = CompanyWpuser::find($company_wpuser_id);
-                    $company_wpuser->status = 1;                    
-                    $company_wpuser->save();
+                    if($company->status==1 || $company->status==2) {  // if company is already registered                        
+                        return response()->json(['message' => 'This company is already registered!'], 200)->setCallback($request->input('callback'));    
+                    } else {                        
+                        $company->status = 1;
+                        // $company->renewal_date = date('Y-m-d H:i:s', strtotime(date("Y-m-d", time()) . " + 365 day"));
+                        $company->save();
 
-                    $wpuser_ids = CompanyWpuser::select('wpuser_id')->where("company_id", $company_id)->where("status", 0)->get();
+                        $company_wpuser = CompanyWpuser::find($company_wpuser_id);
+                        $company_wpuser->status = 1;                    
+                        $company_wpuser->save();
 
-                    return response()->json(['message' => 'Successfully checkout', 'response' => $wpuser_ids], 200)->setCallback($request->input('callback'));    
+                        $wpuser_ids = CompanyWpuser::select('wpuser_id')->where("company_id", $company_id)->where("status", 0)->get();
+
+                        $amount = number_format($total_price, 2, '.', '');
+                        $refno = $user_id.$unique_id;
+                        $secretkey = "3me1sk10t1RaM0La";
+                        $transactionKey = sha1($currency.$amount.$refno.$secretkey);
+
+
+                        return response()->json(['message' => 'Successfully submitted!', 'response' => $wpuser_ids, 'tkey' => $transactionKey, 'currency' => $currency, 'amount' => $amount, 'refno' => $refno, 'secretkey' => $secretkey], 200)->setCallback($request->input('callback'));    
+                    }                    
+
                 }else {
-                    return response()->json(['message' => 'Successfully saved', 'response' => $request->all()], 200)->setCallback($request->input('callback'));
+                    return response()->json(['message' => 'Successfully saved!', 'response' => $request->all()], 200)->setCallback($request->input('callback'));
                 }               
 
             else:
@@ -503,3 +516,5 @@ class CompanyController extends Controller
         }
     }
 }
+
+

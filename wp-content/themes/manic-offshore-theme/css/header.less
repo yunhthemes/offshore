@@ -113,7 +113,7 @@
       padding: 0;
       padding-left: 49px;
     }
-    a{
+    > a{
       color: @dark-blue !important;
       .item_text{
         color: @dark-blue !important;
@@ -216,6 +216,21 @@
     }
   }
 
+  .lost-password {
+    display: block;
+    margin-top: 5px;
+    color: @white !important;
+    &:hover{
+      color: @light-blue !important;
+    }
+  }
+  .back-to-login {
+    color: @white !important;
+    &:hover {
+      color: @light-blue !important;
+    }
+  }
+
   .signin-input, .input{
     font-family: "Open Sans",serif;
     font-size: 13px;
@@ -252,7 +267,7 @@
     font-weight: 700;
     font-style: normal;
     font-family: Montserrat;
-    padding: 13px 36px 13px 36px;
+    padding: 13px;
     outline: none !important;
     box-shadow: none !important;
     text-decoration: none !important;
@@ -420,4 +435,27 @@
   &:last-child {
     border-bottom: 0px;
   }
+}
+
+#forgot-password-popup {
+  #ok {
+    font-size: 14px !important;
+    line-height: 14px !important;
+    min-height: 100% !important;   
+    padding: 16px 30px;  
+    margin-top: 17px !important;
+  }
+}
+
+.mkdf-header-standard-full-width .mkdf-main-menu {
+  > ul {
+    > li {
+      &:last-child {
+        > a span.item_inner {
+          padding-right: 0px;
+        }
+      }
+      
+    }
+  } 
 }
